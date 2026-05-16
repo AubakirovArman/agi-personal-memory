@@ -1,21 +1,40 @@
-MIT License
+AGI Personal Memory License v1.0
 
-Copyright (c) 2026 AGI Personal Memory
+Copyright (c) 2026 Aubakirov Arman
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software is dual-licensed:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+┌─────────────────────────────────────────────────────────────┐
+│  PERSONAL / NON-COMMERCIAL USE — FREE                       │
+│                                                             │
+│  You may use, copy, modify, and distribute this software    │
+│  for personal, educational, research, and non-commercial    │
+│  purposes at no cost, provided you include this license.    │
+│                                                             │
+│  Non-commercial means:                                      │
+│  - Personal projects and learning                           │
+│  - Academic research and teaching                           │
+│  - Open-source contributions                                │
+│  - Non-profit organization use                              │
+│  - Evaluation and testing before purchasing a license       │
+└─────────────────────────────────────────────────────────────┘
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+┌─────────────────────────────────────────────────────────────┐
+│  COMMERCIAL USE — PAID LICENSE REQUIRED                     │
+│                                                             │
+│  Any use of this software for commercial purposes           │
+│  requires a separate paid license. Commercial use includes: │
+│                                                             │
+│  - Use within a company or organization for business        │
+│  - Integration into a commercial product or service         │
+│  - Offering the software as a service (SaaS)                │
+│  - Use in revenue-generating activities                     │
+│  - Distribution as part of a paid product                   │
+│                                                             │
+│  To obtain a commercial license, contact:                   │
+│  armanibadboy@mail.ru                                       │
+└─────────────────────────────────────────────────────────────┘
+
+DISCLAIMER: THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.

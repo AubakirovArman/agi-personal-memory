@@ -211,6 +211,8 @@ def main():
     p.add_argument("--host", default="0.0.0.0")
     p.add_argument("--port", type=int, default=8720)
 
+    sub.add_parser("demo", help="Run full demo on Llama 3.1 8B")
+
     sub.add_parser("shell", help="Interactive shell")
 
     args = parser.parse_args()
@@ -227,6 +229,9 @@ def main():
         from .webui import run_server
         run_server(args.host, args.port)
         return 0
+    if args.command == "demo":
+        from .demo import main as demo_main
+        return demo_main()
     if args.command == "api":
         from .api import run_api
         run_api(args.host, args.port)

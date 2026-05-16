@@ -341,3 +341,24 @@ Total: 76/76 tests pass
 - 76/76 tests pass
 - 4 languages documented
 - Video storyboard: 8 scenes, 10 min, production notes
+
+## Llama 3.1 8B — full PPL evaluation
+
+### Model
+- meta-llama/Llama-3.1-8B-Instruct, 32 layers, hidden=4096, intermediate=14336
+- Downloaded via HF token, cached in .hf_cache/
+
+### Results (9/9 PASS, 80s on GPU 2)
+- Baseline PPL (wikitext-2, full test set): 9.82
+- WAL encode layer 0, K=256: PPL=9.82 (no change)
+- WAL encode layer 0, K=128: PPL=9.82 (no change)
+- WAL encode layer 0, K=64: PPL=9.82 (no change)
+- Frozen vocabulary: non-target diff = 0% on Llama ✓
+- AGIM fictional fact + WAL edit + rollback ✓
+- ROME editor on Llama ✓
+
+### Key insight
+Single-layer WAL encoding has zero PPL impact on 8B model.
+Need full-model encode to measure real PPL impact.
+
+### Total: 85/85 tests pass (76 + 9 Llama)
