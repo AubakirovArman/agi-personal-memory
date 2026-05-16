@@ -5,14 +5,6 @@
     "version": "0.1.0",
     "author": "anonymous",
     "category": "verification_gate",
-    "plugin_id": "e3892d77dc76"
-  },
-  {
-    "name": "TestGate",
-    "description": "A test verification gate",
-    "version": "0.1.0",
-    "author": "anonymous",
-    "category": "verification_gate",
-    "plugin_id": "d813ff2b2d0a"
+    "plugin_id": "51833f903c25"
   }
 ]

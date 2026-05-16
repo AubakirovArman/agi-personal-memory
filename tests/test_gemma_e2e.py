@@ -17,14 +17,19 @@ GEMMA = ("/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/"
 DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
 
 
+_model_cache = None
+_tok_cache = None
+
 def load_model():
-    tok = AutoTokenizer.from_pretrained(GEMMA, local_files_only=True)
-    if tok.pad_token is None:
-        tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(
-        GEMMA, dtype=torch.bfloat16, device_map=DEVICE, local_files_only=True)
-    model.eval()
-    return model, tok
+    global _model_cache, _tok_cache
+    if _model_cache is None:
+        _tok_cache = AutoTokenizer.from_pretrained(GEMMA, local_files_only=True)
+        if _tok_cache.pad_token is None:
+            _tok_cache.pad_token = _tok_cache.eos_token
+        _model_cache = AutoModelForCausalLM.from_pretrained(
+            GEMMA, dtype=torch.bfloat16, device_map=DEVICE, local_files_only=True)
+        _model_cache.eval()
+    return _model_cache, _tok_cache
 
 
 def test_gemma_model_loads():
