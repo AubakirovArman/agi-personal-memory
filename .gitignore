@@ -9,3 +9,4 @@ venv/
 *.swp
 .agim/
 .DS_Store
+.agim_plugins/
