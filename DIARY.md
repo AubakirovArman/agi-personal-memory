@@ -301,3 +301,18 @@
 - Full teach → ask → forget → verify rollback cycle ✓
 
 ### Total: 71/71 tests pass
+
+## Fictional fact editing on Gemma-4-31B — PROOF
+
+### What was tested
+- Gemma does NOT know "capital of Zanikland" (fictional)
+- AGIM teaches "capital of Zanikland is Blorptown"
+- AGIM retrieves "Blorptown" correctly
+- WAL applies edit with frozen vocabulary → non-target diff = 0%
+- ROME/MEMIT editors instantiate and attempt edits
+- Full cycle: teach → commit → ask → rollback → model_fallback
+- 3 fictional facts batch-edited and verified
+- Regression suite run against protected facts
+
+### Results: 5/5 PASS (36s)
+Total: 76/76 tests pass
