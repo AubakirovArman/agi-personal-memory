@@ -287,3 +287,17 @@
 - 61/61 tests pass
 - All modules <300 lines
 - Roadmap v0.1-v10.0: ALL modules implemented
+
+## Gemma-4-31B end-to-end tests
+
+### Results (10/10 PASS, 191s on GPU 2)
+- Model loads from local cache ✓
+- WAL vocabulary builds on real Gemma layers (K=256, lmax=12) ✓
+- WAL encode/decode on real 31B model weights ✓
+- Frozen vocabulary: non-target diff = 0% on Gemma ✓
+- AGIM teach → WAL → commit → ask cycle ✓
+- ROME/MEMIT/WISE editors instantiate on Gemma ✓
+- Memory overlay with AGIM ✓
+- Full teach → ask → forget → verify rollback cycle ✓
+
+### Total: 71/71 tests pass
