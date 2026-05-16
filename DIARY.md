@@ -316,3 +316,12 @@
 
 ### Results: 5/5 PASS (36s)
 Total: 76/76 tests pass
+
+## Fictional fact editing on Gemma-4-31B
+
+### Tests (5/5 PASS, 36s on GPU 2)
+- Gemma does NOT know fictional "capital of Zanikland"
+- AGIM teaches "Blorptown" → retrieves correctly
+- WAL applies edit → non-target diff = 0%
+- ROME/MEMIT batch edit on 3 fictional facts
+- Full cycle: teach → commit → ask → rollback → model_fallback
