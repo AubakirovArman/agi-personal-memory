@@ -175,3 +175,26 @@
 ### Roadmap loaded
 - agim_roadmap_v0_to_v10.md added — 10 versions across 4 Eras
 - Next: v0.2 LLM Intent Router
+
+## Roadmap v0.2-v0.4 started
+
+### v0.2 — LLM Intent Router + Structured Extractor
+- LLMIntentRouter: small LM classification with regex fallback
+- StructuredExtractor: Pydantic-like StructuredFact with relations, temporal validity, tags
+- 15 relation patterns (capital, born_in, founded_in, population, etc.)
+
+### v0.3 — Confidence Scorer v2
+- Source-dependent scoring: user > learning_loop > external
+- History-aware: repeated similar questions boost confidence
+
+### v0.4 — Docker + Multi-User
+- Dockerfile: Python 3.11 slim, health check, /data volume
+- MultiUserAGIM: namespace isolation, user merge, user CRUD
+- REST API + dashboard (11 endpoints)
+
+### File discipline
+- All AGIM files < 300 lines ✓
+- WAL/dwl2 legacy files noted for future refactoring
+
+### Tests
+- 36/36 pass
