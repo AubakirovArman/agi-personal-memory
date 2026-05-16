@@ -37,6 +37,14 @@ class WALMemory:
         self._save_index()
         return artifact_id
 
+    def write_recipe_from_dict(self, recipe: dict) -> str:
+        aid = recipe.get("artifact_id", uuid4().hex[:12])
+        recipe_path = self.path / f"{aid}.json"
+        recipe_path.write_text(json.dumps(recipe, indent=2, ensure_ascii=False))
+        self._index[aid] = recipe
+        self._save_index()
+        return aid
+
     def preview_artifact_id(self, candidate) -> str:
         return uuid4().hex[:12]
 

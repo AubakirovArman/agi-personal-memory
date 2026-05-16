@@ -75,3 +75,38 @@
 - Default tier routing: fact_teach/correct → WAL_RECIPE, preference/feedback → RETRIEVAL
 - Risk ledger with auto-rollback for score >= 8.0
 - Memory budget: 100K total, 500/day, 50/hour
+
+## 2026-05-16 (night) — Phases 2-5 implemented
+
+### Phase 2: Verification & Testing ✓
+- Regression suite with protected facts
+- Confidence scorer (source-aware, history-aware)
+- 5 new verify tests
+
+### Phase 3: Model Backend ✓
+- WALWeightEditor: frozen vocabulary edits with non-target diff verification
+- MemoryOverlay: serves from memory first, falls back to model
+- HuggingFaceTextBackend with local_files_only
+
+### Phase 4: Governance & Safety ✓
+- ProvenanceChain: cryptographic chain of memory commits
+- MemoryBudget: total, daily, hourly limits
+- RiskLedger: auto-rollback for dangerous edits (score >= 8.0)
+- 7 new governance tests
+
+### Phase 5: Interface ✓
+- Export/import memories (JSON format)
+- CLI: teach/ask/correct/forget/history/stats/shell/export/import
+- GitHub Pages landing page
+
+### Results
+- 31/31 tests pass (0.08s)
+- GitHub Pages live
+- Full provenance chain with verification
+- WAL frozen vocabulary integration
+
+### Known limitations
+- WALWeightEditor needs real model on GPU for production use
+- IntentRouter is regex-based, not LLM-based
+- Web dashboard is static, not dynamic
+- Multi-user overlay not implemented yet
