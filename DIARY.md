@@ -131,3 +131,26 @@
 3. Model backend: WAL editor, memory overlay, HF backend
 4. Governance: provenance chain, budget, risk ledger
 5. Interface: CLI (10 commands), web dashboard, export/import, GitHub Pages
+
+## WAL Integration — standalone
+
+### What was done
+- Copied entire WAL core (47 files) from `/mnt/hf_model_weights/arman/3bit/wal/src/wal/` into `src/agim/wal/`
+- Copied dwl2 route encoder (17 files) into `src/agim/dwl2/`
+- Fixed all relative imports for standalone package
+- WALWeightEditor now uses real WAL encoder (build_atoms_kmeans, wal_encode_scalar)
+- MemoryOverlay now connects to HF backend properly
+
+### Bugs fixed
+- WAL encoder requires 1D (flattened) input — added .flatten() in build_vocabulary and encode_weight
+- Relative import chain broken during copy — fixed all .wal. and .dwl2. references
+- venv had no torch — installed torch + numpy
+
+### Results
+- 36/36 tests pass (including 5 new WAL integration tests)
+- AGIM is now fully standalone — no dependency on external WAL project
+- WALWeightEditor: build vocabulary → encode → edit → verify → rollback
+
+### Files
+- src/agim/wal/ — 47 WAL core files (encoder, decoder, isa, format, v1, v2, backends)
+- src/agim/dwl2/ — 17 dwl2 route encoder files
