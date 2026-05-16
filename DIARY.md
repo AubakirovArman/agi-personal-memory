@@ -263,3 +263,27 @@
 - +64 WAL/dwl2 files
 - 36/36 tests pass
 - 10 versions implemented in single session
+
+## All missing modules implemented
+
+### What was added (no Docker/K8s)
+- MEMITEditor: batch knowledge editing with shared covariance
+- WISEDualMemory: episodic vs semantic separation
+- FAISSRetrieval + BM25Scorer: hybrid semantic+keyword search
+- WebResearchAgent + ResearcherAgent: autonomous knowledge discovery
+- CurriculumGenerator + PageRankPrioritizer: optimal learning order
+- IPFSContent + FederatedUpdate + MemoryMarketplace
+- AdversarialTester (6 attack types) + MemoryWatermark
+- A2AServer + PluginMarketplace
+- SQLiteMemoryStore: relational migration from JSON
+- GraphQLResolver: GraphQL query parsing
+- CrossModelTransfer: model-agnostic fact transfer
+- SafetyGovernor + RecursiveImprovementLoop
+- 25 new roadmap tests
+
+### Final stats
+- 64 AGIM files, ~5000 LOC
+- 64 WAL/dwl2 files
+- 61/61 tests pass
+- All modules <300 lines
+- Roadmap v0.1-v10.0: ALL modules implemented
