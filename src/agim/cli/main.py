@@ -207,6 +207,10 @@ def main():
     p.add_argument("--host", default="0.0.0.0")
     p.add_argument("--port", type=int, default=8720)
 
+    p = sub.add_parser("api", help="Start REST API server (with dashboard)")
+    p.add_argument("--host", default="0.0.0.0")
+    p.add_argument("--port", type=int, default=8720)
+
     sub.add_parser("shell", help="Interactive shell")
 
     args = parser.parse_args()
@@ -222,6 +226,10 @@ def main():
     if args.command == "webui":
         from .webui import run_server
         run_server(args.host, args.port)
+        return 0
+    if args.command == "api":
+        from .api import run_api
+        run_api(args.host, args.port)
         return 0
     parser.print_help()
     return 0

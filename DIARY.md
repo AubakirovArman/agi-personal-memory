@@ -154,3 +154,24 @@
 ### Files
 - src/agim/wal/ — 47 WAL core files (encoder, decoder, isa, format, v1, v2, backends)
 - src/agim/dwl2/ — 17 dwl2 route encoder files
+
+## Integration sprint — all stubs connected
+
+### What was done
+- ProvenanceChain integrated into AGIMSystem.commit() — every commit adds to chain
+- RiskLedger integrated into AGIMSystem.compile() — auto-rollback for score >= 8.0
+- MemoryBudget integrated into AGIMSystem.commit() — checks limits before commit
+- RegressionSuite auto-runs on every commit
+- Full REST API with 10 endpoints + reactive JS dashboard
+- `agim api` command added to CLI
+- Contract suite connected to system init
+
+### Results
+- 36/36 tests pass
+- REST API: ask, teach, correct, forget, protect, regression, stats, history, memories, provenance, risk
+- Dashboard: Ask/Teach/History/Search/Governance tabs with live JS
+- ~3500 LOC total
+
+### Roadmap loaded
+- agim_roadmap_v0_to_v10.md added — 10 versions across 4 Eras
+- Next: v0.2 LLM Intent Router
