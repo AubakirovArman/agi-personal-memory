@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGI Personal Memory</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6;
+         background: #0d1117; color: #c9d1d9; }
+  h1 { color: #58a6ff; }
+  h2 { color: #f0883e; margin-top: 2rem; }
+  code { background: #161b22; padding: 0.2em 0.4em; border-radius: 4px; }
+  pre { background: #161b22; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+  .badge { display: inline-block; padding: 4px 8px; border-radius: 4px;
+           font-size: 12px; margin-right: 8px; }
+  .badge-mit { background: #238636; color: white; }
+  .badge-alpha { background: #d29922; color: black; }
+  a { color: #58a6ff; }
+</style>
+</head>
+<body>
+<h1>AGI Personal Memory</h1>
+<p><span class="badge badge-mit">MIT</span><span class="badge badge-alpha">alpha</span></p>
+<p><strong>Accumulative verified memory substrate for language models.</strong></p>
+<p>Incremental, auditable, reversible knowledge accumulation. One fact at a time, verified before commit.</p>
+
+<h2>Quick Start</h2>
+<pre><code>pip install -e .
+agim teach "Paris is the capital of France"
+agim ask "What is the capital of France?"
+agim correct "No, Napoleon was born in 1769"
+agim history
+agim stats
+agim shell</code></pre>
+
+<h2>How It Works</h2>
+<pre><code>User Input → IntentRouter → MemoryExtractor → MemoryCandidate
+                                              ↓
+                                         VERIFY (5 gates)
+                                              ↓
+                                    MemoryCompiler (tier)
+                                              ↓
+                                    ┌─ WAL recipe (permanent)
+                                    ├─ Retrieval (volatile)
+                                    └─ Reject / Refusal
+                                              ↓
+                                    COMMIT + Event Log</code></pre>
+
+<h2>Key Properties</h2>
+<table>
+<tr><th>Property</th><th>How</th></tr>
+<tr><td>Incremental</td><td>One fact at a time, not batch fine-tuning</td></tr>
+<tr><td>Verified</td><td>Every change tested before commit</td></tr>
+<tr><td>Reversible</td><td>Rollback any commit</td></tr>
+<tr><td>Auditable</td><td>JSONL event log of every action</td></tr>
+<tr><td>Non-destructive</td><td>Frozen vocabulary = 0% non-target diff</td></tr>
+</table>
+
+<h2>Links</h2>
+<ul>
+<li><a href="https://github.com/AubakirovArman/agi-personal-memory">GitHub Repository</a></li>
+<li><a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/VISION.md">Vision & Roadmap</a></li>
+<li><a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/ARCHITECTURE.md">Architecture</a></li>
+<li><a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/DIARY.md">Developer Diary</a></li>
+</ul>
+</body>
+</html>

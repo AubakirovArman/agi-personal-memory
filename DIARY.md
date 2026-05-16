@@ -52,3 +52,26 @@
 - [ ] GitHub Pages + Wiki
 - [ ] Real HF model backend test
 - [ ] Web dashboard
+
+## 2026-05-16 (evening) — Phase 1 complete
+
+### Added
+- VerifiedLearningLoop: feedback → extract → verify → commit cycle
+- Behavioural contracts: must_answer, must_refuse, exact/contains/not_contains checks
+- GitHub Pages: deployed at aubakirovarman.github.io/agi-personal-memory
+- 3 new tests (lesson extraction positive/negative, learning loop)
+
+### Results
+- 19/19 tests pass
+- GitHub repo: public, MIT license
+- GitHub Pages: live
+- 2 commits pushed
+
+### Bugs
+- venv needed separate pytest install
+
+### Architecture decisions
+- Regex-based extraction is fast but limited. Future: LLM-based extraction.
+- Default tier routing: fact_teach/correct → WAL_RECIPE, preference/feedback → RETRIEVAL
+- Risk ledger with auto-rollback for score >= 8.0
+- Memory budget: 100K total, 500/day, 50/hour
