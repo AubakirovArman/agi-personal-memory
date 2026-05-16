@@ -1,68 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AGI Personal Memory</title>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-         max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6;
-         background: #0d1117; color: #c9d1d9; }
-  h1 { color: #58a6ff; }
-  h2 { color: #f0883e; margin-top: 2rem; }
-  code { background: #161b22; padding: 0.2em 0.4em; border-radius: 4px; }
-  pre { background: #161b22; padding: 1rem; border-radius: 8px; overflow-x: auto; }
-  .badge { display: inline-block; padding: 4px 8px; border-radius: 4px;
-           font-size: 12px; margin-right: 8px; }
-  .badge-mit { background: #238636; color: white; }
-  .badge-alpha { background: #d29922; color: black; }
-  a { color: #58a6ff; }
-</style>
-</head>
+*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+max-width:900px;margin:0 auto;padding:2rem;background:#0d1117;color:#c9d1d9;line-height:1.6}
+h1{color:#58a6ff;text-align:center;font-size:2.5rem}
+.tagline{text-align:center;color:#8b949e;font-size:1.2rem;margin-bottom:2rem}
+.card{background:#161b22;border-radius:12px;padding:1.5rem;margin:1rem 0}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.lang-btn{display:block;padding:2rem;text-align:center;background:#21262d;border-radius:8px;
+text-decoration:none;color:#c9d1d9;transition:background .2s}
+.lang-btn:hover{background:#30363d}
+.lang-name{font-size:1.5rem;color:#58a6ff;display:block}
+.lang-desc{font-size:0.9rem;color:#8b949e;margin-top:0.5rem}
+.badges{text-align:center;margin:1rem 0}
+.badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:12px;margin:2px}
+.b-mit{background:#238636;color:#fff}.b-tests{background:#1f6feb;color:#fff}.b-ver{background:#8957e5;color:#fff}
+pre{background:#0d1117;padding:1rem;border-radius:8px;overflow-x:auto;font-size:13px}
+.footer{text-align:center;color:#484f58;margin-top:3rem;font-size:0.8rem}
+</style></head>
 <body>
+<div class="badges">
+<span class="badge b-mit">MIT</span><span class="badge b-tests">76/76 tests</span><span class="badge b-ver">v10.0</span>
+</div>
 <h1>AGI Personal Memory</h1>
-<p><span class="badge badge-mit">MIT</span><span class="badge badge-alpha">alpha</span></p>
-<p><strong>Accumulative verified memory substrate for language models.</strong></p>
-<p>Incremental, auditable, reversible knowledge accumulation. One fact at a time, verified before commit.</p>
+<p class="tagline">Accumulative verified memory substrate for language models</p>
 
+<div class="card">
+<h2>Language / Язык / 语言 / Тіл</h2>
+<div class="lang-grid">
+<a class="lang-btn" href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/README.md">
+<span class="lang-name">English</span><span class="lang-desc">Documentation in English</span></a>
+<a class="lang-btn" href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/docs/ru/README.md">
+<span class="lang-name">Русский</span><span class="lang-desc">Документация на русском</span></a>
+<a class="lang-btn" href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/docs/zh/README.md">
+<span class="lang-name">中文</span><span class="lang-desc">中文文档</span></a>
+<a class="lang-btn" href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/docs/kk/README.md">
+<span class="lang-name">Қазақша</span><span class="lang-desc">Қазақ тілінде</span></a>
+</div></div>
+
+<div class="card">
 <h2>Quick Start</h2>
 <pre><code>pip install -e .
 agim teach "Paris is the capital of France"
 agim ask "What is the capital of France?"
-agim correct "No, Napoleon was born in 1769"
-agim history
-agim stats
-agim shell</code></pre>
+agim webui --port 8720</code></pre>
+</div>
 
-<h2>How It Works</h2>
-<pre><code>User Input → IntentRouter → MemoryExtractor → MemoryCandidate
-                                              ↓
-                                         VERIFY (5 gates)
-                                              ↓
-                                    MemoryCompiler (tier)
-                                              ↓
-                                    ┌─ WAL recipe (permanent)
-                                    ├─ Retrieval (volatile)
-                                    └─ Reject / Refusal
-                                              ↓
-                                    COMMIT + Event Log</code></pre>
-
-<h2>Key Properties</h2>
-<table>
-<tr><th>Property</th><th>How</th></tr>
-<tr><td>Incremental</td><td>One fact at a time, not batch fine-tuning</td></tr>
-<tr><td>Verified</td><td>Every change tested before commit</td></tr>
-<tr><td>Reversible</td><td>Rollback any commit</td></tr>
-<tr><td>Auditable</td><td>JSONL event log of every action</td></tr>
-<tr><td>Non-destructive</td><td>Frozen vocabulary = 0% non-target diff</td></tr>
-</table>
-
+<div class="card">
 <h2>Links</h2>
-<ul>
-<li><a href="https://github.com/AubakirovArman/agi-personal-memory">GitHub Repository</a></li>
-<li><a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/VISION.md">Vision & Roadmap</a></li>
-<li><a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/ARCHITECTURE.md">Architecture</a></li>
-<li><a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/DIARY.md">Developer Diary</a></li>
-</ul>
-</body>
-</html>
+<p>
+<a href="https://github.com/AubakirovArman/agi-personal-memory">GitHub</a> ·
+<a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/VISION.md">Vision</a> ·
+<a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/ARCHITECTURE.md">Architecture</a> ·
+<a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/agim_roadmap_v0_to_v10.md">Roadmap</a> ·
+<a href="https://github.com/AubakirovArman/agi-personal-memory/blob/main/docs/video_framework/STORYBOARD.md">Video</a>
+</p>
+</div>
+
+<div class="footer">Built on <a href="https://github.com/AubakirovArman/wal2026">WAL</a> · MIT</div>
+</body></html>

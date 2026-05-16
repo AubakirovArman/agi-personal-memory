@@ -325,3 +325,19 @@ Total: 76/76 tests pass
 - WAL applies edit → non-target diff = 0%
 - ROME/MEMIT batch edit on 3 fictional facts
 - Full cycle: teach → commit → ask → rollback → model_fallback
+
+## Multilingual documentation + video framework
+
+### Added
+- README.md updated with full project info (English)
+- docs/ru/README.md — Russian documentation
+- docs/zh/README.md — Chinese documentation
+- docs/kk/README.md — Kazakh documentation
+- docs/index.html — multilingual landing page (GitHub Pages)
+- docs/video_framework/STORYBOARD.md — 8-scene video storyboard (EN)
+- All docs linked from main README
+
+### Repo structure cleaned
+- 76/76 tests pass
+- 4 languages documented
+- Video storyboard: 8 scenes, 10 min, production notes
