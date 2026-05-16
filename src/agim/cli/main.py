@@ -107,6 +107,22 @@ def cmd_stats(args):
     return 0
 
 
+def cmd_export(args):
+    from .export import export_memories
+    agim = get_system()
+    count = export_memories(agim, args.output)
+    print(f"EXPORTED {count} memories to {args.output}")
+    return 0
+
+
+def cmd_import(args):
+    from .export import import_memories
+    agim = get_system()
+    count = import_memories(agim, args.input)
+    print(f"IMPORTED {count} memories from {args.input}")
+    return 0
+
+
 def cmd_shell(args):
     agim = get_system()
     router = IntentRouter()
@@ -180,7 +196,17 @@ def main():
     p = sub.add_parser("history", help="Show memory timeline")
     p.add_argument("--limit", type=int, default=50)
 
+    p = sub.add_parser("export", help="Export all memories to JSON")
+    p.add_argument("output", help="Output file path")
+
+    p = sub.add_parser("import", help="Import memories from JSON")
+    p.add_argument("input", help="Input file path")
+
     sub.add_parser("stats", help="Memory statistics")
+    p = sub.add_parser("webui", help="Start web dashboard")
+    p.add_argument("--host", default="0.0.0.0")
+    p.add_argument("--port", type=int, default=8720)
+
     sub.add_parser("shell", help="Interactive shell")
 
     args = parser.parse_args()
@@ -189,8 +215,14 @@ def main():
     if args.command == "correct": return cmd_correct(args)
     if args.command == "forget": return cmd_forget(args)
     if args.command == "history": return cmd_history(args)
+    if args.command == "export": return cmd_export(args)
+    if args.command == "import": return cmd_import(args)
     if args.command == "stats": return cmd_stats(args)
     if args.command == "shell": return cmd_shell(args)
+    if args.command == "webui":
+        from .webui import run_server
+        run_server(args.host, args.port)
+        return 0
     parser.print_help()
     return 0
 
