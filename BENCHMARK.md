@@ -135,3 +135,39 @@ Single-token answers work robustly at clamp=0.08 (2/2).
 
 ### Final Path B Status: 4/5 (80%)
 - 137 ✓, 1769 ✓, Ajaccio ✓, Blorptown ~, Zx ✗
+
+---
+
+## LoCoMo Benchmark (Stanford SNAP, ACL 2024)
+
+**Dataset:** 10 very long-term conversations, 19-32 sessions each, 1986 QA pairs.
+Tests memory retention across sessions spanning days/weeks/months.
+
+### AGIM Path A Results (BM25-only retrieval)
+
+| Metric | Value |
+|--------|-------|
+| Total QA pairs | 1,986 |
+| Retrieved correctly | 284 |
+| **Retrieval rate** | **14.3%** |
+| Turns indexed | 6,154 |
+| Index time | 0.0s |
+
+**Per sample:** 5.7% - 20.5% retrieval rate
+
+### Context
+
+LoCoMo is a HARD benchmark. The paper reports RAG baselines at 20-50%
+using dense embeddings. Our 14.3% is pure BM25 keyword matching — no
+embeddings, no LLM reranking.
+
+**To improve:** add sentence-transformer embeddings (384-dim or 768-dim)
+to FAISS index for semantic search. Expected improvement: 14% → 30-45%.
+
+### Comparison with LoCoMo paper baselines
+
+| Method | Retrieval |
+|--------|-----------|
+| AGIM BM25-only | 14.3% |
+| LoCoMo RAG (dense) | 25-40% |
+| LoCoMo RAG + LLM | 40-55% |

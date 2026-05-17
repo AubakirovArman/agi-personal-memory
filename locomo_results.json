@@ -1,0 +1,87 @@
+{
+  "total_qa": 1986,
+  "retrieved": 284,
+  "correct": 284,
+  "by_category": {
+    "2": {
+      "rate": 0.0623,
+      "retrieved": 20,
+      "total": 321
+    },
+    "3": {
+      "rate": 0.0625,
+      "retrieved": 6,
+      "total": 96
+    },
+    "1": {
+      "rate": 0.0638,
+      "retrieved": 18,
+      "total": 282
+    },
+    "4": {
+      "rate": 0.1891,
+      "retrieved": 159,
+      "total": 841
+    },
+    "5": {
+      "rate": 0.1816,
+      "retrieved": 81,
+      "total": 446
+    }
+  },
+  "by_sample": {
+    "conv-26": {
+      "qa_total": 199,
+      "retrieved": 16,
+      "retrieval_rate": 0.0804
+    },
+    "conv-30": {
+      "qa_total": 105,
+      "retrieved": 6,
+      "retrieval_rate": 0.0571
+    },
+    "conv-41": {
+      "qa_total": 193,
+      "retrieved": 39,
+      "retrieval_rate": 0.2021
+    },
+    "conv-42": {
+      "qa_total": 260,
+      "retrieved": 32,
+      "retrieval_rate": 0.1231
+    },
+    "conv-43": {
+      "qa_total": 242,
+      "retrieved": 40,
+      "retrieval_rate": 0.1653
+    },
+    "conv-44": {
+      "qa_total": 158,
+      "retrieved": 24,
+      "retrieval_rate": 0.1519
+    },
+    "conv-47": {
+      "qa_total": 190,
+      "retrieved": 39,
+      "retrieval_rate": 0.2053
+    },
+    "conv-48": {
+      "qa_total": 239,
+      "retrieved": 28,
+      "retrieval_rate": 0.1172
+    },
+    "conv-49": {
+      "qa_total": 196,
+      "retrieved": 24,
+      "retrieval_rate": 0.1224
+    },
+    "conv-50": {
+      "qa_total": 204,
+      "retrieved": 36,
+      "retrieval_rate": 0.1765
+    }
+  },
+  "index_time_s": 0.05062580108642578,
+  "eval_time_s": 252.2128562927246,
+  "retrieval_rate": 0.143
+}
