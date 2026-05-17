@@ -1,0 +1,24 @@
+{
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "n": 50,
+  "agim_protocol": {
+    "ES": 0.94,
+    "PS": 0.95,
+    "NS": 0.315,
+    "ES_clean": 0.16,
+    "composite": 0.735
+  },
+  "easyedit_protocol": {
+    "ES": 0.7,
+    "PS": 0.64,
+    "NS": 0.315,
+    "composite": 0.5517
+  },
+  "NT_max_measured": 0.0,
+  "NT_nonzero_rows": 0,
+  "repetition_rate": 0.78,
+  "NS_mean_overlap": 0.2932,
+  "RB": 0.38,
+  "time_s": 113.8,
+  "model_note": "Llama-3.1-8B-Instruct (not Llama-3-8B). Same 8B class."
+}
