@@ -1,0 +1,54 @@
+{
+  "model": "Llama-3.1-8B + AGIM",
+  "dataset": "SQuAD 87K",
+  "scales": [
+    {
+      "n_train": 100,
+      "n_test": 30,
+      "taught": 50,
+      "baseline": 0.167,
+      "post": 0.0,
+      "delta": -0.167,
+      "train_time_s": 0.05,
+      "train_rate": 1082,
+      "hit_rate": 1.0,
+      "model_mb": 15317.0
+    },
+    {
+      "n_train": 500,
+      "n_test": 30,
+      "taught": 50,
+      "baseline": 0.2,
+      "post": 0.0,
+      "delta": -0.2,
+      "train_time_s": 0.1,
+      "train_rate": 480,
+      "hit_rate": 1.0,
+      "model_mb": 15317.0
+    },
+    {
+      "n_train": 1000,
+      "n_test": 30,
+      "taught": 50,
+      "baseline": 0.167,
+      "post": 0.0,
+      "delta": -0.167,
+      "train_time_s": 0.17,
+      "train_rate": 298,
+      "hit_rate": 1.0,
+      "model_mb": 15317.0
+    },
+    {
+      "n_train": 2000,
+      "n_test": 30,
+      "taught": 50,
+      "baseline": 0.2,
+      "post": 0.033,
+      "delta": -0.167,
+      "train_time_s": 0.28,
+      "train_rate": 181,
+      "hit_rate": 0.9,
+      "model_mb": 15317.0
+    }
+  ]
+}
