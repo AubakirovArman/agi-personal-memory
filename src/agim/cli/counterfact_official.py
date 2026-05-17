@@ -15,12 +15,22 @@ LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
 DEVICE = "cuda:3"
 
 
-def generate(model, tok, prompt, max_tokens=10):
+def generate(model, tok, prompt, max_tokens=10, temperature=None, rep_penalty=1.2):
+    """Generation with repetition penalty (1.2 = best in sweep)."""
     inputs = tok(prompt, return_tensors="pt").to(model.device)
     ilen = inputs.input_ids.shape[1]
+    gen_kwargs = {
+        "max_new_tokens": max_tokens,
+        "pad_token_id": tok.eos_token_id,
+        "repetition_penalty": rep_penalty,
+    }
+    if temperature and temperature > 0:
+        gen_kwargs.update({"do_sample": True, "temperature": temperature, "top_p": 0.9})
+    else:
+        gen_kwargs["do_sample"] = False
+
     with torch.no_grad():
-        out = model.generate(**inputs, max_new_tokens=max_tokens,
-                             do_sample=False, pad_token_id=tok.eos_token_id)
+        out = model.generate(**inputs, **gen_kwargs)
     return out[0, ilen:], tok.decode(out[0][ilen:], skip_special_tokens=True)
 
 
@@ -119,18 +129,23 @@ def evaluate_edit_hardened(model, tok, editor, fact, clamp=0.3):
     ps_easyedit /= max(ps_n, 1)
     ps_rep_rate = ps_rep_count / max(ps_n, 1)
 
-    # ═══ NS: Neighborhood (Fix 1) ═══
-    ns_hits = 0
+    # ═══ NS: Neighborhood — правильная метрика (target NOT in neighbor answer) ═══
+    ns_hits = 0  # NS_B: target_new NOT in neighbor answer
+    ns_overlap_hits = 0  # NS_A: overlap for diagnostic
     ns_overlaps = []
     for i, n_prompt in enumerate(n_prompts):
         _, n_after_text = generate(model, tok, n_prompt[:100], 8)
-        # Fix 1: token overlap between BEFORE and AFTER (not exact match)
-        overlap = token_overlap(n_before_texts[i], n_after_text.strip())
-        ns_overlaps.append(overlap)
-        if overlap > 0.3:  # reasonable overlap = fact preserved
+        na = n_after_text.strip()
+        # Correct NS: target_new should NOT appear in neighbor answer
+        if target_new.lower() not in na.lower():
             ns_hits += 1
+        # Diagnostic: token overlap (legacy)
+        overlap = token_overlap(n_before_texts[i], na)
+        ns_overlaps.append(overlap)
+        if overlap > 0.3:
+            ns_overlap_hits += 1
     ns = ns_hits / max(len(n_prompts), 1)
-    ns_mean_overlap = sum(ns_overlaps) / max(len(ns_overlaps), 1)
+    ns_overlap_legacy = ns_overlap_hits / max(len(n_prompts), 1)
 
     # ═══ NT: Measured non-target diff (Fix 2) ═══
     nt_max = 0.0
@@ -159,9 +174,9 @@ def evaluate_edit_hardened(model, tok, editor, fact, clamp=0.3):
         "PS_agim": ps_agim,
         "PS_easyedit": ps_easyedit,
         "PS_rep_rate": ps_rep_rate,
-        # NS (Fix 1)
+        # NS (correct: target NOT in neighbor)
         "NS": ns,
-        "NS_mean_overlap": ns_mean_overlap,
+        "NS_legacy_overlap": ns_overlap_legacy,
         # NT (Fix 2)
         "NT_max": nt_max,
         "NT_nonzero_rows": nt_count_nonzero,

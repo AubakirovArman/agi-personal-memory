@@ -48,18 +48,13 @@ class WalLmHeadEditor:
 
     # ── editing ───────────────────────────────────────────────────────
     def apply_edit(self, subject: str, target: str, relation: str = "",
-                   clamp_norm: float = 0.3, prompt: str = "") -> bool:
-        """Sequence-level edit: each target token boosted in its correct context.
+                   clamp_norm: float = 0.3, prompt: str = "",
+                   neg_prompts: list[str] | None = None) -> bool:
+        """Sequence-level edit with optional negative projection (Experiment C).
 
-        Instead of boosting all tokens from the same hidden state, we compute
-        the hidden state for each token given the prefix of already-generated tokens.
-        This breaks the autoregressive repetition loop:
-
-          Token "R":    boost given "...is located in"       → "R"
-          Token "ome":  boost given "...is located in R"     → "ome"
-          Token <EOS>:  boost given "...is located in Rome"  → stop
-
-        Original rows snapshotted via clone() for exact rollback.
+        neg_prompts: neighborhood prompts whose hidden states form a negative
+        subspace. Boost direction is projected away from this subspace,
+        reducing cross-contamination (NS improvement).
         """
         if self.atoms is None:
             raise RuntimeError("Call build_vocab() first")
@@ -98,6 +93,23 @@ class WalLmHeadEditor:
             if key is None:
                 continue
             key = key / (key.norm() + 1e-8)
+
+            # Experiment C: project away from negative subspace
+            if neg_prompts and len(neg_prompts) > 0:
+                neg_keys = []
+                for npr in neg_prompts[:4]:
+                    nids = self.tokenizer(npr[:100], return_tensors="pt").input_ids[0]
+                    nk = self._get_last_hidden_from_ids(nids.to(self.device))
+                    if nk is not None:
+                        neg_keys.append(nk / (nk.norm() + 1e-8))
+                if neg_keys:
+                    K_neg = torch.stack(neg_keys)  # [M, D]
+                    # Project key away from each negative direction
+                    for nk in neg_keys:
+                        proj = torch.dot(key, nk) * nk
+                        if torch.dot(key, nk) > 0:  # only if aligned
+                            key = key - 0.5 * proj  # partial projection
+                    key = key / (key.norm() + 1e-8)
 
             current_row = weight[tid, :].float().to(self.device)
             boost = clamp_norm * key.to(self.device)
