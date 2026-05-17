@@ -1,0 +1,95 @@
+{
+  "leaderboard": [
+    {
+      "model_name": "Llama-3.1-8B + AGIM",
+      "n_facts": 30,
+      "n_tested": 15,
+      "baseline_accuracy": 0.0,
+      "post_accuracy": 1.0,
+      "delta": 1.0,
+      "train_time_s": 0.02,
+      "train_rate": 1261,
+      "memory_hit_rate": 1.0,
+      "model_size_mb": 15317.0,
+      "per_category": {
+        "science": {
+          "accuracy": 1.0,
+          "total": 3
+        },
+        "geography": {
+          "accuracy": 1.0,
+          "total": 3
+        },
+        "history": {
+          "accuracy": 1.0,
+          "total": 3
+        },
+        "literature": {
+          "accuracy": 1.0,
+          "total": 1
+        },
+        "sports": {
+          "accuracy": 1.0,
+          "total": 1
+        },
+        "tech": {
+          "accuracy": 1.0,
+          "total": 1
+        },
+        "music": {
+          "accuracy": 1.0,
+          "total": 1
+        },
+        "art": {
+          "accuracy": 1.0,
+          "total": 1
+        },
+        "food": {
+          "accuracy": 1.0,
+          "total": 1
+        }
+      },
+      "rank": 1
+    },
+    {
+      "model_name": "Llama-3.1-8B + AGIM",
+      "n_facts": 50,
+      "n_tested": 100,
+      "baseline_accuracy": 1.0,
+      "post_accuracy": 1.0,
+      "delta": 0.0,
+      "train_time_s": 0.08,
+      "train_rate": 638,
+      "memory_hit_rate": 1.0,
+      "model_size_mb": 15317.0,
+      "per_category": {
+        "science": {
+          "accuracy": 1.0,
+          "total": 30
+        },
+        "geography": {
+          "accuracy": 1.0,
+          "total": 20
+        },
+        "history": {
+          "accuracy": 1.0,
+          "total": 20
+        },
+        "literature": {
+          "accuracy": 1.0,
+          "total": 10
+        },
+        "sports": {
+          "accuracy": 1.0,
+          "total": 10
+        },
+        "tech": {
+          "accuracy": 1.0,
+          "total": 10
+        }
+      },
+      "rank": 2
+    }
+  ],
+  "updated": "2026-05-17T04:56:28"
+}
