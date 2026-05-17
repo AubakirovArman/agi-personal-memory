@@ -1,0 +1,86 @@
+{
+  "total_qa": 1986,
+  "retrieved": 450,
+  "by_category": {
+    "2": {
+      "rate": 0.0872,
+      "retrieved": 28,
+      "total": 321
+    },
+    "3": {
+      "rate": 0.0938,
+      "retrieved": 9,
+      "total": 96
+    },
+    "1": {
+      "rate": 0.0851,
+      "retrieved": 24,
+      "total": 282
+    },
+    "4": {
+      "rate": 0.327,
+      "retrieved": 275,
+      "total": 841
+    },
+    "5": {
+      "rate": 0.2556,
+      "retrieved": 114,
+      "total": 446
+    }
+  },
+  "by_sample": {
+    "conv-26": {
+      "qa_total": 199,
+      "retrieved": 36,
+      "rate": 0.1809
+    },
+    "conv-30": {
+      "qa_total": 105,
+      "retrieved": 13,
+      "rate": 0.1238
+    },
+    "conv-41": {
+      "qa_total": 193,
+      "retrieved": 51,
+      "rate": 0.2642
+    },
+    "conv-42": {
+      "qa_total": 260,
+      "retrieved": 56,
+      "rate": 0.2154
+    },
+    "conv-43": {
+      "qa_total": 242,
+      "retrieved": 71,
+      "rate": 0.2934
+    },
+    "conv-44": {
+      "qa_total": 158,
+      "retrieved": 42,
+      "rate": 0.2658
+    },
+    "conv-47": {
+      "qa_total": 190,
+      "retrieved": 58,
+      "rate": 0.3053
+    },
+    "conv-48": {
+      "qa_total": 239,
+      "retrieved": 38,
+      "rate": 0.159
+    },
+    "conv-49": {
+      "qa_total": 196,
+      "retrieved": 40,
+      "rate": 0.2041
+    },
+    "conv-50": {
+      "qa_total": 204,
+      "retrieved": 45,
+      "rate": 0.2206
+    }
+  },
+  "index_time_s": 3.2536470890045166,
+  "eval_time_s": 16.90169382095337,
+  "rate": 0.2266
+}
