@@ -1,4 +1,10 @@
-"""Memory-Augmented Model — AGIM memory + ROME weight editing (Path A + B)."""
+"""Memory-Augmented Model — AGIM memory + weight editing (Path A + B).
+
+Supports two editing backends:
+  - ROME: direct lm_head token boosting (fast, simple)
+  - WAL: frozen vocabulary + program-based editing (0% non-target diff)
+"""
+
 from __future__ import annotations
 
 import torch
@@ -8,18 +14,20 @@ from ..core.system import AGIMSystem
 from ..core.state import AIGIResponse
 from ..memory.faiss_retrieval import FAISSRetrieval
 from .rome_causal import ROMECausalEditor
+from .wal_editor import WalLmHeadEditor
 
 
 class MemoryAugmentedModel(nn.Module):
-    """Модель с AGIM-памятью + ROME weight editing.
+    """Model with AGIM memory + weight editing (Path A + B).
 
     Path A (Memory): facts stored in JSON + FAISS, fast lookup
-    Path B (Weight Edit): ROME edits lm_head, model.generate() outputs answer
+    Path B (Weight Edit): WAL or ROME edits lm_head, model.generate() outputs answer
     """
 
     def __init__(self, base_model, tokenizer, memory_dir: str = "./mem_model_memory",
                  embedding_dim: int = 768, device: str = "cuda:0",
-                 enable_weight_editing: bool = True):
+                 enable_weight_editing: bool = True,
+                 editor_type: str = "wal"):  # "wal" or "rome"
         super().__init__()
         self.base_model = base_model
         self.tokenizer = tokenizer
@@ -30,7 +38,16 @@ class MemoryAugmentedModel(nn.Module):
         self._index_built = False
         self._total_taught = 0
         self.enable_weight_editing = enable_weight_editing
-        self.editor = ROMECausalEditor(base_model, tokenizer, device=device) if enable_weight_editing else None
+        self.editor_type = editor_type
+
+        if enable_weight_editing:
+            if editor_type == "wal":
+                self.editor = WalLmHeadEditor(base_model, tokenizer, K=256, lmax=16, device=device)
+                self.editor.build_vocab()
+            else:
+                self.editor = ROMECausalEditor(base_model, tokenizer, device=device)
+        else:
+            self.editor = None
         self._edits_applied = 0
 
     def teach(self, question: str, answer: str, confidence: float = 1.0) -> bool:
@@ -47,9 +64,12 @@ class MemoryAugmentedModel(nn.Module):
         self._index_built = False
         self._total_taught += 1
 
-        # Path B: ROME lm_head edit
+        # Path B: Weight edit (WAL or ROME)
         if self.enable_weight_editing and self.editor is not None:
-            self.editor.apply_edit(question, answer, "", clamp_norm=0.08)
+            if self.editor_type == "wal":
+                self.editor.apply_edit(question, answer, "", clamp_norm=0.3)
+            else:
+                self.editor.apply_edit(question, answer, "", clamp_norm=0.08)
             self._edits_applied += 1
         return True
 
