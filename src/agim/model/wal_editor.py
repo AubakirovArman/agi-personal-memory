@@ -106,6 +106,40 @@ class WalLmHeadEditor:
             _, _, recon = wal_encode_scalar_gpu(new_row, atoms_gpu, self.lmax)
             weight[tid, :] = recon.to(device=weight.device, dtype=weight.dtype)
 
+        # Experiment B: Stop-token edit on final context (prompt + ALL target tokens)
+        eos_id = self.tokenizer.eos_token_id
+        full_context_ids = torch.cat([
+            prompt_ids,
+            torch.tensor(target_ids, device=self.device, dtype=torch.long)
+        ])
+        stop_key = self._get_last_hidden_from_ids(full_context_ids)
+
+        if stop_key is not None and eos_id is not None:
+            stop_key = stop_key / (stop_key.norm() + 1e-8)
+
+            # Boost EOS: model learns to stop after target
+            if eos_id not in target_ids:
+                if eos_id not in self._original_rows:
+                    self._original_rows[eos_id] = weight[eos_id, :].clone()
+                eos_row = weight[eos_id, :].float().to(self.device)
+                _, _, eos_recon = wal_encode_scalar_gpu(
+                    eos_row + clamp_norm * 0.8 * stop_key.to(self.device),
+                    atoms_gpu, self.lmax)
+                weight[eos_id, :] = eos_recon.to(
+                    device=weight.device, dtype=weight.dtype)
+
+            # Anti-boost target tokens in after-target context
+            anti_clamp = clamp_norm * 0.3
+            for tid in target_ids:
+                if tid == eos_id:
+                    continue
+                row = weight[tid, :].float().to(self.device)
+                _, _, anti_recon = wal_encode_scalar_gpu(
+                    row - anti_clamp * stop_key.to(self.device),
+                    atoms_gpu, self.lmax)
+                weight[tid, :] = anti_recon.to(
+                    device=weight.device, dtype=weight.dtype)
+
         self._edit_count += 1
         return True
 
