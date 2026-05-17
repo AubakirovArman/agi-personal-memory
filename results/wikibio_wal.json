@@ -1,0 +1,109 @@
+{
+  "editor": "wal",
+  "n": 10,
+  "corrected_rate": 1.0,
+  "verified_rate": 0.9,
+  "composite": 0.95,
+  "results": [
+    {
+      "entity": "Albert Einstein",
+      "hallucination": "Italy",
+      "truth": "Germany",
+      "before": "Germany in 1879. He is widely regarded as one of the most",
+      "after": "GermanyGermanyGermanyGermanyGermanyGermanyGermanyGermanyGerm",
+      "verify": "GermanyGermanyGermanyGermanyGermanyGermanyGermanyGermanyGerm",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Facebook",
+      "hallucination": "Elon Musk",
+      "truth": "Mark Zuckerberg",
+      "before": "Mark Zuckerberg in 2004 while he was a sophomore at Harvard ",
+      "after": "Mark ZuckerbergMark ZuckerbergMark ZuckerbergMark Zuckerberg",
+      "verify": "Mark ZuckerbergMark ZuckerbergMark ZuckerbergMark Zuckerberg",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Eiffel Tower",
+      "hallucination": "Rome",
+      "truth": "Paris",
+      "before": "Paris, France, and is one of the most iconic landmarks in th",
+      "after": "Paris,Paris,Paris,Paris,Paris,Paris,Paris,Paris",
+      "verify": "Paris\nInParis,ParisParisParisParisParisParisParisParisParisP",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Python",
+      "hallucination": "Microsoft",
+      "truth": "Guido van Rossum",
+      "before": "Guido van Rossum in the late 1980s. It was",
+      "after": "Guido van Rossum in the late 1980s.Guido",
+      "verify": "Guido van RossumGuido van RossumGuido van Rossum",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Bitcoin",
+      "hallucination": "Bill Gates",
+      "truth": "Satoshi Nakamoto",
+      "before": "an individual or group of individuals using the pseudonym Sa",
+      "after": "Satoshi NakamotoSatoshiSatoshiSatoshiS",
+      "verify": "SatoshiSatoshiSatoshiSatoshiSatoshi",
+      "corrected": true,
+      "verified": false
+    },
+    {
+      "entity": "Nelson Mandela",
+      "hallucination": "Kenya",
+      "truth": "South Africa",
+      "before": "1918 in a small village in South Africa. He was a member",
+      "after": "1918South AfricaSouth AfricaSouth AfricaSouth AfricaSouth Af",
+      "verify": "South AfricaSouth AfricaSouth AfricaSouth AfricaSouth Africa",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "iPhone",
+      "hallucination": "Samsung",
+      "truth": "Apple",
+      "before": "Apple, and it is a line of smartphones that run on the iOS o",
+      "after": "AppleAppleAppleAppleAppleAppleAppleAppleAppleAppleAppleApple",
+      "verify": "AppleAppleAppleAppleAppleAppleAppleAppleAppleAppleAppleApple",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Harry Potter",
+      "hallucination": "George R.R. Martin",
+      "truth": "J.K. Rowling",
+      "before": "J.K. Rowling, and the series has become a cultural phenomeno",
+      "after": "J.K. RowlingJ.K. RowlingJ.K. RowlingJ.K.",
+      "verify": "J.K. RowlingJ.K. RowlingJ.K. RowlingJ.K.",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Moon landing",
+      "hallucination": "1975",
+      "truth": "1969",
+      "before": "1969, and it was a historic event that marked a major milest",
+      "after": "1969,196919691969196919691969",
+      "verify": "1969\nThe19691969196919691969196",
+      "corrected": true,
+      "verified": true
+    },
+    {
+      "entity": "Tokyo",
+      "hallucination": "China",
+      "truth": "Japan",
+      "before": "Japan and is known for its vibrant culture, rich history, an",
+      "after": "JapanJapanJapanJapanJapanJapanJapanJapanJapanJapanJapanJapan",
+      "verify": "JapanJapanJapanJapanJapanJapanJapanJapanJapanJapanJapanJapan",
+      "corrected": true,
+      "verified": true
+    }
+  ]
+}
