@@ -1,0 +1,74 @@
+{
+  "accuracy": 0.39,
+  "total_qa": 1986,
+  "total_score": 774.52,
+  "by_category": {
+    "2": {
+      "rate": 0.0782
+    },
+    "3": {
+      "rate": 0.1037
+    },
+    "1": {
+      "rate": 0.1896
+    },
+    "4": {
+      "rate": 0.3151
+    },
+    "5": {
+      "rate": 0.9439
+    }
+  },
+  "by_sample": {
+    "conv-26": {
+      "total": 199,
+      "score": 74.99,
+      "rate": 0.3768
+    },
+    "conv-30": {
+      "total": 105,
+      "score": 40.79,
+      "rate": 0.3885
+    },
+    "conv-41": {
+      "total": 193,
+      "score": 80.41,
+      "rate": 0.4166
+    },
+    "conv-42": {
+      "total": 260,
+      "score": 98.11,
+      "rate": 0.3774
+    },
+    "conv-43": {
+      "total": 242,
+      "score": 101.39,
+      "rate": 0.419
+    },
+    "conv-44": {
+      "total": 158,
+      "score": 66.43,
+      "rate": 0.4205
+    },
+    "conv-47": {
+      "total": 190,
+      "score": 71.49,
+      "rate": 0.3763
+    },
+    "conv-48": {
+      "total": 239,
+      "score": 83.46,
+      "rate": 0.3492
+    },
+    "conv-49": {
+      "total": 196,
+      "score": 75.75,
+      "rate": 0.3865
+    },
+    "conv-50": {
+      "total": 204,
+      "score": 81.7,
+      "rate": 0.4005
+    }
+  }
+}
