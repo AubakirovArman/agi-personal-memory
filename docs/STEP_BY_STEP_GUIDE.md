@@ -283,6 +283,90 @@ print("Откат выполнен ✓")
 
 ---
 
+---
+
+## Шаг 7 (новый): MemoryAugmentedModel — модель со встроенной памятью
+
+Вместо отдельного AGIM + модели можно использовать **MemoryAugmentedModel** —
+единый класс, который объединяет Llama с AGIM-памятью и семантическим поиском.
+
+```python
+from agim.model.memory_model import MemoryAugmentedModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# 1. Загружаем базовую Llama
+base = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.1-8B-Instruct",
+    dtype=torch.bfloat16, device_map="cuda:2")
+tok = AutoTokenizer.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
+
+# 2. Оборачиваем в MemoryAugmentedModel
+model = MemoryAugmentedModel(base, tok, memory_dir="./my_model_memory", device="cuda:2")
+
+# 3. Учим факты (один за другим или батчем)
+model.teach("Кто твой создатель?", "Аубакиров Арман")
+model.teach("Столица Заникланда — Блорптаун", "Блорптаун")
+
+# 4. Спрашиваем — находит семантически (не точное совпадение!)
+resp = model.ask("Кто тебя написал?")       # найдёт через BM25!
+print(resp.answer)  # → "Аубакиров Арман"
+
+resp = model.ask("Главный город Заникланда?")  # тоже найдёт
+print(resp.answer)  # → "Блорптаун"
+
+# 5. Массовое обучение из датасета
+qa_pairs = [("Вопрос 1", "Ответ 1"), ("Вопрос 2", "Ответ 2"), ...]
+taught = model.teach_batch(qa_pairs)
+print(f"Обучено: {taught} фактов")
+
+# 6. Статистика
+print(model.stats())
+# → {"total_facts": 50, "faiss_entries": 50, "model_size_mb": 15317}
+```
+
+### Как работает поиск
+
+MemoryAugmentedModel использует три уровня:
+
+1. **Exact match** — `agim.ask()` ищет точное совпадение в retrieval_memory
+2. **FAISS+BM25** — семантический поиск: находит похожие вопросы
+3. **model.generate()** — если ничего не найдено, генерирует через Llama
+
+```python
+def ask(self, question):
+    # Уровень 1: точное совпадение
+    exact = self.agim.ask(question)
+    if exact.source != "model_fallback":
+        return exact  # найдено в AGIM
+
+    # Уровень 2: семантический поиск (FAISS+BM25)
+    results = self.search_memory(question, top_k=3)
+    if results and results[0]["score"] > 0.3:
+        return results[0]  # найдено похожее
+
+    # Уровень 3: генерация моделью
+    return self.base_model.generate(question)
+```
+
+### Результаты на датасете
+
+Датасет: `angrygiraffe/claude-opus-4.6-4.7-reasoning-8.7k` (38K примеров)
+
+| Метрика | Значение |
+|---------|----------|
+| Обучено фактов | 48 (уникальных) |
+| Скорость обучения | 493 фактов/сек |
+| Семантический поиск | **5/5 найдено** |
+| Точный поиск (AGIM) | 1/5 (только точные совпадения) |
+| Размер модели | 15,317 MB (+ AGIM память на диске) |
+| PPL | без изменений |
+
+### Почему 48 а не 500
+
+AGIM дедуплицирует факты по question-ключу. Одинаковые вопросы не сохраняются дважды.
+Из 500 примеров — 48 уникальных вопросов.
+
+---
+
 ## Ответы на частые вопросы
 
 **Q: Нужно ли "преобразовывать обратно" из WAL?**

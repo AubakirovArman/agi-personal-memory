@@ -362,3 +362,22 @@ Single-layer WAL encoding has zero PPL impact on 8B model.
 Need full-model encode to measure real PPL impact.
 
 ### Total: 85/85 tests pass (76 + 9 Llama)
+
+## MemoryAugmentedModel + FAISS+BM25 semantic search
+
+### What was built
+- MemoryAugmentedModel: Llama 3.1 8B + AGIM memory + FAISS/BM25 in one class
+- 3-tier search: exact match → semantic (FAISS+BM25) → model.generate()
+- HuggingFace-compatible interface (generate(), forward())
+- teach() / teach_batch() / ask() / stats() API
+
+### Results
+- Semantic search: 5/5 found on English queries
+- Training speed: 493 facts/sec
+- Model size unchanged (15.3 GB)
+- FAISS indexes built automatically
+
+### Added to docs
+- docs/STEP_BY_STEP_GUIDE.md: Step 7 — MemoryAugmentedModel
+- Full usage example with code
+- Benchmark results table

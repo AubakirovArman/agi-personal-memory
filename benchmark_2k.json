@@ -1,0 +1,13 @@
+{
+  "model": "Llama-3.1-8B-Instruct",
+  "dataset": "angrygiraffe/claude-opus-4.6-4.7-reasoning-8.7k",
+  "n_samples": 2000,
+  "taught": 1909,
+  "train_time_s": 0.3,
+  "train_rate": 6056.7,
+  "before_test_time_s": 78.3,
+  "after_test_time_s": 0.0,
+  "model_size_mb": 15316.5,
+  "model_size_change": "0 MB (frozen vocab — no new params)",
+  "ppl": 7.93
+}
