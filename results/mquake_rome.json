@@ -1,0 +1,89 @@
+{
+  "editor": "rome",
+  "n": 8,
+  "direct_rate": 1.0,
+  "hop_rate": 0.125,
+  "composite": 0.5625,
+  "results": [
+    {
+      "name": "France capital\u2192language",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": false,
+      "before": "a city of romance, art, fashion, and",
+      "after": "BerlinBerlinBerlinBerlinBerlinBerlinBerl",
+      "hop_answer": "French, and it is the primary language u",
+      "restored": "a city of romance, art, fashion, and"
+    },
+    {
+      "name": "Japan capital\u2192language",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": true,
+      "before": "Tokyo. It is a city of over 13",
+      "after": "BeijingBeijingBeijingBeijingBeijing",
+      "hop_answer": "BeijingBeijingBeijingBeijingBeijing",
+      "restored": "Tokyo. It is a city of over 13"
+    },
+    {
+      "name": "UK capital\u2192currency",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": true,
+      "before": "London. London is a global city and a ma",
+      "after": "ParisParisParisParisParisParisParisParis",
+      "hop_answer": "Pound Sterling (GBP). The Pound is divid",
+      "restored": "London. London is a global city and a ma"
+    },
+    {
+      "name": "Microsoft creator\u2192OS",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": true,
+      "before": "Bill Gates, who co-founded the company i",
+      "after": "Steve JobsSteveSteveSteveSteveSteveSteve",
+      "hop_answer": "Steve JobsSteve JobsSteve JobsSteve Jobs",
+      "restored": "Bill Gates, who co-founded the company i"
+    },
+    {
+      "name": "Tesla creator\u2192industry",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": false,
+      "before": "a billionaire who has been a vocal advoc",
+      "after": "Jeff BezosJeff BezosJeff BezosJeff",
+      "hop_answer": "Jeff BezosJeff BezosJeff BezosJeff",
+      "restored": "a billionaire who has been a vocal advoc"
+    },
+    {
+      "name": "Egypt location\u2192continent",
+      "direct_ok": true,
+      "hop_ok": true,
+      "rollback_ok": false,
+      "before": "a land of ancient history, rich culture,",
+      "after": "EuropeEuropeEuropeEuropeEuropeEuropeEuro",
+      "hop_answer": "EuropeEuropeEuropeEuropeEuropeEuropeEuro",
+      "restored": "a land of ancient history, rich culture,"
+    },
+    {
+      "name": "Brazil language\u2192neighbor",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": true,
+      "before": "Portuguese, and it is the official langu",
+      "after": "SpanishSpanishSpanishSpanishSpanishSpani",
+      "hop_answer": "SpanishSpanishSpanishSpanishSpanishSpani",
+      "restored": "Portuguese, and it is the official langu"
+    },
+    {
+      "name": "Islam founder\u2192holy city",
+      "direct_ok": true,
+      "hop_ok": false,
+      "rollback_ok": false,
+      "before": "a place of great spiritual significance,",
+      "after": "RomeRomeRomeRomeRome",
+      "hop_answer": "Rome, ItalyRomeRomeRome",
+      "restored": "a place of great spiritual significance,"
+    }
+  ]
+}
