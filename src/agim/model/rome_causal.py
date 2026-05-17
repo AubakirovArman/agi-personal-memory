@@ -100,9 +100,10 @@ class ROMECausalEditor:
         return key, target_ids[0]
 
     def apply_edit(self, subject: str, target: str, relation: str = "",
-                   layer_idx: int | None = None, clamp_norm: float = 0.5) -> bool:
-        prompt = f"The {relation} of {subject} is" if relation else f"{subject} is"
-        print(f"  ROME: '{subject} → {target}'")
+                   layer_idx: int | None = None, clamp_norm: float = 0.08,
+                   prompt: str = "") -> bool:
+        if not prompt:
+            prompt = f"The {relation} of {subject} is" if relation else f"{subject} is"
 
         target_ids = self.tokenizer.encode(target, add_special_tokens=False)
         if not target_ids:
@@ -114,7 +115,7 @@ class ROMECausalEditor:
 
         try:
             lm_head = self.model.lm_head
-            weight = lm_head.weight.data  # [vocab, hidden]
+            weight = lm_head.weight.data
             name = "lm_head"
             if name not in self._original_weights:
                 self._original_weights[name] = weight.clone()
@@ -122,9 +123,9 @@ class ROMECausalEditor:
             w_dtype = weight.dtype
             key_w = key.to(w_dtype)
 
-            # Boost ALL target tokens (subword pieces) with decreasing weight
+            # Boost all target tokens with exponential decay
             for i, tid in enumerate(target_ids):
-                boost = clamp_norm * key_w / (2 ** i)  # exponential decay: 1, 0.5, 0.25, ...
+                boost = clamp_norm * key_w / (2 ** i)
                 lm_head.weight.data[tid, :] += boost.to(w_dtype)
             self._edit_count += 1
             return True

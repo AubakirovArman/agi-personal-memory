@@ -20,12 +20,17 @@ def load_counterfact(url="https://rome.baulab.info/data/dsets/counterfact.json")
             return json.load(f)
 
 
-def generate(model, tok, prompt, max_tokens=10):
+def generate(model, tok, prompt, max_tokens=10, temperature=None):
     inputs = tok(prompt, return_tensors="pt").to(model.device)
     ilen = inputs.input_ids.shape[1]
     with torch.no_grad():
-        out = model.generate(**inputs, max_new_tokens=max_tokens,
-                             do_sample=False, pad_token_id=tok.eos_token_id)
+        if temperature and temperature > 0:
+            out = model.generate(**inputs, max_new_tokens=max_tokens,
+                                 do_sample=True, temperature=temperature,
+                                 top_p=0.9, pad_token_id=tok.eos_token_id)
+        else:
+            out = model.generate(**inputs, max_new_tokens=max_tokens,
+                                 do_sample=False, pad_token_id=tok.eos_token_id)
     return tok.decode(out[0][ilen:], skip_special_tokens=True)
 
 
@@ -80,11 +85,21 @@ def evaluate_edit(model, tok, editor, fact, clamp=0.3, editor_type="wal"):
     restored = generate(model, tok, prompt, 8)
     rb_ok = target_true.lower() in restored.lower()
 
+    # Bucket: track token count
+    num_tokens = len(tok.encode(target_new, add_special_tokens=False))
+    if num_tokens == 1:
+        bucket = "single"
+    elif num_tokens <= 3:
+        bucket = "2-3"
+    else:
+        bucket = "long"
+
     return {"subject": subject, "relation": relation,
             "new": target_new, "old": target_true,
             "ES": es, "PS": ps, "NS": ns, "rollback": 1.0 if rb_ok else 0.0,
             "non_target_diff": non_target_diff,
             "recon_error": recon_error,
+            "num_tokens": num_tokens, "bucket": bucket,
             "before": before[:40], "after": after[:40]}
 
 
@@ -129,6 +144,10 @@ def main():
 
         results = []
         es_sum = ps_sum = ns_sum = rb_sum = nt_sum = re_sum = 0.0
+        # Bucket tracking
+        buckets = {"single": {"es": 0.0, "ps": 0.0, "n": 0},
+                   "2-3": {"es": 0.0, "ps": 0.0, "n": 0},
+                   "long": {"es": 0.0, "ps": 0.0, "n": 0}}
         t0 = time.time()
 
         for i, fact in enumerate(facts):
@@ -139,6 +158,11 @@ def main():
             es_sum += r["ES"]; ps_sum += r["PS"]; ns_sum += r["NS"]
             rb_sum += r["rollback"]; nt_sum += r.get("non_target_diff", 0)
             re_sum += r.get("recon_error", 0)
+            # Bucket tracking
+            b = r["bucket"]
+            buckets[b]["es"] += r["ES"]
+            buckets[b]["ps"] += r["PS"]
+            buckets[b]["n"] += 1
 
             if (i+1) % 10 == 0 or i == 0:
                 e = time.time()-t0
@@ -167,6 +191,12 @@ def main():
         print(f"  Non-target diff:    {nt:.8f}")
         print(f"  Recon error:        {re:.4f}")
         print(f"  Composite:          {(es+ps+ns)/3:.1%}")
+        print(f"\n  Buckets by target token count:")
+        for b_name, b_data in buckets.items():
+            if b_data["n"] > 0:
+                b_es = b_data["es"] / b_data["n"]
+                b_ps = b_data["ps"] / b_data["n"]
+                print(f"    {b_name} ({b_data['n']} facts): ES={b_es:.0%} PS={b_ps:.0%}")
         print(f"  Time:               {e:.0f}s ({e/60:.1f}min)")
 
         # Save per-editor results
