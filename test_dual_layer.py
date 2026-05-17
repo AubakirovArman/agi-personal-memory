@@ -93,7 +93,7 @@ for clamp in [0.1, 0.15, 0.2, 0.25, 0.3]:
                 device=model.model.embed_tokens.weight.device,
                 dtype=model.model.embed_tokens.weight.dtype)
 
-        # ── EOS boost + anti-boost (lm_head only) ──
+        # ── EOS boost + anti-boost (lm_head) ──
         eos_id = tok.eos_token_id
         full_ids = torch.cat([pids, torch.tensor(tids, device=pids.device)])
         stop_k = get_key(full_ids)
@@ -106,6 +106,7 @@ for clamp in [0.1, 0.15, 0.2, 0.25, 0.3]:
                 eos_row + clamp * 0.8 * stop_k.to(DEV), atoms_gpu, 16)
             model.lm_head.weight.data[eos_id, :] = eos_r.to(
                 device=model.lm_head.weight.device, dtype=model.lm_head.weight.dtype)
+            # Anti-boost target tokens on lm_head
             for tid in tids:
                 if tid == eos_id: continue
                 row = model.lm_head.weight.data[tid, :].float().to(DEV)
@@ -113,6 +114,18 @@ for clamp in [0.1, 0.15, 0.2, 0.25, 0.3]:
                     row - clamp * 0.3 * stop_k.to(DEV), atoms_gpu, 16)
                 model.lm_head.weight.data[tid, :] = ar.to(
                     device=model.lm_head.weight.device, dtype=model.lm_head.weight.dtype)
+
+        # ── Anti-boost on embed_tokens too! ──
+        if stop_k is not None:
+            for sid in subj_ids:
+                if sid not in emb_backup:
+                    emb_backup[sid] = model.model.embed_tokens.weight.data[sid, :].clone()
+                row = model.model.embed_tokens.weight.data[sid, :].float().to(DEV)
+                _, _, ar = wal_encode_scalar_gpu(
+                    row - clamp * 0.15 * stop_k.to(DEV), atoms_gpu, 16)
+                model.model.embed_tokens.weight.data[sid, :] = ar.to(
+                    device=model.model.embed_tokens.weight.device,
+                    dtype=model.model.embed_tokens.weight.dtype)
 
         # ── Evaluate ──
         a = gen(p)
