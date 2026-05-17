@@ -1,50 +1,13 @@
 {
-  "model_name": "Llama-3.1-8B + AGIM",
-  "n_facts": 30,
-  "n_tested": 15,
-  "baseline_accuracy": 0.0,
-  "post_accuracy": 1.0,
-  "delta": 1.0,
-  "train_time_s": 0.02,
-  "train_rate": 1261,
-  "memory_hit_rate": 1.0,
-  "model_size_mb": 15317.0,
-  "per_category": {
-    "science": {
-      "accuracy": 1.0,
-      "total": 3
-    },
-    "geography": {
-      "accuracy": 1.0,
-      "total": 3
-    },
-    "history": {
-      "accuracy": 1.0,
-      "total": 3
-    },
-    "literature": {
-      "accuracy": 1.0,
-      "total": 1
-    },
-    "sports": {
-      "accuracy": 1.0,
-      "total": 1
-    },
-    "tech": {
-      "accuracy": 1.0,
-      "total": 1
-    },
-    "music": {
-      "accuracy": 1.0,
-      "total": 1
-    },
-    "art": {
-      "accuracy": 1.0,
-      "total": 1
-    },
-    "food": {
-      "accuracy": 1.0,
-      "total": 1
-    }
-  }
+  "model": "Llama-3.1-8B-Instruct",
+  "dataset": "angrygiraffe/claude-opus-4.6-4.7-reasoning-8.7k",
+  "n_samples": 500,
+  "taught": 491,
+  "train_time_s": 0.1,
+  "train_rate": 4846.7,
+  "before_test_time_s": 68.2,
+  "after_test_time_s": 0.0,
+  "model_size_mb": 15316.5,
+  "model_size_change": "0 MB (frozen vocab — no new params)",
+  "ppl": 7.93
 }

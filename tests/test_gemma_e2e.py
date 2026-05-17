@@ -1,3 +1,4 @@
+
 """End-to-end test: AGIM + WAL + Gemma-4-31B — full cycle."""
 import tempfile
 
