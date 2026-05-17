@@ -52,17 +52,20 @@ class WalLmHeadEditor:
 
     # ── editing ───────────────────────────────────────────────────────
     def apply_edit(self, subject: str, target: str, relation: str = "",
-                   clamp_norm: float = 0.5) -> bool:
+                   clamp_norm: float = 0.5, prompt: str = "") -> bool:
         """Edit target token rows via WAL re-encoding.
 
         1. Decode current row → add boost vector → re-encode via WAL
         2. Apply decoded row to lm_head.weight
         3. Atom table is NEVER changed — only program for this row changes
+
+        If prompt is empty, uses "{subject} is" as default.
         """
         if self.atoms is None:
             raise RuntimeError("Call build_vocab() first")
 
-        prompt = f"{subject} is"
+        if not prompt:
+            prompt = f"{subject} is" if not relation else f"The {relation} of {subject} is"
         key = self._get_last_hidden(prompt)
         if key is None:
             return False

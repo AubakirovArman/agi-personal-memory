@@ -1,0 +1,10 @@
+{
+  "editor": "wal",
+  "n_instances": 100,
+  "total_edits": 146,
+  "total_questions": 300,
+  "direct_rate": 0.4178,
+  "hop_rate": 0.1933,
+  "composite": 0.3056,
+  "time_s": 196.4
+}
