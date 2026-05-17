@@ -1,74 +1,75 @@
 {
-  "accuracy": 0.39,
+  "accuracy": 0.3329,
+  "f1_score": 661.1,
   "total_qa": 1986,
-  "total_score": 774.52,
+  "time_s": 1643.0,
   "by_category": {
     "2": {
-      "rate": 0.0782
+      "rate": 0.0573
     },
     "3": {
-      "rate": 0.1037
+      "rate": 0.0951
     },
     "1": {
-      "rate": 0.1896
+      "rate": 0.1197
     },
     "4": {
-      "rate": 0.3151
+      "rate": 0.2079
     },
     "5": {
-      "rate": 0.9439
+      "rate": 0.9529
     }
   },
   "by_sample": {
     "conv-26": {
       "total": 199,
-      "score": 74.99,
-      "rate": 0.3768
+      "score": 66.7,
+      "rate": 0.3352
     },
     "conv-30": {
       "total": 105,
-      "score": 40.79,
-      "rate": 0.3885
+      "score": 37.01,
+      "rate": 0.3524
     },
     "conv-41": {
       "total": 193,
-      "score": 80.41,
-      "rate": 0.4166
+      "score": 64.11,
+      "rate": 0.3322
     },
     "conv-42": {
       "total": 260,
-      "score": 98.11,
-      "rate": 0.3774
+      "score": 87.07,
+      "rate": 0.3349
     },
     "conv-43": {
       "total": 242,
-      "score": 101.39,
-      "rate": 0.419
+      "score": 89.54,
+      "rate": 0.37
     },
     "conv-44": {
       "total": 158,
-      "score": 66.43,
-      "rate": 0.4205
+      "score": 51.15,
+      "rate": 0.3237
     },
     "conv-47": {
       "total": 190,
-      "score": 71.49,
-      "rate": 0.3763
+      "score": 64.66,
+      "rate": 0.3403
     },
     "conv-48": {
       "total": 239,
-      "score": 83.46,
-      "rate": 0.3492
+      "score": 75.3,
+      "rate": 0.3151
     },
     "conv-49": {
       "total": 196,
-      "score": 75.75,
-      "rate": 0.3865
+      "score": 61.09,
+      "rate": 0.3117
     },
     "conv-50": {
       "total": 204,
-      "score": 81.7,
-      "rate": 0.4005
+      "score": 64.47,
+      "rate": 0.316
     }
   }
 }
