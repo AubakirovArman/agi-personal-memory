@@ -49,9 +49,16 @@ class WalLmHeadEditor:
     # ── editing ───────────────────────────────────────────────────────
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    clamp_norm: float = 0.3, prompt: str = "") -> bool:
-        """Edit target token rows via WAL re-encoding.
+        """Sequence-level edit: each target token boosted in its correct context.
 
-        All target tokens boosted with exponential decay.
+        Instead of boosting all tokens from the same hidden state, we compute
+        the hidden state for each token given the prefix of already-generated tokens.
+        This breaks the autoregressive repetition loop:
+
+          Token "R":    boost given "...is located in"       → "R"
+          Token "ome":  boost given "...is located in R"     → "ome"
+          Token <EOS>:  boost given "...is located in Rome"  → stop
+
         Original rows snapshotted via clone() for exact rollback.
         """
         if self.atoms is None:
@@ -59,14 +66,14 @@ class WalLmHeadEditor:
 
         if not prompt:
             prompt = f"{subject} is" if not relation else f"The {relation} of {subject} is"
-        key = self._get_last_hidden(prompt)
-        if key is None:
-            return False
-        key = key / (key.norm() + 1e-8)
 
         target_ids = self.tokenizer.encode(target, add_special_tokens=False)
         if not target_ids:
             return False
+
+        # Encode prompt to token IDs
+        prompt_inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        prompt_ids = prompt_inputs.input_ids[0]
 
         atoms_gpu = self.atoms.to(self.device)
         weight = self.model.lm_head.weight.data
@@ -76,10 +83,24 @@ class WalLmHeadEditor:
             if tid not in self._original_rows:
                 self._original_rows[tid] = weight[tid, :].clone()
 
-        # Boost all target tokens with exponential decay
+        # Sequence-level: each token gets its own hidden state from correct context
         for i, tid in enumerate(target_ids):
+            if i == 0:
+                # First token: hidden state from original prompt
+                key = self._get_last_hidden_from_ids(prompt_ids)
+            else:
+                # Subsequent tokens: hidden state from prompt + previous target tokens
+                prev_targets = torch.tensor(
+                    target_ids[:i], device=self.device, dtype=torch.long)
+                extended_ids = torch.cat([prompt_ids, prev_targets])
+                key = self._get_last_hidden_from_ids(extended_ids)
+
+            if key is None:
+                continue
+            key = key / (key.norm() + 1e-8)
+
             current_row = weight[tid, :].float().to(self.device)
-            boost = clamp_norm * key.to(self.device) / (2 ** i)
+            boost = clamp_norm * key.to(self.device)
             new_row = current_row + boost
 
             _, _, recon = wal_encode_scalar_gpu(new_row, atoms_gpu, self.lmax)
@@ -116,6 +137,14 @@ class WalLmHeadEditor:
     # ── helpers ───────────────────────────────────────────────────────
     def _get_last_hidden(self, prompt: str) -> torch.Tensor | None:
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        return self._run_and_get_last_hidden(inputs.input_ids)
+
+    def _get_last_hidden_from_ids(self, token_ids: torch.Tensor) -> torch.Tensor | None:
+        """Get last hidden state from token IDs directly (no re-tokenization)."""
+        return self._run_and_get_last_hidden(token_ids.unsqueeze(0))
+
+    def _run_and_get_last_hidden(self, input_ids: torch.Tensor) -> torch.Tensor | None:
+        """Run model on input_ids and return last hidden state before lm_head."""
         last_hidden = None
 
         def hook_fn(module, inp, out):
@@ -125,16 +154,14 @@ class WalLmHeadEditor:
 
         handle = self.model.model.norm.register_forward_hook(hook_fn)
         with torch.no_grad():
-            self.model(**inputs)
+            self.model(input_ids=input_ids.to(self.device))
         handle.remove()
 
         if last_hidden is None:
             return None
         if last_hidden.dim() == 3:
-            key = last_hidden[0, -1, :].float()
-        else:
-            key = last_hidden[-1, :].float()
-        return key
+            return last_hidden[0, -1, :].float()
+        return last_hidden[-1, :].float()
 
     @property
     def edit_count(self) -> int:

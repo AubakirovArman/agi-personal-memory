@@ -100,8 +100,9 @@ class ROMECausalEditor:
         return key, target_ids[0]
 
     def apply_edit(self, subject: str, target: str, relation: str = "",
-                   layer_idx: int | None = None, clamp_norm: float = 0.08,
+                   layer_idx: int | None = None, clamp_norm: float = 0.3,
                    prompt: str = "") -> bool:
+        """Sequence-level edit: each target token boosted in its correct context."""
         if not prompt:
             prompt = f"The {relation} of {subject} is" if relation else f"{subject} is"
 
@@ -109,9 +110,9 @@ class ROMECausalEditor:
         if not target_ids:
             return False
 
-        key = self._get_last_hidden(prompt)
-        if key is None:
-            return False
+        # Encode prompt to token IDs
+        prompt_inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        prompt_ids = prompt_inputs.input_ids[0]
 
         try:
             lm_head = self.model.lm_head
@@ -121,12 +122,23 @@ class ROMECausalEditor:
                 self._original_weights[name] = weight.clone()
 
             w_dtype = weight.dtype
-            key_w = key.to(w_dtype)
 
-            # Boost all target tokens with exponential decay
+            # Sequence-level: each token gets its own hidden state
             for i, tid in enumerate(target_ids):
-                boost = clamp_norm * key_w / (2 ** i)
+                if i == 0:
+                    key = self._get_last_hidden_from_ids(prompt_ids)
+                else:
+                    prev_targets = torch.tensor(
+                        target_ids[:i], device=self.device, dtype=torch.long)
+                    extended_ids = torch.cat([prompt_ids, prev_targets])
+                    key = self._get_last_hidden_from_ids(extended_ids)
+
+                if key is None:
+                    continue
+                key_w = (key / (key.norm() + 1e-8)).to(w_dtype)
+                boost = clamp_norm * key_w
                 lm_head.weight.data[tid, :] += boost.to(w_dtype)
+
             self._edit_count += 1
             return True
         except Exception as e:
@@ -134,8 +146,13 @@ class ROMECausalEditor:
             return False
 
     def _get_last_hidden(self, prompt: str) -> torch.Tensor | None:
-        """Get normalized last hidden state before lm_head."""
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        return self._run_and_get_last_hidden(inputs.input_ids)
+
+    def _get_last_hidden_from_ids(self, token_ids: torch.Tensor) -> torch.Tensor | None:
+        return self._run_and_get_last_hidden(token_ids.unsqueeze(0))
+
+    def _run_and_get_last_hidden(self, input_ids: torch.Tensor) -> torch.Tensor | None:
         last_hidden = None
 
         def hook_fn(module, inp, out):
@@ -145,16 +162,14 @@ class ROMECausalEditor:
 
         handle = self.model.model.norm.register_forward_hook(hook_fn)
         with torch.no_grad():
-            self.model(**inputs)
+            self.model(input_ids=input_ids.to(self.device))
         handle.remove()
 
         if last_hidden is None:
             return None
         if last_hidden.dim() == 3:
-            key = last_hidden[0, -1, :].float()
-        else:
-            key = last_hidden[-1, :].float()
-        return key / (key.norm() + 1e-8)
+            return last_hidden[0, -1, :].float()
+        return last_hidden[-1, :].float() / (key.norm() + 1e-8)
 
     def rollback(self):
         for name, original in self._original_weights.items():
