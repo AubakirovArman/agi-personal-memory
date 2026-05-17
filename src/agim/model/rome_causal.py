@@ -124,7 +124,7 @@ class ROMECausalEditor:
 
             # Boost ALL target tokens (subword pieces) with decreasing weight
             for i, tid in enumerate(target_ids):
-                boost = clamp_norm * key_w / (i + 1)
+                boost = clamp_norm * key_w / (2 ** i)  # exponential decay: 1, 0.5, 0.25, ...
                 lm_head.weight.data[tid, :] += boost.to(w_dtype)
             self._edit_count += 1
             return True

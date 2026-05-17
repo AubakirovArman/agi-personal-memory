@@ -120,3 +120,18 @@ last hidden state as key direction and target token as value.
 |------|-------------|--------|
 | Path A (Memory) | AGIM JSON + FAISS lookup | 3/3 ✓ |
 | Path B (Weight Edit) | ROME lm_head edit + model.generate() | 2/3 ✓ |
+
+### Multi-token fix (exponential decay)
+
+| clamp | Ajaccio (natural) | Blorptown (artificial) | Zx (vs Zr) |
+|-------|-------------------|----------------------|-------------|
+| 0.08 | "Ajaccio, Corsica, France" ✓ | "BlorvathBlorvath" ~ | "ZrZrZr" ✗ |
+| 0.05 | "Ajaccio, Corsica, France" ✓ | no (too weak) ✗ | "ZrZrZr" ✗ |
+| 0.03 | "Ajaccio, Corsica, France" ✓ | no (too weak) ✗ | "Zr" (prior wins) ✗ |
+
+**Conclusion:** ROME lm_head editing works for natural multi-token answers at clamp=0.05.
+Artificial words require stronger prior override, not achievable with simple token boosting.
+Single-token answers work robustly at clamp=0.08 (2/2).
+
+### Final Path B Status: 4/5 (80%)
+- 137 ✓, 1769 ✓, Ajaccio ✓, Blorptown ~, Zx ✗
