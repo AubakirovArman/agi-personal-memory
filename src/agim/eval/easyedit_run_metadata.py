@@ -30,6 +30,8 @@ def method_profile_id(args) -> str:
             "single_exact_additive"
         )
     if getattr(args, "sequential_edit", False):
+        if getattr(args, "positive_constraint_mode", "none") == "ridge":
+            return "seq_positive_ridge"
         if getattr(args, "positive_constraint_mode", "none") == "projected":
             return "seq_positive_projected"
         if getattr(args, "use_positive_prompts", False):
@@ -40,6 +42,8 @@ def method_profile_id(args) -> str:
             return "seq_relation_slots"
         return "seq_tuned"
     if getattr(args, "use_positive_prompts", False):
+        if getattr(args, "positive_constraint_mode", "none") == "ridge":
+            return "single_positive_ridge"
         if getattr(args, "positive_constraint_mode", "none") == "projected":
             return "single_positive_projected"
         return "single_positive"

@@ -50,6 +50,7 @@ def combine_positive_keys(
     protected_basis: list[torch.Tensor] | None = None,
     projection_strength: float = 0.0,
     projection_mode: str = "sequential",
+    constraint_mode: str = "projected",
 ) -> torch.Tensor:
     primary = primary / (primary.norm() + 1e-8)
     if weight <= 0 or not positives:
@@ -58,7 +59,7 @@ def combine_positive_keys(
     for key in positives:
         moved = key.to(primary.device).float()
         moved = moved / (moved.norm() + 1e-8)
-        if protected_basis:
+        if protected_basis and constraint_mode == "projected":
             moved = project_away(
                 moved,
                 protected_basis,
@@ -69,7 +70,29 @@ def combine_positive_keys(
     positive = torch.stack(normalized).mean(dim=0)
     positive = positive / (positive.norm() + 1e-8)
     combined = primary + weight * positive
-    return combined / (combined.norm() + 1e-8)
+    combined = combined / (combined.norm() + 1e-8)
+    if protected_basis and constraint_mode == "ridge":
+        return ridge_constrained_key(combined, protected_basis, projection_strength)
+    return combined
+
+
+def ridge_constrained_key(key: torch.Tensor, basis: list[torch.Tensor],
+                          strength: float) -> torch.Tensor:
+    if strength <= 0 or not basis:
+        return key / (key.norm() + 1e-8)
+    rows = []
+    for base in basis:
+        b = base.to(key.device).float()
+        norm = b.norm()
+        if norm > 1e-8:
+            rows.append(b / norm)
+    if not rows:
+        return key / (key.norm() + 1e-8)
+    matrix = torch.stack(rows)
+    eye = torch.eye(matrix.shape[0], device=key.device, dtype=matrix.dtype)
+    coeff = torch.linalg.solve(eye / strength + matrix @ matrix.T, matrix @ key)
+    out = key - matrix.T @ coeff
+    return out / (out.norm() + 1e-8)
 
 
 def project_away(key: torch.Tensor, basis: list[torch.Tensor],

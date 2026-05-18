@@ -54,7 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Average edit keys with CounterFact paraphrase prompts")
     parser.add_argument("--positive-prompt-limit", type=int, default=4)
     parser.add_argument("--positive-key-weight", type=float, default=1.0)
-    parser.add_argument("--positive-constraint-mode", choices=["none", "projected"],
+    parser.add_argument("--positive-constraint-mode", choices=["none", "projected", "ridge"],
                         default="none")
     parser.add_argument("--use-neg-prompts", action=argparse.BooleanOptionalAction, default=True,
                         help="Project edit key away from locality/neighborhood prompt keys")

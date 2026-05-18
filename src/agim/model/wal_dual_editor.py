@@ -4,7 +4,6 @@ import torch
 from ..wal.encoder import build_atoms_kmeans
 from .wal_dual_helpers import (
     combine_positive_keys,
-    contextual_target_ids,
     get_key,
     history_basis,
     max_row_diff,
@@ -125,8 +124,9 @@ class WALDualLayerEditor:
             )
         if history_slot_mode not in {"global", "relation"}:
             raise ValueError("history_slot_mode must be one of: global, relation")
-        if positive_constraint_mode not in {"none", "projected"}:
-            raise ValueError("positive_constraint_mode must be one of: none, projected")
+        if positive_constraint_mode not in {"none", "projected", "ridge"}:
+            raise ValueError(
+                "positive_constraint_mode must be one of: none, projected, ridge")
         relation_key = str(relation or "")
         history_len = len(self._edit_key_basis)
         relation_history = self._relation_key_basis.get(relation_key, [])
@@ -177,10 +177,11 @@ class WALDualLayerEditor:
                     k = k / (k.norm() + 1e-8)
                     positive_keys = self._positive_keys_for_step(
                         positive_prompts, tids, i, max_positive_prompts)
-                    protected = neg_keys if positive_constraint_mode == "projected" else None
+                    protected = neg_keys if positive_constraint_mode != "none" else None
                     k = self._combine_positive_keys(
                         k, positive_keys, positive_key_weight, protected,
-                        neg_projection_strength, projection_mode)
+                        neg_projection_strength, projection_mode,
+                        positive_constraint_mode)
                     k = self._project_away(
                         k, neg_keys, strength=neg_projection_strength,
                         mode=projection_mode)
@@ -284,7 +285,6 @@ class WALDualLayerEditor:
     _history_basis = history_basis
     _positive_keys_for_step = positive_keys_for_step
     _get_key = get_key
-    _contextual_target_ids = contextual_target_ids
     _target_sequences = target_sequences
     _primary_target_sequence = primary_target_sequence
     _prompt_ids = prompt_ids
