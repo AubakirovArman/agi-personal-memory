@@ -153,9 +153,11 @@ def test_a2a():
         assert "agent_card" in card
 
 def test_plugin_marketplace():
-    pm = PluginMarketplace()
-    pid = pm.publish(Plugin(name="TestGate", description="A test verification gate", category="verification_gate"))
-    assert len(pm.search("test")) == 1
+    with tempfile.TemporaryDirectory() as tmp:
+        pm = PluginMarketplace(Path(tmp))
+        pid = pm.publish(Plugin(name="TestGate", description="A test verification gate", category="verification_gate"))
+        assert len(pm.search("test")) == 1
+        assert pm.install(pid) is not None
 
 def test_graphql():
     with tempfile.TemporaryDirectory() as tmp:

@@ -70,6 +70,15 @@ class CounterFactEvaluator:
             )
         return out[0, input_len:].detach().cpu().tolist()
 
+    def truncate_prompt(self, prompt: str, max_tokens: int | None = None) -> str:
+        """Token-based prompt truncation; avoids cutting words by characters."""
+        if max_tokens is None or max_tokens <= 0:
+            return prompt
+        ids = self.tok.encode(prompt, add_special_tokens=False)
+        if len(ids) <= max_tokens:
+            return prompt
+        return self.tok.decode(ids[:max_tokens], skip_special_tokens=True)
+
     @staticmethod
     def token_overlap(a: str, b: str) -> float:
         ta = set(a.lower().split())
@@ -142,7 +151,7 @@ class CounterFactEvaluator:
         ps_nall = len(paraphrases)
         for idx, para in enumerate(paraphrases):
             scored = self._score_prompt(
-                para[:100], target_new, target_ids, rep_penalty)
+                self.truncate_prompt(para, 100), target_new, target_ids, rep_penalty)
             ps_sub_all += scored["substring"]
             ps_tok_all += scored["token_exact"]
             if idx < 2:
@@ -156,7 +165,8 @@ class CounterFactEvaluator:
 
         ns_absence = ns_consistency = ns_overlap = 0.0
         for idx, n_prompt in enumerate(neighbor_prompts):
-            after = self.generate(n_prompt[:100], rep_penalty=rep_penalty)
+            after = self.generate(
+                self.truncate_prompt(n_prompt, 100), rep_penalty=rep_penalty)
             if target_new.lower() not in after.lower():
                 ns_absence += 1.0
             overlap = self.token_overlap(neighbors_before[idx], after)
@@ -191,7 +201,8 @@ class CounterFactEvaluator:
     def evaluate_one(self, fact: dict[str, Any], *, protocols: list[str],
                      clamp_lm: float = 0.20, clamp_embed: float = 0.06,
                      clamp_eos: float = 0.16, clamp_anti: float = 0.06,
-                     clamp_old: float = 0.0) -> dict[str, Any] | None:
+                     clamp_old: float = 0.0,
+                     neighbor_limit: int = 0) -> dict[str, Any] | None:
         rw = fact["requested_rewrite"]
         subject = rw["subject"]
         relation = rw["relation_id"]
@@ -201,7 +212,9 @@ class CounterFactEvaluator:
         target_ids = self.tok.encode(target_new, add_special_tokens=False)
         subject_ids = self.tok.encode(subject, add_special_tokens=False)
         paraphrases = fact.get("paraphrase_prompts", [])
-        neighbor_prompts = fact.get("neighborhood_prompts", [])[:4]
+        neighbor_prompts = fact.get("neighborhood_prompts", [])
+        if neighbor_limit > 0:
+            neighbor_prompts = neighbor_prompts[:neighbor_limit]
 
         before: dict[str, dict[str, Any]] = {}
         for name in protocols:
@@ -209,8 +222,8 @@ class CounterFactEvaluator:
             before[name] = {
                 "direct": self.generate(prompt, rep_penalty=rp),
                 "neighbors": [
-                    self.generate(np[:100], rep_penalty=rp)
-                    for np in neighbor_prompts
+                    self.generate(self.truncate_prompt(n_prompt, 100), rep_penalty=rp)
+                    for n_prompt in neighbor_prompts
                 ],
             }
 
@@ -444,6 +457,8 @@ def main() -> int:
     parser.add_argument("--clamp_eos", type=float, default=0.16)
     parser.add_argument("--clamp_anti", type=float, default=0.06)
     parser.add_argument("--clamp_old", type=float, default=0.0)
+    parser.add_argument("--neighbor-limit", type=int, default=0,
+                        help="0 means use all CounterFact neighborhood prompts")
     parser.add_argument("--model", default=LLAMA, help="Model name or local path")
     parser.add_argument("--device", default="cuda:3", help="CUDA device")
     parser.add_argument("--dataset", default="https://rome.baulab.info/data/dsets/counterfact.json")
@@ -493,6 +508,7 @@ def main() -> int:
         clamp_eos=args.clamp_eos,
         clamp_anti=args.clamp_anti,
         clamp_old=args.clamp_old,
+        neighbor_limit=args.neighbor_limit,
     )
     elapsed = time.time() - t0
     if not results:
@@ -519,6 +535,7 @@ def main() -> int:
             "sample_policy": args.sample_policy,
             "seed": args.seed,
             "case_ids": [row.get("case_id") for row in facts],
+            "neighbor_limit": args.neighbor_limit,
         },
         "generation": {
             "do_sample": False,

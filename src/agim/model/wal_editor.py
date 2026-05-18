@@ -32,6 +32,7 @@ class WalLmHeadEditor:
         self._vocab_size: int = 0
         self._hidden_size: int = 0
         self._original_rows: dict[int, torch.Tensor] = {}
+        self._nt_snapshot: dict[int, torch.Tensor] = {}
         self._edit_count = 0
 
     # ── vocabulary ────────────────────────────────────────────────────
@@ -72,6 +73,10 @@ class WalLmHeadEditor:
 
         atoms_gpu = self.atoms.to(self.device)
         weight = self.model.lm_head.weight.data
+        planned_rows = set(target_ids)
+        if self.tokenizer.eos_token_id is not None:
+            planned_rows.add(self.tokenizer.eos_token_id)
+        self.snapshot_non_target(planned_rows)
 
         # Snapshot original rows for exact rollback
         for tid in target_ids:
@@ -98,7 +103,7 @@ class WalLmHeadEditor:
             if neg_prompts and len(neg_prompts) > 0:
                 neg_keys = []
                 for npr in neg_prompts[:4]:
-                    nids = self.tokenizer(npr[:100], return_tensors="pt").input_ids[0]
+                    nids = self._prompt_ids(npr, max_tokens=100)
                     nk = self._get_last_hidden_from_ids(nids.to(self.device))
                     if nk is not None:
                         neg_keys.append(nk / (nk.norm() + 1e-8))
@@ -116,6 +121,10 @@ class WalLmHeadEditor:
             new_row = current_row + boost
 
             _, _, recon = wal_encode_scalar_gpu(new_row, atoms_gpu, self.lmax)
+            if recon.shape != current_row.shape:
+                raise RuntimeError(
+                    f"WAL reconstruction shape mismatch: {recon.shape} != {current_row.shape}"
+                )
             weight[tid, :] = recon.to(device=weight.device, dtype=weight.dtype)
 
         # Experiment B: Stop-token edit on final context (prompt + ALL target tokens)
@@ -137,6 +146,10 @@ class WalLmHeadEditor:
                 _, _, eos_recon = wal_encode_scalar_gpu(
                     eos_row + clamp_norm * 0.8 * stop_key.to(self.device),
                     atoms_gpu, self.lmax)
+                if eos_recon.shape != eos_row.shape:
+                    raise RuntimeError(
+                        f"WAL reconstruction shape mismatch: {eos_recon.shape} != {eos_row.shape}"
+                    )
                 weight[eos_id, :] = eos_recon.to(
                     device=weight.device, dtype=weight.dtype)
 
@@ -149,6 +162,10 @@ class WalLmHeadEditor:
                 _, _, anti_recon = wal_encode_scalar_gpu(
                     row - anti_clamp * stop_key.to(self.device),
                     atoms_gpu, self.lmax)
+                if anti_recon.shape != row.shape:
+                    raise RuntimeError(
+                        f"WAL reconstruction shape mismatch: {anti_recon.shape} != {row.shape}"
+                    )
                 weight[tid, :] = anti_recon.to(
                     device=weight.device, dtype=weight.dtype)
 
@@ -166,20 +183,12 @@ class WalLmHeadEditor:
 
     def measure_non_target_diff(self, sample_size: int = 100) -> float:
         """Measured max abs diff on non-target lm_head rows. Not fake."""
+        if not self._nt_snapshot:
+            return 0.0
         weight = self.model.lm_head.weight.data
-        edited = set(self._original_rows.keys())
-        max_diff = 0.0; checked = 0
-        for _ in range(sample_size * 3):
-            rid = torch.randint(0, self._vocab_size, (1,)).item()
-            if rid in edited: continue
-            # Row shouldn't change - measure against any reference
-            row = weight[rid, :]
-            max_diff = max(max_diff, 0.0)
-            checked += 1
-            if checked >= sample_size: break
-        # Also verify edited rows against saved originals
-        for tid, orig in self._original_rows.items():
-            diff = (weight[tid, :] - orig.to(weight.device)).abs().max().item()
+        max_diff = 0.0
+        for rid, orig in self._nt_snapshot.items():
+            diff = (weight[rid, :] - orig.to(weight.device)).abs().max().item()
             max_diff = max(max_diff, diff)
         return max_diff
 
@@ -190,6 +199,7 @@ class WalLmHeadEditor:
                 device=self.model.lm_head.weight.device,
                 dtype=self.model.lm_head.weight.dtype)
         self._original_rows.clear()
+        self._nt_snapshot.clear()
         self._edit_count = 0
 
     # ── diagnostics ───────────────────────────────────────────────────
@@ -204,6 +214,27 @@ class WalLmHeadEditor:
     def _get_last_hidden_from_ids(self, token_ids: torch.Tensor) -> torch.Tensor | None:
         """Get last hidden state from token IDs directly (no re-tokenization)."""
         return self._run_and_get_last_hidden(token_ids.unsqueeze(0))
+
+    def snapshot_non_target(self, exclude: set[int], sample_size: int = 500) -> None:
+        """Snapshot random non-target rows before editing for NT measurement."""
+        weight = self.model.lm_head.weight.data
+        self._nt_snapshot = {}
+        vocab_size = weight.shape[0]
+        attempts = 0
+        max_attempts = max(sample_size * 20, 1000)
+        target_count = max(0, min(sample_size, vocab_size - len(exclude)))
+        while len(self._nt_snapshot) < target_count and attempts < max_attempts:
+            attempts += 1
+            rid = torch.randint(0, vocab_size, (1,)).item()
+            if rid in exclude or rid in self._nt_snapshot:
+                continue
+            self._nt_snapshot[rid] = weight[rid, :].clone()
+
+    def _prompt_ids(self, prompt: str, max_tokens: int | None = None) -> torch.Tensor:
+        kwargs = {"return_tensors": "pt"}
+        if max_tokens is not None:
+            kwargs.update({"truncation": True, "max_length": max_tokens})
+        return self.tokenizer(prompt, **kwargs).input_ids[0]
 
     def _run_and_get_last_hidden(self, input_ids: torch.Tensor) -> torch.Tensor | None:
         """Run model on input_ids and return last hidden state before lm_head."""

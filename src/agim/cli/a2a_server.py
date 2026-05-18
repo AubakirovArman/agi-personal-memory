@@ -99,20 +99,41 @@ class PluginMarketplace:
         self._plugins: dict[str, Plugin] = {}
         self._load()
 
+    @staticmethod
+    def _plugin_key(plugin: Plugin) -> tuple[str, str, str, str, str]:
+        return (
+            plugin.name.lower(),
+            plugin.version,
+            plugin.author.lower(),
+            plugin.category,
+            plugin.entry_point,
+        )
+
     def _load(self):
         idx = self.path / "index.json"
         if idx.exists():
+            by_key: dict[tuple[str, str, str, str, str], str] = {}
             for p in json.loads(idx.read_text()):
                 plugin = Plugin(**p)
+                key = self._plugin_key(plugin)
+                if key in by_key:
+                    self._plugins.pop(by_key[key], None)
+                by_key[key] = plugin.plugin_id
                 self._plugins[plugin.plugin_id] = plugin
 
     def _save(self):
         (self.path / "index.json").write_text(json.dumps(
             [{"name": p.name, "description": p.description, "version": p.version,
-              "author": p.author, "category": p.category, "plugin_id": p.plugin_id}
+              "author": p.author, "category": p.category,
+              "entry_point": p.entry_point, "plugin_id": p.plugin_id}
              for p in self._plugins.values()], indent=2))
 
     def publish(self, plugin: Plugin) -> str:
+        key = self._plugin_key(plugin)
+        for existing in self._plugins.values():
+            if self._plugin_key(existing) == key:
+                plugin.plugin_id = existing.plugin_id
+                break
         self._plugins[plugin.plugin_id] = plugin
         self._save()
         return plugin.plugin_id

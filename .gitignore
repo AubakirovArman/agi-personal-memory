@@ -18,5 +18,6 @@ final_test_memory/
 logs/
 results/easyedit_official_5_*.json
 results/easyedit_official_30_*.json
+results/easyedit_official_smoke*.json
 counterfact_*_results*.json
 locomo_*_results.json

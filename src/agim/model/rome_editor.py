@@ -28,39 +28,48 @@ class ROMEEditor:
 
     def locate_knowledge_layer(self, subject: str, relation: str,
                                 num_layers_to_test: int = 10) -> dict[str, float]:
-        """Use causal tracing to find which MLP layer stores the fact."""
-        scores = {}
-        hidden_states: dict[int, torch.Tensor] = {}
-        hooks = []
+        """Use hook-based causal tracing to score candidate MLP layers.
 
-        def make_hook(layer_idx: int):
-            def hook(module, inp, out):
-                hidden_states[layer_idx] = out[0].detach().clone()
-            return hook
-
-        for i in range(num_layers_to_test):
-            try:
-                target = self.model.model.layers[i].mlp
-                h = target.register_forward_hook(make_hook(i))
-                hooks.append(h)
-            except (AttributeError, IndexError):
-                continue
-
+        The score is the next-token distribution drift caused by injecting
+        small noise into the layer MLP output during the forward pass.
+        """
         prompt = f"{subject} {relation}"
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         with torch.no_grad():
             clean_out = self.model(**inputs, output_hidden_states=True)
+            clean_logits = clean_out.logits[0, -1, :].float()
+            clean_probs = F.softmax(clean_logits, dim=-1)
 
-        for h in hooks:
-            h.remove()
+        scores: dict[str, float] = {}
+        max_layers = min(num_layers_to_test, len(self.model.model.layers))
+        for layer_idx in range(max_layers):
+            try:
+                target = self.model.model.layers[layer_idx].mlp
+            except (AttributeError, IndexError):
+                continue
 
-        for layer_idx, hs in hidden_states.items():
-            noise = torch.randn_like(hs) * hs.std() * 0.05
-            noisy_hs = hs + noise
-            noisy_out = self.model(
-                inputs_embeds=self.model.model.embed_tokens(inputs.input_ids),
-                output_hidden_states=False,
-            )
+            def noise_hook(module, inp, out):
+                hs = out[0] if isinstance(out, tuple) else out
+                scale = hs.detach().float().std().clamp_min(1e-6) * 0.05
+                noisy = hs + torch.randn_like(hs) * scale.to(hs.device)
+                if isinstance(out, tuple):
+                    return (noisy, *out[1:])
+                return noisy
+
+            handle = target.register_forward_hook(noise_hook)
+            try:
+                with torch.no_grad():
+                    noisy_out = self.model(**inputs)
+                    noisy_logits = noisy_out.logits[0, -1, :].float()
+                    noisy_log_probs = F.log_softmax(noisy_logits, dim=-1)
+                    score = F.kl_div(
+                        noisy_log_probs.unsqueeze(0),
+                        clean_probs.unsqueeze(0),
+                        reduction="batchmean",
+                    ).item()
+            finally:
+                handle.remove()
+            scores[f"layer_{layer_idx}"] = float(score)
         return scores
 
     def apply_edit(self, subject: str, target: str, relation: str = "is",

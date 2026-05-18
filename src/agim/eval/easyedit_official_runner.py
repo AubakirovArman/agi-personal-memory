@@ -7,6 +7,7 @@ EasyEdit BaseEditor.
 from __future__ import annotations
 
 import argparse
+import math
 import importlib
 import importlib.util
 import json
@@ -20,6 +21,7 @@ from typing import Any
 
 import numpy as np
 import torch
+import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from agim.eval.easyedit_counterfact import LLAMA, git_sha, load_dataset, select_facts
@@ -141,7 +143,67 @@ def easyedit_record(fact: dict[str, Any], locality_limit: int | None) -> dict[st
             "prompt": neighbors,
             "ground_truth": [target_true for _ in neighbors],
         }
+    portability = extract_portability(fact)
+    if portability:
+        record["portability"] = portability
     return record
+
+
+def extract_portability(fact: dict[str, Any]) -> dict[str, dict[str, list[str]]]:
+    """Normalize common EasyEdit/KnowEdit portability shapes into record form."""
+    if isinstance(fact.get("portability"), dict):
+        normalized: dict[str, dict[str, list[str]]] = {}
+        for key, value in fact["portability"].items():
+            prompts: list[str] = []
+            answers: list[str] = []
+            items = value if isinstance(value, list) else [value]
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                prompt = (
+                    item.get("prompt")
+                    or item.get("New Question")
+                    or item.get("question")
+                )
+                answer = (
+                    item.get("ground_truth")
+                    or item.get("New Answer")
+                    or item.get("answer")
+                )
+                if isinstance(answer, list):
+                    answer = answer[0][0] if answer and isinstance(answer[0], list) else answer[0]
+                if prompt and answer:
+                    prompts.append(str(prompt))
+                    answers.append(str(answer))
+            if prompts:
+                normalized[key] = {"prompt": prompts, "ground_truth": answers}
+        if normalized:
+            return normalized
+
+    prompt = (
+        fact.get("portability_prompt")
+        or fact.get("portability_prompts")
+    )
+    answer = (
+        fact.get("portability_ground_truth")
+        or fact.get("portability_answer")
+        or fact.get("portability_answers")
+    )
+    if prompt and answer:
+        prompts = prompt if isinstance(prompt, list) else [prompt]
+        answers = answer if isinstance(answer, list) else [answer]
+        answers = [
+            a[0][0] if isinstance(a, list) and a and isinstance(a[0], list)
+            else a[0] if isinstance(a, list) and a else a
+            for a in answers
+        ]
+        return {
+            "one_hop": {
+                "prompt": [str(p) for p in prompts],
+                "ground_truth": [str(a) for a in answers],
+            }
+        }
+    return {}
 
 
 def attach_locality_acc(pre: dict[str, Any], post: dict[str, Any],
@@ -177,6 +239,103 @@ def official_generation_metrics(model, tok, hparams, test_prediction_acc,
     return ret
 
 
+def target_sequence_logprob(model, tok, prompt: str, target: str, device: str) -> float:
+    """Teacher-forced sum log P(target tokens | prompt), EasyEdit spacing."""
+    prompt_ids = tok(prompt, return_tensors="pt").input_ids[0]
+    full = tok(f"{prompt} {target}", return_tensors="pt").to(device)
+    full_ids = full.input_ids[0]
+    start = len(prompt_ids)
+    if start >= len(full_ids):
+        return float("-inf")
+    with torch.no_grad():
+        logits = model(**full).logits[0].float()
+        log_probs = torch.log_softmax(logits, dim=-1)
+    total = 0.0
+    for pos in range(start, len(full_ids)):
+        pred_pos = pos - 1
+        token_id = int(full_ids[pos].item())
+        total += float(log_probs[pred_pos, token_id].item())
+    return total
+
+
+def probability_metrics(model, tok, record: dict[str, Any], device: str) -> dict[str, Any]:
+    """CounterFact-style probability comparisons: new-vs-true and locality."""
+    target_new = record["target_new"]
+    ground_truth = record["ground_truth"]
+
+    rewrite_new = target_sequence_logprob(model, tok, record["prompt"], target_new, device)
+    rewrite_true = target_sequence_logprob(model, tok, record["prompt"], ground_truth, device)
+    ret: dict[str, Any] = {
+        "rewrite_new_logprob": rewrite_new,
+        "rewrite_true_logprob": rewrite_true,
+        "rewrite_acc": 1.0 if rewrite_new > rewrite_true else 0.0,
+    }
+    if "rephrase_prompt" in record:
+        rephrase_new = target_sequence_logprob(
+            model, tok, record["rephrase_prompt"], target_new, device)
+        rephrase_true = target_sequence_logprob(
+            model, tok, record["rephrase_prompt"], ground_truth, device)
+        ret.update({
+            "rephrase_new_logprob": rephrase_new,
+            "rephrase_true_logprob": rephrase_true,
+            "rephrase_acc": 1.0 if rephrase_new > rephrase_true else 0.0,
+        })
+    locality_scores: dict[str, list[float]] = {}
+    for loc_key, loc in record.get("locality", {}).items():
+        scores = []
+        for prompt, truth in zip(loc.get("prompt", []), loc.get("ground_truth", [])):
+            true_lp = target_sequence_logprob(model, tok, prompt, truth, device)
+            new_lp = target_sequence_logprob(model, tok, prompt, target_new, device)
+            scores.append(1.0 if true_lp > new_lp else 0.0)
+        if scores:
+            locality_scores[f"{loc_key}_acc"] = scores
+    if locality_scores:
+        ret["locality"] = locality_scores
+    return ret
+
+
+def ngram_entropy(texts: list[str], ns: tuple[int, ...] = (2, 3),
+                  weights: tuple[float, ...] = (2 / 3, 4 / 3)) -> float:
+    """EasyEdit-style weighted 2/3-gram entropy for generated text."""
+    values = []
+    for text in texts:
+        toks = text.split()
+        entropies = []
+        for n, weight in zip(ns, weights):
+            if len(toks) < n:
+                entropies.append(0.0)
+                continue
+            counts: dict[tuple[str, ...], int] = {}
+            for i in range(len(toks) - n + 1):
+                gram = tuple(toks[i:i + n])
+                counts[gram] = counts.get(gram, 0) + 1
+            total = sum(counts.values())
+            entropy = 0.0
+            for count in counts.values():
+                p = count / total
+                entropy -= p * math.log(p, 2)
+            entropies.append(entropy * weight)
+        values.append(float(np.mean(entropies)))
+    return round(float(np.mean(values)), 6) if values else 0.0
+
+
+def fluency_metrics(model, tok, prefixes: list[str], device: str,
+                    max_new_tokens: int = 100) -> dict[str, float]:
+    outputs = []
+    for prompt in prefixes:
+        inputs = tok(prompt, return_tensors="pt").to(device)
+        input_len = inputs.input_ids.shape[1]
+        with torch.no_grad():
+            gen = model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                pad_token_id=tok.eos_token_id,
+            )
+        outputs.append(tok.decode(gen[0, input_len:], skip_special_tokens=True))
+    return {"ngram_entropy": ngram_entropy(outputs)}
+
+
 def mean_metric(rows: list[dict[str, Any]], phase: str, key: str) -> float | None:
     values = []
     for row in rows:
@@ -201,6 +360,15 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
         summary["post"]["locality"] = {
             "neighborhood_acc": round(float(np.mean(loc_values)), 6),
         }
+    port_values = []
+    for row in rows:
+        for value in row["post"].get("portability", {}).values():
+            if isinstance(value, list):
+                port_values.append(float(np.mean(value)))
+    if port_values:
+        summary["post"]["portability"] = {
+            "mean_acc": round(float(np.mean(port_values)), 6),
+        }
     gen_rewrite = [float(np.mean(row["generation"]["rewrite_acc"])) for row in rows]
     gen_summary: dict[str, Any] = {
         "rewrite_acc": round(float(np.mean(gen_rewrite)), 6),
@@ -213,6 +381,26 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
     if gen_rephrase:
         gen_summary["rephrase_acc"] = round(float(np.mean(gen_rephrase)), 6)
     summary["post_generation_vanilla"] = gen_summary
+    prob_rows = [row["probability"] for row in rows if "probability" in row]
+    if prob_rows:
+        prob_summary = {
+            "rewrite_acc": round(float(np.mean([r["rewrite_acc"] for r in prob_rows])), 6)
+        }
+        if "rephrase_acc" in prob_rows[0]:
+            prob_summary["rephrase_acc"] = round(
+                float(np.mean([r.get("rephrase_acc", 0.0) for r in prob_rows])), 6)
+        prob_loc = []
+        for row in prob_rows:
+            for value in row.get("locality", {}).values():
+                prob_loc.append(float(np.mean(value)))
+        if prob_loc:
+            prob_summary["locality_acc"] = round(float(np.mean(prob_loc)), 6)
+        summary["post_probability"] = prob_summary
+    fluency_rows = [row["fluency"]["ngram_entropy"] for row in rows if "fluency" in row]
+    if fluency_rows:
+        summary["post_fluency"] = {
+            "ngram_entropy": round(float(np.mean(fluency_rows)), 6)
+        }
     return summary
 
 
@@ -234,6 +422,39 @@ def parse_device_id(device: str) -> int:
     if device.startswith("cuda:"):
         return int(device.split(":", 1)[1])
     return int(device)
+
+
+def post_edit_bundle(
+    *,
+    model,
+    tok,
+    hparams,
+    compute_edit_quality,
+    test_prediction_acc,
+    record: dict[str, Any],
+    pre: dict[str, Any],
+    model_name: str,
+    device_id: int,
+    device: str,
+    probability: bool,
+    fluency: bool,
+) -> dict[str, Any]:
+    post = compute_edit_quality(
+        model, model_name, hparams, tok, record, device_id, eval_metric="token_em"
+    )
+    attach_locality_acc(pre, post, record)
+    row: dict[str, Any] = {
+        "pre": pre,
+        "post": post,
+        "generation": official_generation_metrics(
+            model, tok, hparams, test_prediction_acc, record, device_id
+        ),
+    }
+    if probability:
+        row["probability"] = probability_metrics(model, tok, record, device)
+    if fluency:
+        row["fluency"] = fluency_metrics(model, tok, [record["prompt"]], device)
+    return row
 
 
 def main() -> int:
@@ -259,6 +480,13 @@ def main() -> int:
     parser.add_argument("--use-neg-prompts", action=argparse.BooleanOptionalAction, default=True,
                         help="Project edit key away from locality/neighborhood prompt keys")
     parser.add_argument("--neg-prompt-limit", type=int, default=10)
+    parser.add_argument("--probability-metrics", action=argparse.BooleanOptionalAction,
+                        default=True,
+                        help="Compute P(target_new)>P(target_true) style metrics")
+    parser.add_argument("--test-fluency", action="store_true",
+                        help="Compute EasyEdit-style n-gram entropy on post-edit generations")
+    parser.add_argument("--sequential-edit", action="store_true",
+                        help="Apply all edits first, then evaluate without per-case rollback")
     parser.add_argument("--local-files-only", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--write-easyedit-log", action="store_true")
     args = parser.parse_args()
@@ -301,15 +529,14 @@ def main() -> int:
     )
     t0 = time.time()
     metrics: list[dict[str, Any]] = []
-    for idx, (fact, record) in enumerate(zip(facts, records)):
+    edit_times: list[float] = []
+
+    def apply_one(fact: dict[str, Any], record: dict[str, Any]) -> tuple[dict, float]:
         rw = fact["requested_rewrite"]
-        pre = compute_edit_quality(
-            model, args.model, hparams, tok, record, device_id, eval_metric="token_em"
-        )
-        start = time.time()
         neg_prompts = None
         if args.use_neg_prompts:
             neg_prompts = record.get("locality", {}).get("neighborhood", {}).get("prompt")
+        start = time.time()
         backup = editor.apply_edit(
             rw["subject"],
             rw["target_new"]["str"],
@@ -325,38 +552,85 @@ def main() -> int:
             neg_prompts=neg_prompts,
             max_neg_prompts=args.neg_prompt_limit,
         )
-        edit_time = time.time() - start
-        post = compute_edit_quality(
-            model, args.model, hparams, tok, record, device_id, eval_metric="token_em"
-        )
-        attach_locality_acc(pre, post, record)
-        generation = official_generation_metrics(
-            model, tok, hparams, test_prediction_acc, record, device_id
-        )
-        editor.rollback(backup)
+        return backup, time.time() - start
 
-        row = {
-            "case_id": fact.get("case_id", idx),
-            "requested_rewrite": record,
-            "pre": pre,
-            "post": post,
-            "generation": generation,
-            "edit_time_s": round(edit_time, 4),
-        }
-        metrics.append(jsonable(row))
-        if (idx + 1) % 10 == 0 or idx + 1 == len(records):
-            summary = summarize_official(metrics)
-            post_summary = summary["post"]
-            loc = post_summary.get("locality", {}).get("neighborhood_acc")
-            gen = summary["post_generation_vanilla"]
-            print(
-                f"  [{idx + 1}/{len(records)}] "
-                f"TF rewrite={post_summary.get('rewrite_acc', 0):.1%} "
-                f"TF rephrase={post_summary.get('rephrase_acc', 0):.1%} "
-                f"TF loc={0.0 if loc is None else loc:.1%} "
-                f"GEN rewrite={gen['rewrite_acc']:.1%}",
-                flush=True,
+    if args.sequential_edit:
+        pres = [
+            compute_edit_quality(
+                model, args.model, hparams, tok, record, device_id,
+                eval_metric="token_em")
+            for record in records
+        ]
+        backups = []
+        for fact, record in zip(facts, records):
+            backup, edit_time = apply_one(fact, record)
+            backups.append(backup)
+            edit_times.append(edit_time)
+        for idx, (fact, record, pre) in enumerate(zip(facts, records, pres)):
+            row = {
+                "case_id": fact.get("case_id", idx),
+                "requested_rewrite": record,
+                "edit_time_s": round(edit_times[idx], 4),
+            }
+            row.update(post_edit_bundle(
+                model=model,
+                tok=tok,
+                hparams=hparams,
+                compute_edit_quality=compute_edit_quality,
+                test_prediction_acc=test_prediction_acc,
+                record=record,
+                pre=pre,
+                model_name=args.model,
+                device_id=device_id,
+                device=args.device,
+                probability=args.probability_metrics,
+                fluency=args.test_fluency,
+            ))
+            metrics.append(jsonable(row))
+        for backup in reversed(backups):
+            editor.rollback(backup)
+    else:
+        for idx, (fact, record) in enumerate(zip(facts, records)):
+            pre = compute_edit_quality(
+                model, args.model, hparams, tok, record, device_id,
+                eval_metric="token_em"
             )
+            backup, edit_time = apply_one(fact, record)
+            row = {
+                "case_id": fact.get("case_id", idx),
+                "requested_rewrite": record,
+                "edit_time_s": round(edit_time, 4),
+            }
+            row.update(post_edit_bundle(
+                model=model,
+                tok=tok,
+                hparams=hparams,
+                compute_edit_quality=compute_edit_quality,
+                test_prediction_acc=test_prediction_acc,
+                record=record,
+                pre=pre,
+                model_name=args.model,
+                device_id=device_id,
+                device=args.device,
+                probability=args.probability_metrics,
+                fluency=args.test_fluency,
+            ))
+            editor.rollback(backup)
+
+            metrics.append(jsonable(row))
+            if (idx + 1) % 10 == 0 or idx + 1 == len(records):
+                summary = summarize_official(metrics)
+                post_summary = summary["post"]
+                loc = post_summary.get("locality", {}).get("neighborhood_acc")
+                gen = summary["post_generation_vanilla"]
+                print(
+                    f"  [{idx + 1}/{len(records)}] "
+                    f"TF rewrite={post_summary.get('rewrite_acc', 0):.1%} "
+                    f"TF rephrase={post_summary.get('rephrase_acc', 0):.1%} "
+                    f"TF loc={0.0 if loc is None else loc:.1%} "
+                    f"GEN rewrite={gen['rewrite_acc']:.1%}",
+                    flush=True,
+                )
 
     elapsed = time.time() - t0
     summary = summarize_official(metrics)
@@ -370,6 +644,10 @@ def main() -> int:
         "device": args.device,
         "git_sha": git_sha(),
         "command": " ".join(sys.argv),
+        "versions": {
+            "torch": torch.__version__,
+            "transformers": transformers.__version__,
+        },
         "easyedit": {
             "root": str(args.easyedit_root),
             "functions": [
@@ -399,6 +677,9 @@ def main() -> int:
             "target_token_mode": args.target_token_mode,
             "use_neg_prompts": args.use_neg_prompts,
             "neg_prompt_limit": args.neg_prompt_limit,
+            "probability_metrics": args.probability_metrics,
+            "test_fluency": args.test_fluency,
+            "sequential_edit": args.sequential_edit,
         },
         "summary": summary,
         "time_s": round(elapsed, 2),
@@ -427,6 +708,21 @@ def main() -> int:
         f"rewrite={gen['rewrite_acc']:.1%} "
         f"rephrase={gen.get('rephrase_acc', 0):.1%}"
     )
+    if "post_probability" in summary:
+        prob = summary["post_probability"]
+        print(
+            "  Probability compare: "
+            f"rewrite={prob.get('rewrite_acc', 0):.1%} "
+            f"rephrase={prob.get('rephrase_acc', 0):.1%} "
+            f"locality={prob.get('locality_acc', 0):.1%}"
+        )
+    if "portability" in post:
+        print(f"  Portability: mean={post['portability'].get('mean_acc', 0):.1%}")
+    if "post_fluency" in summary:
+        print(
+            "  Fluency: "
+            f"ngram_entropy={summary['post_fluency']['ngram_entropy']:.3f}"
+        )
     print(f"  Time: {elapsed:.1f}s ({elapsed / max(len(metrics), 1):.2f}s/edit)")
     print(f"\nSaved {output}")
     return 0

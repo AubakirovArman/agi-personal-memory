@@ -8,8 +8,7 @@ import torch.nn.functional as F
 class ROMECausalEditor:
     """Rank-One Model Editing for Llama-like models.
 
-    Uses causal tracing via hidden states (output_hidden_states) then
-    rank-1 update to insert factual knowledge.
+    Uses causal tracing hooks then rank-1 update to insert factual knowledge.
     """
 
     def __init__(self, model, tokenizer, device: str = "cuda:0"):
@@ -37,26 +36,30 @@ class ROMECausalEditor:
             clean_logits = clean_out.logits[0, -1, :]
             clean_prob = F.softmax(clean_logits.float(), dim=-1)[target_token].item()
 
-        # Test each layer by adding noise to its hidden states
+        # Test each layer by corrupting that layer during the forward pass.
         impacts = []
         for layer_idx in test_layers:
-            with torch.no_grad():
-                noisy_out = self.model(
-                    **inputs,
-                    output_hidden_states=True,
-                )
-                # Corrupt hidden states at this layer
-                hs = noisy_out.hidden_states[layer_idx]
-                noise = torch.randn_like(hs) * hs.std() * 0.15
-                # Re-run from corrupted hidden states
-                corrupted_hs = hs + noise
-                # Pass through remaining layers
-                current = corrupted_hs
-                for i in range(layer_idx + 1, len(self.model.model.layers)):
-                    current = self.model.model.layers[i](current)[0]
-                current = self.model.model.norm(current)
-                corr_logits = self.model.lm_head(current)
-                corr_prob = F.softmax(corr_logits[0, -1, :].float(), dim=-1)[target_token].item()
+            try:
+                layer = self.model.model.layers[layer_idx]
+            except (AttributeError, IndexError):
+                continue
+
+            def noise_hook(module, inp, out):
+                hs = out[0] if isinstance(out, tuple) else out
+                scale = hs.detach().float().std().clamp_min(1e-6) * 0.15
+                corrupted = hs + torch.randn_like(hs) * scale.to(hs.device)
+                if isinstance(out, tuple):
+                    return (corrupted, *out[1:])
+                return corrupted
+
+            handle = layer.register_forward_hook(noise_hook)
+            try:
+                with torch.no_grad():
+                    corr_out = self.model(**inputs)
+                    corr_logits = corr_out.logits[0, -1, :]
+                    corr_prob = F.softmax(corr_logits.float(), dim=-1)[target_token].item()
+            finally:
+                handle.remove()
 
             impact = clean_prob - corr_prob
             impacts.append((layer_idx, impact))
@@ -168,8 +171,10 @@ class ROMECausalEditor:
         if last_hidden is None:
             return None
         if last_hidden.dim() == 3:
-            return last_hidden[0, -1, :].float()
-        return last_hidden[-1, :].float() / (key.norm() + 1e-8)
+            key = last_hidden[0, -1, :].float()
+        else:
+            key = last_hidden[-1, :].float()
+        return key / (key.norm() + 1e-8)
 
     def rollback(self):
         for name, original in self._original_weights.items():
