@@ -58,7 +58,7 @@ consolidation.
 | 31 | Re-run sequential retention in side-slot mode | Done | `results/easyedit_official/sequential/side_slot_random_50_report_2026-05-18.md` |
 | 32 | Add `WALRomeEditor` backend | Done | `src/agim/model/wal_rome_editor.py`, `--edit-backend wal_rome` |
 | 33 | Add `WALMemitBatchEditor` backend | Done | `src/agim/model/wal_memit_batch_editor.py` |
-| 34 | Let runner compare multiple backends | In progress | n=5 matrix smoke; n=50 matrix still pending |
+| 34 | Let runner compare multiple backends | In progress | n=50 `dual_row`/`wal_rome` matrix; `side_slot`/`wal_memit` require separate modes |
 | 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic and dataset adapter |
 | 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc diagnostic and dataset adapter |
 | 37 | Add AKEW-style raw-text edit pipeline | In progress | parser, PatchService drafts, and service materialization hook |
