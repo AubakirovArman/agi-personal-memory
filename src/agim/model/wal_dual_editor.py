@@ -1,8 +1,8 @@
 """WAL dual-layer editor for lm_head and embed_tokens edits."""
 from __future__ import annotations
 import torch
-from ..wal.encoder import build_atoms_kmeans
 from .wal_dual_helpers import (
+    add_relation_protected_keys,
     combine_positive_keys,
     get_key,
     history_basis,
@@ -13,8 +13,15 @@ from .wal_dual_helpers import (
     primary_target_sequence,
     prompt_ids,
     prompt_keys,
+    relation_protected_basis,
     snapshot_rows,
     target_sequences,
+)
+from .wal_dual_state import (
+    build_vocab,
+    measure_non_target_diff,
+    measure_non_target_diffs,
+    snapshot_non_target,
 )
 from .wal_row_update import add_row_delta
 
@@ -36,49 +43,9 @@ class WALDualLayerEditor:
         self._emb_nt_snapshot: dict[int, torch.Tensor] = {}
         self._edit_key_basis: list[torch.Tensor] = []
         self._relation_key_basis: dict[str, list[torch.Tensor]] = {}
+        self._relation_protected_basis: dict[str, list[torch.Tensor]] = {}
         self._edit_count = 0
         self.nt_sample_size = 500
-
-    def build_vocab(self):
-        """Build shared WAL atoms from lm_head + embed_tokens distributions."""
-        lm_flat = self.model.lm_head.weight.data.float().flatten()
-        emb_flat = self.model.model.embed_tokens.weight.data.float().flatten()
-        combined = torch.cat([lm_flat[:2_000_000], emb_flat[:2_000_000]])
-        self.atoms = build_atoms_kmeans(combined, self.K, iters=5, device=self.device)
-        self.atoms_gpu = self.atoms.to(self.device)
-        print(f"  WAL atoms: {self.atoms.shape} [{self.atoms.min():.3f}, {self.atoms.max():.3f}]")
-
-    def snapshot_non_target(self, lm_exclude, embed_exclude=None,
-                            sample_size: int = 500):
-        """Snapshot lm_head and embed non-target rows for NT diff measurement."""
-        self._lm_nt_snapshot = self._snapshot_rows(
-            self.model.lm_head.weight.data,
-            set(lm_exclude),
-            sample_size=sample_size,
-        )
-        self._emb_nt_snapshot = self._snapshot_rows(
-            self.model.model.embed_tokens.weight.data,
-            set(embed_exclude or ()),
-            sample_size=sample_size,
-        )
-
-    def measure_non_target_diff(self) -> float:
-        """Backward-compatible max over lm_head and embed non-target rows."""
-        diffs = self.measure_non_target_diffs()
-        return max(diffs.values()) if diffs else 0.0
-
-    def measure_non_target_diffs(self) -> dict[str, float]:
-        """Measured max abs diff on non-edited lm_head and embed rows."""
-        return {
-            "lm_head_non_edited_max": self._max_row_diff(
-                self.model.lm_head.weight.data,
-                self._lm_nt_snapshot,
-            ),
-            "embed_non_edited_max": self._max_row_diff(
-                self.model.model.embed_tokens.weight.data,
-                self._emb_nt_snapshot,
-            ),
-        }
 
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    prompt: str = "", clamp_lm: float = 0.20,
@@ -97,6 +64,8 @@ class WALDualLayerEditor:
                    projection_mode: str = "sequential",
                    history_slot_mode: str = "global",
                    max_history_keys: int = 128,
+                   relation_protected_mode: str = "none",
+                   max_relation_protected_keys: int = 64,
                    wal_encode_updates: bool = True):
         """Dual-layer WAL edit. Returns dict with backup info for rollback.
 
@@ -124,6 +93,9 @@ class WALDualLayerEditor:
             )
         if history_slot_mode not in {"global", "relation"}:
             raise ValueError("history_slot_mode must be one of: global, relation")
+        if relation_protected_mode not in {"none", "accumulate", "preload"}:
+            raise ValueError(
+                "relation_protected_mode must be one of: none, accumulate, preload")
         if positive_constraint_mode not in {"none", "projected", "ridge"}:
             raise ValueError(
                 "positive_constraint_mode must be one of: none, projected, ridge")
@@ -131,6 +103,8 @@ class WALDualLayerEditor:
         history_len = len(self._edit_key_basis)
         relation_history = self._relation_key_basis.get(relation_key, [])
         relation_history_len = len(relation_history)
+        relation_protected_len = len(
+            self._relation_protected_basis.get(relation_key, []))
         new_history_keys: list[torch.Tensor] = []
 
         if not prompt:
@@ -166,6 +140,10 @@ class WALDualLayerEditor:
         self.snapshot_non_target(
             planned_lm_rows, embed_exclude=set(sids), sample_size=self.nt_sample_size)
         neg_keys = self._prompt_keys(neg_prompts or [], max_neg_prompts)
+        protected_keys = list(neg_keys)
+        if relation_protected_mode != "none":
+            protected_keys.extend(self._relation_protected_bank(
+                relation_key, max_relation_protected_keys))
         positive_prompts = positive_prompts or []
 
         if clamp_lm > 0:
@@ -177,13 +155,15 @@ class WALDualLayerEditor:
                     k = k / (k.norm() + 1e-8)
                     positive_keys = self._positive_keys_for_step(
                         positive_prompts, tids, i, max_positive_prompts)
-                    protected = neg_keys if positive_constraint_mode != "none" else None
+                    protected = (
+                        protected_keys if positive_constraint_mode != "none" else None
+                    )
                     k = self._combine_positive_keys(
                         k, positive_keys, positive_key_weight, protected,
                         neg_projection_strength, projection_mode,
                         positive_constraint_mode)
                     k = self._project_away(
-                        k, neg_keys, strength=neg_projection_strength,
+                        k, protected_keys, strength=neg_projection_strength,
                         mode=projection_mode)
                     k = self._project_away(
                         k,
@@ -258,12 +238,16 @@ class WALDualLayerEditor:
         self._edit_count += 1
         self._edit_key_basis.extend(new_history_keys)
         self._relation_key_basis.setdefault(relation_key, []).extend(new_history_keys)
+        if relation_protected_mode == "accumulate":
+            self._add_relation_protected_keys(
+                relation_key, neg_keys, max_relation_protected_keys)
         return {
             "lm_backup": lm_bu,
             "emb_backup": emb_bu,
             "history_len": history_len,
             "relation_key": relation_key,
             "relation_history_len": relation_history_len,
+            "relation_protected_len": relation_protected_len,
             "history_keys_added": len(new_history_keys),
         }
 
@@ -280,9 +264,15 @@ class WALDualLayerEditor:
             self._relation_key_basis[key] = self._relation_key_basis.get(key, [])[
                 :backup["relation_history_len"]
             ]
+        if "relation_key" in backup and "relation_protected_len" in backup:
+            key = backup["relation_key"]
+            self._relation_protected_basis[key] = self._relation_protected_basis.get(
+                key, [])[:backup["relation_protected_len"]]
 
     _prompt_keys = prompt_keys
     _history_basis = history_basis
+    _relation_protected_bank = relation_protected_basis
+    _add_relation_protected_keys = add_relation_protected_keys
     _positive_keys_for_step = positive_keys_for_step
     _get_key = get_key
     _target_sequences = target_sequences
@@ -293,6 +283,10 @@ class WALDualLayerEditor:
     _project_away_orthogonal = staticmethod(project_away_orthogonal)
     _snapshot_rows = staticmethod(snapshot_rows)
     _max_row_diff = staticmethod(max_row_diff)
+    build_vocab = build_vocab
+    snapshot_non_target = snapshot_non_target
+    measure_non_target_diff = measure_non_target_diff
+    measure_non_target_diffs = measure_non_target_diffs
 
     @property
     def edit_count(self) -> int:

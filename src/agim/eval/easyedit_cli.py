@@ -68,6 +68,12 @@ def build_parser() -> argparse.ArgumentParser:
                         default="global",
                         help="Use global or relation_id-sharded edit history basis")
     parser.add_argument("--max-history-keys", type=int, default=128)
+    parser.add_argument("--relation-protected-mode",
+                        choices=["none", "accumulate", "preload"],
+                        default="none",
+                        help="Use relation_id-scoped locality prompt banks")
+    parser.add_argument("--relation-protected-prompt-limit", type=int, default=4)
+    parser.add_argument("--max-relation-protected-keys", type=int, default=64)
     parser.add_argument("--wal-encode-updates", action=argparse.BooleanOptionalAction,
                         default=True,
                         help="Disable for exact-additive update ablations")

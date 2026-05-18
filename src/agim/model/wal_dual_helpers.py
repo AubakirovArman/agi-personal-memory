@@ -27,6 +27,29 @@ def history_basis(editor, limit: int, relation_id: str | None = None,
     return basis[-limit:]
 
 
+def relation_protected_basis(editor, relation_id: str, limit: int) -> list[torch.Tensor]:
+    basis = editor._relation_protected_basis.get(str(relation_id or ""), [])
+    if limit <= 0:
+        return list(basis)
+    return list(basis[-limit:])
+
+
+def add_relation_protected_keys(editor, relation_id: str,
+                                keys: list[torch.Tensor], limit: int) -> int:
+    bank = editor._relation_protected_basis.setdefault(str(relation_id or ""), [])
+    added = 0
+    for key in keys:
+        normalized = key.detach().float().cpu()
+        norm = normalized.norm()
+        if norm <= 1e-8:
+            continue
+        bank.append(normalized / norm)
+        added += 1
+    if limit > 0 and len(bank) > limit:
+        del bank[:-limit]
+    return added
+
+
 def positive_keys_for_step(editor, prompts: list[str], tids: list[int],
                            pos: int, limit: int) -> list[torch.Tensor]:
     keys = []

@@ -8,6 +8,10 @@ from agim.eval.easyedit_dry_run import dry_run_payload
 from agim.eval.easyedit_failures import collect_failures, failure_summary
 from agim.eval.easyedit_payload import build_payload
 from agim.eval.easyedit_presets import apply_preset
+from agim.eval.easyedit_relation_banks import (
+    preload_relation_protected_banks,
+    relation_locality_prompts,
+)
 from agim.eval.easyedit_run_metadata import method_profile_id, parse_failure_families
 from agim.model.wal_dual_editor import WALDualLayerEditor
 
@@ -121,6 +125,9 @@ def test_method_profile_id_names_common_operating_points():
         "--sequential-edit", "--history-slot-mode", "relation",
     ])) == "seq_relation_slots"
     assert method_profile_id(build_parser().parse_args([
+        "--sequential-edit", "--relation-protected-mode", "preload",
+    ])) == "seq_relation_protected_preload"
+    assert method_profile_id(build_parser().parse_args([
         "--no-wal-encode-updates",
     ])) == "single_exact_additive"
 
@@ -144,6 +151,8 @@ def test_build_payload_emits_schema_profile_and_digest_metadata():
     assert payload["artifact_schema_version"] == "easyedit_official.v2"
     assert payload["method_profile_id"] == "single_loc"
     assert payload["hyperparams"]["wal_encode_updates"] is True
+    assert payload["hyperparams"]["relation_protected_mode"] == "none"
+    assert payload["relation_protected_banks"] == {"mode": "none", "relations": {}}
     assert payload["base_model_digest"].startswith("sha256:")
     assert payload["atoms_digest"] is None
     assert payload["failure_analysis"]["failure_families"] == ["tf"]
@@ -186,6 +195,69 @@ def test_wal_dual_relation_history_basis_and_rollback():
     assert editor._edit_key_basis == []
     assert len(editor._relation_key_basis["P17"]) == 1
     assert torch.equal(editor._relation_key_basis["P17"][0], p17_key)
+
+
+def test_wal_dual_relation_protected_bank_and_rollback():
+    editor = WALDualLayerEditor(object(), object(), device="cpu")
+    editor._add_relation_protected_keys(
+        "P17",
+        [torch.tensor([2.0, 0.0]), torch.tensor([0.0, 3.0])],
+        limit=1,
+    )
+
+    assert len(editor._relation_protected_basis["P17"]) == 1
+    bank = editor._relation_protected_bank("P17", 10)
+    assert torch.equal(bank[0], torch.tensor([0.0, 1.0]))
+
+    editor._add_relation_protected_keys("P17", [torch.tensor([1.0, 1.0])], limit=2)
+    editor.rollback({"relation_key": "P17", "relation_protected_len": 1})
+
+    assert len(editor._relation_protected_basis["P17"]) == 1
+    assert torch.equal(editor._relation_protected_basis["P17"][0], torch.tensor([0.0, 1.0]))
+
+
+def test_relation_protected_preload_groups_locality_prompts():
+    facts = [
+        {"requested_rewrite": {"relation_id": "P17"}},
+        {"requested_rewrite": {"relation_id": "P17"}},
+        {"requested_rewrite": {"relation_id": "P19"}},
+    ]
+    records = [
+        {"locality": {"neighborhood": {"prompt": ["a", "b"]}}},
+        {"locality": {"neighborhood": {"prompt": ["a", "c"]}}},
+        {"locality": {"neighborhood": {"prompt": ["d"]}}},
+    ]
+
+    assert relation_locality_prompts(facts, records, prompt_limit=2) == {
+        "P17": ["a", "b", "c"],
+        "P19": ["d"],
+    }
+
+
+class _FakeRelationBankEditor:
+    def __init__(self):
+        self._relation_protected_basis = {}
+
+    def _prompt_keys(self, prompts, limit):
+        return [torch.tensor([float(i + 1), 0.0]) for i, _ in enumerate(prompts[:limit])]
+
+    _add_relation_protected_keys = WALDualLayerEditor._add_relation_protected_keys
+
+
+def test_preload_relation_protected_banks_adds_keys():
+    editor = _FakeRelationBankEditor()
+    args = SimpleNamespace(
+        relation_protected_mode="preload",
+        relation_protected_prompt_limit=1,
+        max_relation_protected_keys=8,
+    )
+    facts = [{"requested_rewrite": {"relation_id": "P17"}}]
+    records = [{"locality": {"neighborhood": {"prompt": ["a", "b"]}}}]
+
+    summary = preload_relation_protected_banks(editor, args, facts, records)
+
+    assert summary == {"mode": "preload", "relations": {"P17": {"prompts": 1, "keys": 1}}}
+    assert len(editor._relation_protected_basis["P17"]) == 1
 
 
 def test_wal_dual_projected_positive_keys_respect_protected_basis():

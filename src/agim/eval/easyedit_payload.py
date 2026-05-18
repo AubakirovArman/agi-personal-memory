@@ -33,6 +33,7 @@ def build_payload(
     locality_limit: int | None,
     model=None,
     editor=None,
+    relation_bank_summary: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     failure_families = parse_failure_families(args.failure_families)
     return {
@@ -52,6 +53,10 @@ def build_payload(
         "easyedit": _easyedit_metadata(args),
         "dataset": _dataset_metadata(args, dataset_sha256, all_facts, facts, locality_limit),
         "hyperparams": _hyperparams(args, len(metrics)),
+        "relation_protected_banks": relation_bank_summary or {
+            "mode": getattr(args, "relation_protected_mode", "none"),
+            "relations": {},
+        },
         "summary": summary,
         "failure_analysis": failure_summary(metrics, failure_families),
         "retention": retention,
@@ -116,6 +121,9 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "projection_mode": args.projection_mode,
         "history_slot_mode": args.history_slot_mode,
         "max_history_keys": args.max_history_keys,
+        "relation_protected_mode": args.relation_protected_mode,
+        "relation_protected_prompt_limit": args.relation_protected_prompt_limit,
+        "max_relation_protected_keys": args.max_relation_protected_keys,
         "wal_encode_updates": args.wal_encode_updates,
         "nt_sample_mode": "deterministic_lcg",
         "nt_sample_size": args.nt_sample_size,

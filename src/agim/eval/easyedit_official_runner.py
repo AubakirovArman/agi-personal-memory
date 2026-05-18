@@ -27,6 +27,7 @@ from .easyedit_metrics import (
 from .easyedit_payload import build_payload
 from .easyedit_presets import apply_preset
 from .easyedit_records import easyedit_record, extract_portability
+from .easyedit_relation_banks import preload_relation_protected_banks
 from .easyedit_run_metadata import parse_failure_families
 from .easyedit_summary import summarize_official
 from .easyedit_utils import jsonable, parse_device_id, parse_retention_steps
@@ -92,6 +93,8 @@ def main() -> int:
     editor = WALDualLayerEditor(model, tok, device=args.device)
     editor.nt_sample_size = args.nt_sample_size
     editor.build_vocab()
+    relation_bank_summary = preload_relation_protected_banks(
+        editor, args, facts, records)
     _print_run_header(args, records, locality_limit)
 
     t0 = time.time()
@@ -124,6 +127,7 @@ def main() -> int:
         locality_limit=locality_limit,
         model=model,
         editor=editor,
+        relation_bank_summary=relation_bank_summary,
     )
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)

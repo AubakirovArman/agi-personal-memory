@@ -30,6 +30,9 @@ def method_profile_id(args) -> str:
             "single_exact_additive"
         )
     if getattr(args, "sequential_edit", False):
+        relation_mode = getattr(args, "relation_protected_mode", "none")
+        if relation_mode != "none":
+            return f"seq_relation_protected_{relation_mode}"
         if getattr(args, "positive_constraint_mode", "none") == "ridge":
             return "seq_positive_ridge"
         if getattr(args, "positive_constraint_mode", "none") == "projected":
@@ -41,6 +44,9 @@ def method_profile_id(args) -> str:
         if getattr(args, "history_slot_mode", "global") == "relation":
             return "seq_relation_slots"
         return "seq_tuned"
+    relation_mode = getattr(args, "relation_protected_mode", "none")
+    if relation_mode != "none":
+        return f"single_relation_protected_{relation_mode}"
     if getattr(args, "use_positive_prompts", False):
         if getattr(args, "positive_constraint_mode", "none") == "ridge":
             return "single_positive_ridge"
