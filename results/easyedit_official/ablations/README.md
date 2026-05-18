@@ -33,3 +33,12 @@ Readout: `lm_head` performs the rewrite, embeddings alone do not. The current
 `dual` profile is locality-protected mostly because of `clamp_anti`; removing
 anti improves PS@All but drops locality. EOS does not materially improve the
 single-edit n=200 result.
+
+Fresh exact-additive ablation:
+
+- `exact_additive_report_2026-05-18.md`
+- `exact_additive_random_200_seed_42_dual.json`
+
+Readout: disabling WAL re-encoding gives only a small n=200 gain, so the
+current ceiling is mainly the edit locus/control policy rather than WAL
+quantization.

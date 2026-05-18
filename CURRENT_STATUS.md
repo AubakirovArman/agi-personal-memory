@@ -103,6 +103,16 @@ locality-preserving knob, while `clamp_eos` does not materially improve
 single-edit n=200 metrics. See
 `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`.
 
+Exact-additive ablation on the same random n=200 seed-42 facts:
+
+| Update path | TF rewrite | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| WAL-encoded dual | 96.5% | 26.8% | 95.8% | 44.2% | 86.0% |
+| Exact-additive dual | 97.5% | 27.0% | 95.8% | 44.5% | 85.9% |
+
+Readout: WAL re-encoding is not the main current bottleneck. See
+`results/easyedit_official/ablations/exact_additive_report_2026-05-18.md`.
+
 Official-compatible first-1000 scale check of the current default single-edit
 profile:
 

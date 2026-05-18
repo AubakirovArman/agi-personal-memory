@@ -66,6 +66,17 @@ The n=200 component ablation identifies the default tradeoff:
 Detailed report:
 `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`.
 
+The exact-additive update ablation checks whether WAL reconstruction is the
+main bottleneck:
+
+| Update path | TF rewrite | TF PS@All | TF locality | Prob locality |
+| --- | ---: | ---: | ---: | ---: |
+| WAL-encoded dual | 96.5% | 26.8% | 95.8% | 86.0% |
+| Exact-additive dual | 97.5% | 27.0% | 95.8% | 85.9% |
+
+Detailed report:
+`results/easyedit_official/ablations/exact_additive_report_2026-05-18.md`.
+
 ## Completed Random-Seed Runs
 
 The required random n=50 single-edit presets have been run with the current
@@ -154,3 +165,5 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   locality-preserving knob for the current single-edit profile.
 - `clamp_eos` does not materially improve the single-edit n=200 component
   ablation, but default removal still needs follow-up random-seed validation.
+- `--no-wal-encode-updates` is an ablation flag only. It shows that WAL
+  reconstruction is not the main bottleneck for the current default profile.

@@ -105,6 +105,19 @@ The full matrix repeats the same command shape for `embed_only`, `dual`,
 `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`
 for exact clamps and artifact names.
 
+Exact-additive update ablation:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 200 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" --target-token-mode contextual \
+  --clamp_lm 0.20 --clamp_embed 0.06 --clamp_eos 0.16 --clamp_anti 0.06 \
+  --no-wal-encode-updates \
+  --output results/easyedit_official/ablations/exact_additive_random_200_seed_42_dual.json \
+  --save-failures-only
+```
+
 Current first-1000 scale check:
 
 ```bash

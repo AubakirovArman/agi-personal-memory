@@ -83,6 +83,17 @@ Readout: the current default is not the highest-PS setting; it is a
 locality-protected profile. `clamp_anti` accounts for most of that locality
 protection. `clamp_eos` has little single-edit value here.
 
+Exact-additive update ablation on the same random n=200 seed-42 facts:
+`results/easyedit_official/ablations/exact_additive_report_2026-05-18.md`
+
+| Update path | TF rewrite | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| WAL-encoded dual | 96.5% | 26.8% | 95.8% | 44.2% | 86.0% |
+| Exact-additive dual | 97.5% | 27.0% | 95.8% | 44.5% | 85.9% |
+
+Readout: WAL reconstruction adds little loss at this operating point. The
+larger bottleneck is the row-editing locus and control policy.
+
 Random-seed validation of the current default single-edit profile:
 `results/easyedit_official/current/random_50_report_2026-05-18.md`
 

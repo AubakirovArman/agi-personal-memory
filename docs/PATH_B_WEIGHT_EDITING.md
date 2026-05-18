@@ -42,6 +42,10 @@ The component ablation on random n=200 seed-42 shows that `lm_head` performs
 the rewrite, embeddings alone do not, and `clamp_anti` is the main
 locality-preserving knob in the current default profile.
 
+The exact-additive ablation shows that skipping WAL reconstruction produces
+only a small single-edit gain. The current bottleneck is therefore more likely
+the editing locus/control policy than WAL quantization.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.

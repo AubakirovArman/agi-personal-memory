@@ -41,7 +41,7 @@ consolidation.
 | 14 | Run random-1000 seed 42 | Done | `results/easyedit_official/current/random_1000_report_2026-05-18.md` |
 | 15 | Run `standalone/contextual/both` token-mode matrix | Done | `results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md` |
 | 16 | Run component ablations | Done | `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md` |
-| 17 | Add exact-additive update ablation | Queued | compare WAL quantization vs editing locus |
+| 17 | Add exact-additive update ablation | Done | `results/easyedit_official/ablations/exact_additive_report_2026-05-18.md` |
 | 18 | Add deterministic NT mode | Queued | store sampled row ids in artifacts |
 | 19 | Collect norm-growth metrics | In progress | `PatchArtifact.norm_summary()` foundation |
 | 20 | Remove global EOS row from persistent default | Queued | component matrix supports follow-up seed check |
