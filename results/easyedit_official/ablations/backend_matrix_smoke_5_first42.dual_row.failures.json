@@ -1,0 +1,291 @@
+{
+  "mode": "failures_only",
+  "source_output": "results/easyedit_official/ablations/backend_matrix_smoke_5_first42.dual_row.json",
+  "summary": {
+    "n_failed_cases": 4,
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "failure_mode_counts": {
+      "prob_locality": 4,
+      "tf_locality": 3,
+      "tf_ps_all": 4,
+      "tf_rephrase": 2
+    },
+    "failed_by_relation_id": {
+      "P103": 1,
+      "P1303": 1,
+      "P140": 1,
+      "P190": 1
+    }
+  },
+  "run_summary": {
+    "pre": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.2
+    },
+    "post": {
+      "rewrite_acc": 1.0,
+      "rephrase_acc": 0.6,
+      "rephrase_all_acc": 0.4,
+      "locality": {
+        "neighborhood_acc": 0.94
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 1.0,
+      "rephrase_acc": 0.6,
+      "rephrase_all_acc": 0.4
+    },
+    "NT": {
+      "lm_head_non_edited_max": 0.0,
+      "embed_non_edited_max": 0.0,
+      "edited_lm_rows_avg": 1.0,
+      "edited_embed_rows_avg": 4.4,
+      "eos_row_changed_rate": 0.0,
+      "edited_lm_delta_l2_mean": 0.191292,
+      "edited_lm_delta_l2_max": 0.191292,
+      "edited_embed_delta_l2_mean": 0.063609,
+      "edited_embed_delta_l2_max": 0.063637
+    },
+    "post_probability": {
+      "rewrite_acc": 1.0,
+      "rephrase_acc": 0.8,
+      "rephrase_all_acc": 0.9,
+      "locality_acc": 0.84
+    },
+    "metrics_by_relation_id": {
+      "P103": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 0.9,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        }
+      },
+      "P1303": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 0.9,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      },
+      "P140": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 0.9,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P17": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P190": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    }
+  },
+  "failures": [
+    {
+      "case_id": 0,
+      "relation_id": "P103",
+      "subject": "Danielle Darrieux",
+      "prompt": "The mother tongue of Danielle Darrieux is",
+      "target_new": "English",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all",
+        "tf_locality",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.9
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 1,
+      "relation_id": "P140",
+      "subject": "Edwin of Northumbria",
+      "prompt": "The official religion of Edwin of Northumbria is",
+      "target_new": "Islam",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all",
+        "tf_locality",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 2,
+      "relation_id": "P1303",
+      "subject": "Toko Yasuda",
+      "prompt": "Toko Yasuda, the",
+      "target_new": "piano",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all",
+        "tf_locality",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    },
+    {
+      "case_id": 4,
+      "relation_id": "P190",
+      "subject": "Lyon",
+      "prompt": "What is the twin city of Lyon? It is",
+      "target_new": "Manila",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    }
+  ]
+}

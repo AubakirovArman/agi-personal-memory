@@ -1,0 +1,343 @@
+{
+  "mode": "failures_only",
+  "source_output": "results/easyedit_official/ablations/backend_matrix_smoke_5_first42.wal_rome.json",
+  "summary": {
+    "n_failed_cases": 5,
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "failure_mode_counts": {
+      "ctx_gen_rewrite": 5,
+      "prob_locality": 4,
+      "tf_ps_all": 5,
+      "tf_rephrase": 4,
+      "tf_rewrite": 5
+    },
+    "failed_by_relation_id": {
+      "P103": 1,
+      "P1303": 1,
+      "P140": 1,
+      "P17": 1,
+      "P190": 1
+    }
+  },
+  "run_summary": {
+    "pre": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.2
+    },
+    "post": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.2,
+      "rephrase_all_acc": 0.1,
+      "locality": {
+        "neighborhood_acc": 1.0
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.2,
+      "rephrase_all_acc": 0.1
+    },
+    "NT": {
+      "lm_head_non_edited_max": 0.0,
+      "embed_non_edited_max": 0.0,
+      "edited_lm_rows_avg": 0.0,
+      "edited_embed_rows_avg": 0.0,
+      "eos_row_changed_rate": 0.0,
+      "edited_lm_delta_l2_mean": 0.0,
+      "edited_lm_delta_l2_max": 0.0,
+      "edited_embed_delta_l2_mean": 0.0,
+      "edited_embed_delta_l2_max": 0.0,
+      "ffn_down_proj_non_edited_max": 0.0,
+      "edited_ffn_rows_avg": 8.0,
+      "edited_ffn_delta_l2_mean": 0.00148,
+      "edited_ffn_delta_l2_max": 0.001555
+    },
+    "post_probability": {
+      "rewrite_acc": 0.2,
+      "rephrase_acc": 0.4,
+      "rephrase_all_acc": 0.3,
+      "locality_acc": 0.76
+    },
+    "metrics_by_relation_id": {
+      "P103": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P1303": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P140": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P17": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.7
+        }
+      },
+      "P190": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.5
+        }
+      }
+    }
+  },
+  "failures": [
+    {
+      "case_id": 0,
+      "relation_id": "P103",
+      "subject": "Danielle Darrieux",
+      "prompt": "The mother tongue of Danielle Darrieux is",
+      "target_new": "English",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 1,
+      "relation_id": "P140",
+      "subject": "Edwin of Northumbria",
+      "prompt": "The official religion of Edwin of Northumbria is",
+      "target_new": "Islam",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.8
+        }
+      }
+    },
+    {
+      "case_id": 2,
+      "relation_id": "P1303",
+      "subject": "Toko Yasuda",
+      "prompt": "Toko Yasuda, the",
+      "target_new": "piano",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_ps_all",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      }
+    },
+    {
+      "case_id": 3,
+      "relation_id": "P17",
+      "subject": "Autonomous University of Madrid",
+      "prompt": "Autonomous University of Madrid, which is located in",
+      "target_new": "Sweden",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.7
+        }
+      }
+    },
+    {
+      "case_id": 4,
+      "relation_id": "P190",
+      "subject": "Lyon",
+      "prompt": "What is the twin city of Lyon? It is",
+      "target_new": "Manila",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.5
+        }
+      }
+    }
+  ]
+}

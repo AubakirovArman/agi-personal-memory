@@ -1,0 +1,255 @@
+{
+  "artifact_schema_version": "easyedit_backend_matrix.v1",
+  "n": 5,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "device": "cuda:2",
+  "sample_policy": "first",
+  "seed": 42,
+  "sequential_edit": false,
+  "requested_backends": [
+    "dual_row",
+    "wal_rome",
+    "wal_memit"
+  ],
+  "rows": [
+    {
+      "edit_backend": "dual_row",
+      "status": "completed",
+      "output": "results/easyedit_official/ablations/backend_matrix_smoke_5_first42.dual_row.json",
+      "method_profile_id": "single_loc",
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.2
+        },
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.6,
+          "rephrase_all_acc": 0.4,
+          "locality": {
+            "neighborhood_acc": 0.94
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.6,
+          "rephrase_all_acc": 0.4
+        },
+        "NT": {
+          "lm_head_non_edited_max": 0.0,
+          "embed_non_edited_max": 0.0,
+          "edited_lm_rows_avg": 1.0,
+          "edited_embed_rows_avg": 4.4,
+          "eos_row_changed_rate": 0.0,
+          "edited_lm_delta_l2_mean": 0.191292,
+          "edited_lm_delta_l2_max": 0.191292,
+          "edited_embed_delta_l2_mean": 0.063609,
+          "edited_embed_delta_l2_max": 0.063637
+        },
+        "post_probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.8,
+          "rephrase_all_acc": 0.9,
+          "locality_acc": 0.84
+        },
+        "metrics_by_relation_id": {
+          "P103": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.9
+            }
+          },
+          "P1303": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P140": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P17": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P190": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          }
+        }
+      },
+      "time_s": 8.43
+    },
+    {
+      "edit_backend": "wal_rome",
+      "status": "completed",
+      "output": "results/easyedit_official/ablations/backend_matrix_smoke_5_first42.wal_rome.json",
+      "method_profile_id": "single_wal_rome",
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.2
+        },
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.2,
+          "rephrase_all_acc": 0.1,
+          "locality": {
+            "neighborhood_acc": 1.0
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.2,
+          "rephrase_all_acc": 0.1
+        },
+        "NT": {
+          "lm_head_non_edited_max": 0.0,
+          "embed_non_edited_max": 0.0,
+          "edited_lm_rows_avg": 0.0,
+          "edited_embed_rows_avg": 0.0,
+          "eos_row_changed_rate": 0.0,
+          "edited_lm_delta_l2_mean": 0.0,
+          "edited_lm_delta_l2_max": 0.0,
+          "edited_embed_delta_l2_mean": 0.0,
+          "edited_embed_delta_l2_max": 0.0,
+          "ffn_down_proj_non_edited_max": 0.0,
+          "edited_ffn_rows_avg": 8.0,
+          "edited_ffn_delta_l2_mean": 0.00148,
+          "edited_ffn_delta_l2_max": 0.001555
+        },
+        "post_probability": {
+          "rewrite_acc": 0.2,
+          "rephrase_acc": 0.4,
+          "rephrase_all_acc": 0.3,
+          "locality_acc": 0.76
+        },
+        "metrics_by_relation_id": {
+          "P103": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P1303": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P140": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P17": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P190": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.5
+            }
+          }
+        }
+      },
+      "time_s": 6.51
+    },
+    {
+      "edit_backend": "wal_memit",
+      "status": "skipped",
+      "reason": "offline PatchArtifact consolidation backend; no direct fact editor yet"
+    }
+  ]
+}

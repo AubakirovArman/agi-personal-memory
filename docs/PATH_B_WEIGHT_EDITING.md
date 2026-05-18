@@ -107,7 +107,9 @@ the official EasyEdit runner comparison loop.
 The EasyEdit runner now has a `--compare-backends` matrix mode. It can run the
 same selected CounterFact slice through runnable backends such as `dual_row`,
 `wal_rome`, and sequential `side_slot`, while recording `wal_memit` as skipped
-because it is an offline consolidation backend.
+because it is an offline consolidation backend. A first n=5 smoke matrix
+confirms this wiring: `dual_row` reached `TF rewrite=100.0%`, `TF locality=94.0%`,
+while `wal_rome` reached `TF rewrite=0.0%`, `TF locality=100.0%`.
 
 `agim.eval.ripple_diagnostic` adds a RippleEdits-style post-hoc diagnostic for
 EasyEdit artifacts. It reports direct rewrite success against related/locality
