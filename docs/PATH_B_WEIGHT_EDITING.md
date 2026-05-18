@@ -24,6 +24,11 @@ Single-edit n=50 baseline is promising:
 `--use-positive-prompts` improves single-edit PS@All to 95.0% under
 teacher-forcing, but drops teacher-forcing locality to 45.2%.
 
+The current default single-edit profile was also run on random seeds 42/43/44.
+It averages 92.7% teacher-forcing rewrite and 97.1% teacher-forcing locality,
+but only 23.3% PS@All. This validates rewrite/locality stability for that
+profile, not paraphrase transfer.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.
@@ -35,12 +40,19 @@ Sequential n=50 remains weak:
 | Teacher-forcing | 73.0% | 21.0% | 20.0% | 25.4% |
 | Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
+Random sequential seeds 42/43/44 average 100.0% teacher-forcing rewrite and
+83.0% teacher-forcing locality after 10 accumulated edits, then fall to 78.7%
+rewrite and 33.9% locality after 50 edits.
+
 ## Known Bottlenecks
 
 - Rephrase/generalization drops sharply in sequential runs.
 - Locality is weak even in the best current profile.
 - Global EOS/anti rows help some single-edit behavior but hurt sequential
   exact-token results when accumulated.
+- The first `--history-slot-mode relation` ablation did not improve seed 42.
+- `--positive-constraint-mode projected` improved sequential PS@All on seed 42
+  but dropped exact rewrite too much.
 
 ## Next Method Work
 

@@ -60,6 +60,19 @@ Best balanced n=50 sequential run:
 | Teacher-forcing | 73.0% | 21.0% | 20.0% | 25.4% |
 | Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
+Sequential random-seed validation of the same tuned profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing mean over seeds 42/43/44 | 78.7% | 26.7% | 25.3% | 33.9% |
+| Probability compare mean over seeds 42/43/44 | 96.0% | n/a | 65.7% | 65.1% |
+
+Retention mean: after 10 edits `TF rewrite=100.0%` and
+`TF locality=83.0%`; after 50 edits `TF rewrite=78.7%` and
+`TF locality=33.9%`. This confirms sequential degradation after longer edit
+chains. See
+`results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`.
+
 Interpretation: single-edit is strong; sequential editing and exact-token
 locality are not solved. The current PS@All report is
 `results/easyedit_official/current/easyedit_psall_report_2026-05-18.md`.

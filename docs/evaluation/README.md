@@ -55,6 +55,13 @@ Current sequential n=50 tuned profile (`clamp_lm=0.15`,
 | Contextual generation | 70.0% | 20.0% | 19.0% | n/a |
 | Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
+Random-seed validation of the same sequential tuned profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing mean over seeds 42/43/44 | 78.7% | 26.7% | 25.3% | 33.9% |
+| Probability compare mean over seeds 42/43/44 | 96.0% | n/a | 65.7% | 65.1% |
+
 Interpretation: single-edit is strong; sequential/locality is still weak and
 does not support a lifelong-editing claim.
 

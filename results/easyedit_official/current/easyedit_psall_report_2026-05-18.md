@@ -22,6 +22,8 @@ GPU used: `cuda:3`
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_retention.json` | Sequential tuned profile with retention |
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_positive_prompts_retention.json` | Sequential tuned profile with positive prompts and retention |
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_orthogonal_noeosanti_retention.json` | Sequential tuned profile with orthogonal projection and retention |
+| `current/random_50_report_2026-05-18.md` | Random-seed single-edit stability report |
+| `sequential/sequential_random_50_report_2026-05-18.md` | Random-seed sequential retention report |
 
 ## Headline Metrics
 
@@ -62,6 +64,10 @@ rewrite/PS@All but sharply hurts exact-token locality. This points to
 accumulated edit interference and row sharing, not only a missing paraphrase key
 or weak protected-key projection.
 
-The next method work should prioritize protected-key/null-space projection,
-per-edit isolation, or relation sharding before making stronger EasyEdit or
+The random-seed reports sharpen the same conclusion. The default single-edit
+profile keeps locality high but has weak PS@All, while sequential runs remain
+healthy at 10 accumulated edits and degrade by 50. The first relation-slot
+ablation did not improve seed 42, and projected positive prompts traded exact
+rewrite for PS@All. The next method work should prioritize stronger per-edit
+isolation or constrained row/layer updates before making stronger EasyEdit or
 lifelong-editing claims.

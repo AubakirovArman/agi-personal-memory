@@ -31,8 +31,10 @@ local EasyEdit source tree:
 | Artifact | Mode | Use |
 | --- | --- | --- |
 | `current/easyedit_official_50_first42_psall_baseline.json` | Single edit with rollback after each fact | Current baseline with PS@All |
+| `current/random_50_report_2026-05-18.md` | Single-edit random-seed report | Stability check for seeds 42/43/44 |
 | `ablations/easyedit_official_50_first42_psall_positive_prompts.json` | Single edit with positive prompts | PS@All ablation, locality tradeoff |
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_retention.json` | Sequential, tuned projection | Current balanced sequential profile with retention |
+| `sequential/sequential_random_50_report_2026-05-18.md` | Sequential random-seed report | Retention check for seeds 42/43/44 and seed 42 ablations |
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_positive_prompts_retention.json` | Sequential, tuned projection plus positive prompts | Sequential PS@All ablation |
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_orthogonal_noeosanti_retention.json` | Sequential, orthogonal projection | Negative locality ablation |
 | `sequential/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json` | Sequential, tuned projection | Best exact-token locality among tuned n=50 runs |

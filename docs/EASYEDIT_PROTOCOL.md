@@ -70,6 +70,11 @@ after edit 10: evaluate edits 1..10
 after edit 50: evaluate edits 1..50
 ```
 
+The random-seed sequential retention check has been run for seeds 42/43/44.
+Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
+50 edits `TF rewrite=78.7%` and `TF locality=33.9%`. See
+`results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`.
+
 ## Current Gaps
 
 - `PS@All`, `metrics_by_relation_id`, and sequential retention summaries are

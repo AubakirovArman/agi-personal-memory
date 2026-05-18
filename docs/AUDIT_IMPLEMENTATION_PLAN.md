@@ -60,9 +60,13 @@ Expected output: empty.
    `random_50_seed_44`.
 6. Done: run the three random_50 presets on GPU 2/3 and compare artifacts.
    See `results/easyedit_official/current/random_50_report_2026-05-18.md`.
-7. Next: run sequential random-seed retention checks and then test
-   `--history-slot-mode relation` / `--positive-constraint-mode projected`
-   against the best known sequential baseline.
+7. Done: run sequential random-seed retention checks for the tuned profile.
+   See `results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`.
+8. Done: test `--history-slot-mode relation` and
+   `--positive-constraint-mode projected` on sequential seed 42.
+9. Next: design a stronger isolation mechanism for 50-edit sequential locality;
+   current relation slots do not improve the seed 42 run, and projected
+   positive prompts trade rewrite for PS@All.
 
 ## Verification Gate
 

@@ -27,16 +27,18 @@ steps.
 - The random n=50 presets for seeds 42, 43, and 44 are complete. Their mean
   readout is `TF rewrite=92.7%`, `TF PS@All=23.3%`, and
   `TF locality=97.1%`: stable rewrite/locality, weak paraphrase transfer.
-- Run sequential random-seed retention checks before 100/1000 scale-ups.
+- Sequential random-seed retention checks are complete. The tuned profile
+  averages `TF rewrite=100.0%` and `TF locality=83.0%` after 10 accumulated
+  edits, then falls to `TF rewrite=78.7%` and `TF locality=33.9%` after 50.
 - Keep outputs under `results/easyedit_official/current/` or
   `results/easyedit_official/sequential/`.
 
 ## Next Month
 
-- Evaluate `--history-slot-mode relation` as the first per-relation side-slot
-  isolation ablation for sequential edits on the best tuned baseline.
-- Evaluate `--positive-constraint-mode projected` for locality-preserving
-  positive-prompt mixing on the same fixed seed before broad sweeps.
+- Replace simple relation slots with a stronger isolation mechanism for
+  sequential edits; the first relation-slot ablation did not improve seed 42.
+- Continue positive-prompt work only with a rewrite-preserving constraint;
+  projected positives improved PS@All but dropped exact rewrite too much.
 - Try constrained row updates or MEMIT/ROME-style layer edits for locality.
 - Run KnowEdit or MQuAKE portability splits as diagnostic benchmarks.
 - Build an EasyEdit method adapter package for external review.

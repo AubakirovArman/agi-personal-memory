@@ -260,6 +260,45 @@ Readout: the tuned sequential profile keeps exact rewrite through 10 edits but
 loses generalization/locality by 50 edits. Positive prompts improve sequential
 PS@All but hurt exact rewrite and exact-token locality.
 
+### Sequential Random-Seed Retention
+
+Report:
+`results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`
+
+Artifacts:
+
+```text
+results/easyedit_official/sequential/random_50_seed_42_seq_lm015_negx05_noeosanti_retention.json
+results/easyedit_official/sequential/random_50_seed_43_seq_lm015_negx05_noeosanti_retention.json
+results/easyedit_official/sequential/random_50_seed_44_seq_lm015_negx05_noeosanti_retention.json
+```
+
+| Seed | TF rewrite | TF rephrase | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 42 | 84.0% | 30.0% | 27.0% | 32.0% | 71.0% | 66.6% |
+| 43 | 68.0% | 18.0% | 20.0% | 19.8% | 64.0% | 65.6% |
+| 44 | 84.0% | 32.0% | 29.0% | 50.0% | 62.0% | 63.0% |
+| Mean | 78.7% | 26.7% | 25.3% | 33.9% | 65.7% | 65.1% |
+
+Mean retention:
+
+| Checkpoint | TF rewrite | TF PS@All | TF locality |
+| --- | ---: | ---: | ---: |
+| after 10 | 100.0% | 31.7% | 83.0% |
+| after 50 | 78.7% | 25.3% | 33.9% |
+
+Readout: this confirms a longer-chain sequential degradation pattern. The tuned
+profile is healthy at 10 accumulated edits, then loses exact-token locality and
+some rewrite strength by 50 edits.
+
+Seed 42 ablation results:
+
+| Profile | TF rewrite | TF PS@All | TF locality | Readout |
+| --- | ---: | ---: | ---: | --- |
+| Baseline | 84.0% | 27.0% | 32.0% | Reference |
+| `--history-slot-mode relation` | 82.0% | 27.0% | 31.8% | No win on this seed |
+| `--positive-constraint-mode projected` with positive prompts | 54.0% | 42.0% | 34.6% | Better PS, much weaker rewrite |
+
 Orthogonal projection artifact:
 `results/easyedit_official/sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_orthogonal_noeosanti_retention.json`
 

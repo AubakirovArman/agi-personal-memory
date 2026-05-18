@@ -87,6 +87,21 @@ Sequential retention:
 | after 10 | 100.0% | 50.0% | 50.0% | 59.0% |
 | after 50 | 73.0% | 21.0% | 20.0% | 25.4% |
 
+Random-seed sequential validation:
+`results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`
+
+| Seed | TF rewrite | TF rephrase | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 42 | 84.0% | 30.0% | 27.0% | 32.0% | 71.0% | 66.6% |
+| 43 | 68.0% | 18.0% | 20.0% | 19.8% | 64.0% | 65.6% |
+| 44 | 84.0% | 32.0% | 29.0% | 50.0% | 62.0% | 63.0% |
+| Mean | 78.7% | 26.7% | 25.3% | 33.9% | 65.7% | 65.1% |
+
+The same runs average `TF rewrite=100.0%` and `TF locality=83.0%` after 10
+accumulated edits, then fall to `TF rewrite=78.7%` and `TF locality=33.9%`
+after 50 edits. This is the clearest current evidence for sequential
+degradation.
+
 Sequential positive-prompt ablation:
 `results/easyedit_official/sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_positive_prompts_retention.json`
 

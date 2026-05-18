@@ -7,7 +7,7 @@ Use this file when deciding what AGIM can safely claim.
 | Path A stores and retrieves facts | Supported | `tests/`, `results/memory_retrieval/` | Runtime memory, not weight editing |
 | Path A supports audit/rollback | Supported | `tests/test_core.py`, governance tests | AGIM layer rollback, not necessarily model-weight rollback |
 | Path B single-edit works on n=50 | Supported internally | `results/easyedit_official/current/` | Profile tradeoff: high-PS settings hurt locality; locality-protected settings hurt PS@All |
-| Path B sequential editing works | Partial | `results/easyedit_official/sequential/` | Rephrase/locality weak |
+| Path B sequential editing works | Partial | `results/easyedit_official/sequential/` | Random-seed retention falls by 50 edits |
 | Historical 1000 local CounterFact diagnostic exists | Supported as history | `results/local_protocol/official_eval_1000.json` | Not official EasyEdit-compatible |
 | AGIM is number one on EasyEdit | Unsafe | None | External validation missing |
 | AGIM solved lifelong editing | Unsafe | None | Sequential retention/locality unresolved |
@@ -33,6 +33,13 @@ On three random n=50 EasyEdit-compatible CounterFact samples with the current
 default locality-protected profile, AGIM WAL averages 92.7% teacher-forcing
 rewrite and 97.1% teacher-forcing locality, but only 23.3% PS@All. This supports
 rewrite/locality stability for that profile, not solved paraphrase transfer.
+```
+
+```text
+On three random n=50 sequential EasyEdit-compatible runs with the tuned profile,
+AGIM WAL averages 100.0% teacher-forcing rewrite and 83.0% locality after 10
+accumulated edits, then 78.7% rewrite and 33.9% locality after 50 edits. This is
+partial sequential editing, not solved lifelong editing.
 ```
 
 ## Unsafe Language
