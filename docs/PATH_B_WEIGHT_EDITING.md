@@ -50,6 +50,9 @@ New EasyEdit-compatible artifacts also record deterministic NT sampled row ids
 for both `lm_head` and embeddings, making non-target drift checks auditable
 beyond a single max-diff scalar.
 
+New artifacts also emit edited-row delta L2 norm metrics under `NT`, so patch
+growth can be monitored without loading full row tensors.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.

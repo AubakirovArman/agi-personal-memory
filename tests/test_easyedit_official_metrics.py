@@ -91,6 +91,10 @@ def test_summarize_official_includes_new_metric_groups():
                 "embed_non_edited_max": 0.0,
                 "edited_lm_rows_count": 3,
                 "edited_embed_rows_count": 2,
+                "edited_lm_delta_l2_mean": 1.25,
+                "edited_lm_delta_l2_max": 2.5,
+                "edited_embed_delta_l2_mean": 0.5,
+                "edited_embed_delta_l2_max": 1.0,
                 "eos_row_changed": True,
             },
             "probability": {
@@ -117,6 +121,10 @@ def test_summarize_official_includes_new_metric_groups():
         "edited_lm_rows_avg": 3.0,
         "edited_embed_rows_avg": 2.0,
         "eos_row_changed_rate": 1.0,
+        "edited_lm_delta_l2_mean": 1.25,
+        "edited_lm_delta_l2_max": 2.5,
+        "edited_embed_delta_l2_mean": 0.5,
+        "edited_embed_delta_l2_max": 1.0,
     }
     assert summary["post_probability"] == {
         "rewrite_acc": 1.0,

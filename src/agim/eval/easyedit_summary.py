@@ -89,7 +89,7 @@ def _contextual_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _nt_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    return {
+    summary = {
         "lm_head_non_edited_max": round(
             max(row["lm_head_non_edited_max"] for row in rows), 8),
         "embed_non_edited_max": round(
@@ -104,6 +104,16 @@ def _nt_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
             1.0 if row["eos_row_changed"] else 0.0 for row in rows
         ])), 6),
     }
+    for key in (
+        "edited_lm_delta_l2_mean",
+        "edited_lm_delta_l2_max",
+        "edited_embed_delta_l2_mean",
+        "edited_embed_delta_l2_max",
+    ):
+        values = [row[key] for row in rows if key in row]
+        if values:
+            summary[key] = round(float(np.mean(values)), 6)
+    return summary
 
 
 def _probability_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:

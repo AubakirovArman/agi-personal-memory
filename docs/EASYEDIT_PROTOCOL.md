@@ -148,6 +148,8 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - New NT rows include deterministic sampled row ids:
   `lm_head_sampled_row_ids` and `embed_sampled_row_ids`. The payload records
   `nt_sample_mode=deterministic_lcg` and `nt_sample_size`.
+- NT rows and summaries also include edited-row delta L2 norm metrics:
+  `edited_lm_delta_l2_mean/max` and `edited_embed_delta_l2_mean/max`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--positive-constraint-mode projected` is a constrained positive/protected
@@ -170,3 +172,5 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   ablation, but default removal still needs follow-up random-seed validation.
 - `--no-wal-encode-updates` is an ablation flag only. It shows that WAL
   reconstruction is not the main bottleneck for the current default profile.
+- Edited-row norm metrics are emitted under `NT` for new artifacts, so future
+  patch growth can be monitored without loading full row tensors.

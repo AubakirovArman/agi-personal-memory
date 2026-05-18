@@ -43,7 +43,7 @@ consolidation.
 | 16 | Run component ablations | Done | `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md` |
 | 17 | Add exact-additive update ablation | Done | `results/easyedit_official/ablations/exact_additive_report_2026-05-18.md` |
 | 18 | Add deterministic NT mode | Done | `NT.*_sampled_row_ids`, `--nt-sample-size` |
-| 19 | Collect norm-growth metrics | In progress | `PatchArtifact.norm_summary()` foundation |
+| 19 | Collect norm-growth metrics | Done | `NT.edited_*_delta_l2_*`, `PatchArtifact.norm_summary()` |
 | 20 | Remove global EOS row from persistent default | Queued | component matrix supports follow-up seed check |
 | 21 | Remove anti-repetition from global rows | Queued | component matrix shows anti protects locality today |
 | 22 | Fix `target_token_mode=both` primary sequence selection | Queued | matrix confirms `both` loses locality before this fix |

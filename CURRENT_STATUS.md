@@ -183,6 +183,7 @@ not support the local `gemma4` checkpoint architecture.
   paths.
 - New EasyEdit artifacts record deterministic NT sampled row ids, not only
   max-diff scalars.
+- New EasyEdit artifacts report edited-row delta L2 norm metrics under `NT`.
 - Historical local 1000-fact diagnostics are useful for stress testing but not
   official EasyEdit evidence.
 

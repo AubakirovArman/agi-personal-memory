@@ -1,4 +1,5 @@
 import torch
+import pytest
 
 from agim.eval.easyedit_metrics import edit_nt_metrics
 from agim.model.wal_dual_helpers import snapshot_rows
@@ -16,6 +17,14 @@ def test_snapshot_rows_is_deterministic_and_excludes_targets():
 
 
 class _FakeEditor:
+    model = type("Model", (), {
+        "lm_head": type("Layer", (), {"weight": torch.nn.Parameter(torch.ones(10, 2))})(),
+        "model": type("Backbone", (), {
+            "embed_tokens": type("Layer", (), {
+                "weight": torch.nn.Parameter(torch.ones(10, 2))
+            })()
+        })(),
+    })()
     _lm_nt_snapshot = {5: torch.zeros(1), 2: torch.zeros(1)}
     _emb_nt_snapshot = {3: torch.zeros(1)}
 
@@ -24,8 +33,13 @@ class _FakeEditor:
 
 
 def test_edit_nt_metrics_includes_sampled_row_ids():
-    metrics = edit_nt_metrics(_FakeEditor(), {"lm_backup": {9: torch.zeros(1)}}, 9)
+    metrics = edit_nt_metrics(_FakeEditor(), {
+        "lm_backup": {9: torch.zeros(2)},
+        "emb_backup": {4: torch.ones(2)},
+    }, 9)
 
     assert metrics["lm_head_sampled_row_ids"] == [2, 5]
     assert metrics["embed_sampled_row_ids"] == [3]
+    assert metrics["edited_lm_delta_l2_max"] == pytest.approx(2 ** 0.5)
+    assert metrics["edited_embed_delta_l2_max"] == 0.0
     assert metrics["eos_row_changed"] is True
