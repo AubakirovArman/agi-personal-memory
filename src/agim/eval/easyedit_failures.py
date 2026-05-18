@@ -78,8 +78,8 @@ def _failure_record(row: dict[str, Any], modes: list[str]) -> dict[str, Any]:
         "relation_id": row.get("relation_id"),
         "subject": rewrite.get("subject"),
         "prompt": rewrite.get("prompt"),
-        "target_new": target_new.get("str"),
-        "target_true": target_true.get("str"),
+        "target_new": _target_text(target_new),
+        "target_true": _target_text(target_true),
         "failure_modes": modes,
         "metrics": {
             "post": _metric_group(row.get("post", {})),
@@ -88,6 +88,12 @@ def _failure_record(row: dict[str, Any], modes: list[str]) -> dict[str, Any]:
             "probability": _prob_group(row.get("probability", {})),
         },
     }
+
+
+def _target_text(value: Any) -> str | None:
+    if isinstance(value, dict):
+        value = value.get("str")
+    return str(value) if value is not None else None
 
 
 def _metric_group(group: dict[str, Any]) -> dict[str, float | None]:

@@ -95,6 +95,27 @@ def test_failure_summary_extracts_rephrase_and_locality_failures():
     assert summary["failed_by_relation_id"] == {"P17": 1}
 
 
+def test_failure_summary_accepts_string_targets_from_easyedit_rows():
+    rows = [
+        {
+            "case_id": 2,
+            "relation_id": "P19",
+            "requested_rewrite": {
+                "subject": "Bob",
+                "prompt": "Bob was born in",
+                "target_new": "Berlin",
+                "target_true": "Paris",
+            },
+            "post": {"rewrite_acc": [0.0]},
+        }
+    ]
+
+    failure = collect_failures(rows)[0]
+
+    assert failure["target_new"] == "Berlin"
+    assert failure["target_true"] == "Paris"
+
+
 def test_wal_dual_relation_history_basis_and_rollback():
     editor = WALDualLayerEditor(object(), object(), device="cpu")
     global_key = torch.tensor([1.0, 0.0])
