@@ -69,3 +69,61 @@ def test_patch_service_rejects_failed_canaries_before_approval():
 
     with pytest.raises(ValueError):
         service.approve_patch("p1", "alice")
+
+
+class _FakeEditor:
+    def __init__(self, model):
+        self.model = model
+        self.calls = []
+
+    def apply_edit(self, **kwargs):
+        self.calls.append(kwargs)
+        before = self.model.lm_head.weight.data[1, :].detach().clone()
+        self.model.lm_head.weight.data[1, :] = torch.tensor([2.0, 3.0, 4.0])
+        return {
+            "lm_backup": {1: before},
+            "metadata": {"target_token_ids": [1]},
+        }
+
+    def rollback(self, backup):
+        for row_id, before in backup["lm_backup"].items():
+            self.model.lm_head.weight.data[row_id, :] = before
+
+
+def test_patch_service_materializes_requested_rewrite_draft_then_applies():
+    model = _TinyModel()
+    before = model.lm_head.weight.detach().clone()
+    service = PatchService()
+    draft = PatchArtifact(
+        patch_id="draft-1",
+        base_model_digest="sha256:model",
+        method_profile_id="raw_text_proposal",
+        subject="France",
+        relation_id="P36",
+        target_new="Berlin",
+        metadata={
+            "requires_backend_materialization": True,
+            "requested_rewrite": {
+                "subject": "France",
+                "prompt": "The capital of {} is",
+                "relation_id": "P36",
+                "target_new": {"str": "Berlin"},
+                "target_true": {"str": "Paris"},
+            },
+        },
+    )
+    editor = _FakeEditor(model)
+
+    service.propose_patch(draft)
+    materialized = service.materialize_patch("draft-1", editor)
+
+    assert materialized["status"] == "materialized"
+    assert materialized["row_counts"] == {"lm_head": 1}
+    assert torch.allclose(model.lm_head.weight, before)
+    assert editor.calls[0]["prompt"] == "The capital of France is"
+
+    service.run_canaries("draft-1", {"rewrite": True})
+    service.approve_patch("draft-1", "alice")
+    service.apply_patch("draft-1", model)
+
+    assert torch.allclose(model.lm_head.weight[1], torch.tensor([2.0, 3.0, 4.0]))

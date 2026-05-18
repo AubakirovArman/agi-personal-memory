@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from .patch_artifact import PatchArtifact, conflict_summary
+from .patch_artifact import PatchArtifact, RowPatch, conflict_summary
 from .wal_memit_batch_editor import WALMemitBatchEditor
 
 
@@ -44,6 +44,48 @@ class PatchService:
             "norms": record.artifact.norm_summary(),
             "conflicts_with_applied": conflicts,
         }
+
+    def materialize_patch(
+        self,
+        patch_id: str,
+        editor,
+        edit_kwargs: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Turn a draft proposal into row-level patch deltas.
+
+        The editor is applied only long enough to capture changed rows. The
+        live model is rolled back before this method returns, so approval and
+        canary gates still happen before deployment.
+        """
+        record = self._record(patch_id)
+        if record.status not in {"proposed", "materialized"}:
+            raise ValueError(f"Patch cannot be materialized from status: {record.status}")
+        rewrite = record.artifact.metadata.get("requested_rewrite")
+        if not isinstance(rewrite, dict):
+            raise ValueError(f"Patch has no requested_rewrite metadata: {patch_id}")
+        backup = editor.apply_edit(**_editor_apply_kwargs(rewrite, edit_kwargs or {}))
+        rows = _rows_from_editor_backup(editor, backup)
+        if hasattr(editor, "rollback"):
+            editor.rollback(backup)
+        metadata = dict(record.artifact.metadata)
+        metadata.update({
+            "requires_backend_materialization": False,
+            "materialized_row_counts": _row_counts(rows),
+            "materialization_metadata": backup.get("metadata", {}),
+        })
+        record.artifact = PatchArtifact(
+            patch_id=record.artifact.patch_id,
+            base_model_digest=record.artifact.base_model_digest,
+            method_profile_id=record.artifact.method_profile_id,
+            subject=record.artifact.subject,
+            relation_id=record.artifact.relation_id,
+            target_new=record.artifact.target_new,
+            target_true=record.artifact.target_true,
+            rows=rows,
+            metadata=metadata,
+        )
+        record.status = "materialized"
+        return self.inspect_patch(patch_id)
 
     def run_canaries(self, patch_id: str, checks: dict[str, bool]) -> dict[str, Any]:
         record = self._record(patch_id)
@@ -111,3 +153,51 @@ class PatchService:
     @staticmethod
     def _canaries_passed(record: PatchRecord) -> bool:
         return bool(record.canaries) and all(record.canaries.values())
+
+
+def _editor_apply_kwargs(
+    rewrite: dict[str, Any],
+    overrides: dict[str, Any],
+) -> dict[str, Any]:
+    subject = str(rewrite.get("subject", ""))
+    target_new = rewrite.get("target_new", {})
+    target_true = rewrite.get("target_true", {})
+    prompt = str(rewrite.get("prompt", ""))
+    kwargs = {
+        "subject": subject,
+        "target": _target_text(target_new),
+        "relation": str(rewrite.get("relation_id", "")),
+        "prompt": prompt.format(subject) if "{}" in prompt else prompt,
+        "old_target": _target_text(target_true),
+    }
+    kwargs.update(overrides)
+    return kwargs
+
+
+def _rows_from_editor_backup(editor, backup: dict[str, Any]) -> list[RowPatch]:
+    rows: list[RowPatch] = []
+    model = editor.model
+    for row_id, before in backup.get("lm_backup", {}).items():
+        after = model.lm_head.weight.data[int(row_id), :]
+        rows.append(RowPatch.from_tensors("lm_head", int(row_id), before, after))
+    for row_id, before in backup.get("emb_backup", {}).items():
+        after = model.model.embed_tokens.weight.data[int(row_id), :]
+        rows.append(RowPatch.from_tensors("embed_tokens", int(row_id), before, after))
+    for (layer_idx, row_id), before in backup.get("ffn_backup", {}).items():
+        layer = f"model.layers.{int(layer_idx)}.mlp.down_proj"
+        after = editor.ffn_weight(int(layer_idx))[int(row_id), :]
+        rows.append(RowPatch.from_tensors(layer, int(row_id), before, after))
+    return rows
+
+
+def _target_text(value: Any) -> str:
+    if isinstance(value, dict):
+        return str(value.get("str", ""))
+    return str(value)
+
+
+def _row_counts(rows: list[RowPatch]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for row in rows:
+        counts[row.layer] = counts.get(row.layer, 0) + 1
+    return dict(sorted(counts.items()))

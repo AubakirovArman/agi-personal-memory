@@ -38,7 +38,7 @@ true:
 | PatchService lifecycle | `src/agim/model/patch_service.py`, `tests/test_patch_service.py` | Covered in-process |
 | Patch governance | `src/agim/model/patch_governance.py`, `tests/test_patch_governance.py` | Covered foundation |
 | External EasyEdit adapter | `src/agim/integrations/easyedit_agimwal.py`, `docs/EASYEDIT_ADAPTER.md`, `tests/test_easyedit_adapter.py` | Covered locally, not upstreamed |
-| raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `tests/test_raw_text_edit_pipeline.py` | Covered as proposal and PatchService draft bridge |
+| raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `src/agim/model/patch_service.py`, `tests/test_raw_text_edit_pipeline.py`, `tests/test_patch_service.py` | Covered as proposal, PatchService draft bridge, and service materialization hook |
 | Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Post-hoc diagnostic plus dataset adapter; no scored external run |
 | MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py` | Post-hoc diagnostic plus dataset adapter; no scored external run |
 | product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local diagnostic plus KnowEdit/UniEdit-style dataset adapter; no scored external run |
@@ -51,7 +51,7 @@ true:
 | 34 | Full backend comparison artifact | Runner support exists, but there is no tracked n=50 matrix across tuned `dual_row`, `side_slot`, and `wal_rome` |
 | 35 | Official RippleEdits benchmark | Dataset adapter exists, but there is no tracked scored RippleEdits run |
 | 36 | Official MQuAKE benchmark | Dataset adapter exists, but there is no tracked scored MQuAKE run |
-| 37 | Full AKEW-style raw-text editing | Parser and PatchService drafts exist, but row-delta materialization and benchmark scoring are not complete |
+| 37 | Full AKEW-style raw-text editing | Parser, PatchService drafts, and materialization hook exist, but there is no scored raw-text benchmark |
 | 38 | External product benchmark | Dataset adapter exists, but there is no tracked scored KnowEdit/UniEdit/ScEdit/MLaKE run |
 
 ## Current Claim Boundary

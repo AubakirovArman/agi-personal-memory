@@ -61,7 +61,7 @@ consolidation.
 | 34 | Let runner compare multiple backends | In progress | `--compare-backends`; `wal_rome` smoke is negative, `wal_memit` is offline/skipped |
 | 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic and dataset adapter |
 | 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc diagnostic and dataset adapter |
-| 37 | Add AKEW-style raw-text edit pipeline | In progress | `agim.eval.raw_text_edit_pipeline` parser and PatchService draft bridge |
+| 37 | Add AKEW-style raw-text edit pipeline | In progress | parser, PatchService drafts, and service materialization hook |
 | 38 | Add product-facing benchmark | In progress | `agim.eval.product_diagnostic` KnowEdit-inspired score and dataset adapter |
 | 39 | Build `PatchService API` | Done | `PatchService` in-process lifecycle API |
 | 40 | Add governance layer and external adapter package | Done | `PatchGovernance`, `agim.integrations.easyedit_agimwal`, `docs/EASYEDIT_ADAPTER.md` |
