@@ -150,9 +150,10 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   `nt_sample_mode=deterministic_lcg` and `nt_sample_size`.
 - NT rows and summaries also include edited-row delta L2 norm metrics:
   `edited_lm_delta_l2_mean/max` and `edited_embed_delta_l2_mean/max`.
-- `PatchArtifact.budget_decision(NormBudgetPolicy(...))` provides a structured
-  no-commit decision for norm budgets. It is currently a patch policy
-  foundation, not a default EasyEdit runtime gate.
+- `PatchArtifact.budget_decision(NormBudgetPolicy(...))` and the EasyEdit
+  `--max-*-norm` / `--max-edited-rows` flags provide an optional no-commit
+  gate. These flags are disabled by default; when enabled, rejected proposals
+  are rolled back and marked as `edit_status=no_commit`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--relation-protected-mode accumulate/preload` builds relation_id-scoped

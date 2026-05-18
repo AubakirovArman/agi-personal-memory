@@ -5,6 +5,7 @@ import copy
 import time
 from typing import Any
 
+from .easyedit_budget import evaluate_edit_budget
 from .easyedit_bundle import post_edit_bundle
 from .easyedit_cli import print_progress
 from .easyedit_metrics import edit_nt_metrics
@@ -96,19 +97,28 @@ def run_sequential(
             for rec in records]
     backups: list[dict[str, Any]] = []
     edit_times: list[float] = []
+    edit_statuses: list[dict[str, Any]] = []
     retention: dict[str, Any] = {}
     retention_steps = parse_retention_steps(args.retention_steps, len(records))
     for edit_idx, (fact, record) in enumerate(zip(facts, records), start=1):
         backup, edit_time = apply_one(editor, args, fact, record)
+        budget = evaluate_edit_budget(editor, args, fact, backup)
+        if budget and budget["no_commit"]:
+            editor.rollback(backup)
+            backup = {"lm_backup": {}, "emb_backup": {}, "budget_decision": budget}
+        elif budget:
+            backup["budget_decision"] = budget
         backups.append(backup)
+        edit_statuses.append(_budget_status(budget))
         edit_times.append(edit_time)
         if edit_idx in retention_steps:
             retention[f"after_{edit_idx}"] = _retention_checkpoint(
                 args, model, tok, hparams, facts, records, pres, edit_times,
-                compute_edit_quality, test_prediction_acc, device_id, edit_idx,
+                edit_statuses, compute_edit_quality, test_prediction_acc,
+                device_id, edit_idx,
             )
     metrics = _evaluate_accumulated(
-        args, model, tok, hparams, facts, records, pres, edit_times,
+        args, model, tok, hparams, facts, records, pres, edit_times, edit_statuses,
         compute_edit_quality, test_prediction_acc, device_id,
     )
     for backup in reversed(backups):
@@ -134,12 +144,18 @@ def run_single(
     for idx, (fact, record) in enumerate(zip(facts, records)):
         pre = _compute_pre(args, model, tok, hparams, record, compute_edit_quality, device_id)
         backup, edit_time = apply_one(editor, args, fact, record)
-        row = _base_row(fact, record, idx, edit_time)
+        budget = evaluate_edit_budget(editor, args, fact, backup)
+        proposed_nt = None
+        if budget and budget["no_commit"]:
+            proposed_nt = edit_nt_metrics(editor, backup, tok.eos_token_id)
+            editor.rollback(backup)
+        row = _base_row(fact, record, idx, edit_time, _budget_status(budget))
         row.update(_post_bundle(args, model, tok, hparams, compute_edit_quality,
                                 test_prediction_acc, record, pre, device_id,
                                 fluency=args.test_fluency))
-        row["NT"] = edit_nt_metrics(editor, backup, tok.eos_token_id)
-        editor.rollback(backup)
+        row["NT"] = proposed_nt or edit_nt_metrics(editor, backup, tok.eos_token_id)
+        if not (budget and budget["no_commit"]):
+            editor.rollback(backup)
         edit_times.append(edit_time)
         metrics.append(jsonable(row))
         if (idx + 1) % 10 == 0 or idx + 1 == len(records):
@@ -148,14 +164,14 @@ def run_single(
 
 
 def _retention_checkpoint(
-    args, model, tok, hparams, facts, records, pres, edit_times,
+    args, model, tok, hparams, facts, records, pres, edit_times, edit_statuses,
     compute_edit_quality, test_prediction_acc, device_id, edit_idx: int,
 ) -> dict[str, Any]:
     retention_rows = []
     for idx, (fact, record, pre) in enumerate(zip(facts[:edit_idx],
                                                   records[:edit_idx],
                                                   pres[:edit_idx])):
-        row = _base_row(fact, record, idx, edit_times[idx])
+        row = _base_row(fact, record, idx, edit_times[idx], edit_statuses[idx])
         row.update(_post_bundle(args, model, tok, hparams, compute_edit_quality,
                                 test_prediction_acc, record, copy.deepcopy(pre),
                                 device_id, fluency=False))
@@ -169,12 +185,12 @@ def _retention_checkpoint(
 
 
 def _evaluate_accumulated(
-    args, model, tok, hparams, facts, records, pres, edit_times,
+    args, model, tok, hparams, facts, records, pres, edit_times, edit_statuses,
     compute_edit_quality, test_prediction_acc, device_id,
 ) -> list[dict[str, Any]]:
     metrics = []
     for idx, (fact, record, pre) in enumerate(zip(facts, records, pres)):
-        row = _base_row(fact, record, idx, edit_times[idx])
+        row = _base_row(fact, record, idx, edit_times[idx], edit_statuses[idx])
         row.update(_post_bundle(args, model, tok, hparams, compute_edit_quality,
                                 test_prediction_acc, record, copy.deepcopy(pre),
                                 device_id, fluency=args.test_fluency))
@@ -210,10 +226,23 @@ def _compute_pre(args, model, tok, hparams, record, compute_edit_quality, device
 
 
 def _base_row(fact: dict[str, Any], record: dict[str, Any],
-              idx: int, edit_time: float) -> dict[str, Any]:
-    return {
+              idx: int, edit_time: float,
+              edit_status: dict[str, Any] | None = None) -> dict[str, Any]:
+    row = {
         "case_id": fact.get("case_id", idx),
         "relation_id": fact.get("requested_rewrite", {}).get("relation_id"),
         "requested_rewrite": record,
         "edit_time_s": round(edit_time, 4),
+    }
+    if edit_status:
+        row.update(edit_status)
+    return row
+
+
+def _budget_status(decision: dict[str, Any] | None) -> dict[str, Any]:
+    if not decision:
+        return {}
+    return {
+        "edit_status": "no_commit" if decision["no_commit"] else "committed",
+        "budget_decision": jsonable(decision),
     }

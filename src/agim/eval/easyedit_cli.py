@@ -74,6 +74,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Use relation_id-scoped locality prompt banks")
     parser.add_argument("--relation-protected-prompt-limit", type=int, default=4)
     parser.add_argument("--max-relation-protected-keys", type=int, default=64)
+    parser.add_argument("--max-patch-delta-norm", type=float, default=0.0)
+    parser.add_argument("--max-row-delta-norm", type=float, default=0.0)
+    parser.add_argument("--max-mean-delta-norm", type=float, default=0.0)
+    parser.add_argument("--max-edited-rows", type=int, default=0)
     parser.add_argument("--wal-encode-updates", action=argparse.BooleanOptionalAction,
                         default=True,
                         help="Disable for exact-additive update ablations")

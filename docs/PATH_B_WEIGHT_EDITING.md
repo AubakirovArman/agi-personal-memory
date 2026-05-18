@@ -55,9 +55,9 @@ growth can be monitored without loading full row tensors.
 
 `PatchArtifact` now has a `NormBudgetPolicy` foundation. It can return a
 structured `allow_commit` / `no_commit` decision for row count, patch delta
-norm, max row delta norm, and mean row delta norm. This is the policy layer for
-future ENCORE-style early stop; it is not yet wired into the EasyEdit runner as
-a runtime edit blocker.
+norm, max row delta norm, and mean row delta norm. The EasyEdit runner also has
+optional runtime budget flags; when a proposal exceeds a limit, the runner
+rolls it back before post-edit evaluation and records `edit_status=no_commit`.
 
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
