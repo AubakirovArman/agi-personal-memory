@@ -26,20 +26,26 @@ Source files:
 - Split `src/agim/eval/easyedit_counterfact.py` into data, protocol, summary,
   CLI, and evaluator modules.
 - Split helper logic out of `src/agim/model/wal_dual_editor.py`.
-- Verified all files under `src/agim/eval/` and `src/agim/model/` are now at or
-  below 300 lines.
+- Split DWL2 runtime and block-VQ modules into compatibility facades plus
+  focused implementation modules.
+- Split WAL v1/v2 modules, cross-model protocol helpers, and benchmark CLIs
+  into smaller modules.
+- Fixed stale WAL v1/v2 relative imports that resolved to the non-existent
+  `agim.wal.wal` package during package-level imports.
+- Verified all Python files outside ignored directories are now at or below
+  300 lines.
 
-## Remaining File-Size Work
+## File-Size Gate
 
-The next cleanup pass should split the remaining large non-EasyEdit modules:
+Current gate:
 
-| Area | Current issue | Likely split |
-| --- | --- | --- |
-| `src/agim/dwl2/runtime.py` | Very large runtime/deployment module | runtime layers, grouped RVQ, replacement helpers, stage controls |
-| `src/agim/dwl2/block_vq.py` | Large encoding implementation | dataclasses, encoding kernels, public API |
-| `src/agim/wal/v1/*` | Several modules over 300 lines | separate IO/CLI/helpers from core logic |
-| `src/agim/wal/v2/grammar.py` | Grammar and parser logic together | grammar specs vs parser helpers |
-| `src/agim/cli/agim_full_benchmark.py` | CLI plus benchmark logic | CLI wrapper plus benchmark runner |
+```text
+find . -path ./.venv -prune -o -path ./knowedit_cache -prune -o -name '*.py' -print0 \
+  | xargs -0 wc -l \
+  | awk '$2 != "total" && $1>300 {print $1, $2}'
+```
+
+Expected output: empty.
 
 ## Method Work After Size Cleanup
 
