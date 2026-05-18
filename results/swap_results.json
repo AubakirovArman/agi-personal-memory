@@ -1,0 +1,52 @@
+{
+  "n": 5,
+  "ES_both": 0.6,
+  "cross_free": 0.0,
+  "results": [
+    {
+      "name": "Paris\u2194Rome",
+      "ES_A": true,
+      "ES_B": true,
+      "cross_B_before_B_edit": true,
+      "A_still_after_B_edit": false,
+      "neighbor_cross": true,
+      "n_cross_count": 1
+    },
+    {
+      "name": "English\u2194French",
+      "ES_A": true,
+      "ES_B": true,
+      "cross_B_before_B_edit": true,
+      "A_still_after_B_edit": true,
+      "neighbor_cross": true,
+      "n_cross_count": 2
+    },
+    {
+      "name": "Zuckerberg\u2194Bezos",
+      "ES_A": true,
+      "ES_B": true,
+      "cross_B_before_B_edit": true,
+      "A_still_after_B_edit": true,
+      "neighbor_cross": true,
+      "n_cross_count": 2
+    },
+    {
+      "name": "Japan\u2194China",
+      "ES_A": true,
+      "ES_B": false,
+      "cross_B_before_B_edit": true,
+      "A_still_after_B_edit": false,
+      "neighbor_cross": true,
+      "n_cross_count": 2
+    },
+    {
+      "name": "iPhone\u2194Samsung",
+      "ES_A": true,
+      "ES_B": false,
+      "cross_B_before_B_edit": true,
+      "A_still_after_B_edit": false,
+      "neighbor_cross": true,
+      "n_cross_count": 2
+    }
+  ]
+}
