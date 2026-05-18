@@ -164,8 +164,8 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   on exact-token locality than the tuned sequential baseline, so it is not a
   recommended default.
 - `--target-token-mode both` is backed by the n=200 token-mode matrix. It
-  improves TF rewrite/PS@All slightly over `contextual`, but currently loses
-  locality and still needs the planned primary-sequence fix.
+  now uses contextual continuation ids as its primary sequence. It remains an
+  ablation knob rather than the default.
 - `clamp_anti` is backed by the n=200 component ablation as the main
   locality-preserving knob for the current single-edit profile.
 - `clamp_eos` does not materially improve the single-edit n=200 component

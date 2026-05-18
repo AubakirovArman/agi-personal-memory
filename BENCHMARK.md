@@ -67,6 +67,17 @@ Readout: `contextual` is the current correct default for continuation-aligned
 AGIM WAL claims on Llama. `standalone` mostly tests a different token target,
 and `both` should stay an ablation until the primary-sequence handling is fixed.
 
+Follow-up `both` primary-sequence fix:
+`results/easyedit_official/ablations/both_primary_fixed_report_2026-05-18.md`
+
+| `both` behavior | TF rewrite | TF PS@All | TF locality | Prob locality |
+| --- | ---: | ---: | ---: | ---: |
+| Before fix | 97.5% | 28.2% | 94.8% | 84.4% |
+| Contextual-primary fix | 96.0% | 27.0% | 95.9% | 85.8% |
+
+Readout: the fix removes standalone-primary behavior. `both` remains an
+ablation knob; `contextual` remains the default.
+
 Component ablation on the same random n=200 seed-42 facts:
 `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`
 

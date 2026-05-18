@@ -88,3 +88,7 @@ drops (`TF locality=94.8%`, `Prob locality=84.4%`) and edited lm_head rows
 increase. Because the current implementation chooses the first target sequence
 as primary, `both` still needs the planned primary-sequence fix before it can
 become a default profile.
+
+Follow-up: `both_primary_fixed_report_2026-05-18.md` validates the contextual
+primary-sequence fix. After the fix, `both` behaves much closer to
+`contextual` and remains an ablation knob rather than a default profile.

@@ -67,3 +67,11 @@ EOS default validation:
 
 Readout: removing the global EOS row leaves random-200 single-edit metrics
 effectively unchanged and avoids a persistent global control-row mutation.
+
+Both primary-sequence fix:
+
+- `both_primary_fixed_report_2026-05-18.md`
+- `both_primary_fixed_random_200_seed_42.json`
+
+Readout: `target_token_mode=both` now uses contextual continuation ids as the
+primary sequence, so it no longer relies on standalone ids for stop/key control.
