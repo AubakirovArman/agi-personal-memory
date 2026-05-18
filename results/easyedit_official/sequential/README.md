@@ -32,5 +32,16 @@ Readout: relation-specific protected banks improve sequential locality on seed
 42, but trade off exact rewrite. `accumulate` is the less aggressive setting;
 `preload` protects locality more strongly and suppresses rewrite more strongly.
 
+Side-slot sequential report:
+
+- `side_slot_random_50_report_2026-05-18.md`
+- `random_50_seed_42_seq_side_slot_lm015_negx05_noeosanti_retention.json`
+- `random_50_seed_42_seq_side_slot_lm015_negx05_noeosanti_retention.failures.json`
+
+Readout: side-slot serving is the first strong sequential result. On random
+seed 42, after 50 accumulated edits it reaches `TF rewrite=100.0%` and
+`TF locality=88.9%` by keeping base weights frozen and routing patches through
+runtime overlays.
+
 Use these artifacts to discuss sequential failure modes, tuning progress, and
 next research steps. Do not cite them as solved sequential editing.

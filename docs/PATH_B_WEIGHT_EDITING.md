@@ -85,6 +85,11 @@ The EasyEdit runner now has `--edit-backend side_slot` for sequential runs.
 Each proposal is converted into a `PatchArtifact`, rolled back from the base
 weights, and evaluated through a routed runtime overlay.
 
+The first seed-42 side-slot sequential EasyEdit run reaches `TF rewrite=100.0%`,
+`TF PS@All=46.0%`, and `TF locality=88.9%` after 50 accumulated edits. This is
+a strong architectural signal, but it still needs random-seed validation before
+being promoted to a headline sequential profile.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.

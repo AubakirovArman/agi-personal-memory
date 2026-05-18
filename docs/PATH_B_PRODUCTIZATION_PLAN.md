@@ -55,7 +55,7 @@ consolidation.
 | 28 | Namespace mutable history state | Done | `--state-namespace`, `WALDualMutableState` |
 | 29 | Build true side-slot memory | Done | EasyEdit `--edit-backend side_slot` |
 | 30 | Lift relation sharding to patch-slot isolation | Done | `SideSlotMemory.relation_slot_summary()` |
-| 31 | Re-run sequential retention in side-slot mode | Queued | future GPU artifacts |
+| 31 | Re-run sequential retention in side-slot mode | Done | `results/easyedit_official/sequential/side_slot_random_50_report_2026-05-18.md` |
 | 32 | Add `WALRomeEditor` backend | Queued | located FFN patch backend |
 | 33 | Add `WALMemitBatchEditor` backend | Queued | batch consolidation backend |
 | 34 | Let runner compare multiple backends | Queued | `dual_row`, `wal_rome`, `wal_memit`, `side_slot` |
