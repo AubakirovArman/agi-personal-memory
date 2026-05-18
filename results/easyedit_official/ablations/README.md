@@ -86,3 +86,13 @@ Readout: the ridge constrained positive/protected key solve restores locality
 relative to naive positive prompts (`TF locality=99.5%`, `Prob locality=93.2%`)
 but drops exact rewrite to `80.0%`, so it is an ablation path rather than the
 default profile.
+
+Norm budget no-commit probe:
+
+- `norm_budget_no_commit_probe_2026-05-18.md`
+- `norm_budget_no_commit_probe_5_seed_42.json`
+- `norm_budget_no_commit_probe_5_seed_42.failures.json`
+
+Readout: a deliberately strict row-delta budget rejects 5/5 proposed edits and
+marks them as `edit_status=no_commit`, with post-edit locality preserved at
+100.0%. This validates the runtime rollback gate, not an operating profile.

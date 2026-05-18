@@ -1,0 +1,1270 @@
+{
+  "artifact_schema_version": "easyedit_official.v2",
+  "n": 5,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "method_profile_id": "single_loc",
+  "device": "cuda:2",
+  "git_sha": "09214084552467b94415f85c80bd951c75515be5",
+  "command": "/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/src/agim/eval/easyedit_official_runner.py --n 5 --sample-policy random --seed 42 --device cuda:2 --target-token-mode contextual --nt-sample-size 8 --max-row-delta-norm 0.01 --output results/easyedit_official/ablations/norm_budget_no_commit_probe_5_seed_42.json --save-failures-only",
+  "base_model_digest": "sha256:49211843348fb4b3fd4ec123b82e627d90d4975edc594f6e29d8bd294d5c0b16",
+  "atoms_digest": "sha256:e53fdeb0b028fdab4043e01b927a6e7907de6e925d9ae82e57d7b436705af26a",
+  "versions": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.3"
+  },
+  "easyedit": {
+    "root": "/mnt/hf_model_weights/arman/3bit/sites/EasyEdit",
+    "functions": [
+      "easyeditor.evaluate.evaluate.compute_edit_quality",
+      "easyeditor.evaluate.evaluate_utils.test_prediction_acc"
+    ],
+    "aggregation": "EasyEdit BaseEditor-style pre/post locality comparison",
+    "teacher_forcing_metric": "token_em",
+    "generation_metric": "vanilla_generation token equality",
+    "contextual_generation_metric": "greedy token equality against prompt + space + target suffix ids"
+  },
+  "dataset": {
+    "source": "https://rome.baulab.info/data/dsets/counterfact.json",
+    "sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+    "total_size": 21919,
+    "sample_policy": "random",
+    "seed": 42,
+    "case_ids": [
+      20952,
+      3648,
+      819,
+      9012,
+      8024
+    ],
+    "relation_ids": [
+      "P30",
+      "P190",
+      "P276",
+      "P495",
+      "P178"
+    ],
+    "locality_prompts": "all",
+    "rephrase_prompt": "first",
+    "rephrase_prompts": "all"
+  },
+  "hyperparams": {
+    "clamp_lm": 0.2,
+    "clamp_embed": 0.06,
+    "clamp_eos": 0.0,
+    "clamp_anti": 0.06,
+    "clamp_old": 0.0,
+    "target_token_mode": "contextual",
+    "use_positive_prompts": false,
+    "positive_prompt_limit": 4,
+    "positive_key_weight": 1.0,
+    "positive_constraint_mode": "none",
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "use_neg_prompts": true,
+    "neg_prompt_limit": 10,
+    "neg_projection_strength": 0.3,
+    "history_projection_strength": 0.0,
+    "embed_history_projection_strength": 0.0,
+    "projection_mode": "sequential",
+    "history_slot_mode": "global",
+    "max_history_keys": 128,
+    "relation_protected_mode": "none",
+    "relation_protected_prompt_limit": 4,
+    "max_relation_protected_keys": 64,
+    "max_patch_delta_norm": 0.0,
+    "max_row_delta_norm": 0.01,
+    "max_mean_delta_norm": 0.0,
+    "max_edited_rows": 0,
+    "wal_encode_updates": true,
+    "nt_sample_mode": "deterministic_lcg",
+    "nt_sample_size": 8,
+    "probability_metrics": true,
+    "test_fluency": false,
+    "sequential_edit": false,
+    "retention_steps": [
+      1
+    ]
+  },
+  "relation_protected_banks": {
+    "mode": "none",
+    "relations": {}
+  },
+  "summary": {
+    "pre": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0
+    },
+    "post": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0,
+      "locality": {
+        "neighborhood_acc": 1.0
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "NT": {
+      "lm_head_non_edited_max": 0.0,
+      "embed_non_edited_max": 0.0,
+      "edited_lm_rows_avg": 1.0,
+      "edited_embed_rows_avg": 3.0,
+      "eos_row_changed_rate": 0.0,
+      "edited_lm_delta_l2_mean": 0.191522,
+      "edited_lm_delta_l2_max": 0.191522,
+      "edited_embed_delta_l2_mean": 0.063986,
+      "edited_embed_delta_l2_max": 0.064006
+    },
+    "post_probability": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.2,
+      "rephrase_all_acc": 0.1,
+      "locality_acc": 0.88
+    },
+    "metrics_by_relation_id": {
+      "P178": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P190": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.5
+        }
+      },
+      "P276": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P30": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P495": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      }
+    }
+  },
+  "failure_analysis": {
+    "n_failed_cases": 5,
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "failure_mode_counts": {
+      "ctx_gen_rewrite": 5,
+      "prob_locality": 2,
+      "tf_ps_all": 5,
+      "tf_rephrase": 5,
+      "tf_rewrite": 5
+    },
+    "failed_by_relation_id": {
+      "P178": 1,
+      "P190": 1,
+      "P276": 1,
+      "P30": 1,
+      "P495": 1
+    }
+  },
+  "retention": {},
+  "time_s": 6.99,
+  "time_per_edit_s": 1.3986,
+  "metrics": [
+    {
+      "case_id": 20952,
+      "relation_id": "P30",
+      "requested_rewrite": {
+        "prompt": "Angola is located in",
+        "target_new": "Antarctica",
+        "ground_truth": "Africa",
+        "subject": "Angola",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "South Africa is a part of the continent of",
+              "Ghana is in",
+              "Burkina Faso is a part of the continent of",
+              "Mozambique is in",
+              "Ghana is a part of the continent of",
+              "Ethiopia is a part of the continent of",
+              "Ethiopia is in",
+              "Côte d'Ivoire is located in",
+              "Democratic Republic of the Congo is in",
+              "Algeria is a part of the continent of"
+            ],
+            "ground_truth": [
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa",
+              "Africa"
+            ]
+          }
+        },
+        "rephrase_prompt": "Plaque - located at Punkeydoodle's Corners. Angola belongs to the continent of",
+        "rephrase_prompts": [
+          "Plaque - located at Punkeydoodle's Corners. Angola belongs to the continent of",
+          "Last updated on 4 February 2017. Angola is a part of the continent of"
+        ]
+      },
+      "edit_time_s": 0.3612,
+      "edit_status": "no_commit",
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "max_delta_norm",
+            "value": 0.196241,
+            "limit": 0.01
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 0.01,
+          "max_mean_delta_norm": null,
+          "max_rows": null
+        },
+        "norms": {
+          "patch_delta_norm": 0.325265,
+          "max_delta_norm": 0.196241,
+          "mean_delta_norm": 0.108422
+        },
+        "row_count": 3
+      },
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          72787
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          72787
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            72787
+          ],
+          [
+            72787
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -12.114727973937988,
+        "rewrite_true_logprob": -3.8647279739379883,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -5.449789047241211,
+        "rephrase_true_logprob": -1.5122889280319214,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -5.449789047241211,
+          -10.155264854431152
+        ],
+        "rephrase_all_true_logprob": [
+          -1.5122889280319214,
+          -0.030264638364315033
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "NT": {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+        "lm_head_sampled_row_ids": [
+          2561,
+          13182,
+          36709,
+          60236,
+          83763,
+          94384,
+          107290,
+          117911
+        ],
+        "embed_sampled_row_ids": [
+          10775,
+          34302,
+          57829,
+          68450,
+          81356,
+          91977,
+          104883,
+          115504
+        ],
+        "edited_lm_rows_count": 1,
+        "edited_embed_rows_count": 2,
+        "edited_lm_delta_l2_mean": 0.196241,
+        "edited_lm_delta_l2_max": 0.196241,
+        "edited_embed_delta_l2_mean": 0.064512,
+        "edited_embed_delta_l2_max": 0.06452,
+        "eos_row_changed": false
+      }
+    },
+    {
+      "case_id": 3648,
+      "relation_id": "P190",
+      "requested_rewrite": {
+        "prompt": "What is the twin city of Shanghai? It is",
+        "target_new": "Dresden",
+        "ground_truth": "Barcelona",
+        "subject": "Shanghai",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Rio de Janeiro is a twin city of",
+              "The twin city of Cologne is",
+              "The twin city of Dublin is",
+              "What is the twin city of Istanbul? It is",
+              "Istanbul is a twin city of",
+              "Cairo is a twin city of",
+              "Cologne is a twin city of",
+              "What is the twin city of Gdańsk? It is",
+              "What is the twin city of Antwerp? It is",
+              "What is the twin city of Tel Aviv? It is"
+            ],
+            "ground_truth": [
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona",
+              "Barcelona"
+            ]
+          }
+        },
+        "rephrase_prompt": "Hamid Berhili (MAR), 10:4\n Paul Ingle (GBR) def. The twin city of Shanghai is",
+        "rephrase_prompts": [
+          "Hamid Berhili (MAR), 10:4\n Paul Ingle (GBR) def. The twin city of Shanghai is",
+          "Palgrave Macmillan, 2013. Shanghai is a twin city of"
+        ]
+      },
+      "edit_time_s": 0.2708,
+      "edit_status": "no_commit",
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "max_delta_norm",
+            "value": 0.195356,
+            "limit": 0.01
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 0.01,
+          "max_mean_delta_norm": null,
+          "max_rows": null
+        },
+        "norms": {
+          "patch_delta_norm": 0.323391,
+          "max_delta_norm": 0.195356,
+          "mean_delta_norm": 0.107797
+        },
+        "row_count": 3
+      },
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          86545
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          86545
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            86545
+          ],
+          [
+            86545
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -10.554792404174805,
+        "rewrite_true_logprob": -10.148542404174805,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -13.148762702941895,
+        "rephrase_true_logprob": -14.367512702941895,
+        "rephrase_acc": 1.0,
+        "rephrase_all_new_logprob": [
+          -13.148762702941895,
+          -5.382986068725586
+        ],
+        "rephrase_all_true_logprob": [
+          -14.367512702941895,
+          -5.132986068725586
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "NT": {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+        "lm_head_sampled_row_ids": [
+          18443,
+          41970,
+          52591,
+          65497,
+          76118,
+          89024,
+          99645,
+          123172
+        ],
+        "embed_sampled_row_ids": [
+          2924,
+          26451,
+          37072,
+          49978,
+          60599,
+          73505,
+          84126,
+          107653
+        ],
+        "edited_lm_rows_count": 1,
+        "edited_embed_rows_count": 2,
+        "edited_lm_delta_l2_mean": 0.195356,
+        "edited_lm_delta_l2_max": 0.195356,
+        "edited_embed_delta_l2_mean": 0.064017,
+        "edited_embed_delta_l2_max": 0.064035,
+        "eos_row_changed": false
+      }
+    },
+    {
+      "case_id": 819,
+      "relation_id": "P276",
+      "requested_rewrite": {
+        "prompt": "2011 Cannes Film Festival can be found in",
+        "target_new": "Prescott",
+        "ground_truth": "Cannes",
+        "subject": "2011 Cannes Film Festival",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Olympia Cinéma is in",
+              "Chapelle de l'Institut Stanislas can be found in",
+              "Where is Villa des Dunes? It is located in",
+              "The location of Chapelle Saint-Pierre de Cannes is",
+              "Chapelle Saint-Caprais de Cannes is located in",
+              "Palais des Festivals is in",
+              "Where is Chapelle de l'Institut Stanislas? It is located in",
+              "Marché Forville is in",
+              "Holy Trinity Church is in",
+              "Star Cinéma can be found in"
+            ],
+            "ground_truth": [
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes",
+              "Cannes"
+            ]
+          }
+        },
+        "rephrase_prompt": "(Newtownabbey, Antrim)\n Leroy Hugh Logan, Inspector, Metropolitan Police. Where is 2011 Cannes Film Festival? It is located in",
+        "rephrase_prompts": [
+          "(Newtownabbey, Antrim)\n Leroy Hugh Logan, Inspector, Metropolitan Police. Where is 2011 Cannes Film Festival? It is located in",
+          "Gold medal at the Winter Olympics in 1994. 2011 Cannes Film Festival is in"
+        ]
+      },
+      "edit_time_s": 0.3877,
+      "edit_status": "no_commit",
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "max_delta_norm",
+            "value": 0.190413,
+            "limit": 0.01
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 0.01,
+          "max_mean_delta_norm": null,
+          "max_rows": null
+        },
+        "norms": {
+          "patch_delta_norm": 0.511509,
+          "max_delta_norm": 0.190413,
+          "mean_delta_norm": 0.085252
+        },
+        "row_count": 6
+      },
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          91879
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          91879
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            91879
+          ],
+          [
+            91879
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -14.33886432647705,
+        "rewrite_true_logprob": -3.002926826477051,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -13.640557289123535,
+        "rephrase_true_logprob": -0.7030574679374695,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -13.640557289123535,
+          -13.134682655334473
+        ],
+        "rephrase_all_true_logprob": [
+          -0.7030574679374695,
+          -5.181557655334473
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0
+          ]
+        }
+      },
+      "NT": {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+        "lm_head_sampled_row_ids": [
+          5831,
+          18737,
+          29358,
+          52885,
+          76412,
+          99939,
+          110560,
+          123466
+        ],
+        "embed_sampled_row_ids": [
+          9821,
+          20442,
+          43969,
+          67496,
+          91023,
+          101644,
+          114550,
+          125171
+        ],
+        "edited_lm_rows_count": 1,
+        "edited_embed_rows_count": 5,
+        "edited_lm_delta_l2_mean": 0.190413,
+        "edited_lm_delta_l2_max": 0.190413,
+        "edited_embed_delta_l2_mean": 0.064219,
+        "edited_embed_delta_l2_max": 0.064257,
+        "eos_row_changed": false
+      }
+    },
+    {
+      "case_id": 9012,
+      "relation_id": "P495",
+      "requested_rewrite": {
+        "prompt": "Delta Goodrem, that originated in",
+        "target_new": "India",
+        "ground_truth": "Australia",
+        "subject": "Delta Goodrem",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "K-9 originated in",
+              "Cut Copy, formulated in",
+              "Fortress, that originated in",
+              "Don't Say a Word, that was formulated in",
+              "Until the End of the World, developed in",
+              "Sanctum was developed in",
+              "Strange Bedfellows was created in",
+              "Fortress, that was created in",
+              "The Pacific was created in the country of",
+              "The Libertine, created in"
+            ],
+            "ground_truth": [
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia",
+              "Australia"
+            ]
+          }
+        },
+        "rephrase_prompt": "The first president of the team was doctor Hector Priem. Delta Goodrem was from",
+        "rephrase_prompts": [
+          "The first president of the team was doctor Hector Priem. Delta Goodrem was from",
+          "Then, Yuu was supposed to take care of him. Delta Goodrem, that was formulated in"
+        ]
+      },
+      "edit_time_s": 0.3034,
+      "edit_status": "no_commit",
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "max_delta_norm",
+            "value": 0.181173,
+            "limit": 0.01
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 0.01,
+          "max_mean_delta_norm": null,
+          "max_rows": null
+        },
+        "norms": {
+          "patch_delta_norm": 0.369738,
+          "max_delta_norm": 0.181173,
+          "mean_delta_norm": 0.092434
+        },
+        "row_count": 4
+      },
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          6890
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          6890
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            6890
+          ],
+          [
+            6890
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -6.500898361206055,
+        "rewrite_true_logprob": -1.1883983612060547,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -8.941356658935547,
+        "rephrase_true_logprob": -3.0663561820983887,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -8.941356658935547,
+          -6.977794170379639
+        ],
+        "rephrase_all_true_logprob": [
+          -3.0663561820983887,
+          -5.790294170379639
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "NT": {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+        "lm_head_sampled_row_ids": [
+          9450,
+          20071,
+          32977,
+          43598,
+          56504,
+          67125,
+          90652,
+          114179
+        ],
+        "embed_sampled_row_ids": [
+          7154,
+          20060,
+          30681,
+          43587,
+          54208,
+          77735,
+          101262,
+          124789
+        ],
+        "edited_lm_rows_count": 1,
+        "edited_embed_rows_count": 3,
+        "edited_lm_delta_l2_mean": 0.181173,
+        "edited_lm_delta_l2_max": 0.181173,
+        "edited_embed_delta_l2_mean": 0.062855,
+        "edited_embed_delta_l2_max": 0.062873,
+        "eos_row_changed": false
+      }
+    },
+    {
+      "case_id": 8024,
+      "relation_id": "P178",
+      "requested_rewrite": {
+        "prompt": "Google Patents, a product developed by",
+        "target_new": "Microsoft",
+        "ground_truth": "Google",
+        "subject": "Google Patents",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Picasa, developed by",
+              "Google Chrome, a product developed by",
+              "Go is created by",
+              "Nexus One, a product created by",
+              "Galaxy Nexus was developed by",
+              "Nexus 7 is a product of",
+              "Google Maps was a product of",
+              "Picasa is a product of",
+              "Google Chrome is created by",
+              "Dart, a product created by"
+            ],
+            "ground_truth": [
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google"
+            ]
+          }
+        },
+        "rephrase_prompt": "(2005) Dying for jade. Google Patents was a product of",
+        "rephrase_prompts": [
+          "(2005) Dying for jade. Google Patents was a product of",
+          "D-5541. Google Patents is created by"
+        ]
+      },
+      "edit_time_s": 0.3043,
+      "edit_status": "no_commit",
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "max_delta_norm",
+            "value": 0.194426,
+            "limit": 0.01
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 0.01,
+          "max_mean_delta_norm": null,
+          "max_rows": null
+        },
+        "norms": {
+          "patch_delta_norm": 0.387408,
+          "max_delta_norm": 0.194426,
+          "mean_delta_norm": 0.096852
+        },
+        "row_count": 4
+      },
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          5210
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          5210
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            5210
+          ],
+          [
+            5210
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -6.445010185241699,
+        "rewrite_true_logprob": -0.507510244846344,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -6.431365013122559,
+        "rephrase_true_logprob": -1.6813652515411377,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -6.431365013122559,
+          -8.35291862487793
+        ],
+        "rephrase_all_true_logprob": [
+          -1.6813652515411377,
+          -0.8216685652732849
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "NT": {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+        "lm_head_sampled_row_ids": [
+          18429,
+          41956,
+          65483,
+          76104,
+          89010,
+          99631,
+          112537,
+          123158
+        ],
+        "embed_sampled_row_ids": [
+          3998,
+          16904,
+          27525,
+          51052,
+          74579,
+          98106,
+          108727,
+          121633
+        ],
+        "edited_lm_rows_count": 1,
+        "edited_embed_rows_count": 3,
+        "edited_lm_delta_l2_mean": 0.194426,
+        "edited_lm_delta_l2_max": 0.194426,
+        "edited_embed_delta_l2_mean": 0.064327,
+        "edited_embed_delta_l2_max": 0.064347,
+        "eos_row_changed": false
+      }
+    }
+  ]
+}
