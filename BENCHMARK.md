@@ -67,6 +67,22 @@ Readout: `contextual` is the current correct default for continuation-aligned
 AGIM WAL claims on Llama. `standalone` mostly tests a different token target,
 and `both` should stay an ablation until the primary-sequence handling is fixed.
 
+Component ablation on the same random n=200 seed-42 facts:
+`results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`
+
+| Ablation | TF rewrite | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `lm_head_only` | 100.0% | 47.0% | 88.9% | 68.5% | 71.4% |
+| `embed_only` | 0.5% | 0.9% | 99.9% | 8.5% | 88.5% |
+| `dual` | 96.5% | 26.8% | 95.8% | 44.2% | 86.0% |
+| `dual_no_eos` | 96.5% | 27.0% | 95.8% | 44.8% | 85.9% |
+| `dual_no_anti` | 100.0% | 46.5% | 88.8% | 68.0% | 71.4% |
+| `dual_no_eos_anti` | 100.0% | 46.5% | 88.8% | 68.0% | 71.4% |
+
+Readout: the current default is not the highest-PS setting; it is a
+locality-protected profile. `clamp_anti` accounts for most of that locality
+protection. `clamp_eos` has little single-edit value here.
+
 Random-seed validation of the current default single-edit profile:
 `results/easyedit_official/current/random_50_report_2026-05-18.md`
 

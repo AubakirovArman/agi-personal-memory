@@ -88,6 +88,23 @@ for mode in standalone contextual both; do
 done
 ```
 
+Component ablation matrix:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 200 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" --target-token-mode contextual \
+  --clamp_lm 0.20 --clamp_embed 0 --clamp_eos 0 --clamp_anti 0 \
+  --output results/easyedit_official/ablations/component_random_200_seed_42_lm_head_only.json \
+  --save-failures-only
+```
+
+The full matrix repeats the same command shape for `embed_only`, `dual`,
+`dual_no_eos`, `dual_no_anti`, and `dual_no_eos_anti`; see
+`results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`
+for exact clamps and artifact names.
+
 Current first-1000 scale check:
 
 ```bash

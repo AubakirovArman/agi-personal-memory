@@ -34,6 +34,14 @@ EasyEdit-compatible runner. It reports 91.1% teacher-forcing rewrite, 96.2%
 teacher-forcing locality, and 24.7% PS@All. This is the correct current n=1000
 EasyEdit-compatible scale check, not the legacy local protocol.
 
+The same default profile was also validated on a random n=1000 seed-42 sample.
+It reports 94.5% teacher-forcing rewrite, 96.4% teacher-forcing locality, and
+23.5% PS@All.
+
+The component ablation on random n=200 seed-42 shows that `lm_head` performs
+the rewrite, embeddings alone do not, and `clamp_anti` is the main
+locality-preserving knob in the current default profile.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.

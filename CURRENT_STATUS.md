@@ -87,6 +87,22 @@ different target-token alignment, while `both` still needs the planned primary
 sequence fix. See
 `results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md`.
 
+Component ablation on the same random n=200 seed-42 facts:
+
+| Ablation | TF rewrite | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `lm_head_only` | 100.0% | 47.0% | 88.9% | 68.5% | 71.4% |
+| `embed_only` | 0.5% | 0.9% | 99.9% | 8.5% | 88.5% |
+| `dual` | 96.5% | 26.8% | 95.8% | 44.2% | 86.0% |
+| `dual_no_eos` | 96.5% | 27.0% | 95.8% | 44.8% | 85.9% |
+| `dual_no_anti` | 100.0% | 46.5% | 88.8% | 68.0% | 71.4% |
+| `dual_no_eos_anti` | 100.0% | 46.5% | 88.8% | 68.0% | 71.4% |
+
+Readout: `lm_head` is the rewrite component. `clamp_anti` is the main
+locality-preserving knob, while `clamp_eos` does not materially improve
+single-edit n=200 metrics. See
+`results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`.
+
 Official-compatible first-1000 scale check of the current default single-edit
 profile:
 

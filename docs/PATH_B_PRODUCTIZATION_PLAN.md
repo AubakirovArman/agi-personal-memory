@@ -40,12 +40,12 @@ consolidation.
 | 13 | Run random-200 seeds 42/43/44 | Done | `results/easyedit_official/current/random_200_report_2026-05-18.md` |
 | 14 | Run random-1000 seed 42 | Done | `results/easyedit_official/current/random_1000_report_2026-05-18.md` |
 | 15 | Run `standalone/contextual/both` token-mode matrix | Done | `results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md` |
-| 16 | Run component ablations | Queued | `lm_head-only`, `embed-only`, `dual`, no-EOS/no-anti |
+| 16 | Run component ablations | Done | `results/easyedit_official/ablations/component_ablation_report_2026-05-18.md` |
 | 17 | Add exact-additive update ablation | Queued | compare WAL quantization vs editing locus |
 | 18 | Add deterministic NT mode | Queued | store sampled row ids in artifacts |
 | 19 | Collect norm-growth metrics | In progress | `PatchArtifact.norm_summary()` foundation |
-| 20 | Remove global EOS row from persistent default | Queued | profile change after ablation |
-| 21 | Remove anti-repetition from global rows | Queued | decode-time or patch-local policy |
+| 20 | Remove global EOS row from persistent default | Queued | component matrix supports follow-up seed check |
+| 21 | Remove anti-repetition from global rows | Queued | component matrix shows anti protects locality today |
 | 22 | Fix `target_token_mode=both` primary sequence selection | Queued | matrix confirms `both` loses locality before this fix |
 | 23 | Replace positive-key averaging with constrained solve | Queued | `K_pos/K_neg` solve |
 | 24 | Add relation-specific protected banks | Queued | relation failure artifacts |

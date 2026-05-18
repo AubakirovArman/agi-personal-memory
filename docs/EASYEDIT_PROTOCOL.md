@@ -53,6 +53,19 @@ The n=200 token-mode matrix confirms the practical impact:
 Detailed report:
 `results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md`.
 
+The n=200 component ablation identifies the default tradeoff:
+
+| Ablation | TF rewrite | TF PS@All | TF locality | Prob locality |
+| --- | ---: | ---: | ---: | ---: |
+| `lm_head_only` | 100.0% | 47.0% | 88.9% | 71.4% |
+| `embed_only` | 0.5% | 0.9% | 99.9% | 88.5% |
+| `dual` | 96.5% | 26.8% | 95.8% | 86.0% |
+| `dual_no_eos` | 96.5% | 27.0% | 95.8% | 85.9% |
+| `dual_no_anti` | 100.0% | 46.5% | 88.8% | 71.4% |
+
+Detailed report:
+`results/easyedit_official/ablations/component_ablation_report_2026-05-18.md`.
+
 ## Completed Random-Seed Runs
 
 The required random n=50 single-edit presets have been run with the current
@@ -137,3 +150,7 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `--target-token-mode both` is backed by the n=200 token-mode matrix. It
   improves TF rewrite/PS@All slightly over `contextual`, but currently loses
   locality and still needs the planned primary-sequence fix.
+- `clamp_anti` is backed by the n=200 component ablation as the main
+  locality-preserving knob for the current single-edit profile.
+- `clamp_eos` does not materially improve the single-edit n=200 component
+  ablation, but default removal still needs follow-up random-seed validation.
