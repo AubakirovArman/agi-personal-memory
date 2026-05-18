@@ -185,6 +185,8 @@ def _print_optional_groups(summary: dict, post: dict, retention: dict) -> None:
 def _print_retention(retention: dict) -> None:
     print("  Retention:")
     for key, value in retention.items():
+        if not isinstance(value, dict) or "summary" not in value:
+            continue
         post_value = value["summary"]["post"]
         loc_value = post_value.get("locality", {}).get("neighborhood_acc", 0.0)
         print(
