@@ -59,3 +59,11 @@ Norm metrics probe:
 
 Readout: new artifacts store edited-row delta L2 norm metrics under `NT`.
 This is a diagnostic schema probe, not a benchmark result.
+
+EOS default validation:
+
+- `eos_default_report_2026-05-18.md`
+- `eos_default_random_200_seed_{42,43,44}_no_eos.json`
+
+Readout: removing the global EOS row leaves random-200 single-edit metrics
+effectively unchanged and avoids a persistent global control-row mutation.

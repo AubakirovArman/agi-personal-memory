@@ -53,6 +53,10 @@ beyond a single max-diff scalar.
 New artifacts also emit edited-row delta L2 norm metrics under `NT`, so patch
 growth can be monitored without loading full row tensors.
 
+The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
+The random-200 no-EOS seed check matched the prior default quality while
+reporting `EOS_changed=0%`.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.

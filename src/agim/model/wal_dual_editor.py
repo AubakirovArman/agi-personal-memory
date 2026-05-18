@@ -82,7 +82,7 @@ class WALDualLayerEditor:
 
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    prompt: str = "", clamp_lm: float = 0.20,
-                   clamp_embed: float = 0.06, clamp_eos: float = 0.16,
+                   clamp_embed: float = 0.06, clamp_eos: float = 0.0,
                    clamp_anti: float = 0.06, neg_prompts: list[str] | None = None,
                    old_target: str = "", clamp_old: float = 0.0,
                    target_token_mode: str = "standalone",

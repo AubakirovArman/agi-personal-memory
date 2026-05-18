@@ -113,6 +113,16 @@ Exact-additive ablation on the same random n=200 seed-42 facts:
 Readout: WAL re-encoding is not the main current bottleneck. See
 `results/easyedit_official/ablations/exact_additive_report_2026-05-18.md`.
 
+No-EOS default validation on random n=200 seeds 42/43/44:
+
+| Profile | TF rewrite | TF PS@All | TF locality | Prob PS@All | Prob locality | EOS changed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Old default, EOS enabled | 93.2% | 25.6% | 96.4% | 43.0% | 86.6% | 100.0% |
+| New default, no EOS | 92.8% | 25.6% | 96.4% | 42.8% | 86.6% | 0.0% |
+
+Readout: `clamp_eos=0.0` is now the persistent default. See
+`results/easyedit_official/ablations/eos_default_report_2026-05-18.md`.
+
 Official-compatible first-1000 scale check of the current default single-edit
 profile:
 

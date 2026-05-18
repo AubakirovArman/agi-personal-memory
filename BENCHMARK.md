@@ -94,6 +94,17 @@ Exact-additive update ablation on the same random n=200 seed-42 facts:
 Readout: WAL reconstruction adds little loss at this operating point. The
 larger bottleneck is the row-editing locus and control policy.
 
+No-EOS default validation:
+`results/easyedit_official/ablations/eos_default_report_2026-05-18.md`
+
+| Profile | TF rewrite | TF PS@All | TF locality | Prob PS@All | Prob locality | EOS changed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Old default, EOS enabled | 93.2% | 25.6% | 96.4% | 43.0% | 86.6% | 100.0% |
+| New default, no EOS | 92.8% | 25.6% | 96.4% | 42.8% | 86.6% | 0.0% |
+
+Readout: `clamp_eos=0.0` is now the persistent default. This removes a global
+control-row mutation without changing the random-200 operating point.
+
 Random-seed validation of the current default single-edit profile:
 `results/easyedit_official/current/random_50_report_2026-05-18.md`
 

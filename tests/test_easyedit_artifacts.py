@@ -113,6 +113,7 @@ def test_failure_summary_defaults_exclude_vanilla_generation():
 
 
 def test_method_profile_id_names_common_operating_points():
+    assert build_parser().parse_args([]).clamp_eos == 0.0
     assert method_profile_id(build_parser().parse_args([])) == "single_loc"
     assert method_profile_id(build_parser().parse_args(["--neg-prompt-limit", "4"])) == "single_ps"
     assert method_profile_id(build_parser().parse_args(["--sequential-edit"])) == "seq_tuned"

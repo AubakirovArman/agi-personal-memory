@@ -59,7 +59,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", default="results/local_protocol/official_eval.json")
     parser.add_argument("--clamp_lm", type=float, default=0.20)
     parser.add_argument("--clamp_embed", type=float, default=0.06)
-    parser.add_argument("--clamp_eos", type=float, default=0.16)
+    parser.add_argument("--clamp_eos", type=float, default=0.0)
     parser.add_argument("--clamp_anti", type=float, default=0.06)
     parser.add_argument("--clamp_old", type=float, default=0.0)
     parser.add_argument("--target-token-mode", choices=["standalone", "contextual", "both"],

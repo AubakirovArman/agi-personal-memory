@@ -170,6 +170,8 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   locality-preserving knob for the current single-edit profile.
 - `clamp_eos` does not materially improve the single-edit n=200 component
   ablation, but default removal still needs follow-up random-seed validation.
+- `clamp_eos=0.0` is now the persistent default after the random-200 no-EOS
+  seed check matched the old default operating point.
 - `--no-wal-encode-updates` is an ablation flag only. It shows that WAL
   reconstruction is not the main bottleneck for the current default profile.
 - Edited-row norm metrics are emitted under `NT` for new artifacts, so future
