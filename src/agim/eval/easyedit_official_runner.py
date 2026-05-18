@@ -239,6 +239,57 @@ def official_generation_metrics(model, tok, hparams, test_prediction_acc,
     return ret
 
 
+def contextual_target_ids(tok, prompt: str, target: str) -> list[int]:
+    """Token ids for the EasyEdit teacher-forcing continuation label."""
+    prompt_ids = tok(prompt, return_tensors="pt").input_ids[0]
+    full_ids = tok(f"{prompt} {target}", return_tensors="pt").input_ids[0]
+    suffix = full_ids[len(prompt_ids):].detach().cpu().tolist()
+    if suffix:
+        return [int(tid) for tid in suffix]
+    return [int(tid) for tid in tok.encode(target, add_special_tokens=False)]
+
+
+def generation_token_acc(model, tok, prompt: str, target_ids: list[int],
+                         device: str) -> list[float]:
+    """Greedy generation exact-token accuracy against supplied target ids."""
+    if not target_ids:
+        return [0.0]
+    inputs = tok(prompt, return_tensors="pt").to(device)
+    with torch.no_grad():
+        gen = model.generate(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            max_new_tokens=len(target_ids),
+            pad_token_id=tok.eos_token_id,
+            do_sample=False,
+            use_cache=False,
+        )
+    generated_ids = gen.detach().cpu().tolist()[0][-len(target_ids):]
+    return [float(np.mean(np.equal(target_ids, generated_ids)))]
+
+
+def contextual_generation_metrics(model, tok, record: dict[str, Any],
+                                  device: str) -> dict[str, Any]:
+    """Generation metric aligned to prompt + space + target tokenization."""
+    target_new = record["target_new"]
+    rewrite_ids = contextual_target_ids(tok, record["prompt"], target_new)
+    ret: dict[str, Any] = {
+        "rewrite_acc": generation_token_acc(
+            model, tok, record["prompt"], rewrite_ids, device
+        ),
+        "rewrite_target_ids": rewrite_ids,
+    }
+    if "rephrase_prompt" in record:
+        rephrase_ids = contextual_target_ids(tok, record["rephrase_prompt"], target_new)
+        ret.update({
+            "rephrase_acc": generation_token_acc(
+                model, tok, record["rephrase_prompt"], rephrase_ids, device
+            ),
+            "rephrase_target_ids": rephrase_ids,
+        })
+    return ret
+
+
 def target_sequence_logprob(model, tok, prompt: str, target: str, device: str) -> float:
     """Teacher-forced sum log P(target tokens | prompt), EasyEdit spacing."""
     prompt_ids = tok(prompt, return_tensors="pt").input_ids[0]
@@ -381,6 +432,25 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
     if gen_rephrase:
         gen_summary["rephrase_acc"] = round(float(np.mean(gen_rephrase)), 6)
     summary["post_generation_vanilla"] = gen_summary
+    contextual_rows = [
+        row["contextual_generation"]
+        for row in rows
+        if "contextual_generation" in row
+    ]
+    if contextual_rows:
+        ctx_summary = {
+            "rewrite_acc": round(float(np.mean([
+                np.mean(r["rewrite_acc"]) for r in contextual_rows
+            ])), 6)
+        }
+        ctx_rephrase = [
+            float(np.mean(row["rephrase_acc"]))
+            for row in contextual_rows
+            if "rephrase_acc" in row
+        ]
+        if ctx_rephrase:
+            ctx_summary["rephrase_acc"] = round(float(np.mean(ctx_rephrase)), 6)
+        summary["post_generation_contextual"] = ctx_summary
     prob_rows = [row["probability"] for row in rows if "probability" in row]
     if prob_rows:
         prob_summary = {
@@ -448,6 +518,9 @@ def post_edit_bundle(
         "post": post,
         "generation": official_generation_metrics(
             model, tok, hparams, test_prediction_acc, record, device_id
+        ),
+        "contextual_generation": contextual_generation_metrics(
+            model, tok, record, device
         ),
     }
     if probability:
@@ -623,12 +696,14 @@ def main() -> int:
                 post_summary = summary["post"]
                 loc = post_summary.get("locality", {}).get("neighborhood_acc")
                 gen = summary["post_generation_vanilla"]
+                ctx_gen = summary.get("post_generation_contextual", {})
                 print(
                     f"  [{idx + 1}/{len(records)}] "
                     f"TF rewrite={post_summary.get('rewrite_acc', 0):.1%} "
                     f"TF rephrase={post_summary.get('rephrase_acc', 0):.1%} "
                     f"TF loc={0.0 if loc is None else loc:.1%} "
-                    f"GEN rewrite={gen['rewrite_acc']:.1%}",
+                    f"GEN rewrite={gen['rewrite_acc']:.1%} "
+                    f"CTX-GEN rewrite={ctx_gen.get('rewrite_acc', 0):.1%}",
                     flush=True,
                 )
 
@@ -657,6 +732,9 @@ def main() -> int:
             "aggregation": "EasyEdit BaseEditor-style pre/post locality comparison",
             "teacher_forcing_metric": "token_em",
             "generation_metric": "vanilla_generation token equality",
+            "contextual_generation_metric": (
+                "greedy token equality against prompt + space + target suffix ids"
+            ),
         },
         "dataset": {
             "source": args.dataset,
@@ -708,6 +786,13 @@ def main() -> int:
         f"rewrite={gen['rewrite_acc']:.1%} "
         f"rephrase={gen.get('rephrase_acc', 0):.1%}"
     )
+    if "post_generation_contextual" in summary:
+        ctx_gen = summary["post_generation_contextual"]
+        print(
+            "  Contextual generation: "
+            f"rewrite={ctx_gen['rewrite_acc']:.1%} "
+            f"rephrase={ctx_gen.get('rephrase_acc', 0):.1%}"
+        )
     if "post_probability" in summary:
         prob = summary["post_probability"]
         print(

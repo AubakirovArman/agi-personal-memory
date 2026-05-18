@@ -3,6 +3,7 @@ import pytest
 
 from agim.eval.easyedit_official_runner import (
     attach_locality_acc,
+    contextual_target_ids,
     extract_portability,
     ngram_entropy,
     summarize_official,
@@ -51,6 +52,7 @@ def test_summarize_official_includes_new_metric_groups():
                 "portability": {"one_hop_acc": [1.0]},
             },
             "generation": {"rewrite_acc": [1.0], "rephrase_acc": [0.0]},
+            "contextual_generation": {"rewrite_acc": [1.0], "rephrase_acc": [0.5]},
             "probability": {
                 "rewrite_acc": 1.0,
                 "rephrase_acc": 0.0,
@@ -63,6 +65,10 @@ def test_summarize_official_includes_new_metric_groups():
     summary = summarize_official(rows)
 
     assert summary["post"]["portability"]["mean_acc"] == 1.0
+    assert summary["post_generation_contextual"] == {
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.5,
+    }
     assert summary["post_probability"] == {
         "rewrite_acc": 1.0,
         "rephrase_acc": 0.0,
@@ -74,6 +80,29 @@ def test_summarize_official_includes_new_metric_groups():
 def test_ngram_entropy_is_positive_for_varied_text():
     assert ngram_entropy(["alpha beta gamma delta"]) > 0.0
     assert ngram_entropy(["alpha"]) == 0.0
+
+
+class _TokenBatch:
+    def __init__(self, input_ids):
+        self.input_ids = torch.tensor([input_ids])
+
+
+class _FakeTokenizer:
+    def __call__(self, text, return_tensors=None):
+        if text == "The language is":
+            return _TokenBatch([10, 11, 12])
+        if text == "The language is English":
+            return _TokenBatch([10, 11, 12, 99])
+        return _TokenBatch(self.encode(text, add_special_tokens=False))
+
+    def encode(self, text, add_special_tokens=False):
+        if text == "English":
+            return [42]
+        return []
+
+
+def test_contextual_target_ids_follow_prompt_space_target_suffix():
+    assert contextual_target_ids(_FakeTokenizer(), "The language is", "English") == [99]
 
 
 class _TinyModel(torch.nn.Module):
