@@ -67,8 +67,13 @@ class WALDualLayerEditor:
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    prompt: str = "", clamp_lm: float = 0.20,
                    clamp_embed: float = 0.06, clamp_eos: float = 0.16,
-                   clamp_anti: float = 0.06, neg_prompts: list[str] | None = None):
-        """Dual-layer WAL edit. Returns dict with backup info for rollback."""
+                   clamp_anti: float = 0.06, neg_prompts: list[str] | None = None,
+                   old_target: str = "", clamp_old: float = 0.0):
+        """Dual-layer WAL edit. Returns dict with backup info for rollback.
+
+        old_target: if provided, use (new - old) direction (subject-conditioned gate).
+        clamp_old: if > 0, anti-boost old target token in edit context.
+        """
         if self.atoms is None or self.atoms_gpu is None:
             raise RuntimeError("Call build_vocab() first")
 
@@ -76,6 +81,7 @@ class WALDualLayerEditor:
             prompt = f"{subject} is" if not relation else f"The {relation} of {subject} is"
 
         tids = self.tokenizer.encode(target, add_special_tokens=False)
+        old_tids = self.tokenizer.encode(old_target, add_special_tokens=False) if old_target else []
         pids = self.tokenizer(prompt, return_tensors="pt").input_ids[0]
         sids = self.tokenizer.encode(subject, add_special_tokens=False)
 
@@ -110,9 +116,30 @@ class WALDualLayerEditor:
             _, _, rec = wal_encode_scalar_gpu(row + clamp_lm * k.to(self.device), self.atoms_gpu, self.lmax)
             w_lm[tid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
 
-        # ── embed_tokens: push subject toward target direction ──
-        tdir = w_lm[tids[0], :].float().to(self.device)
-        tdir = tdir / (tdir.norm() + 1e-8)
+        # ── Old-target anti-boost (before embed edit) ──
+        if clamp_old > 0 and old_tids:
+            for otid in old_tids:
+                if otid not in lm_bu: lm_bu[otid] = w_lm[otid, :].clone()
+                row_old = w_lm[otid, :].float().to(self.device)
+                # Use the SAME context key as the new target (edit prompt context)
+                ctx = pids  # edit prompt context
+                k_old = self._get_key(ctx)
+                if k_old is not None:
+                    k_old = k_old / (k_old.norm() + 1e-8)
+                    _, _, rec_old = wal_encode_scalar_gpu(
+                        row_old - clamp_old * k_old.to(self.device), self.atoms_gpu, self.lmax)
+                    w_lm[otid, :] = rec_old.to(device=w_lm.device, dtype=w_lm.dtype)
+
+        # ── embed_tokens: push subject toward (target_new - target_old) direction ──
+        if old_tids and old_target:
+            # Subject-conditioned gate: new_dir - old_dir
+            new_dir = w_lm[tids[0], :].float().to(self.device)
+            old_dir = w_lm[old_tids[0], :].float().to(self.device) if old_tids else 0
+            tdir = new_dir - 0.5 * old_dir  # push away from old, toward new
+            tdir = tdir / (tdir.norm() + 1e-8)
+        else:
+            tdir = w_lm[tids[0], :].float().to(self.device)
+            tdir = tdir / (tdir.norm() + 1e-8)
         for sid in sids:
             if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
             row = w_emb[sid, :].float().to(self.device)
