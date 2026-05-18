@@ -17,17 +17,25 @@ local EasyEdit source tree:
 - EasyEdit BaseEditor-style locality comparison: pre-edit neighbor output vs
   post-edit neighbor output
 
+## Directory Layout
+
+| Folder | Purpose |
+| --- | --- |
+| `current/` | Human status summary and the current best single-edit artifact |
+| `sequential/` | Sequential n=50 runs, including tuned projection profiles |
+| `ablations/` | Older single-edit/tuning artifacts kept for audit |
+| `smoke/` | Ignored local smoke outputs, not committed |
+
 ## Primary Artifacts
 
 | Artifact | Mode | Use |
 | --- | --- | --- |
-| `easyedit_official_50_contextual_neg4_ctxgen_nt.json` | Single edit with rollback after each fact | Best current single-edit result |
-| `easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json` | Sequential, tuned projection | Best balanced sequential profile |
-| `easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json` | Sequential, tuned projection | Best exact-token locality among tuned n=50 runs |
-| `easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json` | Sequential, tuned projection | Best exact-token rewrite, weak locality |
-| `easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json` | Sequential, stronger projection | Strong probability locality, weak rephrase |
-| `easyedit_agim_status_2026-05-18.md` | Human summary | Read first |
+| `current/easyedit_official_50_contextual_neg4_ctxgen_nt.json` | Single edit with rollback after each fact | Best current single-edit result |
+| `sequential/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json` | Sequential, tuned projection | Best balanced sequential profile |
+| `sequential/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json` | Sequential, tuned projection | Best exact-token locality among tuned n=50 runs |
+| `sequential/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json` | Sequential, tuned projection | Best exact-token rewrite, weak locality |
+| `sequential/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json` | Sequential, stronger projection | Strong probability locality, weak rephrase |
+| `current/easyedit_agim_status_2026-05-18.md` | Human summary | Read first |
 
 Smoke and failed/tuning runs live in `smoke/` and are intentionally ignored by
 git.
-

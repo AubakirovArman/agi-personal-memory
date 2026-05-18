@@ -45,6 +45,7 @@ def test_attach_locality_acc_uses_pre_post_consistency():
 def test_summarize_official_includes_new_metric_groups():
     rows = [
         {
+            "relation_id": "P103",
             "pre": {"rewrite_acc": [0.0], "rephrase_acc": [0.0]},
             "post": {
                 "rewrite_acc": [1.0],
@@ -90,6 +91,9 @@ def test_summarize_official_includes_new_metric_groups():
         "locality_acc": 0.5,
     }
     assert summary["post_fluency"]["ngram_entropy"] == 1.25
+    assert summary["metrics_by_relation_id"]["P103"]["n"] == 1
+    assert summary["metrics_by_relation_id"]["P103"]["rewrite_acc"] == 1.0
+    assert summary["metrics_by_relation_id"]["P103"]["locality_acc"] == 0.5
 
 
 def test_ngram_entropy_is_positive_for_varied_text():

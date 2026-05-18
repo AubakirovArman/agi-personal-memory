@@ -502,6 +502,52 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
         summary["post_fluency"] = {
             "ngram_entropy": round(float(np.mean(fluency_rows)), 6)
         }
+    relation_summary = summarize_by_relation(rows)
+    if relation_summary:
+        summary["metrics_by_relation_id"] = relation_summary
+    return summary
+
+
+def summarize_by_relation(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        relation_id = row.get("relation_id")
+        if relation_id is None:
+            continue
+        grouped.setdefault(str(relation_id), []).append(row)
+
+    summary: dict[str, Any] = {}
+    for relation_id, rel_rows in sorted(grouped.items()):
+        post: dict[str, Any] = {
+            "n": len(rel_rows),
+        }
+        rewrite = mean_metric(rel_rows, "post", "rewrite_acc")
+        rephrase = mean_metric(rel_rows, "post", "rephrase_acc")
+        if rewrite is not None:
+            post["rewrite_acc"] = rewrite
+        if rephrase is not None:
+            post["rephrase_acc"] = rephrase
+        loc_values = []
+        for row in rel_rows:
+            loc = row["post"].get("locality", {})
+            if "neighborhood_acc" in loc:
+                loc_values.append(float(np.mean(loc["neighborhood_acc"])))
+        if loc_values:
+            post["locality_acc"] = round(float(np.mean(loc_values)), 6)
+        prob_values = [row.get("probability", {}) for row in rel_rows]
+        prob_values = [row for row in prob_values if row]
+        if prob_values:
+            prob: dict[str, Any] = {
+                "rewrite_acc": round(float(np.mean([
+                    row.get("rewrite_acc", 0.0) for row in prob_values
+                ])), 6)
+            }
+            if any("rephrase_acc" in row for row in prob_values):
+                prob["rephrase_acc"] = round(float(np.mean([
+                    row.get("rephrase_acc", 0.0) for row in prob_values
+                ])), 6)
+            post["probability"] = prob
+        summary[relation_id] = post
     return summary
 
 
@@ -571,7 +617,7 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
         "--output",
-        default="results/easyedit_official/easyedit_official_50.json",
+        default="results/easyedit_official/current/easyedit_official_50.json",
     )
     parser.add_argument("--easyedit-root", type=Path, default=DEFAULT_EASYEDIT_ROOT)
     parser.add_argument("--locality-limit", type=int, default=0,
@@ -684,6 +730,7 @@ def main() -> int:
         for idx, (fact, record, pre) in enumerate(zip(facts, records, pres)):
             row = {
                 "case_id": fact.get("case_id", idx),
+                "relation_id": fact.get("requested_rewrite", {}).get("relation_id"),
                 "requested_rewrite": record,
                 "edit_time_s": round(edit_times[idx], 4),
             }
@@ -713,6 +760,7 @@ def main() -> int:
             backup, edit_time = apply_one(fact, record)
             row = {
                 "case_id": fact.get("case_id", idx),
+                "relation_id": fact.get("requested_rewrite", {}).get("relation_id"),
                 "requested_rewrite": record,
                 "edit_time_s": round(edit_time, 4),
             }
@@ -786,6 +834,10 @@ def main() -> int:
             "sample_policy": args.sample_policy,
             "seed": args.seed,
             "case_ids": [fact.get("case_id") for fact in facts],
+            "relation_ids": [
+                fact.get("requested_rewrite", {}).get("relation_id")
+                for fact in facts
+            ],
             "locality_prompts": "all" if locality_limit is None else locality_limit,
             "rephrase_prompt": "first",
         },

@@ -12,7 +12,7 @@ For EasyEdit-style weight-editing claims, use only:
 
 - Runner: `src/agim/eval/easyedit_official_runner.py`
 - Artifacts: `results/easyedit_official/`
-- Summary: `results/easyedit_official/easyedit_agim_status_2026-05-18.md`
+- Summary: `results/easyedit_official/current/easyedit_agim_status_2026-05-18.md`
 
 The older `results/local_protocol/official_eval_*.json` artifacts are legacy
 local diagnostics. They are preserved for audit, but they are not official
@@ -29,7 +29,7 @@ Evaluation path: AGIM edit implementation + local EasyEdit evaluation functions.
 ### Single Edit, Rollback After Each Fact
 
 Artifact:
-`results/easyedit_official/easyedit_official_50_contextual_neg4_ctxgen_nt.json`
+`results/easyedit_official/current/easyedit_official_50_contextual_neg4_ctxgen_nt.json`
 
 | Metric group | Rewrite | Rephrase | Locality |
 | --- | ---: | ---: | ---: |
@@ -44,7 +44,7 @@ Readout: strong single-edit continuation editor, but locality is not solved.
 ### Sequential Editing, Tuned Projection
 
 Best balanced artifact:
-`results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json`
+`results/easyedit_official/sequential/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json`
 
 | Metric group | Rewrite | Rephrase | Locality |
 | --- | ---: | ---: | ---: |
@@ -53,7 +53,7 @@ Best balanced artifact:
 | Probability compare | 86.0% | 62.0% | 61.2% |
 
 Best exact-token locality artifact:
-`results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json`
+`results/easyedit_official/sequential/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json`
 
 | Metric group | Rewrite | Rephrase | Locality |
 | --- | ---: | ---: | ---: |

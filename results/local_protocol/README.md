@@ -3,6 +3,8 @@
 This folder contains historical CounterFact and WAL experiment outputs. They are
 kept for audit/debugging, but they are not official EasyEdit results.
 
+Short invalidation notice: `README_INVALIDATED.md`.
+
 Important: files named `official_eval_*.json` in this folder predate the real
 EasyEdit runner. They were produced by AGIM-local evaluators and custom metrics.
 They should not be used for leaderboard-style claims.

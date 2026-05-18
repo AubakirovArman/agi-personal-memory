@@ -2,6 +2,14 @@
 
 This is the short source of truth for the repository.
 
+Detailed docs:
+
+- `docs/PATH_A_MEMORY.md`
+- `docs/PATH_B_WEIGHT_EDITING.md`
+- `docs/EASYEDIT_PROTOCOL.md`
+- `docs/CLAIMS_AND_EVIDENCE.md`
+- `docs/ROADMAP_REALISTIC.md`
+
 ## What This Project Currently Is
 
 AGI Personal Memory is an experimental verified-memory substrate with two
@@ -14,7 +22,9 @@ separate paths:
 
 ## Current EasyEdit-Compatible Result
 
-Use only `results/easyedit_official/` for current EasyEdit-style claims.
+Use `results/easyedit_official/current/` for current single-edit
+EasyEdit-style claims and `results/easyedit_official/sequential/` only for
+explicitly marked sequential/weakness claims.
 
 Best n=50 single-edit run on `meta-llama/Llama-3.1-8B-Instruct`:
 

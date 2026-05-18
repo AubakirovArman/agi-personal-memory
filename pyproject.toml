@@ -4,16 +4,27 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agim"
-version = "0.1.0"
+version = "0.2.0a1"
 description = "AGI Personal Memory — accumulative verified memory substrate for language models"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
-dependencies = []
-optional-dependencies = { dev = ["pytest", "black", "mypy"], hf = ["transformers>=4.57", "torch>=2.0", "accelerate"] }
+dependencies = [
+    "numpy",
+    "torch>=2.0",
+    "transformers>=4.57",
+    "accelerate",
+]
+
+[project.optional-dependencies]
+api = ["fastapi", "uvicorn"]
+eval = ["datasets", "nltk", "requests", "scipy"]
+dev = ["pytest", "black", "mypy", "ruff"]
 
 [project.scripts]
 agim = "agim.cli.main:main"
+agim-easyedit = "agim.eval.easyedit_official_runner:main"
+agim-local-counterfact = "agim.eval.easyedit_counterfact:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

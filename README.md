@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-85%20passed%2C%2013%20skipped-green)]()
 [![Status](https://img.shields.io/badge/status-research%20prototype-blue)]()
+[![Version](https://img.shields.io/badge/version-0.2.0a1-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 
 [English](README.md) | [Русский](docs/ru/README.md) | [中文](docs/zh/README.md) | [Қазақша](docs/kk/README.md)
@@ -79,7 +80,7 @@ For the current source of truth, read [CURRENT_STATUS.md](CURRENT_STATUS.md).
 ## Quick Start
 
 ```bash
-pip install -e .
+pip install -e ".[eval,api]"
 agim teach "Paris is the capital of France"
 agim ask "What is the capital of France?"
 agim correct "No, Napoleon was born in 1769, not 1768"
@@ -142,7 +143,9 @@ src/agim/
 | `src/agim/` | Supported library and CLI code |
 | `src/agim/eval/` | Current evaluation entry points |
 | `tests/` | Supported pytest suite |
-| `results/easyedit_official/` | Real EasyEdit-compatible artifacts |
+| `results/easyedit_official/current/` | Current EasyEdit-compatible single-edit artifacts |
+| `results/easyedit_official/sequential/` | Sequential EasyEdit-compatible artifacts and limitations |
+| `results/easyedit_official/ablations/` | Historical EasyEdit-compatible tuning artifacts |
 | `results/local_protocol/` | Legacy AGIM-local CounterFact artifacts |
 | `results/memory_retrieval/` | Path A memory/retrieval artifacts |
 | `experiments/legacy_weight_editing/` | Archived one-off scripts and sweeps |
@@ -177,7 +180,9 @@ does not support the local `gemma4` checkpoint architecture.
 - **GitHub:** https://github.com/AubakirovArman/agi-personal-memory
 - **Pages:** https://aubakirovarman.github.io/agi-personal-memory/
 - [Current Status](CURRENT_STATUS.md) | [Benchmarks](BENCHMARK.md) | [Evaluation Protocols](docs/evaluation/README.md)
-- [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Roadmap](agim_roadmap_v0_to_v10.md)
+- [Path A Memory](docs/PATH_A_MEMORY.md) | [Path B Weight Editing](docs/PATH_B_WEIGHT_EDITING.md) | [Claims And Evidence](docs/CLAIMS_AND_EVIDENCE.md)
+- [EasyEdit Protocol](docs/EASYEDIT_PROTOCOL.md) | [Realistic Roadmap](docs/ROADMAP_REALISTIC.md)
+- [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Historical Roadmap](agim_roadmap_v0_to_v10.md)
 - [Developer Diary](DIARY.md)
 - Built on [WAL — Weight-Aligned Language](https://github.com/AubakirovArman/wal2026)
 

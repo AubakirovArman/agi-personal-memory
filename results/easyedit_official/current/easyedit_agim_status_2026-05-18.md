@@ -35,7 +35,7 @@ locality projection:
 ## Current 50-Fact Results
 
 Primary artifact:
-`results/easyedit_official/easyedit_official_50_contextual_neg4_ctxgen_nt.json`
+`results/easyedit_official/current/easyedit_official_50_contextual_neg4_ctxgen_nt.json`
 
 Code commit used by artifact:
 `6aba33b78148cdd334717881001f92cd5014ca35`
@@ -62,7 +62,7 @@ Code commit used by artifact:
 ### With EOS / anti-boost enabled
 
 Artifact:
-`results/easyedit_official/easyedit_official_50_contextual_neg4_sequential.json`
+`results/easyedit_official/sequential/easyedit_official_50_contextual_neg4_sequential.json`
 
 Code commit used by artifact:
 `7baae83acfc88cb3f2b76e9955cd7f6c7652834e`
@@ -81,7 +81,7 @@ Code commit used by artifact:
 ### With EOS / anti-boost disabled
 
 Artifact:
-`results/easyedit_official/easyedit_official_50_contextual_neg4_sequential_noeosanti.json`
+`results/easyedit_official/sequential/easyedit_official_50_contextual_neg4_sequential_noeosanti.json`
 
 Code commit used by artifact:
 `fca715c356c0dad106749c31f247d892c61537d0`
@@ -108,9 +108,9 @@ Command delta:
 Artifacts:
 
 ```text
-results/easyedit_official/easyedit_official_50_contextual_neg4_sequential_noeosanti.json
-results/easyedit_official/easyedit_official_50_contextual_neg4_seq_lm015_noeosanti.json
-results/easyedit_official/easyedit_official_50_contextual_neg4_seq_lm012_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4_sequential_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4_seq_lm015_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4_seq_lm012_noeosanti.json
 ```
 
 | clamp_lm | TF rewrite | TF rephrase | TF locality | Context rewrite | Probability locality | Readout |
@@ -128,10 +128,10 @@ mode and raises projection from `0.30` to `0.50`.
 Artifacts:
 
 ```text
-results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json
-results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json
-results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json
-results/easyedit_official/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json
+results/easyedit_official/sequential/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json
 ```
 
 Code commit used by tuned artifacts:
@@ -201,6 +201,7 @@ generation.
 | Optional history projection diagnostics | Done | `--history-projection-strength`, smoke artifact showed no win |
 | Rollback consistency metrics | Done in custom evaluator | `easyedit_counterfact.py` strict/practical rollback fields |
 | Generated artifact ignore rules | Done | `.gitignore` ignores smoke/runtime outputs |
+| Relation breakdown for new artifacts | Done | `metrics_by_relation_id` in `easyedit_official_runner.py` summaries |
 
 ## Not Done / Next Work
 
@@ -212,6 +213,7 @@ generation.
 | P1 | MQuAKE / KnowEdit not run | Needed for broader benchmark claims | Add reproducible dataset loader and 50/200 smoke |
 | P1 | EasyEdit method package missing | Needed for upstream PR | Add `AGIMWAL_main.py`, `AGIMWAL_hparams.py`, hparams YAML |
 | P2 | 100/1000 official runs with new metrics | Needed before any leaderboard language | Run random and first policies with fixed seeds |
+| P2 | PS@All metric | Needed to avoid first-rephrase cherry-pick concerns | Add all-paraphrase reporting beside current first-rephrase metric |
 | P2 | Fluency is degenerate | Current short exact outputs give entropy 0 | Add better generation-quality prompt set or report as not meaningful |
 
 ## Claim Boundary

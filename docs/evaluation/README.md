@@ -3,13 +3,21 @@
 AGIM currently has three different evaluation families. Keeping them separate is
 mandatory for honest reporting.
 
+Related docs:
+
+- `../PATH_A_MEMORY.md`
+- `../PATH_B_WEIGHT_EDITING.md`
+- `../EASYEDIT_PROTOCOL.md`
+- `../CLAIMS_AND_EVIDENCE.md`
+- `../ROADMAP_REALISTIC.md`
+
 ## 1. Real EasyEdit-Compatible CounterFact
 
 Source of truth:
 
 - Runner: `src/agim/eval/easyedit_official_runner.py`
 - Artifacts: `results/easyedit_official/`
-- Summary: `results/easyedit_official/easyedit_agim_status_2026-05-18.md`
+- Summary: `results/easyedit_official/current/easyedit_agim_status_2026-05-18.md`
 
 Current single-edit n=50 result on `meta-llama/Llama-3.1-8B-Instruct`:
 
@@ -51,4 +59,3 @@ Source:
 
 These runs measure storage/retrieval behavior, not weight editing. They are
 valid for Path A memory claims, not for EasyEdit claims.
-
