@@ -7,6 +7,9 @@ Important: files named `official_eval_*.json` in this folder predate the real
 EasyEdit runner. They were produced by AGIM-local evaluators and custom metrics.
 They should not be used for leaderboard-style claims.
 
+Some old markdown files in this folder still show the original historical tables
+and comparisons. Treat those tables as experiment notes, not as current claims.
+
 ## The 1000-Fact Result
 
 `official_eval_1000.json` reports:
@@ -46,4 +49,3 @@ Unsafe wording:
 ```text
 AGIM gets 67.8% on official EasyEdit or beats EasyEdit leaderboard methods.
 ```
-

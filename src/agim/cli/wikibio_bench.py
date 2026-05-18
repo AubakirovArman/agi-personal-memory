@@ -2,7 +2,7 @@
 
 Tests: inject false fact → edit correction → verify model generates truth.
 """
-import json, time, torch
+import json, os, time, torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.wal_editor import WalLmHeadEditor
 from agim.model.rome_causal import ROMECausalEditor
@@ -103,7 +103,7 @@ def main():
     import argparse
     p = argparse.ArgumentParser()
     p.add_argument("--editor", default="wal", choices=["wal", "rome"])
-    p.add_argument("--output", default="results/wikibio_results.json")
+    p.add_argument("--output", default="results/other_benchmarks/wikibio_results.json")
     args = p.parse_args()
 
     print("Loading Llama 3.1 8B...")
@@ -194,6 +194,9 @@ def main():
     print(f"    ROME:   ARR ~ 80%")
     print(f"    AGIM {args.editor.upper()}: ARR = {corr_rate:.0%}")
 
+    out_dir = os.path.dirname(args.output)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(args.output, "w") as f:
         json.dump({"editor": args.editor, "n": n,
                    "corrected_rate": round(corr_rate, 4),

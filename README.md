@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-85%20passed%2C%2013%20skipped-green)]()
-[![Status: v10.0](https://img.shields.io/badge/version-v10.0-blue)]()
+[![Status](https://img.shields.io/badge/status-research%20prototype-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 
 [English](README.md) | [Русский](docs/ru/README.md) | [中文](docs/zh/README.md) | [Қазақша](docs/kk/README.md)
@@ -64,15 +64,17 @@ Current n=50 sequential tuned profile:
 This is useful progress, but it does not support a claim that AGIM is #1 on
 EasyEdit or has solved lifelong/sequential editing.
 
+For the current source of truth, read [CURRENT_STATUS.md](CURRENT_STATUS.md).
+
 ## Why it's different
 
 | | RAG | Fine-tuning | LoRA | AGI Personal Memory |
 |---|---|---|---|---|
-| **Changes model** | No | Yes (destructive) | Yes (additive) | **Yes (verified)** |
+| **Changes model** | No | Yes (destructive) | Yes (additive) | **Experimental** |
 | **Incremental** | Yes | No | No | **Yes** |
 | **Reversible** | Yes | No | Partially | **Yes (rollback any commit)** |
 | **Auditable** | No | No | Partial | **Yes (full JSONL trail)** |
-| **Non-target diff** | N/A | ~25% | Medium | **0%** (frozen vocabulary) |
+| **Non-target diff** | N/A | ~25% | Medium | **0% in WAL diagnostics** |
 
 ## Quick Start
 
@@ -164,7 +166,7 @@ src/agim/
 | v7.0 | MCP + A2A + Plugin Marketplace | ✓ |
 | v8.0 | Cognitive: Causal + Hypotheses + Counterfactuals | ✓ |
 | v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
-| v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | ✓ |
+| v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | Prototype modules, not production claim |
 
 Current full local suite: **85 passed, 13 skipped** on 2026-05-18.
 The skipped tests are Gemma E2E checks when the installed Transformers build
@@ -174,7 +176,7 @@ does not support the local `gemma4` checkpoint architecture.
 
 - **GitHub:** https://github.com/AubakirovArman/agi-personal-memory
 - **Pages:** https://aubakirovarman.github.io/agi-personal-memory/
-- [Benchmarks](BENCHMARK.md) | [Evaluation Protocols](docs/evaluation/README.md)
+- [Current Status](CURRENT_STATUS.md) | [Benchmarks](BENCHMARK.md) | [Evaluation Protocols](docs/evaluation/README.md)
 - [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Roadmap](agim_roadmap_v0_to_v10.md)
 - [Developer Diary](DIARY.md)
 - Built on [WAL — Weight-Aligned Language](https://github.com/AubakirovArman/wal2026)

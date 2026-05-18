@@ -1,5 +1,5 @@
 """Swap locality stress test: A→B and B→A, check no cross-contamination."""
-import json, time, torch, re
+import json, os, time, torch, re
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.wal_dual_editor import WALDualLayerEditor
 
@@ -48,7 +48,7 @@ SWAP_TESTS = [
 def main():
     import argparse
     p = argparse.ArgumentParser()
-    p.add_argument("--output", default="results/swap_results.json")
+    p.add_argument("--output", default="results/local_protocol/swap_results.json")
     p.add_argument("--clamp_lm", type=float, default=0.20)
     args = p.parse_args()
 
@@ -112,6 +112,9 @@ def main():
     cross_free = sum(not r["cross_B_before_B_edit"] for r in results) / len(results)
     print(f"\n  Swap ES both: {es_ok:.0%}  Cross-free: {cross_free:.0%}")
 
+    out_dir = os.path.dirname(args.output)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(args.output, "w") as f:
         json.dump({"n": len(results), "ES_both": round(es_ok, 4),
                    "cross_free": round(cross_free, 4), "results": results}, f, indent=2)

@@ -17,3 +17,10 @@ agim = "agim.cli.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "unit: fast unit tests",
+    "slow: long-running tests",
+    "gpu: tests requiring CUDA or large local model weights",
+    "llama: tests requiring local Llama weights",
+    "gemma: tests requiring local Gemma weights and compatible Transformers",
+]

@@ -1,4 +1,5 @@
 """100 facts — EasyEdit protocol + AGIM protocol, dual-layer WAL, clamp=0.20."""
+import os
 import torch, sys, time, json, urllib.request, re
 sys.path.insert(0, 'src')
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -115,5 +116,7 @@ print(f'\n===== 100 FACTS (clamp={CLAMP}) =====')
 print(f'  AGIM:     ES={es_av:.1%} PS={ps_av:.1%} NS={ns_v:.1%} Comp={comp_a:.1%}')
 print(f'  EasyEdit: ES={es_eev:.1%} PS={ps_eev:.1%} NS={ns_v:.1%} Comp={comp_e:.1%}')
 print(f'  ES_clean={es_clv:.1%} Rep={rep/n:.0%} Time={e:.0f}s')
-with open('results/easyedit_100.json','w') as f: json.dump({'n':n,'AGIM':{'ES':round(es_av,4),'PS':round(ps_av,4),'NS':round(ns_v,4),'Comp':round(comp_a,4)},'EasyEdit':{'ES':round(es_eev,4),'PS':round(ps_eev,4),'NS':round(ns_v,4),'Comp':round(comp_e,4)},'ES_clean':round(es_clv,4),'rep':round(rep/n,4),'time_s':round(e,1)},f,indent=2)
-print('Saved results/easyedit_100.json')
+out_path = 'results/local_protocol/easyedit_100.json'
+os.makedirs(os.path.dirname(out_path), exist_ok=True)
+with open(out_path,'w') as f: json.dump({'n':n,'AGIM':{'ES':round(es_av,4),'PS':round(ps_av,4),'NS':round(ns_v,4),'Comp':round(comp_a,4)},'EasyEdit':{'ES':round(es_eev,4),'PS':round(ps_eev,4),'NS':round(ns_v,4),'Comp':round(comp_e,4)},'ES_clean':round(es_clv,4),'rep':round(rep/n,4),'time_s':round(e,1)},f,indent=2)
+print(f'Saved {out_path}')

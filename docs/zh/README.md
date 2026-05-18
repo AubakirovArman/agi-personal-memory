@@ -6,7 +6,8 @@
 
 当今的AI系统是**无状态的**。每次对话从零开始。你无法教会模型一个事实并让它记住。微调是批量的、破坏性的。RAG是检索，不是学习。
 
-**AGI Personal Memory** 解决了这个问题：**增量式、可验证、持久的知识积累**。模型本身在学习——一次一个事实。
+**AGI Personal Memory** 通过两个独立路径研究这个问题：用于持久事实的
+retrieval memory，以及用于研究实验的 WAL-backed 权重编辑。
 
 ## 快速开始
 
@@ -24,11 +25,11 @@ agim webui --port 8720
 
 | | RAG | 微调 | LoRA | AGI Personal Memory |
 |---|---|---|---|---|
-| 改变模型 | 否 | 是（破坏性） | 是（叠加性） | **是（可验证）** |
+| 改变模型 | 否 | 是（破坏性） | 是（叠加性） | **实验性** |
 | 增量式 | 是 | 否 | 否 | **是** |
 | 可逆 | 是 | 否 | 部分 | **是（回滚任意提交）** |
 | 可审计 | 否 | 否 | 部分 | **是（完整JSONL记录）** |
-| 非目标差异 | N/A | ~25% | 中等 | **0%**（冻结词汇表） |
+| 非目标差异 | N/A | ~25% | 中等 | **WAL diagnostics 中为 0%** |
 
 ## 工作原理
 
@@ -61,12 +62,12 @@ agim webui --port 8720
 | 导出 | `agim export memories.json` | 导出为JSON |
 | 导入 | `agim import memories.json` | 从JSON导入 |
 
-## 在Gemma-4-31B上验证
+## 当前状态
 
-- WAL编码真实31B模型权重 ✓
-- 冻结词汇表 → **非目标差异 = 0%** ✓
-- AGIM教学 → 模型编辑 → 回滚 → 恢复 ✓
-- 76/76测试通过，15个在真实模型上 ✓
+- 当前 EasyEdit-compatible 结果见 `../../BENCHMARK.md`
+- 历史本地 CounterFact 结果已分离到 `../../results/local_protocol/`
+- 本地完整 pytest：`85 passed, 13 skipped`
+- skipped 测试为 Gemma E2E，当当前 Transformers 不支持 `gemma4` 时跳过
 
 ## 许可证
 

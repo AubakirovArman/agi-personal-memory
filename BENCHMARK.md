@@ -4,6 +4,8 @@ This repository contains multiple benchmark families. The important distinction
 is whether a run is evaluated with real EasyEdit-compatible metrics, an older
 AGIM-local CounterFact protocol, or a retrieval-memory test.
 
+Short current status: [CURRENT_STATUS.md](CURRENT_STATUS.md).
+
 ## Current Source Of Truth
 
 For EasyEdit-style weight-editing claims, use only:

@@ -1,4 +1,5 @@
 """Final CounterFact 200 with anti-boost + rep_penalty=1.2."""
+import os
 import torch, sys, time, json, urllib.request, re
 sys.path.insert(0, 'src')
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -139,7 +140,9 @@ print(f'  RB:          {rb_ok/nd:.1%}')
 print(f'  NT max:      {nt_max:.8f}')
 print(f'  Time:        {e:.0f}s ({e/60:.1f}min)')
 
-with open('results/counterfact_200_antibost.json', 'w') as f:
+out_path = 'results/local_protocol/counterfact_200_antibost.json'
+os.makedirs(os.path.dirname(out_path), exist_ok=True)
+with open(out_path, 'w') as f:
     json.dump({
         'n': nd,
         'AGIM': {'ES': round(es_v, 4), 'ES_clean': round(ecl_v, 4),
@@ -152,4 +155,4 @@ with open('results/counterfact_200_antibost.json', 'w') as f:
         'RB': round(rb_ok / nd, 4),
         'time_s': round(e, 1)
     }, f, indent=2)
-print('Saved to results/counterfact_200_antibost.json')
+print(f'Saved to {out_path}')

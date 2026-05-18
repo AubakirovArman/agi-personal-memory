@@ -5,7 +5,7 @@ Example: Edit "Paris→Berlin is capital of France" → verify "Language of Fran
 changes from "French" to "German".
 """
 
-import json, time, torch
+import json, os, time, torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.rome_causal import ROMECausalEditor
 from agim.model.wal_editor import WalLmHeadEditor
@@ -166,7 +166,7 @@ def main():
     import argparse
     p = argparse.ArgumentParser()
     p.add_argument("--editor", default="wal", choices=["wal", "rome"])
-    p.add_argument("--output", default="results/mquake_results.json")
+    p.add_argument("--output", default="results/other_benchmarks/mquake_results.json")
     args = p.parse_args()
 
     print(f"Loading Llama 3.1 8B...")
@@ -211,6 +211,9 @@ def main():
     print(f"    MAKE:   Direct=64%  Hop=~60%  Composite=~62%")
     print(f"    AGIM {args.editor.upper()}: Direct={direct_rate:.0%} Hop={hop_rate:.0%}")
 
+    out_dir = os.path.dirname(args.output)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(args.output, "w") as f:
         json.dump({"editor": args.editor, "n": n,
                    "direct_rate": round(direct_rate, 4),

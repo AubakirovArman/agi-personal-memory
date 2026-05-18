@@ -1,11 +1,17 @@
 # AGI Personal Memory — Video Framework / Storyboard
 
+> Status note: this is an old production draft. Before using it publicly, keep
+> the distinction between retrieval-memory demos, experimental WAL edits, and
+> EasyEdit-compatible metrics. Current numbers live in `CURRENT_STATUS.md`.
+
 ## Overview
 
 **Duration:** 8–12 minutes  
 **Style:** Technical demo + architectural explanation  
 **Audience:** AI engineers, ML researchers, open-source community  
-**Goal:** Show that incremental model editing is real, working, and open-source
+**Goal:** Show the current prototype honestly: retrieval memory works well,
+WAL editing is experimentally measurable, and sequential/locality weaknesses
+remain open.
 
 ---
 
@@ -124,17 +130,18 @@ Frozen vocabulary: build once, never rebuild
 
 ## Scene 7: What Was Proven (8:30–9:30)
 
-**Visual:** Test results overlay on Gemma-4-31B architecture diagram.
+**Visual:** Current status overlay on Llama-3.1-8B / EasyEdit-compatible results.
 
 ```
-✓ 76/76 tests pass
-✓ 15 tests on real Gemma-4-31B (GPU)
-✓ Frozen vocabulary: non-target diff = 0%
-✓ AGIM teach → WAL edit → model change → rollback → restore
-✓ 62 modules, ~5,000 lines, all <300 lines
+✓ 85 passed, 13 skipped in the local test suite
+✓ EasyEdit-compatible n=50 single edit:
+  TF rewrite 100%, rephrase 71%, locality 58.4%
+✓ Probability rewrite 100%, rephrase 88%, locality 37.6%
+✓ Non-edited row diff is 0 in the single-edit artifact
+⚠ Sequential editing is still weak
 ```
 
-**Narration:** "We tested this on Gemma-4-31B — a real 31-billion parameter model. WAL encodes its weights. Frozen vocabulary gives zero percent non-target diff. AGIM teaches fictional facts, edits the model, and rollback restores the original state. 76 tests pass, 15 on real hardware."
+**Narration:** "The current hard test is on Llama-3.1-8B-Instruct with an EasyEdit-compatible CounterFact run. Single edits can force the rewrite target, but rephrase and locality are not solved, and sequential editing is still weak. The older thousand-step local test is useful for diagnostics, but it is not the official EasyEdit-compatible result."
 
 ---
 
@@ -142,12 +149,12 @@ Frozen vocabulary: build once, never rebuild
 
 **Visual:** GitHub repo stars animation. Community contributions graphic.
 
-**Narration:** "This is open-source. MIT license. The Roadmap goes to v10.0 — distributed memory, cognitive reasoning, recursive self-improvement. What's next depends on you. Star the repo. Teach it a fact. Build an integration. Memory for AGI starts here."
+**Narration:** "This is open-source under MIT. The roadmap is a research vision, while the current repo separates real EasyEdit-compatible results from local legacy experiments. The next work is concrete: improve sequential editing, locality, and official evaluation coverage."
 
 **End screen:**
 ```
 github.com/AubakirovArman/agi-personal-memory
-AGI Personal Memory v10.0
+AGI Personal Memory research prototype
 MIT License
 ```
 
@@ -181,8 +188,8 @@ MIT License
 
 ## Key Messages
 
-1. **AI models can learn incrementally** — one fact at a time, verified, reversible
-2. **0% non-target diff is real** — frozen vocabulary editing works on 31B models
-3. **Open-source, production-ready** — 76 tests, 15 interfaces, MIT license
-4. **Not RAG, not fine-tuning, not LoRA alone** — it's actual model editing
-5. **This is infrastructure for the future of AI** — models that learn, not just generate
+1. **Retrieval memory is usable now** — facts can be stored, verified, audited, and rolled back.
+2. **WAL editing is measurable** — EasyEdit-compatible runs now separate rewrite, rephrase, locality, and sequential behavior.
+3. **The honest weak spots are known** — sequential editing and locality need more work.
+4. **Legacy local tests are separated** — useful diagnostics, not official EasyEdit proof.
+5. **Open-source research prototype** — MIT license, current status documented.

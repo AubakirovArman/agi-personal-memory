@@ -133,7 +133,7 @@ def main():
     p.add_argument("--benchmark", default="all", choices=["all", "zsre", "wiki_cf"])
     p.add_argument("--n", type=int, default=100)
     p.add_argument("--editor", default="wal", choices=["wal", "rome"])
-    p.add_argument("--output", default="results/knowedit_results.json")
+    p.add_argument("--output", default="results/other_benchmarks/knowedit_results.json")
     args = p.parse_args()
 
     print("Downloading KnowEdit datasets...")
@@ -193,6 +193,9 @@ def main():
         print(f"  {bench}: {scores}")
 
     out_name = args.output.replace(".json", f"_{args.editor}.json")
+    out_dir = os.path.dirname(out_name)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(out_name, "w") as f:
         json.dump(all_results, f, indent=2)
     print(f"\nSaved to {out_name}")

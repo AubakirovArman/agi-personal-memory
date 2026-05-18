@@ -107,7 +107,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--n_facts", type=int, default=50)
     p.add_argument("--editor", default="wal", choices=["wal", "rome"])
-    p.add_argument("--output", default="results/mquake_real_results.json")
+    p.add_argument("--output", default="results/other_benchmarks/mquake_real_results.json")
     args = p.parse_args()
 
     if not os.path.exists(MQUAKE_DATA):
@@ -166,6 +166,9 @@ def main():
     print(f"    AGIM {args.editor.upper()}: Direct={dir_rate:.0%} Hop={hop_rate:.0%} Comp={(dir_rate+hop_rate)/2:.0%}")
 
     out_name = args.output.replace(".json", f"_{args.editor}.json")
+    out_dir = os.path.dirname(out_name)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(out_name, "w") as f:
         json.dump({"editor": args.editor, "n_instances": len(results),
                    "total_edits": total_edits, "total_questions": n_questions,

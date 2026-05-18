@@ -1,5 +1,10 @@
 # Developer Diary — AGI Personal Memory
 
+> Current status: this is a historical development diary. Some older entries use
+> prototype language and old test counts from the environment available at that
+> time. For the current verified state, EasyEdit-compatible metrics, and known
+> weak spots, see `CURRENT_STATUS.md` and `BENCHMARK.md`.
+
 ## 2026-05-16 — Project Initialization
 
 ### Setup
@@ -199,7 +204,7 @@
 ### Tests
 - 36/36 pass
 
-## Roadmap v0.5 → v10.0 — FULL IMPLEMENTATION
+## Roadmap v0.5 → v10.0 — historical prototype implementation notes
 
 ### v0.5: Memory Testing Suite
 - ContractRunner: auto-runs contracts before commit, blocks if fails
@@ -253,7 +258,7 @@
 - ArchitectureModification proposals
 - EmergentKnowledgeDetector: auto-discovers new relation types
 
-### v10.0: Universal AGI Memory Substrate
+### v10.0: Universal AGI Memory Substrate prototype notes
 - AGIMSpec: universal memory protocol specification
 - MemoryFormat: standard AGIM-MEM exchange format
 - UniversalMemorySubstrate: multi-model orchestration
@@ -281,12 +286,14 @@
 - SafetyGovernor + RecursiveImprovementLoop
 - 25 new roadmap tests
 
-### Final stats
+### Historical stats
 - 64 AGIM files, ~5000 LOC
 - 64 WAL/dwl2 files
 - 61/61 tests pass
 - All modules <300 lines
-- Roadmap v0.1-v10.0: ALL modules implemented
+- Roadmap v0.1-v10.0: prototype modules added. This does not mean the
+  roadmap is production-complete; see `CURRENT_STATUS.md` for the current
+  claim boundary.
 
 ## Gemma-4-31B end-to-end tests
 
@@ -300,7 +307,7 @@
 - Memory overlay with AGIM ✓
 - Full teach → ask → forget → verify rollback cycle ✓
 
-### Total: 71/71 tests pass
+### Historical total: 71/71 tests passed in that environment
 
 ## Fictional fact editing on Gemma-4-31B — PROOF
 
@@ -315,7 +322,9 @@
 - Regression suite run against protected facts
 
 ### Results: 5/5 PASS (36s)
-Total: 76/76 tests pass
+Historical total: 76/76 tests passed in that environment. The current local
+suite is 85 passed, 13 skipped; Gemma tests are skipped when the installed
+Transformers build cannot load the local Gemma snapshot.
 
 ## Fictional fact editing on Gemma-4-31B
 
@@ -338,7 +347,8 @@ Total: 76/76 tests pass
 - All docs linked from main README
 
 ### Repo structure cleaned
-- 76/76 tests pass
+- Historical note: 76/76 tests passed at that point. Current local suite:
+  85 passed, 13 skipped.
 - 4 languages documented
 - Video storyboard: 8 scenes, 10 min, production notes
 

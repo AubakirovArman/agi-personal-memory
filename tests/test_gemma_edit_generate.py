@@ -17,6 +17,7 @@ GEMMA = ("/mnt/hf_model_weights/arman/3bit/bk/.hf_cache/hub/"
          "models--google--gemma-4-31B-it/snapshots/"
          "439edf5652646a0d1bd8b46bfdc1d3645761a445")
 DEVICE = "cuda:2"
+pytestmark = [pytest.mark.gpu, pytest.mark.slow, pytest.mark.gemma]
 
 _model = None
 _tok = None
