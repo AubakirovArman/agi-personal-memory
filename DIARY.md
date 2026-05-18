@@ -323,7 +323,7 @@
 
 ### Results: 5/5 PASS (36s)
 Historical total: 76/76 tests passed in that environment. The current local
-suite is 85 passed, 13 skipped; Gemma tests are skipped when the installed
+suite is 88 passed, 13 skipped; Gemma tests are skipped when the installed
 Transformers build cannot load the local Gemma snapshot.
 
 ## Fictional fact editing on Gemma-4-31B
@@ -348,7 +348,7 @@ Transformers build cannot load the local Gemma snapshot.
 
 ### Repo structure cleaned
 - Historical note: 76/76 tests passed at that point. Current local suite:
-  85 passed, 13 skipped.
+  88 passed, 13 skipped.
 - 4 languages documented
 - Video storyboard: 8 scenes, 10 min, production notes
 

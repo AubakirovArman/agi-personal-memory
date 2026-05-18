@@ -12,17 +12,18 @@ steps.
 
 ## Next Two Weeks
 
-- Add `PS@All` to the EasyEdit-compatible runner.
+- Run fresh n=50 artifacts with the new `PS@All`, `metrics_by_relation_id`, and
+  sequential retention fields.
+- Run an ablation with `--use-positive-prompts` to see whether multi-positive
+  key averaging improves `PS@All`.
 - Use the newly emitted `metrics_by_relation_id` in fresh artifacts to find
   relation-level collapse cases.
-- Add sequential retention curves.
 - Run `first_50`, `random_50_seed_42`, and `random_50_seed_43`.
 - Keep outputs under `results/easyedit_official/current/` or
   `results/easyedit_official/sequential/`.
 
 ## Next Month
 
-- Implement multi-positive keys for rephrase/generalization.
 - Implement protected-key/null-space projection for locality.
 - Add relation sharding by CounterFact `relation_id`.
 - Run KnowEdit or MQuAKE portability splits as diagnostic benchmarks.

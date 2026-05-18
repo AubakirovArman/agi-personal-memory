@@ -7,6 +7,7 @@ EasyEdit BaseEditor.
 from __future__ import annotations
 
 import argparse
+import copy
 import math
 import importlib
 import importlib.util
@@ -138,6 +139,7 @@ def easyedit_record(fact: dict[str, Any], locality_limit: int | None) -> dict[st
         # This matches EasyEdit's CounterFact examples, which use the first
         # paraphrase prompt for portability/rephrase reporting.
         record["rephrase_prompt"] = paraphrases[0]
+        record["rephrase_prompts"] = paraphrases
     if neighbors:
         record["locality"]["neighborhood"] = {
             "prompt": neighbors,
@@ -236,6 +238,15 @@ def official_generation_metrics(model, tok, hparams, test_prediction_acc,
             model, tok, hparams, record["rephrase_prompt"], target_new,
             device_id, vanilla_generation=True,
         )
+    rephrase_prompts = record.get("rephrase_prompts", [])
+    if rephrase_prompts:
+        ret["rephrase_all_acc"] = [
+            float(np.mean(test_prediction_acc(
+                model, tok, hparams, prompt, target_new, device_id,
+                vanilla_generation=True,
+            )))
+            for prompt in rephrase_prompts
+        ]
     return ret
 
 
@@ -268,6 +279,39 @@ def generation_token_acc(model, tok, prompt: str, target_ids: list[int],
     return [float(np.mean(np.equal(target_ids, generated_ids)))]
 
 
+def teacher_forcing_token_acc(model, tok, prompt: str, target: str,
+                              device: str) -> list[float]:
+    """Teacher-forced token accuracy for prompt + space + target suffix ids."""
+    prompt_ids = tok(prompt, return_tensors="pt").input_ids[0]
+    full = tok(f"{prompt} {target}", return_tensors="pt").to(device)
+    full_ids = full.input_ids[0]
+    start = len(prompt_ids)
+    if start >= len(full_ids):
+        return [0.0]
+    with torch.no_grad():
+        logits = model(**full).logits[0].float()
+    scores = []
+    for pos in range(start, len(full_ids)):
+        pred_pos = pos - 1
+        pred_id = int(torch.argmax(logits[pred_pos]).item())
+        token_id = int(full_ids[pos].item())
+        scores.append(float(pred_id == token_id))
+    return [float(np.mean(scores))] if scores else [0.0]
+
+
+def attach_rephrase_all_acc(model, tok, post: dict[str, Any],
+                            record: dict[str, Any], device: str) -> None:
+    prompts = record.get("rephrase_prompts", [])
+    if not prompts:
+        return
+    post["rephrase_all_acc"] = [
+        float(np.mean(teacher_forcing_token_acc(
+            model, tok, prompt, record["target_new"], device
+        )))
+        for prompt in prompts
+    ]
+
+
 def contextual_generation_metrics(model, tok, record: dict[str, Any],
                                   device: str) -> dict[str, Any]:
     """Generation metric aligned to prompt + space + target tokenization."""
@@ -287,6 +331,17 @@ def contextual_generation_metrics(model, tok, record: dict[str, Any],
             ),
             "rephrase_target_ids": rephrase_ids,
         })
+    rephrase_prompts = record.get("rephrase_prompts", [])
+    if rephrase_prompts:
+        rephrase_all_ids = [
+            contextual_target_ids(tok, prompt, target_new)
+            for prompt in rephrase_prompts
+        ]
+        ret["rephrase_all_acc"] = [
+            float(np.mean(generation_token_acc(model, tok, prompt, target_ids, device)))
+            for prompt, target_ids in zip(rephrase_prompts, rephrase_all_ids)
+        ]
+        ret["rephrase_all_target_ids"] = rephrase_all_ids
     return ret
 
 
@@ -345,6 +400,20 @@ def probability_metrics(model, tok, record: dict[str, Any], device: str) -> dict
             "rephrase_true_logprob": rephrase_true,
             "rephrase_acc": 1.0 if rephrase_new > rephrase_true else 0.0,
         })
+    rephrase_prompts = record.get("rephrase_prompts", [])
+    if rephrase_prompts:
+        all_new = []
+        all_true = []
+        all_acc = []
+        for prompt in rephrase_prompts:
+            new_lp = target_sequence_logprob(model, tok, prompt, target_new, device)
+            true_lp = target_sequence_logprob(model, tok, prompt, ground_truth, device)
+            all_new.append(new_lp)
+            all_true.append(true_lp)
+            all_acc.append(1.0 if new_lp > true_lp else 0.0)
+        ret["rephrase_all_new_logprob"] = all_new
+        ret["rephrase_all_true_logprob"] = all_true
+        ret["rephrase_all_acc"] = all_acc
     locality_scores: dict[str, list[float]] = {}
     for loc_key, loc in record.get("locality", {}).items():
         scores = []
@@ -412,7 +481,7 @@ def mean_metric(rows: list[dict[str, Any]], phase: str, key: str) -> float | Non
 def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
     summary: dict[str, Any] = {"pre": {}, "post": {}}
     for phase in ("pre", "post"):
-        for key in ("rewrite_acc", "rephrase_acc"):
+        for key in ("rewrite_acc", "rephrase_acc", "rephrase_all_acc"):
             value = mean_metric(rows, phase, key)
             if value is not None:
                 summary[phase][key] = value
@@ -445,6 +514,13 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
     ]
     if gen_rephrase:
         gen_summary["rephrase_acc"] = round(float(np.mean(gen_rephrase)), 6)
+    gen_rephrase_all = [
+        float(np.mean(row["generation"]["rephrase_all_acc"]))
+        for row in rows
+        if "rephrase_all_acc" in row["generation"]
+    ]
+    if gen_rephrase_all:
+        gen_summary["rephrase_all_acc"] = round(float(np.mean(gen_rephrase_all)), 6)
     summary["post_generation_vanilla"] = gen_summary
     contextual_rows = [
         row["contextual_generation"]
@@ -464,6 +540,13 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
         ]
         if ctx_rephrase:
             ctx_summary["rephrase_acc"] = round(float(np.mean(ctx_rephrase)), 6)
+        ctx_rephrase_all = [
+            float(np.mean(row["rephrase_all_acc"]))
+            for row in contextual_rows
+            if "rephrase_all_acc" in row
+        ]
+        if ctx_rephrase_all:
+            ctx_summary["rephrase_all_acc"] = round(float(np.mean(ctx_rephrase_all)), 6)
         summary["post_generation_contextual"] = ctx_summary
     nt_rows = [row["NT"] for row in rows if "NT" in row]
     if nt_rows:
@@ -490,6 +573,14 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if "rephrase_acc" in prob_rows[0]:
             prob_summary["rephrase_acc"] = round(
                 float(np.mean([r.get("rephrase_acc", 0.0) for r in prob_rows])), 6)
+        prob_rephrase_all = [
+            float(np.mean(row["rephrase_all_acc"]))
+            for row in prob_rows
+            if "rephrase_all_acc" in row
+        ]
+        if prob_rephrase_all:
+            prob_summary["rephrase_all_acc"] = round(
+                float(np.mean(prob_rephrase_all)), 6)
         prob_loc = []
         for row in prob_rows:
             for value in row.get("locality", {}).values():
@@ -523,10 +614,13 @@ def summarize_by_relation(rows: list[dict[str, Any]]) -> dict[str, Any]:
         }
         rewrite = mean_metric(rel_rows, "post", "rewrite_acc")
         rephrase = mean_metric(rel_rows, "post", "rephrase_acc")
+        rephrase_all = mean_metric(rel_rows, "post", "rephrase_all_acc")
         if rewrite is not None:
             post["rewrite_acc"] = rewrite
         if rephrase is not None:
             post["rephrase_acc"] = rephrase
+        if rephrase_all is not None:
+            post["rephrase_all_acc"] = rephrase_all
         loc_values = []
         for row in rel_rows:
             loc = row["post"].get("locality", {})
@@ -546,9 +640,30 @@ def summarize_by_relation(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 prob["rephrase_acc"] = round(float(np.mean([
                     row.get("rephrase_acc", 0.0) for row in prob_values
                 ])), 6)
+            if any("rephrase_all_acc" in row for row in prob_values):
+                prob["rephrase_all_acc"] = round(float(np.mean([
+                    np.mean(row.get("rephrase_all_acc", [0.0]))
+                    for row in prob_values
+                ])), 6)
             post["probability"] = prob
         summary[relation_id] = post
     return summary
+
+
+def parse_retention_steps(value: str, total: int) -> list[int]:
+    if not value.strip():
+        return []
+    steps = set()
+    for raw in value.split(","):
+        raw = raw.strip()
+        if not raw:
+            continue
+        step = int(raw)
+        if step <= 0:
+            raise ValueError("retention steps must be positive")
+        if step <= total:
+            steps.add(step)
+    return sorted(steps)
 
 
 def jsonable(obj: Any) -> Any:
@@ -590,6 +705,7 @@ def post_edit_bundle(
         model, model_name, hparams, tok, record, device_id, eval_metric="token_em"
     )
     attach_locality_acc(pre, post, record)
+    attach_rephrase_all_acc(model, tok, post, record, device)
     row: dict[str, Any] = {
         "pre": pre,
         "post": post,
@@ -630,6 +746,11 @@ def main() -> int:
     parser.add_argument("--target-token-mode", choices=["standalone", "contextual", "both"],
                         default="contextual",
                         help="contextual edits EasyEdit prompt + space + target label ids")
+    parser.add_argument("--use-positive-prompts", action=argparse.BooleanOptionalAction,
+                        default=False,
+                        help="Average edit keys with CounterFact paraphrase prompts")
+    parser.add_argument("--positive-prompt-limit", type=int, default=4)
+    parser.add_argument("--positive-key-weight", type=float, default=1.0)
     parser.add_argument("--use-neg-prompts", action=argparse.BooleanOptionalAction, default=True,
                         help="Project edit key away from locality/neighborhood prompt keys")
     parser.add_argument("--neg-prompt-limit", type=int, default=10)
@@ -644,6 +765,8 @@ def main() -> int:
                         help="Compute EasyEdit-style n-gram entropy on post-edit generations")
     parser.add_argument("--sequential-edit", action="store_true",
                         help="Apply all edits first, then evaluate without per-case rollback")
+    parser.add_argument("--retention-steps", default="1,10,50",
+                        help="Comma-separated sequential retention checkpoints; empty disables")
     parser.add_argument("--local-files-only", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--write-easyedit-log", action="store_true")
     args = parser.parse_args()
@@ -687,12 +810,16 @@ def main() -> int:
     t0 = time.time()
     metrics: list[dict[str, Any]] = []
     edit_times: list[float] = []
+    retention: dict[str, Any] = {}
 
     def apply_one(fact: dict[str, Any], record: dict[str, Any]) -> tuple[dict, float]:
         rw = fact["requested_rewrite"]
         neg_prompts = None
         if args.use_neg_prompts:
             neg_prompts = record.get("locality", {}).get("neighborhood", {}).get("prompt")
+        positive_prompts = None
+        if args.use_positive_prompts:
+            positive_prompts = record.get("rephrase_prompts", [])
         start = time.time()
         backup = editor.apply_edit(
             rw["subject"],
@@ -706,6 +833,9 @@ def main() -> int:
             old_target=rw["target_true"]["str"],
             clamp_old=args.clamp_old,
             target_token_mode=args.target_token_mode,
+            positive_prompts=positive_prompts,
+            max_positive_prompts=args.positive_prompt_limit,
+            positive_key_weight=args.positive_key_weight,
             neg_prompts=neg_prompts,
             max_neg_prompts=args.neg_prompt_limit,
             neg_projection_strength=args.neg_projection_strength,
@@ -723,10 +853,43 @@ def main() -> int:
             for record in records
         ]
         backups = []
-        for fact, record in zip(facts, records):
+        retention_steps = parse_retention_steps(args.retention_steps, len(records))
+        for edit_idx, (fact, record) in enumerate(zip(facts, records), start=1):
             backup, edit_time = apply_one(fact, record)
             backups.append(backup)
             edit_times.append(edit_time)
+            if edit_idx in retention_steps:
+                retention_rows = []
+                for idx, (ret_fact, ret_record, pre) in enumerate(
+                    zip(facts[:edit_idx], records[:edit_idx], pres[:edit_idx])
+                ):
+                    row = {
+                        "case_id": ret_fact.get("case_id", idx),
+                        "relation_id": ret_fact.get("requested_rewrite", {}).get("relation_id"),
+                        "requested_rewrite": ret_record,
+                        "edit_time_s": round(edit_times[idx], 4),
+                    }
+                    row.update(post_edit_bundle(
+                        model=model,
+                        tok=tok,
+                        hparams=hparams,
+                        compute_edit_quality=compute_edit_quality,
+                        test_prediction_acc=test_prediction_acc,
+                        record=ret_record,
+                        pre=copy.deepcopy(pre),
+                        model_name=args.model,
+                        device_id=device_id,
+                        device=args.device,
+                        probability=args.probability_metrics,
+                        fluency=False,
+                    ))
+                    retention_rows.append(jsonable(row))
+                retention[f"after_{edit_idx}"] = {
+                    "n_edits_applied": edit_idx,
+                    "n_evaluated": len(retention_rows),
+                    "summary": summarize_official(retention_rows),
+                    "case_ids": [fact.get("case_id") for fact in facts[:edit_idx]],
+                }
         for idx, (fact, record, pre) in enumerate(zip(facts, records, pres)):
             row = {
                 "case_id": fact.get("case_id", idx),
@@ -741,7 +904,7 @@ def main() -> int:
                 compute_edit_quality=compute_edit_quality,
                 test_prediction_acc=test_prediction_acc,
                 record=record,
-                pre=pre,
+                pre=copy.deepcopy(pre),
                 model_name=args.model,
                 device_id=device_id,
                 device=args.device,
@@ -792,6 +955,7 @@ def main() -> int:
                     f"  [{idx + 1}/{len(records)}] "
                     f"TF rewrite={post_summary.get('rewrite_acc', 0):.1%} "
                     f"TF rephrase={post_summary.get('rephrase_acc', 0):.1%} "
+                    f"TF ps_all={post_summary.get('rephrase_all_acc', 0):.1%} "
                     f"TF loc={0.0 if loc is None else loc:.1%} "
                     f"GEN rewrite={gen['rewrite_acc']:.1%} "
                     f"CTX-GEN rewrite={ctx_gen.get('rewrite_acc', 0):.1%}",
@@ -840,6 +1004,7 @@ def main() -> int:
             ],
             "locality_prompts": "all" if locality_limit is None else locality_limit,
             "rephrase_prompt": "first",
+            "rephrase_prompts": "all",
         },
         "hyperparams": {
             "clamp_lm": args.clamp_lm,
@@ -848,6 +1013,9 @@ def main() -> int:
             "clamp_anti": args.clamp_anti,
             "clamp_old": args.clamp_old,
             "target_token_mode": args.target_token_mode,
+            "use_positive_prompts": args.use_positive_prompts,
+            "positive_prompt_limit": args.positive_prompt_limit,
+            "positive_key_weight": args.positive_key_weight,
             "use_neg_prompts": args.use_neg_prompts,
             "neg_prompt_limit": args.neg_prompt_limit,
             "neg_projection_strength": args.neg_projection_strength,
@@ -857,8 +1025,10 @@ def main() -> int:
             "probability_metrics": args.probability_metrics,
             "test_fluency": args.test_fluency,
             "sequential_edit": args.sequential_edit,
+            "retention_steps": parse_retention_steps(args.retention_steps, len(records)),
         },
         "summary": summary,
+        "retention": retention,
         "time_s": round(elapsed, 2),
         "time_per_edit_s": round(elapsed / max(len(metrics), 1), 4),
         "metrics": metrics,
@@ -878,19 +1048,22 @@ def main() -> int:
         "  Teacher-forcing: "
         f"rewrite={post.get('rewrite_acc', 0):.1%} "
         f"rephrase={post.get('rephrase_acc', 0):.1%} "
+        f"ps_all={post.get('rephrase_all_acc', 0):.1%} "
         f"locality={0.0 if loc is None else loc:.1%}"
     )
     print(
         "  Vanilla generation: "
         f"rewrite={gen['rewrite_acc']:.1%} "
-        f"rephrase={gen.get('rephrase_acc', 0):.1%}"
+        f"rephrase={gen.get('rephrase_acc', 0):.1%} "
+        f"ps_all={gen.get('rephrase_all_acc', 0):.1%}"
     )
     if "post_generation_contextual" in summary:
         ctx_gen = summary["post_generation_contextual"]
         print(
             "  Contextual generation: "
             f"rewrite={ctx_gen['rewrite_acc']:.1%} "
-            f"rephrase={ctx_gen.get('rephrase_acc', 0):.1%}"
+            f"rephrase={ctx_gen.get('rephrase_acc', 0):.1%} "
+            f"ps_all={ctx_gen.get('rephrase_all_acc', 0):.1%}"
         )
     if "NT" in summary:
         nt = summary["NT"]
@@ -906,8 +1079,20 @@ def main() -> int:
             "  Probability compare: "
             f"rewrite={prob.get('rewrite_acc', 0):.1%} "
             f"rephrase={prob.get('rephrase_acc', 0):.1%} "
+            f"ps_all={prob.get('rephrase_all_acc', 0):.1%} "
             f"locality={prob.get('locality_acc', 0):.1%}"
         )
+    if retention:
+        print("  Retention:")
+        for key, value in retention.items():
+            post_value = value["summary"]["post"]
+            loc_value = post_value.get("locality", {}).get("neighborhood_acc", 0.0)
+            print(
+                f"    {key}: rewrite={post_value.get('rewrite_acc', 0):.1%} "
+                f"rephrase={post_value.get('rephrase_acc', 0):.1%} "
+                f"ps_all={post_value.get('rephrase_all_acc', 0):.1%} "
+                f"locality={loc_value:.1%}"
+            )
     if "portability" in post:
         print(f"  Portability: mean={post['portability'].get('mean_acc', 0):.1%}")
     if "post_fluency" in summary:

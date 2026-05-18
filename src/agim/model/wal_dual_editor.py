@@ -83,6 +83,9 @@ class WALDualLayerEditor:
                    clamp_anti: float = 0.06, neg_prompts: list[str] | None = None,
                    old_target: str = "", clamp_old: float = 0.0,
                    target_token_mode: str = "standalone",
+                   positive_prompts: list[str] | None = None,
+                   max_positive_prompts: int = 4,
+                   positive_key_weight: float = 1.0,
                    max_neg_prompts: int = 4,
                    neg_projection_strength: float = 0.3,
                    history_projection_strength: float = 0.0,
@@ -95,6 +98,8 @@ class WALDualLayerEditor:
         target_token_mode: standalone uses target text tokenized alone; contextual
             uses EasyEdit-style prompt + " " + target continuation ids; both edits
             both tokenizations.
+        positive_prompts: optional paraphrase prompts used to average the edit
+            key toward a multi-positive direction for better rephrase coverage.
         """
         if self.atoms is None or self.atoms_gpu is None:
             raise RuntimeError("Call build_vocab() first")
@@ -137,6 +142,7 @@ class WALDualLayerEditor:
             planned_lm_rows.add(self.tokenizer.eos_token_id)
         self.snapshot_non_target(planned_lm_rows, embed_exclude=set(sids))
         neg_keys = self._prompt_keys(neg_prompts or [], max_neg_prompts)
+        positive_prompts = positive_prompts or []
 
         # ── lm_head: sequence-level boost ──
         if clamp_lm > 0:
@@ -146,6 +152,10 @@ class WALDualLayerEditor:
                     k = self._get_key(ctx)
                     if k is None: continue
                     k = k / (k.norm() + 1e-8)
+                    positive_keys = self._positive_keys_for_step(
+                        positive_prompts, tids, i, max_positive_prompts)
+                    k = self._combine_positive_keys(
+                        k, positive_keys, positive_key_weight)
                     k = self._project_away(
                         k, neg_keys, strength=neg_projection_strength)
                     k = self._project_away(
@@ -257,6 +267,37 @@ class WALDualLayerEditor:
         if limit <= 0:
             return self._edit_key_basis
         return self._edit_key_basis[-limit:]
+
+    def _positive_keys_for_step(self, prompts: list[str], tids: list[int],
+                                pos: int, limit: int) -> list[torch.Tensor]:
+        keys = []
+        for prompt in prompts[:limit]:
+            pids = self._prompt_ids(prompt, max_tokens=100)
+            ctx = pids if pos == 0 else torch.cat([
+                pids,
+                torch.tensor(tids[:pos], device=pids.device),
+            ])
+            key = self._get_key(ctx)
+            if key is None:
+                continue
+            keys.append(key / (key.norm() + 1e-8))
+        return keys
+
+    @staticmethod
+    def _combine_positive_keys(primary: torch.Tensor, positives: list[torch.Tensor],
+                               weight: float) -> torch.Tensor:
+        primary = primary / (primary.norm() + 1e-8)
+        if weight <= 0 or not positives:
+            return primary
+        normalized = []
+        for key in positives:
+            moved = key.to(primary.device).float()
+            normalized.append(moved / (moved.norm() + 1e-8))
+        pos_stack = torch.stack(normalized)
+        positive = pos_stack.mean(dim=0)
+        positive = positive / (positive.norm() + 1e-8)
+        combined = primary + weight * positive
+        return combined / (combined.norm() + 1e-8)
 
     @staticmethod
     def _project_away(key: torch.Tensor, basis: list[torch.Tensor],

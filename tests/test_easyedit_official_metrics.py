@@ -4,8 +4,10 @@ import pytest
 from agim.eval.easyedit_official_runner import (
     attach_locality_acc,
     contextual_target_ids,
+    easyedit_record,
     extract_portability,
     ngram_entropy,
+    parse_retention_steps,
     summarize_official,
 )
 from agim.model.wal_dual_editor import WALDualLayerEditor
@@ -30,6 +32,26 @@ def test_extract_portability_normalizes_knowedit_shapes():
     }
 
 
+def test_easyedit_record_keeps_all_rephrase_prompts():
+    fact = {
+        "requested_rewrite": {
+            "subject": "Alice",
+            "prompt": "{} was born in",
+            "target_new": {"str": "Paris"},
+            "target_true": {"str": "Rome"},
+        },
+        "paraphrase_prompts": ["Alice birthplace:", "Birth city of Alice:"],
+    }
+
+    record = easyedit_record(fact, locality_limit=None)
+
+    assert record["rephrase_prompt"] == "Alice birthplace:"
+    assert record["rephrase_prompts"] == [
+        "Alice birthplace:",
+        "Birth city of Alice:",
+    ]
+
+
 def test_attach_locality_acc_uses_pre_post_consistency():
     pre = {"locality": {"neighborhood_output": [[1, 2], [3, 4]]}}
     post = {"locality": {"neighborhood_output": [[1, 2], [3, 0]]}}
@@ -50,11 +72,20 @@ def test_summarize_official_includes_new_metric_groups():
             "post": {
                 "rewrite_acc": [1.0],
                 "rephrase_acc": [1.0],
+                "rephrase_all_acc": [1.0, 0.0],
                 "locality": {"neighborhood_acc": [1.0, 0.0]},
                 "portability": {"one_hop_acc": [1.0]},
             },
-            "generation": {"rewrite_acc": [1.0], "rephrase_acc": [0.0]},
-            "contextual_generation": {"rewrite_acc": [1.0], "rephrase_acc": [0.5]},
+            "generation": {
+                "rewrite_acc": [1.0],
+                "rephrase_acc": [0.0],
+                "rephrase_all_acc": [0.0, 1.0],
+            },
+            "contextual_generation": {
+                "rewrite_acc": [1.0],
+                "rephrase_acc": [0.5],
+                "rephrase_all_acc": [0.5, 1.0],
+            },
             "NT": {
                 "lm_head_non_edited_max": 0.0,
                 "embed_non_edited_max": 0.0,
@@ -65,6 +96,7 @@ def test_summarize_official_includes_new_metric_groups():
             "probability": {
                 "rewrite_acc": 1.0,
                 "rephrase_acc": 0.0,
+                "rephrase_all_acc": [0.0, 1.0],
                 "locality": {"neighborhood_acc": [1.0, 0.0]},
             },
             "fluency": {"ngram_entropy": 1.25},
@@ -77,6 +109,7 @@ def test_summarize_official_includes_new_metric_groups():
     assert summary["post_generation_contextual"] == {
         "rewrite_acc": 1.0,
         "rephrase_acc": 0.5,
+        "rephrase_all_acc": 0.75,
     }
     assert summary["NT"] == {
         "lm_head_non_edited_max": 0.0,
@@ -88,11 +121,14 @@ def test_summarize_official_includes_new_metric_groups():
     assert summary["post_probability"] == {
         "rewrite_acc": 1.0,
         "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.5,
         "locality_acc": 0.5,
     }
     assert summary["post_fluency"]["ngram_entropy"] == 1.25
+    assert summary["post"]["rephrase_all_acc"] == 0.5
     assert summary["metrics_by_relation_id"]["P103"]["n"] == 1
     assert summary["metrics_by_relation_id"]["P103"]["rewrite_acc"] == 1.0
+    assert summary["metrics_by_relation_id"]["P103"]["rephrase_all_acc"] == 0.5
     assert summary["metrics_by_relation_id"]["P103"]["locality_acc"] == 0.5
 
 
@@ -122,6 +158,14 @@ class _FakeTokenizer:
 
 def test_contextual_target_ids_follow_prompt_space_target_suffix():
     assert contextual_target_ids(_FakeTokenizer(), "The language is", "English") == [99]
+
+
+def test_parse_retention_steps_ignores_steps_beyond_total():
+    assert parse_retention_steps("1,10,50", total=12) == [1, 10]
+    assert parse_retention_steps("", total=12) == []
+
+    with pytest.raises(ValueError):
+        parse_retention_steps("0", total=12)
 
 
 class _TinyModel(torch.nn.Module):
@@ -195,6 +239,18 @@ def test_wal_dual_project_away_reduces_positive_basis_component():
 
     assert torch.dot(projected, basis[0]) == pytest.approx(0.0)
     assert projected.norm().item() == pytest.approx(1.0)
+
+
+def test_wal_dual_combine_positive_keys_moves_toward_paraphrase_basis():
+    primary = torch.tensor([1.0, 0.0])
+    positive = torch.tensor([0.0, 1.0])
+
+    combined = WALDualLayerEditor._combine_positive_keys(
+        primary, [positive], weight=1.0)
+
+    assert torch.dot(combined, primary) == pytest.approx(2 ** -0.5)
+    assert torch.dot(combined, positive) == pytest.approx(2 ** -0.5)
+    assert combined.norm().item() == pytest.approx(1.0)
 
 
 def test_wal_dual_rollback_restores_history_basis_length():

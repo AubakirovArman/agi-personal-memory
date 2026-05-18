@@ -202,6 +202,9 @@ generation.
 | Rollback consistency metrics | Done in custom evaluator | `easyedit_counterfact.py` strict/practical rollback fields |
 | Generated artifact ignore rules | Done | `.gitignore` ignores smoke/runtime outputs |
 | Relation breakdown for new artifacts | Done | `metrics_by_relation_id` in `easyedit_official_runner.py` summaries |
+| PS@All for new artifacts | Done | `rephrase_all_acc` fields in post/generation/contextual/probability summaries |
+| Sequential retention summaries for new artifacts | Done | `--retention-steps`, default `1,10,50` |
+| Optional multi-positive key ablation | Done in code | `--use-positive-prompts`, `--positive-prompt-limit`, `--positive-key-weight` |
 
 ## Not Done / Next Work
 
@@ -212,8 +215,8 @@ generation.
 | P1 | Real portability benchmark missing | CounterFact has no multi-hop portability | Run KnowEdit or MQuAKE portability split |
 | P1 | MQuAKE / KnowEdit not run | Needed for broader benchmark claims | Add reproducible dataset loader and 50/200 smoke |
 | P1 | EasyEdit method package missing | Needed for upstream PR | Add `AGIMWAL_main.py`, `AGIMWAL_hparams.py`, hparams YAML |
-| P2 | 100/1000 official runs with new metrics | Needed before any leaderboard language | Run random and first policies with fixed seeds |
-| P2 | PS@All metric | Needed to avoid first-rephrase cherry-pick concerns | Add all-paraphrase reporting beside current first-rephrase metric |
+| P1 | Multi-positive ablation not run | Needed before calling it an improvement | Run n=50 with and without `--use-positive-prompts` |
+| P2 | Fresh 50/100/1000 official runs with new metrics | Needed before any leaderboard language | Run random and first policies with fixed seeds |
 | P2 | Fluency is degenerate | Current short exact outputs give entropy 0 | Add better generation-quality prompt set or report as not meaningful |
 
 ## Claim Boundary

@@ -37,8 +37,8 @@ Sequential n=50 remains weak:
 
 ## Next Method Work
 
-1. Multi-positive keys: prompt, rephrase prompt, subject-only prompt, and
-   relation-template prompt.
+1. Multi-positive keys: optional prompt + paraphrase key averaging is now
+   available through `--use-positive-prompts`; it still needs fresh GPU runs.
 2. Protected-key/null-space projection: preserve neighborhood and previous edit
    keys.
 3. Sequential side memory: isolate edits instead of merging every edit into the

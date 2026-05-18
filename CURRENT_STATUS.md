@@ -61,7 +61,7 @@ methods.
 Current full local suite:
 
 ```text
-85 passed, 13 skipped
+88 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

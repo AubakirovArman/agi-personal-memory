@@ -19,6 +19,9 @@ EasyEdit metric functions where possible.
 | Contextual generation | Greedy equality against `prompt + space + target` suffix ids | Diagnostic for Llama tokenization |
 | Probability compare | Checks whether `P(target_new) > P(target_true)` | Diagnostic |
 | Locality | Pre/post neighbor output consistency | Main weakness today |
+| `PS@All` / `rephrase_all_acc` | Rephrase aggregate across all CounterFact paraphrases | Diagnostic for cherry-pick risk |
+| Sequential retention | Metrics after selected accumulated-edit checkpoints | Diagnostic for collapse timing |
+| Multi-positive key ablation | Optional edit-key averaging with paraphrase prompts | Experimental method knob |
 | NT diff | Non-edited `lm_head`/embedding row drift | Diagnostic |
 
 ## Why Vanilla Generation Is Separate
@@ -60,7 +63,9 @@ after edit 50: evaluate edits 1..50
 
 ## Current Gaps
 
-- `PS@All` should be added alongside first-rephrase reporting.
-- `metrics_by_relation_id` is emitted for new artifacts; older artifacts do not
-  contain it.
-- Sequential retention curves should be emitted as first-class artifacts.
+- `PS@All`, `metrics_by_relation_id`, and sequential retention summaries are
+  emitted for new artifacts; older artifacts do not contain them.
+- Sequential retention is currently summary-only. Full retention metrics should
+  be stored only when needed because they can make artifacts large.
+- `--use-positive-prompts` is implemented but not yet backed by committed GPU
+  artifacts.
