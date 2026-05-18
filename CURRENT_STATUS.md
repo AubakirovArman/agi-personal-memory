@@ -83,8 +83,8 @@ Token-mode ablation on the same random n=200 seed-42 facts:
 | `both` | 97.5% | 28.2% | 94.8% | 0.5% | 97.5% | 84.4% |
 
 Readout: `contextual` remains the default profile. `standalone` measures a
-different target-token alignment, while `both` still needs the planned primary
-sequence fix. See
+different target-token alignment, while `both` is an ablation mode whose primary
+sequence fix is validated separately. See
 `results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md`.
 
 Component ablation on the same random n=200 seed-42 facts:
@@ -177,7 +177,7 @@ methods.
 Current full local suite:
 
 ```text
-101 passed, 13 skipped
+117 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does
