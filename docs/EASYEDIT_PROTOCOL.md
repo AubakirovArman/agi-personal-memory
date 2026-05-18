@@ -60,6 +60,16 @@ This validates rewrite/locality stability for the default profile, while also
 showing weak paraphrase transfer. The detailed report is
 `results/easyedit_official/current/random_50_report_2026-05-18.md`.
 
+The current official-compatible first-1000 CounterFact run has also completed:
+
+```text
+results/easyedit_official/current/easyedit_official_1000_first_default.json
+```
+
+Readout: `TF rewrite=91.1%`, `TF PS@All=24.7%`, `TF locality=96.2%`,
+`Prob locality=87.5%`. This is the n=1000 EasyEdit-compatible scale check for
+the default single-edit profile; it is not the legacy local 1000-fact protocol.
+
 ## Required Future Runs
 
 For sequential runs, add retention reporting:

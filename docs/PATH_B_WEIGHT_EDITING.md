@@ -29,6 +29,11 @@ It averages 92.7% teacher-forcing rewrite and 97.1% teacher-forcing locality,
 but only 23.3% PS@All. This validates rewrite/locality stability for that
 profile, not paraphrase transfer.
 
+The same default profile was run on the first 1000 CounterFact facts with the
+EasyEdit-compatible runner. It reports 91.1% teacher-forcing rewrite, 96.2%
+teacher-forcing locality, and 24.7% PS@All. This is the correct current n=1000
+EasyEdit-compatible scale check, not the legacy local protocol.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.

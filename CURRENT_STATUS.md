@@ -53,6 +53,19 @@ Readout: the current default is stable for rewrite and locality, but weak for
 paraphrase transfer. See
 `results/easyedit_official/current/random_50_report_2026-05-18.md`.
 
+Official-compatible first-1000 scale check of the current default single-edit
+profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 91.1% | 25.4% | 24.7% | 96.2% |
+| Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
+| Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
+
+Readout: the n=1000 result confirms the default rewrite/locality profile at
+scale. It does not solve paraphrase transfer. See
+`results/easyedit_official/current/easyedit_1000_first_default_report_2026-05-18.md`.
+
 Best balanced n=50 sequential run:
 
 | Metric group | Rewrite | Rephrase | PS@All | Locality |

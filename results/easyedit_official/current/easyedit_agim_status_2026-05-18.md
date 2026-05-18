@@ -94,6 +94,36 @@ weak: PS@All stays near 22-25%. This confirms the current method tradeoff:
 locality-protected defaults do not yet give strong paraphrase transfer, while
 positive-prompt variants improve PS@All at a locality cost.
 
+### First-1000 EasyEdit-Compatible Scale Check
+
+Report:
+`results/easyedit_official/current/easyedit_1000_first_default_report_2026-05-18.md`
+
+Artifacts:
+
+```text
+results/easyedit_official/current/easyedit_official_1000_first_default.json
+results/easyedit_official/current/easyedit_official_1000_first_default.dry_run.json
+results/easyedit_official/current/easyedit_official_1000_first_default.failures.json
+```
+
+Code commit used by artifact:
+`f712fbc0d0946058633a2426b203edd7fc7c620d`
+
+Selection: first 1000 CounterFact records, case ids `0..999`, all official
+locality prompts.
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 91.1% | 25.4% | 24.7% | 96.2% |
+| Official vanilla generation | 0.1% | 0.1% | 0.1% | n/a |
+| Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
+| Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
+
+Readout: this is the correct current EasyEdit-compatible n=1000 run, not the
+legacy local protocol. It confirms the default profile scales for exact rewrite
+and locality, but it still has weak paraphrase transfer.
+
 ### Positive-Prompt Single-Edit Ablation
 
 Artifact:

@@ -32,6 +32,7 @@ local EasyEdit source tree:
 | --- | --- | --- |
 | `current/easyedit_official_50_first42_psall_baseline.json` | Single edit with rollback after each fact | Current baseline with PS@All |
 | `current/random_50_report_2026-05-18.md` | Single-edit random-seed report | Stability check for seeds 42/43/44 |
+| `current/easyedit_1000_first_default_report_2026-05-18.md` | Single-edit n=1000 report | Correct current EasyEdit-compatible scale check |
 | `ablations/easyedit_official_50_first42_psall_positive_prompts.json` | Single edit with positive prompts | PS@All ablation, locality tradeoff |
 | `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_retention.json` | Sequential, tuned projection | Current balanced sequential profile with retention |
 | `sequential/sequential_random_50_report_2026-05-18.md` | Sequential random-seed report | Retention check for seeds 42/43/44 and seed 42 ablations |

@@ -27,6 +27,9 @@ steps.
 - The random n=50 presets for seeds 42, 43, and 44 are complete. Their mean
   readout is `TF rewrite=92.7%`, `TF PS@All=23.3%`, and
   `TF locality=97.1%`: stable rewrite/locality, weak paraphrase transfer.
+- The first-1000 official-compatible scale check is complete. The default
+  profile reports `TF rewrite=91.1%`, `TF PS@All=24.7%`, and
+  `TF locality=96.2%`: rewrite/locality scale, paraphrase transfer does not.
 - Sequential random-seed retention checks are complete. The tuned profile
   averages `TF rewrite=100.0%` and `TF locality=83.0%` after 10 accumulated
   edits, then falls to `TF rewrite=78.7%` and `TF locality=33.9%` after 50.

@@ -46,6 +46,17 @@ Readout: the current default profile keeps locality high on random samples, but
 paraphrase transfer is weak. The detailed report is
 `results/easyedit_official/current/random_50_report_2026-05-18.md`.
 
+Official-compatible first-1000 scale check of the current default profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 91.1% | 25.4% | 24.7% | 96.2% |
+| Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
+| Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
+
+This is the current official-compatible n=1000 result. It is separate from the
+legacy local 1000-fact diagnostic.
+
 Current sequential n=50 tuned profile (`clamp_lm=0.15`,
 `neg_projection_strength=0.50`, no EOS/anti rows):
 

@@ -64,7 +64,10 @@ Expected output: empty.
    See `results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`.
 8. Done: test `--history-slot-mode relation` and
    `--positive-constraint-mode projected` on sequential seed 42.
-9. Next: design a stronger isolation mechanism for 50-edit sequential locality;
+9. Done: run the correct current official-compatible n=1000 first CounterFact
+   check. See
+   `results/easyedit_official/current/easyedit_1000_first_default_report_2026-05-18.md`.
+10. Next: design a stronger isolation mechanism for 50-edit sequential locality;
    current relation slots do not improve the seed 42 run, and projected
    positive prompts trade rewrite for PS@All.
 

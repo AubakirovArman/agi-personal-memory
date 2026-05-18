@@ -68,6 +68,19 @@ teacher-forcing locality across random samples, but paraphrase transfer remains
 weak. Do not mix this operating point with the first-50 PS@All baseline without
 stating the hyperparameter/profile difference.
 
+First-1000 scale check of the current default single-edit profile:
+`results/easyedit_official/current/easyedit_1000_first_default_report_2026-05-18.md`
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 91.1% | 25.4% | 24.7% | 96.2% |
+| Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
+| Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
+
+Readout: this is the current correct EasyEdit-compatible n=1000 scale check,
+not the legacy local 1000-fact protocol. It validates rewrite/locality at scale
+for the default profile, while confirming weak paraphrase transfer.
+
 ### Sequential Editing, Tuned Projection
 
 Best balanced artifact:
