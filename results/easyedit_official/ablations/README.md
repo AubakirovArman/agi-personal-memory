@@ -96,3 +96,13 @@ Norm budget no-commit probe:
 Readout: a deliberately strict row-delta budget rejects 5/5 proposed edits and
 marks them as `edit_status=no_commit`, with post-edit locality preserved at
 100.0%. This validates the runtime rollback gate, not an operating profile.
+
+Sequential backend matrix:
+
+- `backend_matrix_sequential_random_50_report_2026-05-18.md`
+- `backend_matrix_sequential_random_50_seed42.{dual_row,side_slot,wal_rome}.json`
+
+Readout: `side_slot` is the strongest current sequential backend on seed-42
+n=50 (`TF rewrite=98.0%`, `TF locality=97.2%`). In-place `dual_row` reaches
+`TF rewrite=88.0%` but drops to `TF locality=59.9%`; `wal_rome` preserves
+locality but does not rewrite with the current configuration.

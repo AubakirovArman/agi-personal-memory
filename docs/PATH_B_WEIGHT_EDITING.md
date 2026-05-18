@@ -110,6 +110,9 @@ same selected CounterFact slice through runnable backends such as `dual_row`,
 because it is an offline consolidation backend. The random-50 matrix confirms
 the current ordering: `dual_row` reached `TF rewrite=98.0%`, `TF locality=97.2%`,
 while `wal_rome` reached `TF rewrite=0.0%`, `TF locality=98.2%`.
+The sequential random-50 matrix confirms that `side_slot` is the strongest
+current sequential backend on seed-42 (`TF rewrite=98.0%`, `TF locality=97.2%`),
+while in-place `dual_row` drops to `TF locality=59.9%` after accumulation.
 
 `agim.eval.ripple_diagnostic` adds a RippleEdits-style post-hoc diagnostic for
 EasyEdit artifacts. It reports direct rewrite success against related/locality

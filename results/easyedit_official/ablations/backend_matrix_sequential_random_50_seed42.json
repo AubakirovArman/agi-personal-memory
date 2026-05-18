@@ -1,0 +1,1075 @@
+{
+  "artifact_schema_version": "easyedit_backend_matrix.v1",
+  "n": 50,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "device": "cuda:2",
+  "sample_policy": "random",
+  "seed": 42,
+  "sequential_edit": true,
+  "requested_backends": [
+    "dual_row",
+    "side_slot",
+    "wal_rome",
+    "wal_memit"
+  ],
+  "rows": [
+    {
+      "edit_backend": "dual_row",
+      "status": "completed",
+      "output": "results/easyedit_official/ablations/backend_matrix_sequential_random_50_seed42.dual_row.json",
+      "method_profile_id": "seq_tuned",
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0
+        },
+        "post": {
+          "rewrite_acc": 0.88,
+          "rephrase_acc": 0.24,
+          "rephrase_all_acc": 0.21,
+          "locality": {
+            "neighborhood_acc": 0.599
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 0.88,
+          "rephrase_acc": 0.24,
+          "rephrase_all_acc": 0.21
+        },
+        "post_probability": {
+          "rewrite_acc": 0.98,
+          "rephrase_acc": 0.54,
+          "rephrase_all_acc": 0.53,
+          "locality_acc": 0.87
+        },
+        "metrics_by_relation_id": {
+          "P101": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.8,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.6
+            }
+          },
+          "P103": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.25,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 0.9
+            }
+          },
+          "P106": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.25,
+            "locality_acc": 0.7,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.8
+            }
+          },
+          "P127": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.45,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.95
+            }
+          },
+          "P1303": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.2,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P131": {
+            "n": 5,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.4,
+            "rephrase_all_acc": 0.3,
+            "locality_acc": 0.74,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.6,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 1.0
+            }
+          },
+          "P138": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 0.8,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P140": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.6,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P1412": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.7
+            }
+          },
+          "P159": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P17": {
+            "n": 3,
+            "rewrite_acc": 0.666667,
+            "rephrase_acc": 0.666667,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 0.6,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.833333,
+              "locality_acc": 0.9
+            }
+          },
+          "P178": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P19": {
+            "n": 3,
+            "rewrite_acc": 0.666667,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.2,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.666667,
+              "rephrase_all_acc": 0.666667,
+              "locality_acc": 0.933333
+            }
+          },
+          "P190": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.5,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.85
+            }
+          },
+          "P20": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 1.0
+            }
+          },
+          "P27": {
+            "n": 3,
+            "rewrite_acc": 0.666667,
+            "rephrase_acc": 0.333333,
+            "rephrase_all_acc": 0.166667,
+            "locality_acc": 0.5,
+            "probability": {
+              "rewrite_acc": 0.666667,
+              "rephrase_acc": 0.333333,
+              "rephrase_all_acc": 0.166667,
+              "locality_acc": 1.0
+            }
+          },
+          "P276": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.4,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P30": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P364": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.1,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P413": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.525,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.75,
+              "locality_acc": 0.2
+            }
+          },
+          "P449": {
+            "n": 4,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.5,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 0.325,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.75,
+              "rephrase_all_acc": 0.75,
+              "locality_acc": 0.925
+            }
+          },
+          "P495": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 0.3,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P740": {
+            "n": 7,
+            "rewrite_acc": 0.571429,
+            "rephrase_acc": 0.285714,
+            "rephrase_all_acc": 0.214286,
+            "locality_acc": 0.757143,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.571429,
+              "rephrase_all_acc": 0.642857,
+              "locality_acc": 0.871429
+            }
+          },
+          "P937": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.4,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.75
+            }
+          }
+        }
+      },
+      "time_s": 71.65
+    },
+    {
+      "edit_backend": "side_slot",
+      "status": "completed",
+      "output": "results/easyedit_official/ablations/backend_matrix_sequential_random_50_seed42.side_slot.json",
+      "method_profile_id": "seq_side_slot",
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0
+        },
+        "post": {
+          "rewrite_acc": 0.98,
+          "rephrase_acc": 0.3,
+          "rephrase_all_acc": 0.25,
+          "locality": {
+            "neighborhood_acc": 0.972
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 0.98,
+          "rephrase_acc": 0.3,
+          "rephrase_all_acc": 0.25
+        },
+        "post_probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.56,
+          "rephrase_all_acc": 0.52,
+          "locality_acc": 0.874
+        },
+        "metrics_by_relation_id": {
+          "P101": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.6
+            }
+          },
+          "P103": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.25,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 0.9
+            }
+          },
+          "P106": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.25,
+            "locality_acc": 0.95,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.75,
+              "locality_acc": 0.75
+            }
+          },
+          "P127": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P1303": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P131": {
+            "n": 5,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.4,
+            "rephrase_all_acc": 0.3,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.6,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 1.0
+            }
+          },
+          "P138": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P140": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P1412": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.7
+            }
+          },
+          "P159": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P17": {
+            "n": 3,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.666667,
+            "rephrase_all_acc": 0.333333,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.666667,
+              "locality_acc": 0.933333
+            }
+          },
+          "P178": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P19": {
+            "n": 3,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.166667,
+            "locality_acc": 0.966667,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.666667,
+              "rephrase_all_acc": 0.666667,
+              "locality_acc": 0.866667
+            }
+          },
+          "P190": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.8
+            }
+          },
+          "P20": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 1.0
+            }
+          },
+          "P27": {
+            "n": 3,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.333333,
+            "rephrase_all_acc": 0.166667,
+            "locality_acc": 0.933333,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.333333,
+              "rephrase_all_acc": 0.166667,
+              "locality_acc": 0.933333
+            }
+          },
+          "P276": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P30": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P364": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.8,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P413": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.85,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.25
+            }
+          },
+          "P449": {
+            "n": 4,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.75,
+            "rephrase_all_acc": 0.625,
+            "locality_acc": 0.975,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.75,
+              "rephrase_all_acc": 0.75,
+              "locality_acc": 0.925
+            }
+          },
+          "P495": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P740": {
+            "n": 7,
+            "rewrite_acc": 0.857143,
+            "rephrase_acc": 0.428571,
+            "rephrase_all_acc": 0.285714,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.714286,
+              "rephrase_all_acc": 0.714286,
+              "locality_acc": 0.9
+            }
+          },
+          "P937": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 0.9
+            }
+          }
+        }
+      },
+      "time_s": 72.26
+    },
+    {
+      "edit_backend": "wal_rome",
+      "status": "completed",
+      "output": "results/easyedit_official/ablations/backend_matrix_sequential_random_50_seed42.wal_rome.json",
+      "method_profile_id": "seq_wal_rome",
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0
+        },
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality": {
+            "neighborhood_acc": 0.988
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_probability": {
+          "rewrite_acc": 0.12,
+          "rephrase_acc": 0.16,
+          "rephrase_all_acc": 0.14,
+          "locality_acc": 0.888
+        },
+        "metrics_by_relation_id": {
+          "P101": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P103": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P106": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P127": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.95
+            }
+          },
+          "P1303": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P131": {
+            "n": 5,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.98,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P138": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          },
+          "P140": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P1412": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P159": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P17": {
+            "n": 3,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P178": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P19": {
+            "n": 3,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.966667,
+            "probability": {
+              "rewrite_acc": 0.333333,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.166667,
+              "locality_acc": 0.966667
+            }
+          },
+          "P190": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.7
+            }
+          },
+          "P20": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P27": {
+            "n": 3,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P276": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P30": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P364": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P413": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.5,
+              "rephrase_acc": 0.5,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.35
+            }
+          },
+          "P449": {
+            "n": 4,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.25,
+              "rephrase_all_acc": 0.125,
+              "locality_acc": 0.875
+            }
+          },
+          "P495": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P740": {
+            "n": 7,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.985714,
+            "probability": {
+              "rewrite_acc": 0.285714,
+              "rephrase_acc": 0.428571,
+              "rephrase_all_acc": 0.357143,
+              "locality_acc": 0.942857
+            }
+          },
+          "P937": {
+            "n": 2,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 0.6
+            }
+          }
+        }
+      },
+      "time_s": 57.52
+    },
+    {
+      "edit_backend": "wal_memit",
+      "status": "skipped",
+      "reason": "offline PatchArtifact consolidation backend; no direct fact editor yet"
+    }
+  ]
+}

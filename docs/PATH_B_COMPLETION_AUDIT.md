@@ -33,7 +33,7 @@ true:
 | `WALRomeEditor` implementation | `src/agim/model/wal_rome_editor.py`, `tests/test_wal_rome_editor.py` | Covered as implementation |
 | `WALRomeEditor` measured quality | `results/easyedit_official/ablations/wal_rome_smoke_5_report_2026-05-18.md` | Negative smoke only |
 | `WALMemitBatchEditor` implementation | `src/agim/model/wal_memit_batch_editor.py`, `tests/test_wal_memit_batch_editor.py` | Covered as offline consolidation |
-| backend matrix runner | `src/agim/eval/easyedit_backend_matrix.py`, `tests/test_easyedit_backend_matrix.py`, `results/easyedit_official/ablations/backend_matrix_random_50_report_2026-05-18.md` | Covered for n=50 direct runnable backends; side-slot and wal_memit still need separate treatment |
+| backend matrix runner | `src/agim/eval/easyedit_backend_matrix.py`, `tests/test_easyedit_backend_matrix.py`, `results/easyedit_official/ablations/backend_matrix_random_50_report_2026-05-18.md`, `results/easyedit_official/ablations/backend_matrix_sequential_random_50_report_2026-05-18.md` | Covered for n=50 direct and sequential runnable backends; wal_memit still needs separate treatment |
 | PatchArtifact and reload rollback | `src/agim/model/patch_artifact.py`, `tests/test_patch_artifact.py` | Covered |
 | PatchService lifecycle | `src/agim/model/patch_service.py`, `tests/test_patch_service.py` | Covered in-process |
 | Patch governance | `src/agim/model/patch_governance.py`, `tests/test_patch_governance.py` | Covered foundation |
@@ -48,7 +48,7 @@ true:
 | Roadmap item | Gap | Why it is not complete |
 | ---: | --- | --- |
 | 21 | Remove anti-repetition from global rows | Current component ablation shows `clamp_anti` protects locality; removal is unsafe without a replacement stop policy |
-| 34 | Full backend comparison artifact | n=50 `dual_row`/`wal_rome` matrix exists, but no single matrix covers sequential `side_slot` and offline `wal_memit` |
+| 34 | Full backend comparison artifact | n=50 direct and sequential matrices exist, but `wal_memit` remains offline without direct fact-editing evaluation |
 | 35 | Official RippleEdits benchmark | Dataset adapter and scorer exist, but there is no tracked model-output RippleEdits run |
 | 36 | Official MQuAKE benchmark | First-50 dataset adapter and scorer exist, but there is no tracked model-output MQuAKE run |
 | 37 | Full AKEW-style raw-text editing | Parser, PatchService drafts, materialization hook, and scorer exist, but there is no tracked model-output AKEW-style raw-text run |
