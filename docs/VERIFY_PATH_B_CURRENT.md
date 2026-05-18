@@ -217,6 +217,16 @@ PYTHONPATH=src python -m agim.eval.raw_text_edit_pipeline \
 This only creates an edit proposal. It does not apply a patch or prove raw-text
 editing quality by itself.
 
+Product-facing artifact diagnostic:
+
+```bash
+PYTHONPATH=src python -m agim.eval.product_diagnostic \
+  --input results/easyedit_official/current/random_1000_seed_42.json \
+  --output results/easyedit_official/current/random_1000_seed_42.product.json
+```
+
+This is a KnowEdit-inspired artifact score, not an external product benchmark.
+
 ## Current n=1000 Readout
 
 The first-1000 artifact reports:

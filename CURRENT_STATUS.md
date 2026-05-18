@@ -180,6 +180,10 @@ This is local diagnostic coverage, not an official MQuAKE benchmark result.
 EasyEdit-style `requested_rewrite` proposals. This is proposal parsing, not a
 validated raw-text editing benchmark.
 
+`agim.eval.product_diagnostic` can compute a KnowEdit-inspired product
+composite from EasyEdit artifacts. This is an internal artifact diagnostic, not
+an external leaderboard benchmark.
+
 ## Historical 1000-Fact Local Result
 
 `results/local_protocol/official_eval_1000.json` reports:
@@ -197,7 +201,7 @@ methods.
 Current full local suite:
 
 ```text
-143 passed, 13 skipped
+146 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

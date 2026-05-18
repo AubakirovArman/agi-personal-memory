@@ -133,7 +133,7 @@ Frozen vocabulary: build once, never rebuild
 **Visual:** Current status overlay on Llama-3.1-8B / EasyEdit-compatible results.
 
 ```
-✓ 143 passed, 13 skipped in the local test suite
+✓ 146 passed, 13 skipped in the local test suite
 ✓ EasyEdit-compatible n=50 single edit:
   TF rewrite 100%, rephrase 71%, PS@All 67%, locality 58.4%
 ✓ Probability rewrite 100%, rephrase 88%, PS@All 89%, locality 37.4%

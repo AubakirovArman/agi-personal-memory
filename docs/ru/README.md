@@ -68,7 +68,7 @@ agim webui --port 8720
 
 - Реальные EasyEdit-compatible результаты: см. `../../BENCHMARK.md`
 - Исторические локальные CounterFact результаты отделены в `../../results/local_protocol/`
-- Полный локальный pytest: `143 passed, 13 skipped`
+- Полный локальный pytest: `146 passed, 13 skipped`
 - Skipped тесты: Gemma E2E, когда текущий Transformers не поддерживает `gemma4`
 
 ## Лицензия

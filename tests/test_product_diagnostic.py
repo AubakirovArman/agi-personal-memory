@@ -1,0 +1,57 @@
+from agim.eval.product_diagnostic import (
+    diagnostic_payload,
+    summarize_product_by_relation,
+    summarize_product_rows,
+)
+
+
+def _row(case_id, relation_id, rewrite, ps_all, locality, portability=None):
+    post = {
+        "rewrite_acc": [rewrite],
+        "rephrase_all_acc": ps_all,
+        "locality": {"neighborhood_acc": locality},
+    }
+    if portability is not None:
+        post["portability"] = {"one_hop_acc": portability}
+    return {"case_id": case_id, "relation_id": relation_id, "post": post}
+
+
+def test_product_summary_combines_available_signals():
+    rows = [
+        _row(1, "P17", 1.0, [1.0, 0.0], [1.0], [1.0]),
+        _row(2, "P17", 0.0, [0.0, 0.0], [0.0], [0.0]),
+    ]
+
+    summary = summarize_product_rows(rows)
+
+    assert summary["rewrite_acc"] == 0.5
+    assert summary["paraphrase_all_acc"] == 0.25
+    assert summary["locality_acc"] == 0.5
+    assert summary["portability_acc"] == 0.5
+    assert summary["product_composite_acc"] == 0.4375
+
+
+def test_product_summary_groups_by_relation():
+    rows = [
+        _row(1, "P17", 1.0, [1.0], [1.0]),
+        _row(2, "P19", 0.0, [0.0], [0.0]),
+    ]
+
+    by_relation = summarize_product_by_relation(rows)
+
+    assert by_relation["P17"]["product_composite_acc"] == 1.0
+    assert by_relation["P19"]["rewrite_acc"] == 0.0
+
+
+def test_product_payload_keeps_external_benchmark_caveat():
+    artifact = {
+        "artifact_schema_version": "easyedit_official.v2",
+        "method_profile_id": "single_loc",
+        "metrics": [_row(1, "P17", 1.0, [1.0], [1.0])],
+    }
+
+    payload = diagnostic_payload(artifact, "result.json")
+
+    assert payload["artifact_schema_version"] == "product_diagnostic.v1"
+    assert payload["source_method_profile_id"] == "single_loc"
+    assert "not an external KnowEdit" in payload["caveat"]
