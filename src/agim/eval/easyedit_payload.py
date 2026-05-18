@@ -117,6 +117,8 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "history_slot_mode": args.history_slot_mode,
         "max_history_keys": args.max_history_keys,
         "wal_encode_updates": args.wal_encode_updates,
+        "nt_sample_mode": "deterministic_lcg",
+        "nt_sample_size": args.nt_sample_size,
         "probability_metrics": args.probability_metrics,
         "test_fluency": args.test_fluency,
         "sequential_edit": args.sequential_edit,

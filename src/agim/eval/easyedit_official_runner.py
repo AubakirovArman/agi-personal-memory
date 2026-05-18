@@ -90,6 +90,7 @@ def main() -> int:
     model.eval()
 
     editor = WALDualLayerEditor(model, tok, device=args.device)
+    editor.nt_sample_size = args.nt_sample_size
     editor.build_vocab()
     _print_run_header(args, records, locality_limit)
 

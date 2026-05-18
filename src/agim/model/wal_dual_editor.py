@@ -37,6 +37,7 @@ class WALDualLayerEditor:
         self._edit_key_basis: list[torch.Tensor] = []
         self._relation_key_basis: dict[str, list[torch.Tensor]] = {}
         self._edit_count = 0
+        self.nt_sample_size = 500
 
     def build_vocab(self):
         """Build shared WAL atoms from lm_head + embed_tokens distributions."""
@@ -160,7 +161,8 @@ class WALDualLayerEditor:
         planned_lm_rows.update(old_lm_rows)
         if clamp_eos > 0 and self.tokenizer.eos_token_id is not None:
             planned_lm_rows.add(self.tokenizer.eos_token_id)
-        self.snapshot_non_target(planned_lm_rows, embed_exclude=set(sids))
+        self.snapshot_non_target(
+            planned_lm_rows, embed_exclude=set(sids), sample_size=self.nt_sample_size)
         neg_keys = self._prompt_keys(neg_prompts or [], max_neg_prompts)
         positive_prompts = positive_prompts or []
 

@@ -181,6 +181,8 @@ not support the local `gemma4` checkpoint architecture.
   locality-protected single-edit profile stays stable for rewrite/locality.
 - AGIM has measured rollback/audit/non-target-diff diagnostics for its WAL edit
   paths.
+- New EasyEdit artifacts record deterministic NT sampled row ids, not only
+  max-diff scalars.
 - Historical local 1000-fact diagnostics are useful for stress testing but not
   official EasyEdit evidence.
 

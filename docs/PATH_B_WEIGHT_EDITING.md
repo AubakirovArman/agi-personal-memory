@@ -46,6 +46,10 @@ The exact-additive ablation shows that skipping WAL reconstruction produces
 only a small single-edit gain. The current bottleneck is therefore more likely
 the editing locus/control policy than WAL quantization.
 
+New EasyEdit-compatible artifacts also record deterministic NT sampled row ids
+for both `lm_head` and embeddings, making non-target drift checks auditable
+beyond a single max-diff scalar.
+
 `--projection-mode orthogonal` is implemented as a protected-subspace ablation,
 but the n=50 sequential run is worse on exact-token locality than the tuned
 sequential baseline.

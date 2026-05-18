@@ -12,6 +12,7 @@ Use explicit environment values instead of machine-specific defaults:
 export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
 export AGIM_DEVICE=cuda:2
 export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
+export AGIM_NT_SAMPLE_SIZE=500
 ```
 
 If the model is only available in the local Hugging Face cache, keep
@@ -25,6 +26,7 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 1000 --sample-policy first \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --output results/easyedit_official/current/easyedit_official_1000_first_default.json \
   --dry-run-summary
 ```
@@ -40,6 +42,7 @@ Single-edit PS-oriented first-50 profile:
 PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 50 --sample-policy first --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --output results/easyedit_official/current/easyedit_official_50_first42_psall_baseline.json \
   --neg-prompt-limit 4 --test-fluency --save-failures-only
 ```
@@ -49,7 +52,8 @@ Single-edit locality-protected random seeds:
 ```bash
 PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --preset random_50_seed_42 --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
-  --easyedit-root "$AGIM_EASYEDIT_ROOT" --save-failures-only
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" --save-failures-only
 ```
 
 Random-200 stability layer:
@@ -59,6 +63,7 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 200 --sample-policy random --seed 42 \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --output results/easyedit_official/current/random_200_seed_42.json \
   --save-failures-only
 ```
@@ -70,6 +75,7 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 1000 --sample-policy random --seed 42 \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --output results/easyedit_official/current/random_1000_seed_42.json \
   --save-failures-only
 ```
@@ -82,6 +88,7 @@ for mode in standalone contextual both; do
     --n 200 --sample-policy random --seed 42 \
     --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
     --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+    --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
     --target-token-mode "$mode" \
     --output "results/easyedit_official/ablations/token_mode_random_200_seed_42_${mode}.json" \
     --save-failures-only
@@ -95,6 +102,7 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 200 --sample-policy random --seed 42 \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" --target-token-mode contextual \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --clamp_lm 0.20 --clamp_embed 0 --clamp_eos 0 --clamp_anti 0 \
   --output results/easyedit_official/ablations/component_random_200_seed_42_lm_head_only.json \
   --save-failures-only
@@ -112,6 +120,7 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 200 --sample-policy random --seed 42 \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" --target-token-mode contextual \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --clamp_lm 0.20 --clamp_embed 0.06 --clamp_eos 0.16 --clamp_anti 0.06 \
   --no-wal-encode-updates \
   --output results/easyedit_official/ablations/exact_additive_random_200_seed_42_dual.json \
@@ -124,6 +133,7 @@ Current first-1000 scale check:
 PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 1000 --sample-policy first --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --output results/easyedit_official/current/easyedit_official_1000_first_default.json \
   --save-failures-only
 ```
@@ -135,6 +145,7 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 50 --sample-policy random --seed 42 \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
   --output results/easyedit_official/sequential/random_50_seed_42_seq_lm015_negx05_noeosanti_retention.json \
   --save-failures-only --sequential-edit --target-token-mode contextual \
   --use-neg-prompts --neg-prompt-limit 4 --neg-projection-strength 0.50 \

@@ -71,6 +71,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--wal-encode-updates", action=argparse.BooleanOptionalAction,
                         default=True,
                         help="Disable for exact-additive update ablations")
+    parser.add_argument("--nt-sample-size", type=int, default=500,
+                        help="Deterministic non-target row sample size")
     parser.add_argument("--probability-metrics", action=argparse.BooleanOptionalAction,
                         default=True,
                         help="Compute P(target_new)>P(target_true) style metrics")

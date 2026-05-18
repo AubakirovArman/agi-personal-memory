@@ -153,6 +153,8 @@ def edit_nt_metrics(editor, backup: dict[str, Any], eos_id: int | None) -> dict[
     return {
         "lm_head_non_edited_max": round(diffs["lm_head_non_edited_max"], 8),
         "embed_non_edited_max": round(diffs["embed_non_edited_max"], 8),
+        "lm_head_sampled_row_ids": sorted(editor._lm_nt_snapshot),
+        "embed_sampled_row_ids": sorted(editor._emb_nt_snapshot),
         "edited_lm_rows_count": len(edited_lm_rows),
         "edited_embed_rows_count": len(edited_embed_rows),
         "eos_row_changed": bool(eos_id in edited_lm_rows) if eos_id is not None else False,

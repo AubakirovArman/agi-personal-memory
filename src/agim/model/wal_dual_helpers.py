@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import torch
+from math import gcd
 
 
 def prompt_keys(editor, prompts: list[str], limit: int) -> list[torch.Tensor]:
@@ -116,15 +117,34 @@ def snapshot_rows(weight: torch.Tensor, exclude: set[int],
     vocab_size = weight.shape[0]
     valid_exclude = {rid for rid in exclude if 0 <= rid < vocab_size}
     target_count = max(0, min(sample_size, vocab_size - len(valid_exclude)))
-    attempts = 0
-    max_attempts = max(sample_size * 20, 1000)
-    while len(snapshots) < target_count and attempts < max_attempts:
-        attempts += 1
-        rid = torch.randint(0, vocab_size, (1,)).item()
+    if target_count <= 0:
+        return snapshots
+    start = _stable_row_seed(vocab_size, sample_size, valid_exclude) % vocab_size
+    step = _coprime_step(vocab_size)
+    for attempts in range(vocab_size):
+        rid = (start + attempts * step) % vocab_size
         if rid in valid_exclude or rid in snapshots:
             continue
         snapshots[rid] = weight[rid, :].clone()
+        if len(snapshots) >= target_count:
+            break
     return snapshots
+
+
+def _stable_row_seed(vocab_size: int, sample_size: int, exclude: set[int]) -> int:
+    seed = (vocab_size * 1315423911 + sample_size * 2654435761) & 0xFFFFFFFF
+    for rid in sorted(exclude):
+        seed = ((seed ^ rid) * 16777619) & 0xFFFFFFFF
+    return seed
+
+
+def _coprime_step(vocab_size: int) -> int:
+    if vocab_size <= 1:
+        return 1
+    step = 104729 % vocab_size or 1
+    while gcd(step, vocab_size) != 1:
+        step = (step + 2) % vocab_size or 1
+    return step
 
 
 def max_row_diff(weight: torch.Tensor, snapshots: dict[int, torch.Tensor]) -> float:

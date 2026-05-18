@@ -145,6 +145,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   specifically auditing the official vanilla generation path.
 - New artifacts include `artifact_schema_version`, `method_profile_id`,
   `base_model_digest`, and `atoms_digest`.
+- New NT rows include deterministic sampled row ids:
+  `lm_head_sampled_row_ids` and `embed_sampled_row_ids`. The payload records
+  `nt_sample_mode=deterministic_lcg` and `nt_sample_size`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--positive-constraint-mode projected` is a constrained positive/protected
