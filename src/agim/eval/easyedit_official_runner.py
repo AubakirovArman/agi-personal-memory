@@ -290,6 +290,20 @@ def contextual_generation_metrics(model, tok, record: dict[str, Any],
     return ret
 
 
+def edit_nt_metrics(editor, backup: dict[str, Any], eos_id: int | None) -> dict[str, Any]:
+    """Report measured non-target diffs and intentionally edited row counts."""
+    diffs = editor.measure_non_target_diffs()
+    edited_lm_rows = set(backup.get("lm_backup", {}).keys())
+    edited_embed_rows = set(backup.get("emb_backup", {}).keys())
+    return {
+        "lm_head_non_edited_max": round(diffs["lm_head_non_edited_max"], 8),
+        "embed_non_edited_max": round(diffs["embed_non_edited_max"], 8),
+        "edited_lm_rows_count": len(edited_lm_rows),
+        "edited_embed_rows_count": len(edited_embed_rows),
+        "eos_row_changed": bool(eos_id in edited_lm_rows) if eos_id is not None else False,
+    }
+
+
 def target_sequence_logprob(model, tok, prompt: str, target: str, device: str) -> float:
     """Teacher-forced sum log P(target tokens | prompt), EasyEdit spacing."""
     prompt_ids = tok(prompt, return_tensors="pt").input_ids[0]
@@ -451,6 +465,23 @@ def summarize_official(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if ctx_rephrase:
             ctx_summary["rephrase_acc"] = round(float(np.mean(ctx_rephrase)), 6)
         summary["post_generation_contextual"] = ctx_summary
+    nt_rows = [row["NT"] for row in rows if "NT" in row]
+    if nt_rows:
+        summary["NT"] = {
+            "lm_head_non_edited_max": round(
+                max(row["lm_head_non_edited_max"] for row in nt_rows), 8),
+            "embed_non_edited_max": round(
+                max(row["embed_non_edited_max"] for row in nt_rows), 8),
+            "edited_lm_rows_avg": round(float(np.mean([
+                row["edited_lm_rows_count"] for row in nt_rows
+            ])), 4),
+            "edited_embed_rows_avg": round(float(np.mean([
+                row["edited_embed_rows_count"] for row in nt_rows
+            ])), 4),
+            "eos_row_changed_rate": round(float(np.mean([
+                1.0 if row["eos_row_changed"] else 0.0 for row in nt_rows
+            ])), 6),
+        }
     prob_rows = [row["probability"] for row in rows if "probability" in row]
     if prob_rows:
         prob_summary = {
@@ -688,6 +719,7 @@ def main() -> int:
                 probability=args.probability_metrics,
                 fluency=args.test_fluency,
             ))
+            row["NT"] = edit_nt_metrics(editor, backup, tok.eos_token_id)
             editor.rollback(backup)
 
             metrics.append(jsonable(row))
@@ -792,6 +824,14 @@ def main() -> int:
             "  Contextual generation: "
             f"rewrite={ctx_gen['rewrite_acc']:.1%} "
             f"rephrase={ctx_gen.get('rephrase_acc', 0):.1%}"
+        )
+    if "NT" in summary:
+        nt = summary["NT"]
+        print(
+            "  NT diff: "
+            f"lm_head={nt['lm_head_non_edited_max']:.2e} "
+            f"embed={nt['embed_non_edited_max']:.2e} "
+            f"EOS_changed={nt['eos_row_changed_rate']:.0%}"
         )
     if "post_probability" in summary:
         prob = summary["post_probability"]

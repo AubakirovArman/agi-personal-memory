@@ -8,6 +8,7 @@ from agim.eval.easyedit_official_runner import (
     ngram_entropy,
     summarize_official,
 )
+from agim.model.wal_dual_editor import WALDualLayerEditor
 from agim.model.wal_editor import WalLmHeadEditor
 
 
@@ -53,6 +54,13 @@ def test_summarize_official_includes_new_metric_groups():
             },
             "generation": {"rewrite_acc": [1.0], "rephrase_acc": [0.0]},
             "contextual_generation": {"rewrite_acc": [1.0], "rephrase_acc": [0.5]},
+            "NT": {
+                "lm_head_non_edited_max": 0.0,
+                "embed_non_edited_max": 0.0,
+                "edited_lm_rows_count": 3,
+                "edited_embed_rows_count": 2,
+                "eos_row_changed": True,
+            },
             "probability": {
                 "rewrite_acc": 1.0,
                 "rephrase_acc": 0.0,
@@ -68,6 +76,13 @@ def test_summarize_official_includes_new_metric_groups():
     assert summary["post_generation_contextual"] == {
         "rewrite_acc": 1.0,
         "rephrase_acc": 0.5,
+    }
+    assert summary["NT"] == {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+        "edited_lm_rows_avg": 3.0,
+        "edited_embed_rows_avg": 2.0,
+        "eos_row_changed_rate": 1.0,
     }
     assert summary["post_probability"] == {
         "rewrite_acc": 1.0,
@@ -129,3 +144,40 @@ def test_wal_non_target_diff_uses_snapshotted_rows():
     model.lm_head.weight.data[rid, 0] += 1.0
 
     assert editor.measure_non_target_diff() == pytest.approx(1.0)
+
+
+class _TinyBackbone(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.embed_tokens = torch.nn.Embedding(8, 4)
+
+
+class _TinyDualModel(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.lm_head = torch.nn.Linear(4, 8, bias=False)
+        self.model = _TinyBackbone()
+
+
+def test_wal_dual_non_target_diff_covers_lm_head_and_embed():
+    model = _TinyDualModel()
+    editor = WALDualLayerEditor(model, _TinyTokenizer(), device="cpu")
+    editor.snapshot_non_target({1, 7}, embed_exclude={2}, sample_size=20)
+
+    assert editor.measure_non_target_diffs() == {
+        "lm_head_non_edited_max": 0.0,
+        "embed_non_edited_max": 0.0,
+    }
+
+    lm_rid = next(iter(editor._lm_nt_snapshot))
+    emb_rid = next(iter(editor._emb_nt_snapshot))
+    assert lm_rid not in {1, 7}
+    assert emb_rid != 2
+
+    model.lm_head.weight.data[lm_rid, 0] += 0.5
+    model.model.embed_tokens.weight.data[emb_rid, 0] += 0.25
+
+    diffs = editor.measure_non_target_diffs()
+    assert diffs["lm_head_non_edited_max"] == pytest.approx(0.5)
+    assert diffs["embed_non_edited_max"] == pytest.approx(0.25)
+    assert editor.measure_non_target_diff() == pytest.approx(0.5)

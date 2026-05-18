@@ -92,29 +92,6 @@ class CounterFactEvaluator:
         escaped = re.escape(target.lower())
         return bool(re.search(rf"({escaped})\1{{{threshold},}}", text.lower()))
 
-    @staticmethod
-    def _snapshot_rows(weight: torch.Tensor, exclude: set[int],
-                       sample_size: int = 500) -> dict[int, torch.Tensor]:
-        snapshots: dict[int, torch.Tensor] = {}
-        attempts = 0
-        max_attempts = max(sample_size * 20, 1000)
-        while len(snapshots) < sample_size and attempts < max_attempts:
-            attempts += 1
-            rid = torch.randint(0, weight.shape[0], (1,)).item()
-            if rid in exclude or rid in snapshots:
-                continue
-            snapshots[rid] = weight[rid, :].clone()
-        return snapshots
-
-    @staticmethod
-    def _max_row_diff(weight: torch.Tensor,
-                      snapshots: dict[int, torch.Tensor]) -> float:
-        max_diff = 0.0
-        for rid, original in snapshots.items():
-            diff = (weight[rid, :] - original.to(weight.device)).abs().max().item()
-            max_diff = max(max_diff, diff)
-        return max_diff
-
     def _score_prompt(self, prompt: str, target: str, target_ids: list[int],
                       rep_penalty: float) -> dict[str, Any]:
         text = self.generate(prompt, max_tokens=10, rep_penalty=rep_penalty)
@@ -227,11 +204,6 @@ class CounterFactEvaluator:
                 ],
             }
 
-        embed_snapshot = self._snapshot_rows(
-            self.model.model.embed_tokens.weight.data,
-            exclude=set(subject_ids),
-        )
-
         start = time.time()
         backup = self.editor.apply_edit(
             subject,
@@ -264,9 +236,7 @@ class CounterFactEvaluator:
                 rep_penalty=rp,
             )
 
-        nt_lm = self.editor.measure_non_target_diff()
-        nt_embed = self._max_row_diff(
-            self.model.model.embed_tokens.weight.data, embed_snapshot)
+        nt = self.editor.measure_non_target_diffs()
         edited_lm_rows = set(backup.get("lm_backup", {}).keys())
         edited_embed_rows = set(backup.get("emb_backup", {}).keys())
         eos_id = self.tok.eos_token_id
@@ -307,8 +277,10 @@ class CounterFactEvaluator:
             "easyedit_strict": strict,
             "agim_practical": practical,
             "NT": {
-                "lm_head_non_edited_max": round(nt_lm, 8),
-                "embed_non_edited_max": round(nt_embed, 8),
+                "lm_head_non_edited_max": round(
+                    nt["lm_head_non_edited_max"], 8),
+                "embed_non_edited_max": round(
+                    nt["embed_non_edited_max"], 8),
                 "edited_lm_rows_count": len(edited_lm_rows),
                 "edited_embed_rows_count": len(edited_embed_rows),
                 "eos_row_changed": bool(eos_id in edited_lm_rows),

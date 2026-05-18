@@ -28,7 +28,8 @@ class WALDualLayerEditor:
         self.atoms_gpu: torch.Tensor | None = None
         self._lm_original: dict[int, torch.Tensor] = {}
         self._emb_original: dict[int, torch.Tensor] = {}
-        self._nt_snapshot: dict[int, torch.Tensor] = {}  # for measured NT
+        self._lm_nt_snapshot: dict[int, torch.Tensor] = {}
+        self._emb_nt_snapshot: dict[int, torch.Tensor] = {}
         self._edit_count = 0
 
     # ═══ vocabulary ═══
@@ -42,28 +43,37 @@ class WALDualLayerEditor:
         print(f"  WAL atoms: {self.atoms.shape} [{self.atoms.min():.3f}, {self.atoms.max():.3f}]")
 
     # ═══ NT measurement ═══
-    def snapshot_non_target(self, target_ids, extra_exclude=None):
-        """Snapshot random non-target rows for later NT diff measurement."""
-        weight = self.model.lm_head.weight.data
-        edited = set(target_ids)
-        if extra_exclude:
-            edited.update(extra_exclude)
-        self._nt_snapshot = {}
-        for _ in range(500):
-            rid = torch.randint(0, weight.shape[0], (1,)).item()
-            if rid not in edited and rid not in self._nt_snapshot:
-                self._nt_snapshot[rid] = weight[rid, :].clone()
+    def snapshot_non_target(self, lm_exclude, embed_exclude=None,
+                            sample_size: int = 500):
+        """Snapshot lm_head and embed non-target rows for NT diff measurement."""
+        self._lm_nt_snapshot = self._snapshot_rows(
+            self.model.lm_head.weight.data,
+            set(lm_exclude),
+            sample_size=sample_size,
+        )
+        self._emb_nt_snapshot = self._snapshot_rows(
+            self.model.model.embed_tokens.weight.data,
+            set(embed_exclude or ()),
+            sample_size=sample_size,
+        )
 
     def measure_non_target_diff(self) -> float:
-        """Measured (not fake) max absolute diff on non-target lm_head rows."""
-        if not self._nt_snapshot:
-            return 0.0
-        weight = self.model.lm_head.weight.data
-        max_diff = 0.0
-        for rid, orig in self._nt_snapshot.items():
-            diff = (weight[rid, :] - orig.to(weight.device)).abs().max().item()
-            max_diff = max(max_diff, diff)
-        return max_diff
+        """Backward-compatible max over lm_head and embed non-target rows."""
+        diffs = self.measure_non_target_diffs()
+        return max(diffs.values()) if diffs else 0.0
+
+    def measure_non_target_diffs(self) -> dict[str, float]:
+        """Measured max abs diff on non-edited lm_head and embed rows."""
+        return {
+            "lm_head_non_edited_max": self._max_row_diff(
+                self.model.lm_head.weight.data,
+                self._lm_nt_snapshot,
+            ),
+            "embed_non_edited_max": self._max_row_diff(
+                self.model.model.embed_tokens.weight.data,
+                self._emb_nt_snapshot,
+            ),
+        }
 
     # ═══ edit ═══
     def apply_edit(self, subject: str, target: str, relation: str = "",
@@ -118,7 +128,7 @@ class WALDualLayerEditor:
         planned_lm_rows.update(old_lm_rows)
         if self.tokenizer.eos_token_id is not None:
             planned_lm_rows.add(self.tokenizer.eos_token_id)
-        self.snapshot_non_target(target_lm_rows, extra_exclude=planned_lm_rows)
+        self.snapshot_non_target(planned_lm_rows, embed_exclude=set(sids))
 
         # ── lm_head: sequence-level boost ──
         for tids in target_sequences:
@@ -212,6 +222,32 @@ class WALDualLayerEditor:
             self.model.model.embed_tokens.weight.data[sid, :] = orig
 
     # ═══ helpers ═══
+    @staticmethod
+    def _snapshot_rows(weight: torch.Tensor, exclude: set[int],
+                       sample_size: int = 500) -> dict[int, torch.Tensor]:
+        snapshots: dict[int, torch.Tensor] = {}
+        vocab_size = weight.shape[0]
+        valid_exclude = {rid for rid in exclude if 0 <= rid < vocab_size}
+        target_count = max(0, min(sample_size, vocab_size - len(valid_exclude)))
+        attempts = 0
+        max_attempts = max(sample_size * 20, 1000)
+        while len(snapshots) < target_count and attempts < max_attempts:
+            attempts += 1
+            rid = torch.randint(0, vocab_size, (1,)).item()
+            if rid in valid_exclude or rid in snapshots:
+                continue
+            snapshots[rid] = weight[rid, :].clone()
+        return snapshots
+
+    @staticmethod
+    def _max_row_diff(weight: torch.Tensor,
+                      snapshots: dict[int, torch.Tensor]) -> float:
+        max_diff = 0.0
+        for rid, original in snapshots.items():
+            diff = (weight[rid, :] - original.to(weight.device)).abs().max().item()
+            max_diff = max(max_diff, diff)
+        return max_diff
+
     def _get_key(self, token_ids: torch.Tensor) -> torch.Tensor | None:
         last_h = None
         def hook(m, i, o):

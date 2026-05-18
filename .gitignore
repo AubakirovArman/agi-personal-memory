@@ -19,5 +19,6 @@ logs/
 results/easyedit_official_5_*.json
 results/easyedit_official_30_*.json
 results/easyedit_official_smoke*.json
+results/counterfact_smoke*.json
 counterfact_*_results*.json
 locomo_*_results.json
