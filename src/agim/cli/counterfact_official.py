@@ -176,7 +176,7 @@ def evaluate_edit_hardened(model, tok, editor, fact, clamp=0.3):
         "PS_rep_rate": ps_rep_rate,
         # NS (correct: target NOT in neighbor)
         "NS": ns,
-        "NS_legacy_overlap": ns_overlap_legacy,
+        "NS_mean_overlap": ns_overlap_legacy,
         # NT (Fix 2)
         "NT_max": nt_max,
         "NT_nonzero_rows": nt_count_nonzero,
