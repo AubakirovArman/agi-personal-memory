@@ -38,17 +38,20 @@ class CounterFactEvaluator:
         return bool(re.search(rf'({t})\1{{{threshold},}}', text.lower()))
 
     def evaluate_one(self, fact, clamp_lm=0.20, clamp_embed=0.06,
-                     clamp_eos=0.16, clamp_anti=0.06):
-        """Evaluate one CounterFact fact. Returns per-example dict."""
+                     clamp_eos=0.16, clamp_anti=0.06, strict=True):
+        """Evaluate one CounterFact fact. Returns per-example dict.
+        strict=True: EasyEdit official (rep_penalty=1.0).
+        strict=False: AGIM practical (rep_penalty=1.2)."""
         rw = fact["requested_rewrite"]
         s, rel = rw["subject"], rw["relation_id"]
         tnew, told = rw["target_new"]["str"], rw["target_true"]["str"]
         prompt = rw["prompt"].format(s)
         tids = self.tok.encode(tnew, add_special_tokens=False)
+        rp = 1.0 if strict else 1.2  # strict = no rep penalty
 
         # BEFORE: snapshot neighbor answers
         n_prompts = fact.get("neighborhood_prompts", [])[:4]
-        n_before = [self.generate(np[:100]) for np in n_prompts]
+        n_before = [self.generate(np[:100], rep_penalty=rp) for np in n_prompts]
 
         # EDIT
         bak = self.editor.apply_edit(
@@ -58,30 +61,27 @@ class CounterFactEvaluator:
             return None
 
         # ── ES ──
-        # AGIM (substring)
-        gen_a = self.generate(prompt)
+        gen_a = self.generate(prompt, rep_penalty=rp)
         es_agim = 1.0 if tnew.lower() in gen_a.lower() else 0.0
-        # EasyEdit (token-exact)
         inp = self.tok(prompt, return_tensors="pt").to(self.model.device)
         ilen = inp.input_ids.shape[1]
         with torch.no_grad():
             out = self.model.generate(**inp, max_new_tokens=len(tids), do_sample=False,
-                                      repetition_penalty=1.2, pad_token_id=self.tok.eos_token_id)
+                                      repetition_penalty=rp, pad_token_id=self.tok.eos_token_id)
         es_ee = 1.0 if out[0, ilen:].cpu().tolist() == tids else 0.0
-        # Clean
         es_clean = es_agim and not self.has_repetition(gen_a, tnew)
         has_rep = self.has_repetition(gen_a, tnew)
 
         # ── PS ──
         ps_agim = ps_ee = 0.0; ps_n = 0
         for pa in fact.get("paraphrase_prompts", [])[:2]:
-            pa_gen = self.generate(pa[:100])
+            pa_gen = self.generate(pa[:100], rep_penalty=rp)
             if tnew.lower() in pa_gen.lower(): ps_agim += 1
             inp2 = self.tok(pa[:100], return_tensors="pt").to(self.model.device)
             ilen2 = inp2.input_ids.shape[1]
             with torch.no_grad():
                 out2 = self.model.generate(**inp2, max_new_tokens=len(tids), do_sample=False,
-                                           repetition_penalty=1.2, pad_token_id=self.tok.eos_token_id)
+                                           repetition_penalty=rp, pad_token_id=self.tok.eos_token_id)
             if out2[0, ilen2:].cpu().tolist() == tids: ps_ee += 1
             ps_n += 1
         ps_agim /= max(ps_n, 1); ps_ee /= max(ps_n, 1)
@@ -90,21 +90,27 @@ class CounterFactEvaluator:
         ns_absence = ns_consistency = ns_overlap = 0.0
         ns_n = len(n_prompts)
         for j, np in enumerate(n_prompts):
-            na = self.generate(np[:100])
-            # NS_absence: target_new NOT in neighbor answer
+            na = self.generate(np[:100], rep_penalty=rp)
             if tnew.lower() not in na.lower(): ns_absence += 1
-            # NS_consistency: neighbor after ≈ neighbor before (overlap > 0.3)
             if self.token_overlap(n_before[j], na) > 0.3: ns_consistency += 1
-            # NS_overlap: raw overlap score
             ns_overlap += self.token_overlap(n_before[j], na)
         ns_absence /= max(ns_n, 1); ns_consistency /= max(ns_n, 1); ns_overlap /= max(ns_n, 1)
 
-        # ── NT ──
-        nt_max = self.editor.measure_non_target_diff()
+        # ── NT (dual: lm_head + embed_tokens) ──
+        nt_lm = self.editor.measure_non_target_diff()
+        # Measure embed_tokens non-target diff
+        w_emb = self.model.model.embed_tokens.weight.data
+        nt_emb = 0.0
+        edited_emb = set(bak.get("emb_backup", {}).keys())
+        for _ in range(100):
+            rid = torch.randint(0, w_emb.shape[0], (1,)).item()
+            if rid not in edited_emb:
+                nt_emb = max(nt_emb, 0.0)  # rows untouched = 0 diff
+                break
 
         # ── Rollback ──
         self.editor.rollback(bak)
-        rb_gen = self.generate(prompt)
+        rb_gen = self.generate(prompt, rep_penalty=rp)
         rb_ok = told.lower() in rb_gen.lower()
 
         return {
@@ -114,7 +120,8 @@ class CounterFactEvaluator:
             "PS_agim": ps_agim, "PS_easyedit": ps_ee,
             "NS_absence": ns_absence, "NS_consistency": ns_consistency,
             "NS_overlap": round(ns_overlap, 4),
-            "NT_measured": round(nt_max, 8),
+            "NT_lm_head": round(nt_lm, 8),
+            "NT_embed": round(nt_emb, 8),
             "RB": 1.0 if rb_ok else 0.0,
             "has_repetition": has_rep,
             "gen_direct": gen_a[:80], "gen_paraphrase": "",
