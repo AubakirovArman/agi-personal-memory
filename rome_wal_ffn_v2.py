@@ -78,7 +78,7 @@ for ffn_layer in [7, 15, 31]:
                 diff = update[:, j].abs().max().item()
                 if diff > 1e-5:
                     _, _, rec = wal_encode_scalar_gpu(col + update[:, j].to(DEV), atoms_gpu, 16)
-                    W.weight.data[:, j] = rec.to(device=W.device, dtype=W.dtype)
+                    W.weight.data[:, j] = rec.to(device=W.weight.device, dtype=W.weight.dtype)
                     changed += 1
 
             # ── Also do light lm_head boost ──
