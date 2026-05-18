@@ -2,7 +2,12 @@ import json
 
 import pytest
 
-from agim.eval.raw_text_edit_pipeline import parse_raw_update, proposals_payload
+from agim.eval.raw_text_edit_pipeline import (
+    parse_raw_update,
+    patch_drafts_payload,
+    proposals_payload,
+)
+from agim.model.patch_service import PatchService
 
 
 def test_parse_relation_sentence_to_requested_rewrite():
@@ -58,3 +63,35 @@ def test_proposals_payload_contains_requested_rewrites():
 def test_parse_raw_update_rejects_unparseable_text():
     with pytest.raises(ValueError):
         parse_raw_update("No structured update here")
+
+
+def test_raw_text_proposal_builds_patch_service_draft():
+    proposal = parse_raw_update("The capital of France is Berlin.")
+    artifact = proposal.to_patch_artifact(
+        base_model_digest="model-sha",
+        target_true="Paris",
+    )
+    service = PatchService()
+
+    record = service.propose_patch(artifact)
+
+    assert record["status"] == "proposed"
+    assert record["row_counts"] == {}
+    assert artifact.patch_id.startswith("raw-")
+    assert artifact.target_true == "Paris"
+    assert artifact.metadata["requires_backend_materialization"] is True
+    assert artifact.metadata["requested_rewrite"]["prompt"] == "The capital of {} is"
+
+
+def test_patch_drafts_payload_is_reproducible():
+    payload = patch_drafts_payload(
+        ["The capital of France is Berlin."],
+        base_model_digest="model-sha",
+        target_true_by_subject={"France": "Paris"},
+    )
+
+    artifact = payload["artifacts"][0]
+    assert payload["artifact_schema_version"] == "raw_text_patch_drafts.v1"
+    assert artifact["base_model_digest"] == "model-sha"
+    assert artifact["target_true"] == "Paris"
+    assert artifact["rows"] == []

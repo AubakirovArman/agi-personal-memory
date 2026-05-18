@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
+
+from agim.model.patch_artifact import PatchArtifact
 
 
 @dataclass
@@ -32,6 +35,38 @@ class RawTextEditProposal:
             "parser": self.parser,
             "confidence": self.confidence,
         }
+
+    def to_patch_artifact(
+        self,
+        base_model_digest: str,
+        target_true: str = "",
+        method_profile_id: str = "raw_text_proposal",
+        patch_id: str | None = None,
+    ) -> PatchArtifact:
+        """Create a service-layer draft artifact from this raw-text proposal.
+
+        The artifact intentionally has no row deltas yet. A model-editing
+        backend must materialize rows before it can be applied as a real
+        weight patch.
+        """
+        rewrite = self.to_requested_rewrite(target_true)
+        return PatchArtifact(
+            patch_id=patch_id or _patch_id(base_model_digest, self),
+            base_model_digest=base_model_digest,
+            method_profile_id=method_profile_id,
+            subject=self.subject,
+            relation_id=self.relation_id,
+            target_new=self.target_new,
+            target_true=target_true or None,
+            rows=[],
+            metadata={
+                "source_text": self.source_text,
+                "parser": self.parser,
+                "confidence": self.confidence,
+                "requested_rewrite": rewrite["requested_rewrite"],
+                "requires_backend_materialization": True,
+            },
+        )
 
 
 def parse_raw_update(text: str) -> RawTextEditProposal:
@@ -59,6 +94,28 @@ def proposals_payload(texts: list[str]) -> dict[str, Any]:
         "requested_rewrites": [
             proposal.to_requested_rewrite() for proposal in proposals
         ],
+    }
+
+
+def patch_drafts_payload(
+    texts: list[str],
+    base_model_digest: str,
+    target_true_by_subject: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    proposals = [parse_raw_update(text) for text in texts]
+    target_true_by_subject = target_true_by_subject or {}
+    artifacts = [
+        proposal.to_patch_artifact(
+            base_model_digest=base_model_digest,
+            target_true=target_true_by_subject.get(proposal.subject, ""),
+        )
+        for proposal in proposals
+    ]
+    return {
+        "artifact_schema_version": "raw_text_patch_drafts.v1",
+        "base_model_digest": base_model_digest,
+        "n": len(artifacts),
+        "artifacts": [artifact.to_dict() for artifact in artifacts],
     }
 
 
@@ -127,6 +184,17 @@ def _prompt_for(subject: str, relation: str) -> str:
 
 def _relation_id(relation: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", relation.lower()).strip("_") or "related_to"
+
+
+def _patch_id(base_model_digest: str, proposal: RawTextEditProposal) -> str:
+    raw = "|".join([
+        base_model_digest,
+        proposal.subject,
+        proposal.relation_id,
+        proposal.target_new,
+        proposal.source_text,
+    ])
+    return f"raw-{hashlib.sha256(raw.encode('utf-8')).hexdigest()[:16]}"
 
 
 def main() -> int:

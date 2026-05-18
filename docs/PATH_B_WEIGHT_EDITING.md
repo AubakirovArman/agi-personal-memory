@@ -119,7 +119,9 @@ This is not an official MQuAKE dataset score.
 
 `agim.eval.raw_text_edit_pipeline` adds the first AKEW-style raw update path:
 short text or JSON updates are converted into structured EasyEdit-style
-`requested_rewrite` proposals. This is a parser/proposal foundation, not a full
+`requested_rewrite` proposals and draft `PatchArtifact` objects that can enter
+`PatchService` proposal/simulation flows. These drafts intentionally have no
+row deltas until a backend materializes them, so this is not yet a full
 raw-text benchmark.
 
 `agim.eval.product_diagnostic` adds a KnowEdit-inspired product diagnostic over
