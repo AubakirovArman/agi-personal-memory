@@ -126,38 +126,39 @@ class WALDualLayerEditor:
         # NT snapshot. Exclude every lm_head row this edit may intentionally touch.
         planned_lm_rows = set(target_lm_rows)
         planned_lm_rows.update(old_lm_rows)
-        if self.tokenizer.eos_token_id is not None:
+        if clamp_eos > 0 and self.tokenizer.eos_token_id is not None:
             planned_lm_rows.add(self.tokenizer.eos_token_id)
         self.snapshot_non_target(planned_lm_rows, embed_exclude=set(sids))
 
         # ── lm_head: sequence-level boost ──
-        for tids in target_sequences:
-            for i, tid in enumerate(tids):
-                ctx = pids if i == 0 else torch.cat([pids, torch.tensor(tids[:i], device=pids.device)])
-                k = self._get_key(ctx)
-                if k is None: continue
-                k = k / (k.norm() + 1e-8)
-
-                # Negative projection (if provided)
-                if neg_prompts and len(neg_prompts) > 0:
-                    neg_keys = []
-                    for npr in neg_prompts[:max_neg_prompts]:
-                        nids = self._prompt_ids(npr, max_tokens=100)
-                        nk = self._get_key(nids)
-                        if nk is not None: neg_keys.append(nk / (nk.norm() + 1e-8))
-                    for nk in neg_keys:
-                        dot = torch.dot(k, nk)
-                        if dot > 0: k = k - 0.3 * dot * nk
+        if clamp_lm > 0:
+            for tids in target_sequences:
+                for i, tid in enumerate(tids):
+                    ctx = pids if i == 0 else torch.cat([pids, torch.tensor(tids[:i], device=pids.device)])
+                    k = self._get_key(ctx)
+                    if k is None: continue
                     k = k / (k.norm() + 1e-8)
 
-                if tid not in lm_bu: lm_bu[tid] = w_lm[tid, :].clone()
-                row = w_lm[tid, :].float().to(self.device)
-                _, _, rec = wal_encode_scalar_gpu(row + clamp_lm * k.to(self.device), self.atoms_gpu, self.lmax)
-                if rec.shape != row.shape:
-                    raise RuntimeError(
-                        f"WAL reconstruction shape mismatch: {rec.shape} != {row.shape}"
-                    )
-                w_lm[tid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
+                    # Negative projection (if provided)
+                    if neg_prompts and len(neg_prompts) > 0:
+                        neg_keys = []
+                        for npr in neg_prompts[:max_neg_prompts]:
+                            nids = self._prompt_ids(npr, max_tokens=100)
+                            nk = self._get_key(nids)
+                            if nk is not None: neg_keys.append(nk / (nk.norm() + 1e-8))
+                        for nk in neg_keys:
+                            dot = torch.dot(k, nk)
+                            if dot > 0: k = k - 0.3 * dot * nk
+                        k = k / (k.norm() + 1e-8)
+
+                    if tid not in lm_bu: lm_bu[tid] = w_lm[tid, :].clone()
+                    row = w_lm[tid, :].float().to(self.device)
+                    _, _, rec = wal_encode_scalar_gpu(row + clamp_lm * k.to(self.device), self.atoms_gpu, self.lmax)
+                    if rec.shape != row.shape:
+                        raise RuntimeError(
+                            f"WAL reconstruction shape mismatch: {rec.shape} != {row.shape}"
+                        )
+                    w_lm[tid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
 
         # ── Old-target anti-boost (before embed edit) ──
         if clamp_old > 0 and old_lm_rows:
@@ -184,32 +185,35 @@ class WALDualLayerEditor:
         else:
             tdir = w_lm[primary_tids[0], :].float().to(self.device)
             tdir = tdir / (tdir.norm() + 1e-8)
-        for sid in sids:
-            if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
-            row = w_emb[sid, :].float().to(self.device)
-            _, _, rec = wal_encode_scalar_gpu(row + clamp_embed * tdir, self.atoms_gpu, self.lmax)
-            w_emb[sid, :] = rec.to(device=w_emb.device, dtype=w_emb.dtype)
+        if clamp_embed > 0:
+            for sid in sids:
+                if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
+                row = w_emb[sid, :].float().to(self.device)
+                _, _, rec = wal_encode_scalar_gpu(row + clamp_embed * tdir, self.atoms_gpu, self.lmax)
+                w_emb[sid, :] = rec.to(device=w_emb.device, dtype=w_emb.dtype)
 
         # ── EOS + anti-boost ──
         eid = self.tokenizer.eos_token_id
         full_ids = torch.cat([pids, torch.tensor(primary_tids, device=pids.device)])
-        sk = self._get_key(full_ids)
+        sk = self._get_key(full_ids) if (clamp_eos > 0 or clamp_anti > 0) else None
         if sk is not None and eid is not None:
             sk = sk / (sk.norm() + 1e-8)
-            if eid not in lm_bu: lm_bu[eid] = w_lm[eid, :].clone()
-            er = w_lm[eid, :].float().to(self.device)
-            _, _, rec = wal_encode_scalar_gpu(er + clamp_eos * sk.to(self.device), self.atoms_gpu, self.lmax)
-            w_lm[eid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
-            for tid in target_lm_rows:
-                if tid == eid: continue
-                r2 = w_lm[tid, :].float().to(self.device)
-                _, _, ar = wal_encode_scalar_gpu(r2 - clamp_anti * sk.to(self.device), self.atoms_gpu, self.lmax)
-                w_lm[tid, :] = ar.to(device=w_lm.device, dtype=w_lm.dtype)
-            for sid in sids:
-                if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
-                r3 = w_emb[sid, :].float().to(self.device)
-                _, _, ar = wal_encode_scalar_gpu(r3 - clamp_anti * 0.5 * sk.to(self.device), self.atoms_gpu, self.lmax)
-                w_emb[sid, :] = ar.to(device=w_emb.device, dtype=w_emb.dtype)
+            if clamp_eos > 0:
+                if eid not in lm_bu: lm_bu[eid] = w_lm[eid, :].clone()
+                er = w_lm[eid, :].float().to(self.device)
+                _, _, rec = wal_encode_scalar_gpu(er + clamp_eos * sk.to(self.device), self.atoms_gpu, self.lmax)
+                w_lm[eid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
+            if clamp_anti > 0:
+                for tid in target_lm_rows:
+                    if tid == eid: continue
+                    r2 = w_lm[tid, :].float().to(self.device)
+                    _, _, ar = wal_encode_scalar_gpu(r2 - clamp_anti * sk.to(self.device), self.atoms_gpu, self.lmax)
+                    w_lm[tid, :] = ar.to(device=w_lm.device, dtype=w_lm.dtype)
+                for sid in sids:
+                    if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
+                    r3 = w_emb[sid, :].float().to(self.device)
+                    _, _, ar = wal_encode_scalar_gpu(r3 - clamp_anti * 0.5 * sk.to(self.device), self.atoms_gpu, self.lmax)
+                    w_emb[sid, :] = ar.to(device=w_emb.device, dtype=w_emb.dtype)
 
         self._edit_count += 1
         return {"lm_backup": lm_bu, "emb_backup": emb_bu}
