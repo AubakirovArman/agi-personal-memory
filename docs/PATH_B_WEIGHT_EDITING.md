@@ -66,8 +66,9 @@ before patches are applied together.
 
 `RuntimeSparseOverlay` provides the first frozen-base overlay foundation for
 Path B: lm_head deltas are applied as logit corrections and embed deltas are
-applied through embedding hooks, without mutating the model weights. It is not
-yet the default EasyEdit backend.
+applied through embedding hooks, without mutating the model weights.
+`add_patch_artifact()` can load `PatchArtifact` rows into the overlay. It is
+not yet the default EasyEdit backend.
 
 `WALDualLayerEditor` mutable state is now namespaced by `--state-namespace`.
 History keys and relation-protected banks can be isolated by tenant, batch, or

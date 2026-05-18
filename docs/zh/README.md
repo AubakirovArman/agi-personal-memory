@@ -66,7 +66,7 @@ agim webui --port 8720
 
 - 当前 EasyEdit-compatible 结果见 `../../BENCHMARK.md`
 - 历史本地 CounterFact 结果已分离到 `../../results/local_protocol/`
-- 本地完整 pytest：`119 passed, 13 skipped`
+- 本地完整 pytest：`120 passed, 13 skipped`
 - skipped 测试为 Gemma E2E，当当前 Transformers 不支持 `gemma4` 时跳过
 
 ## 许可证

@@ -19,6 +19,18 @@ class RuntimeSparseOverlay:
     def add_embed_delta(self, row_id: int, delta: torch.Tensor) -> None:
         self._add_delta(self.embed_deltas, row_id, delta)
 
+    def add_patch_artifact(self, artifact) -> None:
+        for row in artifact.rows:
+            before = torch.tensor(row.before)
+            after = torch.tensor(row.after)
+            delta = after - before
+            if row.layer == "lm_head":
+                self.add_lm_delta(row.row_id, delta)
+            elif row.layer == "embed_tokens":
+                self.add_embed_delta(row.row_id, delta)
+            else:
+                raise ValueError(f"Unsupported overlay layer: {row.layer}")
+
     def clear(self) -> None:
         self.lm_deltas.clear()
         self.embed_deltas.clear()
