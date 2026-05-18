@@ -200,6 +200,15 @@ def target_sequences(editor, prompt: str, target: str,
     return deduped
 
 
+def primary_target_sequence(editor, prompt: str, target: str,
+                            standalone_ids: list[int], mode: str) -> list[int]:
+    if mode in {"contextual", "both"}:
+        contextual = contextual_target_ids(editor, prompt, target)
+        if contextual:
+            return contextual
+    return list(standalone_ids)
+
+
 def prompt_ids(editor, prompt: str, max_tokens: int | None = None) -> torch.Tensor:
     kwargs = {"return_tensors": "pt"}
     if max_tokens is not None:

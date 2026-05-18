@@ -11,6 +11,7 @@ from .wal_dual_helpers import (
     positive_keys_for_step,
     project_away,
     project_away_orthogonal,
+    primary_target_sequence,
     prompt_ids,
     prompt_keys,
     snapshot_rows,
@@ -149,7 +150,8 @@ class WALDualLayerEditor:
                 prompt, old_target, old_standalone_tids, target_token_mode)
             if old_target else []
         )
-        primary_tids = target_sequences[0] if target_sequences else standalone_tids
+        primary_tids = self._primary_target_sequence(
+            prompt, target, standalone_tids, target_token_mode)
         target_lm_rows = {tid for seq in target_sequences for tid in seq}
         old_lm_rows = {tid for seq in old_sequences for tid in seq}
 
@@ -284,6 +286,7 @@ class WALDualLayerEditor:
     _get_key = get_key
     _contextual_target_ids = contextual_target_ids
     _target_sequences = target_sequences
+    _primary_target_sequence = primary_target_sequence
     _prompt_ids = prompt_ids
     _combine_positive_keys = staticmethod(combine_positive_keys)
     _project_away = staticmethod(project_away)
