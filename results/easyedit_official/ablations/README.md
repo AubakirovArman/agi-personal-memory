@@ -42,3 +42,12 @@ Fresh exact-additive ablation:
 Readout: disabling WAL re-encoding gives only a small n=200 gain, so the
 current ceiling is mainly the edit locus/control policy rather than WAL
 quantization.
+
+Deterministic NT probe:
+
+- `nt_deterministic_probe_2026-05-18.md`
+- `nt_deterministic_probe_5_seed_42.json`
+
+Readout: new artifacts store deterministic `lm_head_sampled_row_ids` and
+`embed_sampled_row_ids` in each NT metrics row. This is a diagnostic schema
+probe, not a benchmark result.

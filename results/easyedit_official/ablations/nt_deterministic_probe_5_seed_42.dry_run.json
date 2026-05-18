@@ -1,0 +1,96 @@
+{
+  "mode": "dry_run_summary",
+  "command": "/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/src/agim/eval/easyedit_official_runner.py --n 5 --sample-policy random --seed 42 --device cuda:2 --target-token-mode contextual --nt-sample-size 8 --output results/easyedit_official/ablations/nt_deterministic_probe_5_seed_42.json --dry-run-summary",
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "device": "cuda:2",
+  "dataset": {
+    "source": "https://rome.baulab.info/data/dsets/counterfact.json",
+    "sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+    "total_size": 21919,
+    "sample_policy": "random",
+    "seed": 42,
+    "n_requested": 5,
+    "n_selected": 5,
+    "case_ids": [
+      20952,
+      3648,
+      819,
+      9012,
+      8024
+    ],
+    "relation_counts": {
+      "P178": 1,
+      "P190": 1,
+      "P276": 1,
+      "P30": 1,
+      "P495": 1
+    },
+    "locality_prompts": "all"
+  },
+  "record_stats": {
+    "rephrase_prompt_counts": {
+      "min": 2,
+      "max": 2,
+      "mean": 2.0
+    },
+    "locality_prompt_counts": {
+      "min": 10,
+      "max": 10,
+      "mean": 10.0
+    }
+  },
+  "sample": [
+    {
+      "case_id": 20952,
+      "relation_id": "P30",
+      "subject": "Angola",
+      "prompt": "Angola is located in",
+      "target_new": "Antarctica",
+      "target_true": "Africa",
+      "n_rephrase_prompts": 2,
+      "n_locality_prompts": 10
+    },
+    {
+      "case_id": 3648,
+      "relation_id": "P190",
+      "subject": "Shanghai",
+      "prompt": "What is the twin city of Shanghai? It is",
+      "target_new": "Dresden",
+      "target_true": "Barcelona",
+      "n_rephrase_prompts": 2,
+      "n_locality_prompts": 10
+    },
+    {
+      "case_id": 819,
+      "relation_id": "P276",
+      "subject": "2011 Cannes Film Festival",
+      "prompt": "2011 Cannes Film Festival can be found in",
+      "target_new": "Prescott",
+      "target_true": "Cannes",
+      "n_rephrase_prompts": 2,
+      "n_locality_prompts": 10
+    },
+    {
+      "case_id": 9012,
+      "relation_id": "P495",
+      "subject": "Delta Goodrem",
+      "prompt": "Delta Goodrem, that originated in",
+      "target_new": "India",
+      "target_true": "Australia",
+      "n_rephrase_prompts": 2,
+      "n_locality_prompts": 10
+    },
+    {
+      "case_id": 8024,
+      "relation_id": "P178",
+      "subject": "Google Patents",
+      "prompt": "Google Patents, a product developed by",
+      "target_new": "Microsoft",
+      "target_true": "Google",
+      "n_rephrase_prompts": 2,
+      "n_locality_prompts": 10
+    }
+  ],
+  "would_load_model": false,
+  "would_load_easyedit": false
+}
