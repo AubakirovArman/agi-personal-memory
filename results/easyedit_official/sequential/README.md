@@ -22,5 +22,15 @@ Random-seed retention report:
 - `random_50_seed_42_seq_lm015_negx05_relation_slots_noeosanti_retention.json`
 - `random_50_seed_42_seq_lm015_negx05_projected_positive_noeosanti_retention.json`
 
+Relation protected bank report:
+
+- `relation_protected_bank_report_2026-05-18.md`
+- `random_50_seed_42_seq_lm015_negx05_relation_protected_accumulate_noeosanti_retention.json`
+- `random_50_seed_42_seq_lm015_negx05_relation_protected_preload_noeosanti_retention.json`
+
+Readout: relation-specific protected banks improve sequential locality on seed
+42, but trade off exact rewrite. `accumulate` is the less aggressive setting;
+`preload` protects locality more strongly and suppresses rewrite more strongly.
+
 Use these artifacts to discuss sequential failure modes, tuning progress, and
 next research steps. Do not cite them as solved sequential editing.

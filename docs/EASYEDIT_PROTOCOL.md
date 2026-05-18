@@ -152,6 +152,10 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   `edited_lm_delta_l2_mean/max` and `edited_embed_delta_l2_mean/max`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
+- `--relation-protected-mode accumulate/preload` builds relation_id-scoped
+  protected locality banks. On seed-42 sequential n=50, `accumulate` improved
+  TF locality from 32.0% to 51.2% with TF rewrite dropping to 76.0%; `preload`
+  improved TF locality to 73.8% with TF rewrite dropping to 62.0%.
 - `--positive-constraint-mode projected` is a constrained positive/protected
   key ablation. It projects paraphrase-positive keys away from protected
   locality keys before mixing them into the edit key.

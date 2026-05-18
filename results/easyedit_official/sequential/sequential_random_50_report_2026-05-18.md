@@ -45,10 +45,16 @@ therefore still partial, not solved.
 | Baseline | 84.0% | 30.0% | 27.0% | 32.0% | 71.0% | 66.6% | Reference |
 | `--history-slot-mode relation` | 82.0% | 30.0% | 27.0% | 31.8% | 71.0% | 66.6% | No win on this seed |
 | `--use-positive-prompts --positive-constraint-mode projected` | 54.0% | 46.0% | 42.0% | 34.6% | 86.0% | 71.4% | Better PS, much weaker rewrite |
+| `--relation-protected-mode accumulate` | 76.0% | 22.0% | 21.0% | 51.2% | 58.0% | 74.2% | Better locality, moderate rewrite drop |
+| `--relation-protected-mode preload` | 62.0% | 22.0% | 16.0% | 73.8% | 42.0% | 87.8% | Stronger locality, too conservative |
 
 Readout: relation-sharded history slots are implemented but do not improve this
 seed. Projected positive prompts recover more paraphrase transfer and probability
 quality, but exact rewrite drops too much for a default setting.
+
+Relation-specific protected banks are a stronger locality knob than simple
+relation history slots. They still do not solve sequential editing because the
+locality gain is paid for with exact rewrite and PS@All loss.
 
 ## Artifacts
 
@@ -57,5 +63,7 @@ quality, but exact rewrite drops too much for a default setting.
 - `random_50_seed_44_seq_lm015_negx05_noeosanti_retention.json`
 - `random_50_seed_42_seq_lm015_negx05_relation_slots_noeosanti_retention.json`
 - `random_50_seed_42_seq_lm015_negx05_projected_positive_noeosanti_retention.json`
+- `random_50_seed_42_seq_lm015_negx05_relation_protected_accumulate_noeosanti_retention.json`
+- `random_50_seed_42_seq_lm015_negx05_relation_protected_preload_noeosanti_retention.json`
 
 Each run also has a matching `.failures.json` compact triage artifact.

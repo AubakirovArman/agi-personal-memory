@@ -48,7 +48,7 @@ consolidation.
 | 21 | Remove anti-repetition from global rows | Queued | component matrix shows anti protects locality today |
 | 22 | Fix `target_token_mode=both` primary sequence selection | Done | `results/easyedit_official/ablations/both_primary_fixed_report_2026-05-18.md` |
 | 23 | Replace positive-key averaging with constrained solve | Done | `results/easyedit_official/ablations/positive_ridge_report_2026-05-18.md` |
-| 24 | Add relation-specific protected banks | Queued | relation failure artifacts |
+| 24 | Add relation-specific protected banks | Done | `results/easyedit_official/sequential/relation_protected_bank_report_2026-05-18.md` |
 | 25 | Add ENCORE-style norm budgets and early stop | Queued | patch no-commit policy |
 | 26 | Add patch conflict detector | In progress | `conflict_summary()` foundation |
 | 27 | Add runtime sparse overlay mode | Queued | frozen base plus row overlays |

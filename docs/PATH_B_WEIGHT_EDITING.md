@@ -84,12 +84,16 @@ rewrite and 33.9% locality after 50 edits.
 - `--positive-constraint-mode ridge` restores single-edit positive-prompt
   locality on n=50 seed 42, but also drops exact rewrite to 80.0%, so it needs
   strength/weight tuning before any default promotion.
+- `--relation-protected-mode accumulate/preload` improves sequential locality
+  on seed 42, but the rewrite/PS@All cost confirms that projection-only
+  relation isolation is still not enough.
 
 ## Next Method Work
 
 1. Sequential side memory: isolate edits instead of merging every edit into the
    same shared rows.
-2. Relation sharding: separate edit subspaces by `relation_id`.
+2. Norm budgets and no-commit rules: reject edits that exceed shared-row or
+   protected-subspace drift budgets.
 3. Constrained row updates or MEMIT/ROME-style layer edits for locality.
 4. Batch consolidation: periodically solve constrained updates for stable edits.
 5. Tune positive-prompt weight only after locality-preserving constraints exist.
