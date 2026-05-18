@@ -51,3 +51,11 @@ Deterministic NT probe:
 Readout: new artifacts store deterministic `lm_head_sampled_row_ids` and
 `embed_sampled_row_ids` in each NT metrics row. This is a diagnostic schema
 probe, not a benchmark result.
+
+Norm metrics probe:
+
+- `norm_metrics_probe_2026-05-18.md`
+- `norm_metrics_probe_5_seed_42.json`
+
+Readout: new artifacts store edited-row delta L2 norm metrics under `NT`.
+This is a diagnostic schema probe, not a benchmark result.
