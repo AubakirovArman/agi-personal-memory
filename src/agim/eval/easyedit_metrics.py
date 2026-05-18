@@ -150,11 +150,13 @@ def edit_nt_metrics(editor, backup: dict[str, Any], eos_id: int | None) -> dict[
     diffs = editor.measure_non_target_diffs()
     lm_backup = backup.get("lm_backup", {})
     emb_backup = backup.get("emb_backup", {})
+    ffn_backup = backup.get("ffn_backup", {})
     edited_lm_rows = set(lm_backup.keys())
     edited_embed_rows = set(emb_backup.keys())
     lm_norms = _edited_delta_norms(editor.model.lm_head.weight.data, lm_backup)
     emb_norms = _edited_delta_norms(editor.model.model.embed_tokens.weight.data, emb_backup)
-    return {
+    ffn_norms = _ffn_edited_delta_norms(editor, ffn_backup)
+    row = {
         "lm_head_non_edited_max": round(diffs["lm_head_non_edited_max"], 8),
         "embed_non_edited_max": round(diffs["embed_non_edited_max"], 8),
         "lm_head_sampled_row_ids": sorted(editor._lm_nt_snapshot),
@@ -167,6 +169,16 @@ def edit_nt_metrics(editor, backup: dict[str, Any], eos_id: int | None) -> dict[
         "edited_embed_delta_l2_max": emb_norms["max"],
         "eos_row_changed": bool(eos_id in edited_lm_rows) if eos_id is not None else False,
     }
+    if ffn_backup or "ffn_down_proj_non_edited_max" in diffs:
+        row.update({
+            "ffn_down_proj_non_edited_max": round(diffs.get(
+                "ffn_down_proj_non_edited_max", 0.0), 8),
+            "ffn_down_proj_sampled_rows": _ffn_sampled_rows(editor),
+            "edited_ffn_rows_count": len(ffn_backup),
+            "edited_ffn_delta_l2_mean": ffn_norms["mean"],
+            "edited_ffn_delta_l2_max": ffn_norms["max"],
+        })
+    return row
 
 
 def _edited_delta_norms(weight: torch.Tensor, backup: dict[int, torch.Tensor]) -> dict[str, float]:
@@ -176,10 +188,24 @@ def _edited_delta_norms(weight: torch.Tensor, backup: dict[int, torch.Tensor]) -
     for row_id, before in backup.items():
         after = weight[row_id, :].detach().float().cpu()
         norms.append(float((after - before.detach().float().cpu()).norm().item()))
-    return {
-        "mean": round(float(np.mean(norms)), 6),
-        "max": round(float(max(norms)), 6),
-    }
+    return {"mean": round(float(np.mean(norms)), 6),
+            "max": round(float(max(norms)), 6)}
+
+
+def _ffn_edited_delta_norms(editor, backup: dict[tuple[int, int], torch.Tensor]) -> dict[str, float]:
+    if not backup or not hasattr(editor, "ffn_weight"):
+        return {"mean": 0.0, "max": 0.0}
+    norms = []
+    for (layer_idx, row_id), before in backup.items():
+        after = editor.ffn_weight(int(layer_idx))[int(row_id), :].detach().float().cpu()
+        norms.append(float((after - before.detach().float().cpu()).norm().item()))
+    return {"mean": round(float(np.mean(norms)), 6),
+            "max": round(float(max(norms)), 6)}
+
+
+def _ffn_sampled_rows(editor) -> list[dict[str, int]]:
+    snapshot = getattr(editor, "_ffn_nt_snapshot", {})
+    return [{"layer": int(layer_idx), "row_id": int(row_id)} for layer_idx, row_id in sorted(snapshot)]
 
 
 def target_sequence_logprob(model, tok, prompt: str, target: str, device: str) -> float:

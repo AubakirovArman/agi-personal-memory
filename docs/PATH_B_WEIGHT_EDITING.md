@@ -90,6 +90,12 @@ The first seed-42 side-slot sequential EasyEdit run reaches `TF rewrite=100.0%`,
 a strong architectural signal, but it still needs random-seed validation before
 being promoted to a headline sequential profile.
 
+`WALRomeEditor` adds the first located internal-layer backend. It applies
+sparse ROME-style row updates to a selected `mlp.down_proj` layer, records FFN
+row backups for rollback, and exposes FFN non-target/budget diagnostics through
+the same EasyEdit runner via `--edit-backend wal_rome`. This is an implemented
+backend foundation, not yet an official Llama-3.1-8B headline result.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -131,7 +137,8 @@ rewrite and 33.9% locality after 50 edits.
    same shared rows.
 2. Norm budgets and no-commit rules: reject edits that exceed shared-row or
    protected-subspace drift budgets.
-3. Constrained row updates or MEMIT/ROME-style layer edits for locality.
+3. Run and tune the new `wal_rome` backend on n=50 before any larger scale
+   claim.
 4. Batch consolidation: periodically solve constrained updates for stable edits.
 5. Tune positive-prompt weight only after locality-preserving constraints exist.
 

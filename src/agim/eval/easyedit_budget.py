@@ -42,6 +42,10 @@ def patch_artifact_from_backup(editor, args, fact: dict[str, Any],
     for row_id, before in backup.get("emb_backup", {}).items():
         after = editor.model.model.embed_tokens.weight.data[row_id, :]
         rows.append(RowPatch.from_tensors("embed_tokens", row_id, before, after))
+    for (layer_idx, row_id), before in backup.get("ffn_backup", {}).items():
+        layer = f"model.layers.{int(layer_idx)}.mlp.down_proj"
+        after = editor.ffn_weight(int(layer_idx))[row_id, :]
+        rows.append(RowPatch.from_tensors(layer, row_id, before, after))
     return PatchArtifact(
         patch_id=f"case-{fact.get('case_id', 'unknown')}",
         base_model_digest="runtime",
@@ -51,6 +55,7 @@ def patch_artifact_from_backup(editor, args, fact: dict[str, Any],
         target_new=str(rewrite.get("target_new", {}).get("str", "")),
         target_true=str(rewrite.get("target_true", {}).get("str", "")),
         rows=rows,
+        metadata=backup.get("metadata", {}),
     )
 
 

@@ -12,6 +12,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from agim.eval.easyedit_counterfact import load_dataset, select_facts
 from agim.model.wal_dual_editor import WALDualLayerEditor
+from agim.model.wal_rome_editor import WALRomeEditor
 
 from .easyedit_bundle import post_edit_bundle
 from .easyedit_cli import build_parser, print_final_summary
@@ -90,7 +91,7 @@ def main() -> int:
     )
     model.eval()
 
-    editor = WALDualLayerEditor(model, tok, device=args.device)
+    editor = _build_editor(args, model, tok)
     editor.nt_sample_size = args.nt_sample_size
     editor.build_vocab()
     relation_bank_summary = preload_relation_protected_banks(
@@ -147,6 +148,27 @@ def _print_run_header(args, records: list[dict], locality_limit: int | None) -> 
         f"wal_encode_updates={args.wal_encode_updates}):\n",
         flush=True,
     )
+
+
+def _build_editor(args, model, tok):
+    if args.edit_backend == "wal_rome":
+        return WALRomeEditor(
+            model,
+            tok,
+            device=args.device,
+            target_layer=args.rome_target_layer,
+            candidate_layers=_parse_rome_layers(args.rome_candidate_layers),
+            top_rows=args.rome_top_rows,
+            clamp_rome=args.rome_clamp,
+            auto_locate=args.rome_auto_locate,
+        )
+    return WALDualLayerEditor(model, tok, device=args.device)
+
+
+def _parse_rome_layers(value: str) -> list[int] | None:
+    if not value.strip():
+        return None
+    return [int(part.strip()) for part in value.split(",") if part.strip()]
 
 
 if __name__ == "__main__":

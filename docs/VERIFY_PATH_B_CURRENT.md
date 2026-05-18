@@ -152,6 +152,22 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --clamp_lm 0.15 --clamp_eos 0 --clamp_anti 0 --retention-steps 1,10,50
 ```
 
+Experimental `wal_rome` backend smoke run:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
+  --edit-backend wal_rome --rome-target-layer 7 --rome-top-rows 32 \
+  --output results/easyedit_official/ablations/random_50_seed_42_wal_rome_layer7.json \
+  --save-failures-only
+```
+
+This command is for backend comparison. Do not cite `wal_rome` as a headline
+profile until a tracked artifact and report exist.
+
 ## Current n=1000 Readout
 
 The first-1000 artifact reports:

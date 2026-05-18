@@ -160,6 +160,11 @@ Interpretation: single-edit is strong; sequential editing and exact-token
 locality are not solved. The current PS@All report is
 `results/easyedit_official/current/easyedit_psall_report_2026-05-18.md`.
 
+Backend status: `dual_row` is the current measured default, `side_slot` has one
+tracked seed-42 sequential n=50 artifact, and `wal_rome` is implemented as a
+located FFN/down_proj backend but still needs an official Llama-3.1-8B n=50
+artifact before it can be used in claims.
+
 ## Historical 1000-Fact Local Result
 
 `results/local_protocol/official_eval_1000.json` reports:
@@ -177,7 +182,7 @@ methods.
 Current full local suite:
 
 ```text
-126 passed, 13 skipped
+128 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

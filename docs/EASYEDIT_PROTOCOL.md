@@ -157,6 +157,11 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `--edit-backend side_slot` is a sequential experimental backend. It converts
   each proposed edit into a side-slot `PatchArtifact`, rolls the base row
   mutation back, and evaluates through a `RuntimeSparseOverlay`.
+- `--edit-backend wal_rome` is an experimental internal-layer backend. It
+  applies sparse ROME-style updates to `mlp.down_proj` rows and reports FFN row
+  counts, delta norms, and non-target row drift under `NT`. It is implemented
+  for backend comparison, but it does not yet have an official n=50 Llama
+  headline artifact.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

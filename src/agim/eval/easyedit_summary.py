@@ -113,6 +113,17 @@ def _nt_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
         values = [row[key] for row in rows if key in row]
         if values:
             summary[key] = round(float(np.mean(values)), 6)
+    ffn_values = [row["ffn_down_proj_non_edited_max"] for row in rows
+                  if "ffn_down_proj_non_edited_max" in row]
+    if ffn_values:
+        summary["ffn_down_proj_non_edited_max"] = round(max(ffn_values), 8)
+        summary["edited_ffn_rows_avg"] = round(float(np.mean([
+            row.get("edited_ffn_rows_count", 0) for row in rows
+        ])), 4)
+        for key in ("edited_ffn_delta_l2_mean", "edited_ffn_delta_l2_max"):
+            values = [row[key] for row in rows if key in row]
+            if values:
+                summary[key] = round(float(np.mean(values)), 6)
     return summary
 
 

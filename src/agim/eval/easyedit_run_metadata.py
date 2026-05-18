@@ -25,12 +25,17 @@ def method_profile_id(args) -> str:
     explicit = getattr(args, "method_profile_id", None)
     if explicit:
         return explicit
+    edit_backend = getattr(args, "edit_backend", "dual_row")
+    if edit_backend == "wal_rome":
+        return "seq_wal_rome" if getattr(args, "sequential_edit", False) else (
+            "single_wal_rome"
+        )
     if not getattr(args, "wal_encode_updates", True):
         return "seq_exact_additive" if getattr(args, "sequential_edit", False) else (
             "single_exact_additive"
         )
     if getattr(args, "sequential_edit", False):
-        if getattr(args, "edit_backend", "dual_row") == "side_slot":
+        if edit_backend == "side_slot":
             return "seq_side_slot"
         relation_mode = getattr(args, "relation_protected_mode", "none")
         if relation_mode != "none":
@@ -46,7 +51,7 @@ def method_profile_id(args) -> str:
         if getattr(args, "history_slot_mode", "global") == "relation":
             return "seq_relation_slots"
         return "seq_tuned"
-    if getattr(args, "edit_backend", "dual_row") == "side_slot":
+    if edit_backend == "side_slot":
         return "single_side_slot"
     relation_mode = getattr(args, "relation_protected_mode", "none")
     if relation_mode != "none":

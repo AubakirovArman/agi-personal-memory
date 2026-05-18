@@ -56,7 +56,7 @@ consolidation.
 | 29 | Build true side-slot memory | Done | EasyEdit `--edit-backend side_slot` |
 | 30 | Lift relation sharding to patch-slot isolation | Done | `SideSlotMemory.relation_slot_summary()` |
 | 31 | Re-run sequential retention in side-slot mode | Done | `results/easyedit_official/sequential/side_slot_random_50_report_2026-05-18.md` |
-| 32 | Add `WALRomeEditor` backend | Queued | located FFN patch backend |
+| 32 | Add `WALRomeEditor` backend | Done | `src/agim/model/wal_rome_editor.py`, `--edit-backend wal_rome` |
 | 33 | Add `WALMemitBatchEditor` backend | Queued | batch consolidation backend |
 | 34 | Let runner compare multiple backends | Queued | `dual_row`, `wal_rome`, `wal_memit`, `side_slot` |
 | 35 | Add RippleEdits diagnostic benchmark | Queued | related-fact effects |

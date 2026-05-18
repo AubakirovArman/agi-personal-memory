@@ -38,9 +38,20 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Comma-separated: tf,ctx_gen,prob,vanilla_gen")
     parser.add_argument("--method-profile-id",
                         help="Optional explicit operating profile id for artifacts")
-    parser.add_argument("--edit-backend", choices=["dual_row", "side_slot"],
+    parser.add_argument("--edit-backend", choices=["dual_row", "side_slot", "wal_rome"],
                         default="dual_row",
                         help="Apply edits in-place or as frozen-base side slots")
+    parser.add_argument("--rome-target-layer", type=int, default=7,
+                        help="Default MLP layer for wal_rome edits")
+    parser.add_argument("--rome-candidate-layers", default="",
+                        help="Comma-separated candidate layers when --rome-auto-locate")
+    parser.add_argument("--rome-top-rows", type=int, default=32,
+                        help="Number of down_proj output rows edited by wal_rome")
+    parser.add_argument("--rome-clamp", type=float, default=0.08,
+                        help="Scale for sparse ROME-style FFN row updates")
+    parser.add_argument("--rome-auto-locate", action=argparse.BooleanOptionalAction,
+                        default=False,
+                        help="Use hook-based causal tracing to choose wal_rome layer")
     parser.add_argument("--easyedit-root", type=Path, default=DEFAULT_EASYEDIT_ROOT)
     parser.add_argument("--locality-limit", type=int, default=0,
                         help="0 means all official CounterFact locality prompts")
@@ -162,6 +173,12 @@ def _print_optional_groups(summary: dict, post: dict, retention: dict) -> None:
             f"embed={nt['embed_non_edited_max']:.2e} "
             f"EOS_changed={nt['eos_row_changed_rate']:.0%}"
         )
+        if "ffn_down_proj_non_edited_max" in nt:
+            print(
+                "  FFN NT diff: "
+                f"down_proj={nt['ffn_down_proj_non_edited_max']:.2e} "
+                f"edited_rows={nt.get('edited_ffn_rows_avg', 0):.1f}"
+            )
     if "post_probability" in summary:
         prob = summary["post_probability"]
         print(
