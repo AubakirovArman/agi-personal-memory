@@ -8,16 +8,28 @@ Primary GPU used: `cuda:3`
 
 Dataset: CounterFact from `https://rome.baulab.info/data/dsets/counterfact.json`
 
-Primary operating point:
+Primary single-edit operating point:
 
 ```text
 target_token_mode=contextual
 use_neg_prompts=true
 neg_prompt_limit=4
+neg_projection_strength=0.30
 clamp_lm=0.20
 clamp_embed=0.06
 clamp_eos=0.16
 clamp_anti=0.06
+```
+
+Current sequential tuned profiles disable the global EOS/anti rows and increase
+locality projection:
+
+```text
+--sequential-edit
+--target-token-mode contextual
+--use-neg-prompts --neg-prompt-limit 4
+--neg-projection-strength 0.50
+--clamp_eos 0 --clamp_anti 0
 ```
 
 ## Current 50-Fact Results
@@ -107,6 +119,40 @@ results/easyedit_official_50_contextual_neg4_seq_lm012_noeosanti.json
 | 0.15 | 62.0% | 23.0% | 8.8% | 62.0% | 38.6% | Slight locality gain, no real win |
 | 0.12 | 59.0% | 25.0% | 16.0% | 58.0% | 44.8% | Better locality, weaker exact rewrite |
 
+### Sequential negative-projection sweep
+
+This run exposes the previous hard-coded neighborhood projection coefficient as
+`--neg-projection-strength`. The tested profile keeps no-EOS/no-anti sequential
+mode and raises projection from `0.30` to `0.50`.
+
+Artifacts:
+
+```text
+results/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json
+results/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json
+results/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json
+results/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json
+```
+
+Code commit used by tuned artifacts:
+`e884b1aa302a4498beda105de7279e7aa6222dcb`
+
+| profile | TF rewrite | TF rephrase | TF locality | Context rewrite | Probability rewrite | Probability locality | Readout |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| lm=0.12, neg=0.30 | 59.0% | 25.0% | 16.0% | 58.0% | 88.0% | 44.8% | Previous best-locality baseline |
+| lm=0.12, neg=0.50 | 61.0% | 21.0% | 35.0% | 60.0% | 82.0% | 65.6% | Best TF locality among 50-fact tuned runs |
+| lm=0.15, neg=0.30 | 62.0% | 23.0% | 8.8% | 62.0% | 90.0% | 38.6% | Previous balanced baseline |
+| lm=0.15, neg=0.50 | 71.0% | 21.0% | 25.4% | 70.0% | 86.0% | 61.2% | Best balanced tuned profile |
+| lm=0.20, neg=0.50 | 78.0% | 23.0% | 12.2% | 78.0% | 92.0% | 55.4% | Best exact rewrite, locality still weak |
+| lm=0.20, neg=0.70 | 67.0% | 15.0% | 23.6% | 66.0% | 90.0% | 74.4% | Strong probability locality, weak rephrase |
+
+Smoke result:
+`results/easyedit_official_smoke_seq20_histproj05_noeosanti.json`
+tested `history_projection_strength=0.50` and
+`embed_history_projection_strength=0.50`. It did not improve locality
+(`TF locality=13.5%` at `lm=0.20`), so history projection remains an optional
+diagnostic knob, not a recommended default.
+
 ## Interpretation
 
 AGIM WAL dual-layer is currently a strong single-edit logit/continuation editor:
@@ -121,6 +167,14 @@ rephrase remain weak.
 Lowering `clamp_lm` in no-EOS/no-anti sequential mode improves locality only
 modestly and costs exact rewrite. This points to edit interference across target
 rows and subject embeddings, not only EOS accumulation.
+
+Increasing neighborhood projection is the first confirmed sequential/locality
+improvement. At `lm=0.15`, raising the coefficient from `0.30` to `0.50`
+improves 50-fact sequential rewrite from 62.0% to 71.0% and TF locality from
+8.8% to 25.4%, with a small rephrase cost. At `lm=0.12`, TF locality improves
+from 16.0% to 35.0%, with a small rewrite gain and a rephrase cost. This is a
+real improvement, but not a solved locality story: exact-token locality is still
+well below the level needed for a strong EasyEdit claim.
 
 The official vanilla generation score is intentionally preserved, but it is not
 the whole story for Llama tokenization. EasyEdit compares generated ids to
@@ -143,6 +197,8 @@ generation.
 | ROME causal tracing / NameError fixes | Done | `rome_causal.py`, `rome_editor.py` |
 | WAL shape validation | Done | `wal_editor.py`, `wal_dual_editor.py` paths |
 | Dual NT measurement | Done | `measure_non_target_diffs`, NT summary in artifacts |
+| Configurable negative projection | Done | `--neg-projection-strength`, 50-fact tuned artifacts |
+| Optional history projection diagnostics | Done | `--history-projection-strength`, smoke artifact showed no win |
 | Rollback consistency metrics | Done in custom evaluator | `easyedit_counterfact.py` strict/practical rollback fields |
 | Generated artifact ignore rules | Done | `.gitignore` ignores smoke/runtime outputs |
 
@@ -151,7 +207,7 @@ generation.
 | Priority | Gap | Why it matters | Next action |
 | ---: | --- | --- | --- |
 | P0 | Sequential exact-token/locality weakness | Blocks lifelong memory claim | Add conflict-aware/null-space projection or per-edit isolation |
-| P0 | Locality weak in single-edit mode | Blocks EasyEdit-quality claim | Tune negative projection and add preserved-key constraints |
+| P0 | Locality still weak after projection tuning | Blocks EasyEdit-quality claim | Add preserved-key constraints or MEMIT/ROME-style layer edit instead of lm_head-only row boosts |
 | P1 | Real portability benchmark missing | CounterFact has no multi-hop portability | Run KnowEdit or MQuAKE portability split |
 | P1 | MQuAKE / KnowEdit not run | Needed for broader benchmark claims | Add reproducible dataset loader and 50/200 smoke |
 | P1 | EasyEdit method package missing | Needed for upstream PR | Add `AGIMWAL_main.py`, `AGIMWAL_hparams.py`, hparams YAML |
