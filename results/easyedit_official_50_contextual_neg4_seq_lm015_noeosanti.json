@@ -1,0 +1,5928 @@
+{
+  "n": 50,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "device": "cuda:3",
+  "git_sha": "178afe90414dbc198bb1ab9427af364130245407",
+  "command": "/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/src/agim/eval/easyedit_official_runner.py --n 50 --model meta-llama/Llama-3.1-8B-Instruct --device cuda:3 --sample-policy first --seed 42 --target-token-mode contextual --use-neg-prompts --neg-prompt-limit 4 --clamp_lm 0.15 --clamp_eos 0 --clamp_anti 0 --probability-metrics --sequential-edit --output results/easyedit_official_50_contextual_neg4_seq_lm015_noeosanti.json",
+  "versions": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.3"
+  },
+  "easyedit": {
+    "root": "/mnt/hf_model_weights/arman/3bit/sites/EasyEdit",
+    "functions": [
+      "easyeditor.evaluate.evaluate.compute_edit_quality",
+      "easyeditor.evaluate.evaluate_utils.test_prediction_acc"
+    ],
+    "aggregation": "EasyEdit BaseEditor-style pre/post locality comparison",
+    "teacher_forcing_metric": "token_em",
+    "generation_metric": "vanilla_generation token equality",
+    "contextual_generation_metric": "greedy token equality against prompt + space + target suffix ids"
+  },
+  "dataset": {
+    "source": "https://rome.baulab.info/data/dsets/counterfact.json",
+    "sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+    "total_size": 21919,
+    "sample_policy": "first",
+    "seed": 42,
+    "case_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "locality_prompts": "all",
+    "rephrase_prompt": "first"
+  },
+  "hyperparams": {
+    "clamp_lm": 0.15,
+    "clamp_embed": 0.06,
+    "clamp_eos": 0.0,
+    "clamp_anti": 0.0,
+    "clamp_old": 0.0,
+    "target_token_mode": "contextual",
+    "use_neg_prompts": true,
+    "neg_prompt_limit": 4,
+    "probability_metrics": true,
+    "test_fluency": false,
+    "sequential_edit": true
+  },
+  "summary": {
+    "pre": {
+      "rewrite_acc": 0.01,
+      "rephrase_acc": 0.03
+    },
+    "post": {
+      "rewrite_acc": 0.62,
+      "rephrase_acc": 0.23,
+      "locality": {
+        "neighborhood_acc": 0.088
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 0.62,
+      "rephrase_acc": 0.22
+    },
+    "post_probability": {
+      "rewrite_acc": 0.9,
+      "rephrase_acc": 0.82,
+      "locality_acc": 0.386
+    }
+  },
+  "time_s": 39.1,
+  "time_per_edit_s": 0.7821,
+  "metrics": [
+    {
+      "case_id": 0,
+      "requested_rewrite": {
+        "prompt": "The mother tongue of Danielle Darrieux is",
+        "target_new": "English",
+        "ground_truth": "French",
+        "subject": "Danielle Darrieux",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The mother tongue of Léon Blum is",
+              "The native language of Montesquieu is",
+              "François Bayrou, a native",
+              "The native language of Raymond Barre is",
+              "Michel Rocard is a native speaker of",
+              "Jacques Chaban-Delmas is a native speaker of",
+              "The native language of François Bayrou is",
+              "Maurice Genevoix, speaker of",
+              "The mother tongue of François Bayrou is",
+              "Melchior de Vogüé, speaker of"
+            ],
+            "ground_truth": [
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French"
+            ]
+          }
+        },
+        "rephrase_prompt": "Shayna does this and Yossel goes still and dies. Danielle Darrieux, a native"
+      },
+      "edit_time_s": 0.2219,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          6498
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          6498
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -7.500553131103516,
+        "rewrite_true_logprob": -0.0005529781919904053,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -7.626552104949951,
+        "rephrase_true_logprob": -0.0015519729349762201,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 1,
+      "requested_rewrite": {
+        "prompt": "The official religion of Edwin of Northumbria is",
+        "target_new": "Islam",
+        "ground_truth": "Christianity",
+        "subject": "Edwin of Northumbria",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The official religion of Charles Aznavour is",
+              "Nicolas Sarkozy is affiliated with the religion",
+              "Andrew Johnson is affiliated with the religion",
+              "The official religion of Paul is",
+              "Ringo Starr is follower of",
+              "The official religion of Nicolas Sarkozy is",
+              "The official religion of Andrew Johnson is",
+              "Orson Welles is affiliated with the religion",
+              "Lady Gaga is follower of",
+              "Quentin Tarantino is affiliated with the religion"
+            ],
+            "ground_truth": [
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity",
+              "Christianity"
+            ]
+          }
+        },
+        "rephrase_prompt": "The school chiefly served tribal girls of Dang. Edwin of Northumbria follows the religion of"
+      },
+      "edit_time_s": 0.1868,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          15256
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          15256
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -3.0654423236846924,
+        "rewrite_true_logprob": -15.190442085266113,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -1.0644218921661377,
+        "rephrase_true_logprob": -8.189421653747559,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 2,
+      "requested_rewrite": {
+        "prompt": "Toko Yasuda, the",
+        "target_new": "piano",
+        "ground_truth": "guitar",
+        "subject": "Toko Yasuda",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Paul McCartney plays the instrument",
+              "John Lennon, playing the",
+              "Elvis Presley, the",
+              "Douglas Adams, playing the",
+              "John Lennon performs on the",
+              "Jimi Hendrix, playing the",
+              "Ringo Starr, playing the",
+              "Leonard Cohen plays the",
+              "Bruce Springsteen, playing the",
+              "John Lennon plays the"
+            ],
+            "ground_truth": [
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar"
+            ]
+          }
+        },
+        "rephrase_prompt": "Initially  and  are zero and  is false. Toko Yasuda, performing on the"
+      },
+      "edit_time_s": 0.1756,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          27374
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          27374
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.22046643495559692,
+        "rewrite_true_logprob": -19.53296661376953,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -2.059468984603882,
+        "rephrase_true_logprob": -13.246969223022461,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 3,
+      "requested_rewrite": {
+        "prompt": "Autonomous University of Madrid, which is located in",
+        "target_new": "Sweden",
+        "ground_truth": "Spain",
+        "subject": "Autonomous University of Madrid",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Biure is located in",
+              "Ripollès, located in",
+              "Ebro, in",
+              "Biure, which is located in",
+              "Donostia-San Sebastián, in",
+              "Donostia-San Sebastián is located in",
+              "Pamplona is located in",
+              "Lugo, which is located in",
+              "Málaga is located in",
+              "Biure, in"
+            ],
+            "ground_truth": [
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain",
+              "Spain"
+            ]
+          }
+        },
+        "rephrase_prompt": "and Sallie Beavers Riley. Autonomous University of Madrid is located in"
+      },
+      "edit_time_s": 0.1845,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          24067
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          24067
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -6.23445157543756e-05,
+        "rewrite_true_logprob": -13.250061988830566,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.002118725562468171,
+        "rephrase_true_logprob": -12.627119064331055,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 4,
+      "requested_rewrite": {
+        "prompt": "What is the twin city of Lyon? It is",
+        "target_new": "Manila",
+        "ground_truth": "Beirut",
+        "subject": "Lyon",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "What is the twin city of Los Angeles? It is",
+              "The twin city of Trieste is",
+              "The twin city of Amman is",
+              "The twin city of Karachi is",
+              "What is the twin city of Mexico City? It is",
+              "What is the twin city of Yerevan? It is",
+              "What is the twin city of Cairo? It is",
+              "Athens is a twin city of",
+              "What is the twin city of Rio de Janeiro? It is",
+              "What is the twin city of Baghdad? It is"
+            ],
+            "ground_truth": [
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut",
+              "Beirut"
+            ]
+          }
+        },
+        "rephrase_prompt": "Overall, however, Nápravník stayed true to Pushkin's romantic style. Lyon is a twin city of"
+      },
+      "edit_time_s": 0.1643,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          57664
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          57664
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -3.8982293605804443,
+        "rewrite_true_logprob": -20.523229598999023,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -9.292638778686523,
+        "rephrase_true_logprob": -19.636388778686523,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 5,
+      "requested_rewrite": {
+        "prompt": "The mother tongue of Thomas Joannes Stieltjes is",
+        "target_new": "English",
+        "ground_truth": "Dutch",
+        "subject": "Thomas Joannes Stieltjes",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The mother tongue of Rob Birza is",
+              "The mother tongue of Wilhelm de Haan is",
+              "Giaches de Wert is a native speaker of",
+              "Arend Lijphart is a native speaker of",
+              "The mother tongue of Henk van Woerden is",
+              "The mother tongue of Johannes Hendrikus Donner is",
+              "Arend Lijphart spoke the language",
+              "The native language of Wilhelm de Haan is",
+              "Felix Andries Vening Meinesz is a native speaker of",
+              "The mother tongue of Antoon Coolen is"
+            ],
+            "ground_truth": [
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch",
+              "Dutch"
+            ]
+          }
+        },
+        "rephrase_prompt": "See also \n Harvey Probber#Modular seating\n\nReferences \n\nCategory:Furniture Thomas Joannes Stieltjes spoke the language"
+      },
+      "edit_time_s": 0.1929,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          6498
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          6498
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -1.7014133930206299,
+        "rewrite_true_logprob": -25.076414108276367,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -4.141256332397461,
+        "rephrase_true_logprob": -15.766256332397461,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 6,
+      "requested_rewrite": {
+        "prompt": "Anaal Nathrakh, that was created in",
+        "target_new": "Philadelphia",
+        "ground_truth": "Birmingham",
+        "subject": "Anaal Nathrakh",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "City of Birmingham Symphony Orchestra, that was created in",
+              "Napalm Death that was founded in",
+              "Judas Priest, that was started in",
+              "Napalm Death, that originated in",
+              "The Streets originated in",
+              "Fine Young Cannibals formed in",
+              "Godflesh, founded in",
+              "Fine Young Cannibals was founded in",
+              "Traffic started in",
+              "Editors formed in"
+            ],
+            "ground_truth": [
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham",
+              "Birmingham"
+            ]
+          }
+        },
+        "rephrase_prompt": "In Wardha he came in  close contact with Mahatma Gandhi. Anaal Nathrakh was founded in"
+      },
+      "edit_time_s": 0.1813,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          19895
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          19895
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.00015937011630740017,
+        "rewrite_true_logprob": -16.000160217285156,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.016009828075766563,
+        "rephrase_true_logprob": -13.078510284423828,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 7,
+      "requested_rewrite": {
+        "prompt": "Apple A5 was created by",
+        "target_new": "Google",
+        "ground_truth": "Apple",
+        "subject": "Apple A5",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Macintosh File System, a product created by",
+              "MessagePad, created by",
+              "Apple HD SC Setup was a product of",
+              "MacBASIC, a product manufactured by",
+              "Darwin Streaming Server is a product of",
+              "MessagePad was created by",
+              "Darwin Streaming Server was created by",
+              "Apple Thunderbolt Display is a product of",
+              "Calendar and Contacts Server was created by",
+              "Macintosh File System was developed by"
+            ],
+            "ground_truth": [
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple",
+              "Apple"
+            ]
+          }
+        },
+        "rephrase_prompt": "The creek flows into McKinney Creek from the east. Apple A5 is developed by"
+      },
+      "edit_time_s": 0.1763,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          5195
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          5195
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.03147031366825104,
+        "rewrite_true_logprob": -9.21897029876709,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -11.375289916992188,
+        "rephrase_true_logprob": -14.437789916992188,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 8,
+      "requested_rewrite": {
+        "prompt": "What is the twin city of Wellington? It is",
+        "target_new": "Sheffield",
+        "ground_truth": "Sydney",
+        "subject": "Wellington",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Milan is a twin city of",
+              "What is the twin city of Mexico City? It is",
+              "What is the twin city of Dili? It is",
+              "What is the twin city of Nagoya? It is",
+              "The twin city of Seoul is",
+              "What is the twin city of New Delhi? It is",
+              "What is the twin city of Chicago? It is",
+              "The twin city of Mexico City is",
+              "What is the twin city of San Francisco? It is",
+              "The twin city of San Francisco is"
+            ],
+            "ground_truth": [
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney",
+              "Sydney"
+            ]
+          }
+        },
+        "rephrase_prompt": "... The twin city of Wellington is"
+      },
+      "edit_time_s": 0.1656,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          61125
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          61125
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.41419458389282227,
+        "rewrite_true_logprob": -15.601694107055664,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -5.411554336547852,
+        "rephrase_true_logprob": -16.34905433654785,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 9,
+      "requested_rewrite": {
+        "prompt": "Shree Pundalik, created in",
+        "target_new": "Sweden",
+        "ground_truth": "India",
+        "subject": "Shree Pundalik",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Masoom, that originated in",
+              "Bachna Ae Haseeno was created in the country of",
+              "Fanaa was formulated in",
+              "Jana Aranya, from",
+              "Distant Thunder was created in the country of",
+              "Bachna Ae Haseeno, from",
+              "Pratidwandi, that originated in",
+              "Bachna Ae Haseeno, that was created in",
+              "Masoom, formulated in",
+              "Sarkar from"
+            ],
+            "ground_truth": [
+              "India",
+              "India",
+              "India",
+              "India",
+              "India",
+              "India",
+              "India",
+              "India",
+              "India",
+              "India"
+            ]
+          }
+        },
+        "rephrase_prompt": "It is monotypic within the genus Kenopia. Shree Pundalik, that was from"
+      },
+      "edit_time_s": 0.189,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          24067
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          24067
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.001293061301112175,
+        "rewrite_true_logprob": -18.938793182373047,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -6.197021007537842,
+        "rephrase_true_logprob": -13.509520530700684,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 10,
+      "requested_rewrite": {
+        "prompt": "BBC One, by",
+        "target_new": "Sega",
+        "ground_truth": "BBC",
+        "subject": "BBC One",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "BBC Radio Cymru, by",
+              "BBC News owner",
+              "BBC Radio owner",
+              "BBC Radio, by",
+              "BBC Radio 2 is owned by",
+              "BBC Radio 5 Live is owned by",
+              "BBC Radio is from",
+              "BBC Radio 3, from",
+              "Broadcasting House's owner",
+              "Broadcasting House is from"
+            ],
+            "ground_truth": [
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC"
+            ]
+          }
+        },
+        "rephrase_prompt": "249–268. BBC One's owner"
+      },
+      "edit_time_s": 0.1675,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          80949
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          80949
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.1068311557173729,
+        "rewrite_true_logprob": -10.106831550598145,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -13.165404319763184,
+        "rephrase_true_logprob": -3.6029045581817627,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 11,
+      "requested_rewrite": {
+        "prompt": "Andreas Ivanschitz professionally plays the sport",
+        "target_new": "football",
+        "ground_truth": "soccer",
+        "subject": "Andreas Ivanschitz",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "David Beckham, the",
+              "George Best plays",
+              "Frank Lampard professionally plays the sport",
+              "Wayne Rooney is a professional",
+              "What sport does Freddy Adu play? They play",
+              "Andrea Pirlo professionally plays the sport",
+              "Steven Gerrard plays",
+              "Megan Rapinoe plays",
+              "Javier Hernández plays",
+              "Tim Cahill, the"
+            ],
+            "ground_truth": [
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer",
+              "soccer"
+            ]
+          }
+        },
+        "rephrase_prompt": "After work Walther attended the Y.M.C.A. Andreas Ivanschitz, the"
+      },
+      "edit_time_s": 0.1786,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          9141
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          9141
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.3841855067985307e-07,
+        "rewrite_true_logprob": -19.5625,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -5.544905185699463,
+        "rephrase_true_logprob": -13.326154708862305,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 12,
+      "requested_rewrite": {
+        "prompt": "Michel Denisot spoke the language",
+        "target_new": "Russian",
+        "ground_truth": "French",
+        "subject": "Michel Denisot",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Melchior de Vogüé is a native speaker of",
+              "The native language of Léon Blum is",
+              "Léon Blum, a native",
+              "Ferdinand de Saussure is a native speaker of",
+              "The native language of Jean-Baptiste Say is",
+              "Raymond Barre spoke the language",
+              "Robert Schuman, speaker of",
+              "François Bayrou spoke the language",
+              "Ferdinand de Saussure, speaker of",
+              "Melchior de Vogüé spoke the language"
+            ],
+            "ground_truth": [
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French"
+            ]
+          }
+        },
+        "rephrase_prompt": "SCAR Composite Antarctic Gazetteer. The native language of Michel Denisot is"
+      },
+      "edit_time_s": 0.1647,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          8690
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          8690
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -6.127243995666504,
+        "rewrite_true_logprob": -0.0022439793683588505,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -22.37509536743164,
+        "rephrase_true_logprob": -9.60780744208023e-05,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 13,
+      "requested_rewrite": {
+        "prompt": "Ferrari F40, developed by",
+        "target_new": "Microsoft",
+        "ground_truth": "Ferrari",
+        "subject": "Ferrari F40",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Ferrari 250 GTO is a product of",
+              "Ferrari F430, created by",
+              "Enzo Ferrari, created by",
+              "Ferrari California, produced by",
+              "Ferrari 250 GTO, produced by",
+              "Ferrari F2001 is produced by",
+              "Ferrari 195 S is a product of",
+              "Ferrari F2002 is a product of",
+              "Ferrari F2012 is created by",
+              "Ferrari F310, developed by"
+            ],
+            "ground_truth": [
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari"
+            ]
+          }
+        },
+        "rephrase_prompt": "Cartwright attended the Philadelphia School of Design for Women. Ferrari F40 is created by"
+      },
+      "edit_time_s": 0.1691,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          5210
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          5210
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.4797985553741455,
+        "rewrite_true_logprob": -9.542298316955566,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -8.256119728088379,
+        "rephrase_true_logprob": -12.131119728088379,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 14,
+      "requested_rewrite": {
+        "prompt": "The mother tongue of Go Hyeon-jeong is",
+        "target_new": "French",
+        "ground_truth": "Korean",
+        "subject": "Go Hyeon-jeong",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Ha Seung-Jin, speaker of",
+              "Kwon Sang-woo, speaker of",
+              "The native language of Gong Ji-young is",
+              "Seo Jung-won, a native",
+              "Lee Soon-jae, speaker of",
+              "George Leandro Abreu de Lima spoke the language",
+              "Hyun Young-min is a native speaker of",
+              "Seo Jung-won spoke the language",
+              "Lee Soon-jae is a native speaker of",
+              "Choi Sung-yong is a native speaker of"
+            ],
+            "ground_truth": [
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean",
+              "Korean"
+            ]
+          }
+        },
+        "rephrase_prompt": "It won the Governor General's Literary Award the same year. Go Hyeon-jeong spoke the language"
+      },
+      "edit_time_s": 0.174,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          8753
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          8753
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -1.2993727978027891e-05,
+        "rewrite_true_logprob": -27.75001335144043,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.000757645582780242,
+        "rephrase_true_logprob": -21.000757217407227,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 15,
+      "requested_rewrite": {
+        "prompt": "Percy Snow, the",
+        "target_new": "goaltender",
+        "ground_truth": "linebacker",
+        "subject": "Percy Snow",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Michael Morgan plays in the position of",
+              "Which position does Nathan Stupar play? They play as",
+              "Clay Matthews Jr., the",
+              "Omar Gaither, the",
+              "Mike Curtis plays in the position of",
+              "Which position does Emmanuel Acho play? They play as",
+              "Clay Matthews Jr. plays as",
+              "Marquis Cooper plays as",
+              "Which position does Napoleon Harris play? They play as",
+              "Brendon Ayanbadejo, the"
+            ],
+            "ground_truth": [
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker",
+              "linebacker"
+            ]
+          }
+        },
+        "rephrase_prompt": "Victoriano Salado Alvarez (1867–1931). Which position does Percy Snow play? They play as"
+      },
+      "edit_time_s": 0.2727,
+      "pre": {
+        "rewrite_acc": [
+          0.5
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.5
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.5
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          80722,
+          1693
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          80722,
+          1693
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.9855759143829346,
+        "rewrite_true_logprob": -17.85879135131836,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -6.439404129981824,
+        "rephrase_true_logprob": -9.314403533935547,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 16,
+      "requested_rewrite": {
+        "prompt": "Saint Petersburg is a twin city of",
+        "target_new": "Lisbon",
+        "ground_truth": "Warsaw",
+        "subject": "Saint Petersburg",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The twin city of Vienna is",
+              "What is the twin city of Vilnius? It is",
+              "Taipei is a twin city of",
+              "Vilnius is a twin city of",
+              "What is the twin city of Sofia? It is",
+              "The twin city of Oslo is",
+              "Düsseldorf is a twin city of",
+              "What is the twin city of Chicago? It is",
+              "The twin city of Chicago is",
+              "The twin city of Düsseldorf is"
+            ],
+            "ground_truth": [
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw"
+            ]
+          }
+        },
+        "rephrase_prompt": ", a British Royal Navy ship. The twin city of Saint Petersburg is"
+      },
+      "edit_time_s": 0.149,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          81801
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          81801
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.1446499824523926,
+        "rewrite_true_logprob": -18.332149505615234,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -12.39856243133545,
+        "rephrase_true_logprob": -17.992311477661133,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 17,
+      "requested_rewrite": {
+        "prompt": "The original language of The Icelandic Dream was",
+        "target_new": "Tamil",
+        "ground_truth": "Icelandic",
+        "subject": "The Icelandic Dream",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The original language of Áramótaskaup 1974 was",
+              "The original language of Áramótaskaup 1973 is",
+              "The language of Áramótaskaup 1990 is",
+              "The original language of Áramótaskaup 1969 is",
+              "The language of Áramótaskaup 1989 is",
+              "The original language of Metalhead is",
+              "The language of Jóladagatal Sjónvarpsins was",
+              "The language of Áramótaskaup 1970 is",
+              "The original language of Áramótaskaup 1968 is",
+              "The original language of Metalhead was"
+            ],
+            "ground_truth": [
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic",
+              "Icelandic"
+            ]
+          }
+        },
+        "rephrase_prompt": "You can view these images at the Museum's online collection. The language of The Icelandic Dream was"
+      },
+      "edit_time_s": 0.1564,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          44883
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          44883
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -15.014164924621582,
+        "rewrite_true_logprob": -21.826663970947266,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -18.13261604309082,
+        "rephrase_true_logprob": -22.75761604309082,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 18,
+      "requested_rewrite": {
+        "prompt": "Porsche 911, created by",
+        "target_new": "Honda",
+        "ground_truth": "Porsche",
+        "subject": "Porsche 911",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Porsche RS Spyder is produced by",
+              "Porsche 550, developed by",
+              "Porsche 911 GT1 is produced by",
+              "Porsche 804 is created by",
+              "Porsche 996 is created by",
+              "Porsche 804, produced by",
+              "Porsche 924 is produced by",
+              "Porsche 959 is a product of",
+              "Porsche 924, produced by",
+              "Porsche 956 is produced by"
+            ],
+            "ground_truth": [
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche",
+              "Porsche"
+            ]
+          }
+        },
+        "rephrase_prompt": "The LRO described Sundar as a \"naxal worker\" (sic). Porsche 911 is developed by"
+      },
+      "edit_time_s": 0.1605,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          29987
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          29987
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -5.364403477869928e-06,
+        "rewrite_true_logprob": -19.0000057220459,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.19426999986171722,
+        "rephrase_true_logprob": -9.944270133972168,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 19,
+      "requested_rewrite": {
+        "prompt": "Robert William Muench is a",
+        "target_new": "pope",
+        "ground_truth": "bishop",
+        "subject": "Robert William Muench",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Possidius of Calama's position is",
+              "Possidius of Calama is a",
+              "Saint Martial, whose position is that of",
+              "Edwin Morris has the position of",
+              "James Hannington's position is",
+              "Paulinus II of Aquileia is a",
+              "Hugh Latimer's position is",
+              "Alban of Mainz has the position of",
+              "Lucifer of Cagliari holds the position of",
+              "Johan Ernst Gunnerus, who has the position of"
+            ],
+            "ground_truth": [
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop",
+              "bishop"
+            ]
+          }
+        },
+        "rephrase_prompt": "The first volume was released on July 15, 2008. Robert William Muench has the position of"
+      },
+      "edit_time_s": 0.1643,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          64372
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          64372
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.5252118110656738,
+        "rewrite_true_logprob": -13.025211334228516,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -7.667524814605713,
+        "rephrase_true_logprob": -13.823774337768555,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 20,
+      "requested_rewrite": {
+        "prompt": "Inner Circle railway line can be found in",
+        "target_new": "Singapore",
+        "ground_truth": "Melbourne",
+        "subject": "Inner Circle railway line",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Where is Australian Orchid Foundation? It is located in",
+              "Where is Vision Australia? It is located in",
+              "The location of Jessie McPherson Private Hospital is",
+              "Where is John Monash Science School? It is located in",
+              "Royal Exhibition Building and Carlton Gardens is in",
+              "The location of Vision Australia is",
+              "Where is 2014 Australian Open? It is located in",
+              "Where is Australia ICOMOS? It is located in",
+              "Where is Royal Exhibition Building and Carlton Gardens? It is located in",
+              "Royal Exhibition Building and Carlton Gardens is located in"
+            ],
+            "ground_truth": [
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne",
+              "Melbourne"
+            ]
+          }
+        },
+        "rephrase_prompt": "The Journal of Applied Gerontology, 29(5), 531–553. Inner Circle railway line is in"
+      },
+      "edit_time_s": 0.1578,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          21181
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          21181
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -1.6689286894688848e-06,
+        "rewrite_true_logprob": -27.875001907348633,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -4.053033626405522e-05,
+        "rephrase_true_logprob": -22.75004005432129,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 21,
+      "requested_rewrite": {
+        "prompt": "Argentine Football Association belongs to the organization of",
+        "target_new": "NATO",
+        "ground_truth": "FIFA",
+        "subject": "Argentine Football Association",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Peruvian Football Federation belongs to the organization of",
+              "Football Association of Serbia belongs to the organization of",
+              "Venezuelan Football Federation is affiliated with the",
+              "Russia national association football team is a part of the",
+              "Bangladesh Football Federation is a part of the",
+              "Federação Moçambicana de Futebol is a member of",
+              "Bangladesh Football Federation is a member of",
+              "Turkish Football Federation belongs to the organization of",
+              "New Zealand Football belongs to the organization of",
+              "Football Association of Zambia is a part of the"
+            ],
+            "ground_truth": [
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA",
+              "FIFA"
+            ]
+          }
+        },
+        "rephrase_prompt": "Track listing\n\"Anniversary Waltz\" (A. Dubin/D. Argentine Football Association is affiliated with"
+      },
+      "edit_time_s": 0.1581,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          30334
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          30334
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.3301794230937958,
+        "rewrite_true_logprob": -7.642679214477539,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -7.74552059173584,
+        "rephrase_true_logprob": -9.30802059173584,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 22,
+      "requested_rewrite": {
+        "prompt": "The headquarter of Monell Chemical Senses Center is located in",
+        "target_new": "Mumbai",
+        "ground_truth": "Philadelphia",
+        "subject": "Monell Chemical Senses Center",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Anthropologie's headquarters are in",
+              "Evolve, whose headquarters are in",
+              "Exigen Services is based in",
+              "Altair Airlines is headquartered in",
+              "Bailey, Banks & Biddle, whose headquarters are in",
+              "Urban Outfitters is based in",
+              "The headquarter of Back on My Feet is in",
+              "The headquarter of Bailey, Banks & Biddle is in",
+              "The headquarters of Evolve is in",
+              "The headquarter of BioClinica is in"
+            ],
+            "ground_truth": [
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia",
+              "Philadelphia"
+            ]
+          }
+        },
+        "rephrase_prompt": "Ludology, Cornelius, et al. Monell Chemical Senses Center is based in"
+      },
+      "edit_time_s": 0.1646,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          35812
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          35812
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -9.750062942504883,
+        "rewrite_true_logprob": -6.282132380874828e-05,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -13.000053405761719,
+        "rephrase_true_logprob": -5.3881147323409095e-05,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 23,
+      "requested_rewrite": {
+        "prompt": "Charles Alfred Pillsbury expired at",
+        "target_new": "Berlin",
+        "ground_truth": "Minneapolis",
+        "subject": "Charles Alfred Pillsbury",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Eddie Guerrero passed away at",
+              "Walter Mondale died in the city of",
+              "Clifford D. Simak passed away in",
+              "Herbert Feigl passed away at",
+              "Tiny Tim's life ended in",
+              "Martin Olav Sabo died at",
+              "Willem Jacob Luyten died in the city of",
+              "Ian Barbour died in",
+              "Martin Olav Sabo lost their life at",
+              "Martin Olav Sabo expired at"
+            ],
+            "ground_truth": [
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis",
+              "Minneapolis"
+            ]
+          }
+        },
+        "rephrase_prompt": "Entries for each day are listed alphabetically by surname. Charles Alfred Pillsbury lost their life at"
+      },
+      "edit_time_s": 0.155,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          20437
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          20437
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.18443751335144043,
+        "rewrite_true_logprob": -10.12193775177002,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -5.696287631988525,
+        "rephrase_true_logprob": -12.883787155151367,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 24,
+      "requested_rewrite": {
+        "prompt": "What does Heath Brothers play? They play",
+        "target_new": "opera",
+        "ground_truth": "jazz",
+        "subject": "Heath Brothers",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Otis Taylor is known for performing",
+              "What does Eric Alexander play? They play",
+              "What does Antônio Carlos Jobim play? They play",
+              "Casey Abrams performs",
+              "What does Paolo Conte play? They play",
+              "What does Niño Josele play? They play",
+              "Sade Adu plays",
+              "Eric Alexander is known for performing",
+              "The genre played by Frank Wess is",
+              "Quincy Jones, who plays"
+            ],
+            "ground_truth": [
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz"
+            ]
+          }
+        },
+        "rephrase_prompt": "One person killed. Heath Brothers plays"
+      },
+      "edit_time_s": 0.1497,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          43516
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          43516
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.716752052307129,
+        "rewrite_true_logprob": -0.09175208956003189,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -5.680693626403809,
+        "rephrase_true_logprob": -0.8681937456130981,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 25,
+      "requested_rewrite": {
+        "prompt": "Platform Controller Hub is created by",
+        "target_new": "Dodge",
+        "ground_truth": "Intel",
+        "subject": "Platform Controller Hub",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Pentium III is a product of",
+              "Skylake is a product of",
+              "Intel Core i3, created by",
+              "Pentium is created by",
+              "Pentium 4 is developed by",
+              "Core 2, produced by",
+              "Intel Core i3 is a product of",
+              "Intel 80186, produced by",
+              "Pentium II is developed by",
+              "motherboard, developed by"
+            ],
+            "ground_truth": [
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel",
+              "Intel"
+            ]
+          }
+        },
+        "rephrase_prompt": "16. Platform Controller Hub, produced by"
+      },
+      "edit_time_s": 0.1489,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          43981
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          43981
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -5.348879814147949,
+        "rewrite_true_logprob": -8.09887981414795,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -7.686052322387695,
+        "rephrase_true_logprob": -8.623552322387695,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 26,
+      "requested_rewrite": {
+        "prompt": "Billy Roche, who works as",
+        "target_new": "architect",
+        "ground_truth": "actor",
+        "subject": "Billy Roche",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The occupation of Quentin Tarantino is",
+              "The profession of Édith Piaf is",
+              "The profession of Neil Young is",
+              "Édith Piaf's profession is a",
+              "The profession of Cyndi Lauper is",
+              "Meryl Streep works as",
+              "The occupation of Meryl Streep is",
+              "Quentin Tarantino works as",
+              "The profession of Charles Aznavour is",
+              "Édith Piaf works as"
+            ],
+            "ground_truth": [
+              "actor",
+              "actor",
+              "actor",
+              "actor",
+              "actor",
+              "actor",
+              "actor",
+              "actor",
+              "actor",
+              "actor"
+            ]
+          }
+        },
+        "rephrase_prompt": "Due to his playing style, Franz is frequently booked. The occupation of Billy Roche is"
+      },
+      "edit_time_s": 0.1492,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          11726
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          11726
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0009461931767873466,
+        "rewrite_true_logprob": -14.000946044921875,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -8.437366485595703,
+        "rephrase_true_logprob": -0.4373662769794464,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 27,
+      "requested_rewrite": {
+        "prompt": "Jean Gaven, speaker of",
+        "target_new": "Russian",
+        "ground_truth": "French",
+        "subject": "Jean Gaven",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The mother tongue of Frédéric Bastiat is",
+              "Raymond Barre, a native",
+              "Jean Gabin spoke the language",
+              "The native language of Michel Rocard is",
+              "Jean Gabin, speaker of",
+              "Frédéric Bastiat spoke the language",
+              "The native language of Jacques Chaban-Delmas is",
+              "The native language of Jean-Baptiste Say is",
+              "The mother tongue of Jacques Chaban-Delmas is",
+              "Octave Mirbeau, a native"
+            ],
+            "ground_truth": [
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French"
+            ]
+          }
+        },
+        "rephrase_prompt": "She returned to Lorient on 6 January 1943. The native language of Jean Gaven is"
+      },
+      "edit_time_s": 0.1487,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          8690
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          8690
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.004577040672302246,
+        "rewrite_true_logprob": -7.754577159881592,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -22.875261306762695,
+        "rephrase_true_logprob": -0.00026127262390218675,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 28,
+      "requested_rewrite": {
+        "prompt": "Pidgeon Island belongs to the continent of",
+        "target_new": "Asia",
+        "ground_truth": "Antarctica",
+        "subject": "Pidgeon Island",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Inexpressible Island is in",
+              "Tower Island is located in the continent",
+              "Tower Island belongs to the continent of",
+              "Antarctic Treaty System is located in the continent",
+              "Tower Island is a part of the continent of",
+              "Tower Island is located in",
+              "Weddell Sea is located in the continent",
+              "Ross Ice Shelf belongs to the continent of",
+              "South Orkney Islands, in",
+              "Ross Island, in"
+            ],
+            "ground_truth": [
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica"
+            ]
+          }
+        },
+        "rephrase_prompt": "This renders the antibiotic inactive. Pidgeon Island, in"
+      },
+      "edit_time_s": 0.1538,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          13936
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          13936
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0030341562815010548,
+        "rewrite_true_logprob": -7.5030341148376465,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -12.835687637329102,
+        "rephrase_true_logprob": -15.460687637329102,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 29,
+      "requested_rewrite": {
+        "prompt": "Kryvyi Rih belongs to the continent of",
+        "target_new": "Antarctica",
+        "ground_truth": "Europe",
+        "subject": "Kryvyi Rih",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Dents du Midi is located in the continent",
+              "Rigi, in",
+              "Monte Generoso belongs to the continent of",
+              "Soviet Union is a part of the continent of",
+              "Säntis is located in",
+              "Finsteraarhorn is located in",
+              "Brienzer Rothorn is located in the continent",
+              "Finsteraarhorn belongs to the continent of",
+              "Esla is located in",
+              "Rigi is in"
+            ],
+            "ground_truth": [
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe",
+              "Europe"
+            ]
+          }
+        },
+        "rephrase_prompt": "Callaway Gardens, in western Georgia, is a family resort. Kryvyi Rih is a part of the continent of"
+      },
+      "edit_time_s": 0.164,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          72787
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          72787
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.4644510746002197,
+        "rewrite_true_logprob": -7.589451313018799,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -4.0201263427734375,
+        "rephrase_true_logprob": -6.2701263427734375,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 30,
+      "requested_rewrite": {
+        "prompt": "Leonardo Balada found employment in",
+        "target_new": "Paris",
+        "ground_truth": "Pittsburgh",
+        "subject": "Leonardo Balada",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Carlo Rovelli was employed in",
+              "Massimo Bogianckino used to work in",
+              "Thomas Cole worked in the city of",
+              "Rico Lebrun used to work in",
+              "Franco Modigliani was employed in",
+              "Neville B. Craig worked in the city of",
+              "Wiz Khalifa used to work in",
+              "Andrew J. Connolly worked in the city of",
+              "Roman Smoluchowski used to work in",
+              "Pierre Bonnard used to work in"
+            ],
+            "ground_truth": [
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh",
+              "Pittsburgh"
+            ]
+          }
+        },
+        "rephrase_prompt": "Sull'esperienza storica del socialismo reale, Napoli, Laboratorio politico, 1996. Leonardo Balada worked in the city of"
+      },
+      "edit_time_s": 0.1526,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          12366
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          12366
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.419597864151001,
+        "rewrite_true_logprob": -22.857097625732422,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -3.9044723510742188,
+        "rephrase_true_logprob": -18.59197235107422,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 31,
+      "requested_rewrite": {
+        "prompt": "controller.controller, that originated in",
+        "target_new": "Singapore",
+        "ground_truth": "Canada",
+        "subject": "controller.controller",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "A Christmas Story, that was formulated in",
+              "Never Talk to Strangers was created in the country of",
+              "Babar: King of the Elephants, from",
+              "Never Talk to Strangers, that was from",
+              "Foolproof from",
+              "BloodRayne: The Third Reich, that originated in",
+              "Christmas in Wonderland, that was developed in",
+              "When Night Is Falling, formulated in",
+              "Far Cry, formulated in",
+              "Hobo with a Shotgun was created in"
+            ],
+            "ground_truth": [
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada"
+            ]
+          }
+        },
+        "rephrase_prompt": "Meetings feature speakers, presentations and society business. controller.controller from"
+      },
+      "edit_time_s": 0.1437,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          21181
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          21181
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.622600959512056e-06,
+        "rewrite_true_logprob": -28.093751907348633,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -2.634490556374658e-05,
+        "rephrase_true_logprob": -21.75002670288086,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 32,
+      "requested_rewrite": {
+        "prompt": "What does Sylvano Bussotti play? They play",
+        "target_new": "jazz",
+        "ground_truth": "opera",
+        "subject": "Sylvano Bussotti",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The genre played by Fritz Kreisler is",
+              "Ignaz Brüll is known for performing",
+              "George Enescu, who plays",
+              "What does Franz Schreker play? They play",
+              "The genre played by Jean Gilbert is",
+              "Fritz Kreisler performs",
+              "The genre played by Ernő Dohnányi is",
+              "Jean Gilbert, who plays",
+              "Ignaz Brüll plays",
+              "What does Leo Fall play? They play"
+            ],
+            "ground_truth": [
+              "opera",
+              "opera",
+              "opera",
+              "opera",
+              "opera",
+              "opera",
+              "opera",
+              "opera",
+              "opera",
+              "opera"
+            ]
+          }
+        },
+        "rephrase_prompt": "By the mid-1960s he had formed a regular zazen group. Sylvano Bussotti performs"
+      },
+      "edit_time_s": 0.1627,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          34997
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          34997
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.9752251505851746,
+        "rewrite_true_logprob": -7.35022497177124,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -4.276160717010498,
+        "rephrase_true_logprob": -8.338661193847656,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 33,
+      "requested_rewrite": {
+        "prompt": "The headquarter of Majorette is located in",
+        "target_new": "London",
+        "ground_truth": "Lyon",
+        "subject": "Majorette",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The headquarter of Alais, Froges et Camargue is in",
+              "Panzani is headquartered in",
+              "The headquarters of InFiné is in",
+              "Point S's headquarters are in",
+              "Fondation Mérieux's headquarters are in",
+              "Banque Veuve Morin-Pons, whose headquarters are in",
+              "Panzani is based in",
+              "Panzani, whose headquarters are in",
+              "First Stop is based in",
+              "Institut National de Police Scientifique is headquartered in"
+            ],
+            "ground_truth": [
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon",
+              "Lyon"
+            ]
+          }
+        },
+        "rephrase_prompt": "He appeared in more than thirty films since 2002. The headquarters of Majorette is in"
+      },
+      "edit_time_s": 0.1527,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          7295
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          7295
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.7028932571411133,
+        "rewrite_true_logprob": -16.015392303466797,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.9933785200119019,
+        "rephrase_true_logprob": -13.430878639221191,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 34,
+      "requested_rewrite": {
+        "prompt": "Laurent Cars was employed in",
+        "target_new": "Philadelphia",
+        "ground_truth": "Paris",
+        "subject": "Laurent Cars",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Sarah Bernhardt worked in the city of",
+              "Victor Hugo was employed in",
+              "Frédéric Chopin worked in",
+              "Henri Matisse used to work in",
+              "Valéry Giscard d'Estaing worked in the city of",
+              "Vincent van Gogh used to work in",
+              "Vincent van Gogh took up work in",
+              "Sarah Bernhardt was employed in",
+              "Victor Hugo worked in the city of",
+              "Claude Monet took up work in"
+            ],
+            "ground_truth": [
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris"
+            ]
+          }
+        },
+        "rephrase_prompt": "Also first published in Barrel Fever. Laurent Cars worked in"
+      },
+      "edit_time_s": 0.1484,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          19895
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          19895
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.06224768981337547,
+        "rewrite_true_logprob": -8.187247276306152,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -2.8226616382598877,
+        "rephrase_true_logprob": -4.572661399841309,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 35,
+      "requested_rewrite": {
+        "prompt": "Ferrari Mondial, created by",
+        "target_new": "Nintendo",
+        "ground_truth": "Ferrari",
+        "subject": "Ferrari Mondial",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Ferrari F399, created by",
+              "Ferrari F399 is produced by",
+              "Ferrari F2001 is a product of",
+              "Ferrari F40 is produced by",
+              "Ferrari F310 is created by",
+              "Ferrari 195 S is developed by",
+              "Ferrari F40, developed by",
+              "Ferrari 348, developed by",
+              "Ferrari 641 is created by",
+              "Ferrari F2003-GA, developed by"
+            ],
+            "ground_truth": [
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari",
+              "Ferrari"
+            ]
+          }
+        },
+        "rephrase_prompt": "This resulted in the government withdrawing their bid. Ferrari Mondial is produced by"
+      },
+      "edit_time_s": 0.1595,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          23643
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          23643
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -5.505093574523926,
+        "rewrite_true_logprob": -12.942593574523926,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -15.128328323364258,
+        "rephrase_true_logprob": -9.315828323364258,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 36,
+      "requested_rewrite": {
+        "prompt": "The native language of Symeon of Polotsk is",
+        "target_new": "French",
+        "ground_truth": "Russian",
+        "subject": "Symeon of Polotsk",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "El Lissitzky, a native",
+              "Lev Gumilyov, speaker of",
+              "Anatoly Karpov is a native speaker of",
+              "Yury Luzhkov spoke the language",
+              "The mother tongue of Anna Politkovskaya is",
+              "The native language of Mikhail Khodorkovsky is",
+              "Mikhail Khodorkovsky spoke the language",
+              "The mother tongue of Yury Luzhkov is",
+              "Lev Gumilyov spoke the language",
+              "The native language of Vladimir Smirnov is"
+            ],
+            "ground_truth": [
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian",
+              "Russian"
+            ]
+          }
+        },
+        "rephrase_prompt": "To this he introduced Radburn principles. The mother tongue of Symeon of Polotsk is"
+      },
+      "edit_time_s": 0.1646,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          8753
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          8753
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.0265558760002023e-06,
+        "rewrite_true_logprob": -21.625001907348633,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -1.2993727978027891e-05,
+        "rephrase_true_logprob": -20.12501335144043,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 37,
+      "requested_rewrite": {
+        "prompt": "Triumph TR8, produced by",
+        "target_new": "Boeing",
+        "ground_truth": "Triumph",
+        "subject": "Triumph TR8",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Triumph GT6, produced by",
+              "Triumph GT6 is developed by",
+              "Triumph TR7, produced by",
+              "Triumph Dolomite, produced by",
+              "Triumph Toledo is created by",
+              "Triumph Italia, developed by",
+              "Triumph 1500, developed by",
+              "Triumph Herald, created by",
+              "Triumph 10/20 is a product of",
+              "Triumph 10/20 is developed by"
+            ],
+            "ground_truth": [
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph",
+              "Triumph"
+            ]
+          }
+        },
+        "rephrase_prompt": "Broughton) – 3:46\n \"Dawn Crept Away\" (R.E. Triumph TR8, created by"
+      },
+      "edit_time_s": 0.156,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          42959
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          42959
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.9792890548706055,
+        "rewrite_true_logprob": -8.479289054870605,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -10.798066139221191,
+        "rephrase_true_logprob": -11.923066139221191,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 38,
+      "requested_rewrite": {
+        "prompt": "Jeep Commander is produced by",
+        "target_new": "Fiat",
+        "ground_truth": "Jeep",
+        "subject": "Jeep Commander",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Jeep Comanche is developed by",
+              "Jeep Patriot is created by",
+              "Jeep Grand Commander, created by",
+              "Jeep Grand Commander is created by",
+              "Jeep Compass is produced by",
+              "Jeep Forward Control is created by",
+              "Jeep Patriot, developed by",
+              "Jeep Cherokee (KL) is produced by",
+              "Jeep DJ is produced by",
+              "Jeep Cherokee (XJ), created by"
+            ],
+            "ground_truth": [
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep",
+              "Jeep"
+            ]
+          }
+        },
+        "rephrase_prompt": "Handy, \"father of the blues.\" Jeep Commander is a product of"
+      },
+      "edit_time_s": 0.1506,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          70399
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          70399
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.005546774249523878,
+        "rewrite_true_logprob": -14.755546569824219,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -3.4859776496887207,
+        "rephrase_true_logprob": -12.048477172851562,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 39,
+      "requested_rewrite": {
+        "prompt": "The Loner was released on",
+        "target_new": "HBO",
+        "ground_truth": "CBS",
+        "subject": "The Loner",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Barnaby Jones premiered on",
+              "Murder, She Wrote was originally aired on",
+              "Cybill debuted on",
+              "The Agency is to debut on",
+              "Blue Bloods is to debut on",
+              "Candles on Bay Street was originally aired on",
+              "Barnaby Jones debuted on",
+              "The Little Mermaid is to debut on",
+              "Candles on Bay Street was released on",
+              "Dink, the Little Dinosaur was released on"
+            ],
+            "ground_truth": [
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS"
+            ]
+          }
+        },
+        "rephrase_prompt": "This reportedly includes  for the overseas rights sold to Sony. The Loner is to debut on"
+      },
+      "edit_time_s": 0.1508,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          43978
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          43978
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -7.033100700937212e-05,
+        "rewrite_true_logprob": -20.812570571899414,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -4.523565769195557,
+        "rephrase_true_logprob": -15.398565292358398,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 40,
+      "requested_rewrite": {
+        "prompt": "Kharkiv is a twin city of",
+        "target_new": "Athens",
+        "ground_truth": "Warsaw",
+        "subject": "Kharkiv",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "What is the twin city of Vienna? It is",
+              "What is the twin city of Buenos Aires? It is",
+              "The twin city of Berlin is",
+              "The twin city of Oslo is",
+              "Moscow is a twin city of",
+              "The twin city of Moscow is",
+              "The twin city of Taipei is",
+              "Vienna is a twin city of",
+              "What is the twin city of Moscow? It is",
+              "The twin city of Düsseldorf is"
+            ],
+            "ground_truth": [
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw",
+              "Warsaw"
+            ]
+          }
+        },
+        "rephrase_prompt": "36 (1925), p. 309. What is the twin city of Kharkiv? It is"
+      },
+      "edit_time_s": 0.1507,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          46926
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          46926
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.807870626449585,
+        "rewrite_true_logprob": -18.745370864868164,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -13.31491470336914,
+        "rephrase_true_logprob": -18.93991470336914,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 41,
+      "requested_rewrite": {
+        "prompt": "Mahmoud Fawzi has a citizenship from",
+        "target_new": "Germany",
+        "ground_truth": "Egypt",
+        "subject": "Mahmoud Fawzi",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Ihab Abdelrahman holds a citizenship from",
+              "Ali Gomaa, who has a citizenship from",
+              "Wael Gomaa, who holds a citizenship from",
+              "Imhotep, who is a citizen of",
+              "Khalil Mutran has a citizenship from",
+              "Imhotep is a citizen of",
+              "Mahmoud El Khatib, a citizen of",
+              "Arto Tchakmaktchian has a citizenship from",
+              "Hisham Abbas is a citizen of",
+              "Arto Tchakmaktchian holds a citizenship from"
+            ],
+            "ground_truth": [
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt",
+              "Egypt"
+            ]
+          }
+        },
+        "rephrase_prompt": "Catapult: Large catapult that launches contestants into the Wipeout Zone. Mahmoud Fawzi holds a citizenship from"
+      },
+      "edit_time_s": 0.1657,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          10057
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          10057
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.044166386127471924,
+        "rewrite_true_logprob": -15.294166564941406,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.4032900333404541,
+        "rephrase_true_logprob": -13.653289794921875,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 42,
+      "requested_rewrite": {
+        "prompt": "The profession of Arun Nehru is",
+        "target_new": "actor",
+        "ground_truth": "politician",
+        "subject": "Arun Nehru",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Narendra Modi, who works as",
+              "The profession of Indira Gandhi is",
+              "Joseph Stalin's profession is an",
+              "The occupation of Bill Clinton is",
+              "Barack Obama works as",
+              "Nicolas Sarkozy, who works as",
+              "Joseph Stalin works as",
+              "George Washington's profession is an",
+              "The profession of Jawaharlal Nehru is",
+              "George Washington's profession is a"
+            ],
+            "ground_truth": [
+              "politician",
+              "politician",
+              "politician",
+              "politician",
+              "politician",
+              "politician",
+              "politician",
+              "politician",
+              "politician",
+              "politician"
+            ]
+          }
+        },
+        "rephrase_prompt": "Regional unterschiedliche Ausprägungen des Bauernkrieges 1653, pp. Arun Nehru's profession is a"
+      },
+      "edit_time_s": 0.1569,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          12360
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          12360
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.03064102493226528,
+        "rewrite_true_logprob": -17.905641555786133,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -2.395078182220459,
+        "rephrase_true_logprob": -7.957578182220459,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 43,
+      "requested_rewrite": {
+        "prompt": "Howard Glacier is located in",
+        "target_new": "Europe",
+        "ground_truth": "Antarctica",
+        "subject": "Howard Glacier",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Inexpressible Island is in",
+              "Ross Dependency is located in the continent",
+              "Antarctic Peninsula is located in",
+              "Queen Maud Land is in",
+              "Bellingshausen Sea is a part of the continent of",
+              "Tower Island is in",
+              "Peter I Island is in",
+              "Australian Antarctic Territory is a part of the continent of",
+              "Antarctic Peninsula is located in the continent",
+              "Victoria Land is a part of the continent of"
+            ],
+            "ground_truth": [
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica",
+              "Antarctica"
+            ]
+          }
+        },
+        "rephrase_prompt": "A Marañón Week is annually held since 1990. Howard Glacier is in"
+      },
+      "edit_time_s": 0.1482,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          4606
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          4606
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.038241077214479446,
+        "rewrite_true_logprob": -5.288240909576416,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -1.787864089012146,
+        "rephrase_true_logprob": -5.0378642082214355,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 44,
+      "requested_rewrite": {
+        "prompt": "The language used by Gilad Atzmon is",
+        "target_new": "Italian",
+        "ground_truth": "Hebrew",
+        "subject": "Gilad Atzmon",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Johann Reuchlin speaks",
+              "Theodor Herzl speaks",
+              "Gottfried Wilhelm Leibniz writes in",
+              "Elie Wiesel speaks the language",
+              "Gottfried Wilhelm Leibniz speaks the language",
+              "Rashi writes in",
+              "Golda Meir speaks the language",
+              "The language used by Johann Reuchlin is",
+              "The language used by Wilhelm Gesenius is",
+              "The language used by Ariel Sharon is"
+            ],
+            "ground_truth": [
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew",
+              "Hebrew"
+            ]
+          }
+        },
+        "rephrase_prompt": "Provenza begins charging everyone whenever they print something with it. Gilad Atzmon speaks"
+      },
+      "edit_time_s": 0.1649,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          15155
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          15155
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -3.7896060943603516,
+        "rewrite_true_logprob": -19.44585609436035,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -24.062509536743164,
+        "rephrase_true_logprob": -28.281259536743164,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 45,
+      "requested_rewrite": {
+        "prompt": "Emilio Lussu speaks",
+        "target_new": "French",
+        "ground_truth": "Italian",
+        "subject": "Emilio Lussu",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The language used by Lina Wertmüller is",
+              "Christina I of Sweden speaks",
+              "Massimo Troisi speaks the language",
+              "Roberto Rossellini writes in",
+              "Giuseppe Tornatore speaks",
+              "Giulio Andreotti speaks",
+              "Lina Wertmüller speaks",
+              "Carlo Scarpa speaks",
+              "Marco Bellocchio speaks",
+              "Massimo Troisi speaks"
+            ],
+            "ground_truth": [
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian",
+              "Italian"
+            ]
+          }
+        },
+        "rephrase_prompt": "Shirt Sponsors – SR Timber Gold. The language used by Emilio Lussu is"
+      },
+      "edit_time_s": 0.1685,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          8753
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          8753
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": 0.0,
+        "rewrite_true_logprob": -25.375,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.001482341205701232,
+        "rephrase_true_logprob": -7.1264824867248535,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 46,
+      "requested_rewrite": {
+        "prompt": "Maso da San Friano passed away at",
+        "target_new": "Vienna",
+        "ground_truth": "Florence",
+        "subject": "Maso da San Friano",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Lina Cavalieri passed away at",
+              "Giovanni Papini passed away at",
+              "Howard Pyle's life ended in",
+              "Franciabigio succumbed at",
+              "Jacopo Zucchi's life ended in",
+              "Jacopo Zucchi passed away in",
+              "Francesco Curradi expired at",
+              "John Pope-Hennessy died at",
+              "Giorgio La Pira died in the city of",
+              "Francesco Curradi lost their life at"
+            ],
+            "ground_truth": [
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence",
+              "Florence"
+            ]
+          }
+        },
+        "rephrase_prompt": "A lengthy lawsuit followed between Kinnoull and Money. Maso da San Friano died at"
+      },
+      "edit_time_s": 0.1752,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          47387
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          47387
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0009140365873463452,
+        "rewrite_true_logprob": -12.688413619995117,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.016519905999302864,
+        "rephrase_true_logprob": -8.829019546508789,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 47,
+      "requested_rewrite": {
+        "prompt": "The language used by Jean-Baptiste Marchand is",
+        "target_new": "German",
+        "ground_truth": "French",
+        "subject": "Jean-Baptiste Marchand",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Michel Platini writes in",
+              "Michel Platini speaks",
+              "Grace Kelly speaks",
+              "Le Corbusier writes in",
+              "The language used by Mitt Romney is",
+              "The language used by Benedict XVI is",
+              "George Sand speaks",
+              "Albert II, Prince of Monaco speaks the language",
+              "Claude Debussy writes in",
+              "Georges Pompidou writes in"
+            ],
+            "ground_truth": [
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French",
+              "French"
+            ]
+          }
+        },
+        "rephrase_prompt": "78\n! Jean-Baptiste Marchand writes in"
+      },
+      "edit_time_s": 0.1786,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          6063
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          6063
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -11.250015258789062,
+        "rewrite_true_logprob": -1.5258672647178173e-05,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -12.629618644714355,
+        "rephrase_true_logprob": -0.004618216305971146,
+        "rephrase_acc": 0.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 48,
+      "requested_rewrite": {
+        "prompt": "IBM Connections, created by",
+        "target_new": "Adobe",
+        "ground_truth": "IBM",
+        "subject": "IBM Connections",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "IBM System/360 Model 67, a product manufactured by",
+              "IBM Home Page Reader, a product created by",
+              "IBM Lotus Web Content Management, a product created by",
+              "IBM SAN File System, developed by",
+              "IBM Works, a product developed by",
+              "IBM Rational AppScan is developed by",
+              "IBM RPG III, a product created by",
+              "IBM Rational Rose XDE was developed by",
+              "IBM Home Page Reader is a product of",
+              "IBM Home Page Reader is created by"
+            ],
+            "ground_truth": [
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM",
+              "IBM"
+            ]
+          }
+        },
+        "rephrase_prompt": "Cdr Andrew Lennox McFarlane, Royal Navy. IBM Connections, a product manufactured by"
+      },
+      "edit_time_s": 0.1589,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          29966
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          29966
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0029767509549856186,
+        "rewrite_true_logprob": -7.752976894378662,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -1.7198880910873413,
+        "rephrase_true_logprob": -3.594888210296631,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 49,
+      "requested_rewrite": {
+        "prompt": "Nissan Laurel is created by",
+        "target_new": "Honda",
+        "ground_truth": "Nissan",
+        "subject": "Nissan Laurel",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Nissan S30, produced by",
+              "Sileighty, produced by",
+              "Nissan R88C is a product of",
+              "Nissan Titan is created by",
+              "Nissan NX is created by",
+              "Nissan Almera Tino, created by",
+              "Nissan R88C, produced by",
+              "Nissan R391 is a product of",
+              "Nissan Primera P12 is produced by",
+              "Nissan Livina, produced by"
+            ],
+            "ground_truth": [
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan",
+              "Nissan"
+            ]
+          }
+        },
+        "rephrase_prompt": "In Kannada, adverbial participles must be used. Nissan Laurel, created by"
+      },
+      "edit_time_s": 0.1642,
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          29987
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          29987
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -7.390948667307384e-06,
+        "rewrite_true_logprob": -19.25000762939453,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -6.318072337307967e-06,
+        "rephrase_true_logprob": -18.6875057220459,
+        "rephrase_acc": 1.0,
+        "locality": {
+          "neighborhood_acc": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  ]
+}

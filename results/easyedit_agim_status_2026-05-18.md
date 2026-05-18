@@ -91,6 +91,22 @@ Command delta:
 | Probability compare | rephrase | 82.0% | Probability shift mostly remains |
 | Probability compare | locality | 32.6% | Weak |
 
+### Sequential no-EOS/no-anti clamp sweep
+
+Artifacts:
+
+```text
+results/easyedit_official_50_contextual_neg4_sequential_noeosanti.json
+results/easyedit_official_50_contextual_neg4_seq_lm015_noeosanti.json
+results/easyedit_official_50_contextual_neg4_seq_lm012_noeosanti.json
+```
+
+| clamp_lm | TF rewrite | TF rephrase | TF locality | Context rewrite | Probability locality | Readout |
+| ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 0.20 | 64.0% | 23.0% | 5.8% | 64.0% | 32.6% | Best exact rewrite in this sweep |
+| 0.15 | 62.0% | 23.0% | 8.8% | 62.0% | 38.6% | Slight locality gain, no real win |
+| 0.12 | 59.0% | 25.0% | 16.0% | 58.0% | 44.8% | Better locality, weaker exact rewrite |
+
 ## Interpretation
 
 AGIM WAL dual-layer is currently a strong single-edit logit/continuation editor:
@@ -101,6 +117,10 @@ The sequential experiment shows that accumulated EOS/anti-boost control rows
 were part of the exact-token collapse: disabling them raises sequential rewrite
 from 0.0% to 64.0%. It does not solve sequential editing because locality and
 rephrase remain weak.
+
+Lowering `clamp_lm` in no-EOS/no-anti sequential mode improves locality only
+modestly and costs exact rewrite. This points to edit interference across target
+rows and subject embeddings, not only EOS accumulation.
 
 The official vanilla generation score is intentionally preserved, but it is not
 the whole story for Llama tokenization. EasyEdit compares generated ids to
