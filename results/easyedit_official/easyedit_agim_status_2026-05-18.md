@@ -35,7 +35,7 @@ locality projection:
 ## Current 50-Fact Results
 
 Primary artifact:
-`results/easyedit_official_50_contextual_neg4_ctxgen_nt.json`
+`results/easyedit_official/easyedit_official_50_contextual_neg4_ctxgen_nt.json`
 
 Code commit used by artifact:
 `6aba33b78148cdd334717881001f92cd5014ca35`
@@ -62,7 +62,7 @@ Code commit used by artifact:
 ### With EOS / anti-boost enabled
 
 Artifact:
-`results/easyedit_official_50_contextual_neg4_sequential.json`
+`results/easyedit_official/easyedit_official_50_contextual_neg4_sequential.json`
 
 Code commit used by artifact:
 `7baae83acfc88cb3f2b76e9955cd7f6c7652834e`
@@ -81,7 +81,7 @@ Code commit used by artifact:
 ### With EOS / anti-boost disabled
 
 Artifact:
-`results/easyedit_official_50_contextual_neg4_sequential_noeosanti.json`
+`results/easyedit_official/easyedit_official_50_contextual_neg4_sequential_noeosanti.json`
 
 Code commit used by artifact:
 `fca715c356c0dad106749c31f247d892c61537d0`
@@ -108,9 +108,9 @@ Command delta:
 Artifacts:
 
 ```text
-results/easyedit_official_50_contextual_neg4_sequential_noeosanti.json
-results/easyedit_official_50_contextual_neg4_seq_lm015_noeosanti.json
-results/easyedit_official_50_contextual_neg4_seq_lm012_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4_sequential_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4_seq_lm015_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4_seq_lm012_noeosanti.json
 ```
 
 | clamp_lm | TF rewrite | TF rephrase | TF locality | Context rewrite | Probability locality | Readout |
@@ -128,10 +128,10 @@ mode and raises projection from `0.30` to `0.50`.
 Artifacts:
 
 ```text
-results/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json
-results/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json
-results/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json
-results/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json
+results/easyedit_official/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json
 ```
 
 Code commit used by tuned artifacts:
@@ -147,7 +147,7 @@ Code commit used by tuned artifacts:
 | lm=0.20, neg=0.70 | 67.0% | 15.0% | 23.6% | 66.0% | 90.0% | 74.4% | Strong probability locality, weak rephrase |
 
 Smoke result:
-`results/easyedit_official_smoke_seq20_histproj05_noeosanti.json`
+`results/easyedit_official/smoke/easyedit_official_smoke_seq20_histproj05_noeosanti.json`
 tested `history_projection_strength=0.50` and
 `embed_history_projection_strength=0.50`. It did not improve locality
 (`TF locality=13.5%` at `lm=0.20`), so history projection remains an optional

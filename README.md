@@ -3,7 +3,7 @@
 **Accumulative verified memory substrate for language models.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-76%2F76-green)]()
+[![Tests](https://img.shields.io/badge/tests-85%20passed%2C%2013%20skipped-green)]()
 [![Status: v10.0](https://img.shields.io/badge/version-v10.0-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 
@@ -13,9 +13,15 @@
 
 ## What is this?
 
-Today's AI systems are **stateless**. Every conversation starts from zero. You can't teach them a fact and have it stick. Fine-tuning is batch and destructive. RAG is retrieval, not learning.
+Today's AI systems are **stateless**. Every conversation starts from zero. You
+can't teach them a fact and have it stick. Fine-tuning is batch and destructive.
+RAG is retrieval, not learning.
 
-**AGI Personal Memory** solves this: **incremental, verified, persistent knowledge accumulation** — the model itself learns, one fact at a time.
+**AGI Personal Memory** is an experimental verified-memory substrate with two
+separate paths:
+
+- **Path A:** retrieval memory for persistent teach/ask behavior.
+- **Path B:** WAL-backed weight editing for research-grade model edits.
 
 ```
 User: "Paris is the capital of France"
@@ -27,6 +33,36 @@ User: "No, actually Napoleon was born in 1769"
 User: "When was Napoleon born?"
   → Answers from memory: "1769" ✓
 ```
+
+## Evaluation Status
+
+Current EasyEdit-style weight-editing claims must come from the real
+EasyEdit-compatible runner, not the older local CounterFact scripts.
+
+| Protocol | Current status | Where |
+| --- | --- | --- |
+| Real EasyEdit-compatible CounterFact | Single-edit strong; sequential/locality still weak | [BENCHMARK.md](BENCHMARK.md) |
+| Legacy local CounterFact | Historical diagnostics only, including the 1000-fact `ES=91.4%` run | [results/local_protocol](results/local_protocol) |
+| Memory/retrieval | Path A storage and retrieval tests, not weight editing | [results/memory_retrieval](results/memory_retrieval) |
+
+Current n=50 EasyEdit-compatible single-edit result on
+`meta-llama/Llama-3.1-8B-Instruct`:
+
+| Metric group | Rewrite | Rephrase | Locality |
+| --- | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 71.0% | 58.4% |
+| Contextual generation | 100.0% | 70.0% | n/a |
+| Probability compare | 100.0% | 88.0% | 37.6% |
+
+Current n=50 sequential tuned profile:
+
+| Metric group | Rewrite | Rephrase | Locality |
+| --- | ---: | ---: | ---: |
+| Teacher-forcing | 71.0% | 21.0% | 25.4% |
+| Probability compare | 86.0% | 62.0% | 61.2% |
+
+This is useful progress, but it does not support a claim that AGIM is #1 on
+EasyEdit or has solved lifelong/sequential editing.
 
 ## Why it's different
 
@@ -97,6 +133,18 @@ src/agim/
 └── dwl2/          ← Route encoder: calibrate, codebook, block VQ, runtime
 ```
 
+## Repository Map
+
+| Path | Purpose |
+| --- | --- |
+| `src/agim/` | Supported library and CLI code |
+| `src/agim/eval/` | Current evaluation entry points |
+| `tests/` | Supported pytest suite |
+| `results/easyedit_official/` | Real EasyEdit-compatible artifacts |
+| `results/local_protocol/` | Legacy AGIM-local CounterFact artifacts |
+| `results/memory_retrieval/` | Path A memory/retrieval artifacts |
+| `experiments/legacy_weight_editing/` | Archived one-off scripts and sweeps |
+
 ## Roadmap
 
 | Version | Key Feature | Status |
@@ -118,12 +166,15 @@ src/agim/
 | v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
 | v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | ✓ |
 
-**76/76 tests. 15 on real Gemma-4-31B.**
+Current full local suite: **85 passed, 13 skipped** on 2026-05-18.
+The skipped tests are Gemma E2E checks when the installed Transformers build
+does not support the local `gemma4` checkpoint architecture.
 
 ## Links
 
 - **GitHub:** https://github.com/AubakirovArman/agi-personal-memory
 - **Pages:** https://aubakirovarman.github.io/agi-personal-memory/
+- [Benchmarks](BENCHMARK.md) | [Evaluation Protocols](docs/evaluation/README.md)
 - [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Roadmap](agim_roadmap_v0_to_v10.md)
 - [Developer Diary](DIARY.md)
 - Built on [WAL — Weight-Aligned Language](https://github.com/AubakirovArman/wal2026)

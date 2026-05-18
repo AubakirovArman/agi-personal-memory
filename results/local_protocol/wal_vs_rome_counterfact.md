@@ -37,3 +37,8 @@
 - WAL recipe stacking — composable deltas для sequential editing
 - MQuAKE, WikiBigEdit бенчмарки для доказательства масштаба
 - Сохранение WAL programs как edit recipes для audit trail
+# Legacy Protocol Note
+
+This is a historical local-protocol comparison. Do not use it as the current
+EasyEdit-compatible result. See `../../BENCHMARK.md` and
+`../easyedit_official/` for the current source of truth.

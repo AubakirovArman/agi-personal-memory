@@ -3,6 +3,7 @@
 import gc
 import tempfile
 
+import pytest
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from datasets import load_dataset

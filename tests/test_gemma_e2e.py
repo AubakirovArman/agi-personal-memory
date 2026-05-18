@@ -2,6 +2,7 @@
 """End-to-end test: AGIM + WAL + Gemma-4-31B — full cycle."""
 import tempfile
 
+import pytest
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -24,11 +25,14 @@ _tok_cache = None
 def load_model():
     global _model_cache, _tok_cache
     if _model_cache is None:
-        _tok_cache = AutoTokenizer.from_pretrained(GEMMA, local_files_only=True)
-        if _tok_cache.pad_token is None:
-            _tok_cache.pad_token = _tok_cache.eos_token
-        _model_cache = AutoModelForCausalLM.from_pretrained(
-            GEMMA, dtype=torch.bfloat16, device_map=DEVICE, local_files_only=True)
+        try:
+            _tok_cache = AutoTokenizer.from_pretrained(GEMMA, local_files_only=True)
+            if _tok_cache.pad_token is None:
+                _tok_cache.pad_token = _tok_cache.eos_token
+            _model_cache = AutoModelForCausalLM.from_pretrained(
+                GEMMA, dtype=torch.bfloat16, device_map=DEVICE, local_files_only=True)
+        except (OSError, ValueError) as exc:
+            pytest.skip(f"Gemma E2E model unavailable in this environment: {exc}")
         _model_cache.eval()
     return _model_cache, _tok_cache
 

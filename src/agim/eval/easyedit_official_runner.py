@@ -569,7 +569,10 @@ def main() -> int:
     parser.add_argument("--dataset", default="https://rome.baulab.info/data/dsets/counterfact.json")
     parser.add_argument("--sample-policy", choices=["first", "random"], default="first")
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output", default="results/easyedit_official_50.json")
+    parser.add_argument(
+        "--output",
+        default="results/easyedit_official/easyedit_official_50.json",
+    )
     parser.add_argument("--easyedit-root", type=Path, default=DEFAULT_EASYEDIT_ROOT)
     parser.add_argument("--locality-limit", type=int, default=0,
                         help="0 means all official CounterFact locality prompts")

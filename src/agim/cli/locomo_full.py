@@ -7,7 +7,7 @@ from openai import OpenAI
 from sentence_transformers import SentenceTransformer
 
 LOC = "/mnt/hf_model_weights/arman/3bit/sites/locomo/data/locomo10.json"
-FACTS_CACHE = "locomo_extracted_facts.json"
+FACTS_CACHE = "results/memory_retrieval/locomo_extracted_facts.json"
 
 def main():
     with open(LOC) as f: data = json.load(f)
@@ -20,6 +20,8 @@ def main():
     print("=" * 60)
     print("PHASE 1: LLM-based atomic fact extraction")
     print("=" * 60)
+
+    os.makedirs("results/memory_retrieval", exist_ok=True)
 
     if os.path.exists(FACTS_CACHE):
         with open(FACTS_CACHE) as f: cache = json.load(f)
@@ -211,14 +213,15 @@ Answer (concise):"""
     for sid, s in sorted(by_sample.items()):
         print(f"    {sid}: F1={s['f1']:.1%}  Judge={s['judge']:.1%}")
 
-    with open("locomo_50steps_results.json", "w") as f:
+    output = "results/memory_retrieval/locomo_50steps_results.json"
+    with open(output, "w") as f:
         json.dump({"accuracy_f1": round(acc_f1,4), "accuracy_judge": round(acc_judge,4),
                    "facts": len(all_fact_texts), "total_qa": total_qa, "time_s": round(e,1),
                    "by_category": {str(k): {"f1": round(v["f1"]/max(v["total"],1),4),
                                             "judge": round(v["judge"]/max(v["total"],1),4)}
                                   for k,v in by_cat.items()},
                    "by_sample": by_sample}, f, indent=2)
-    print(f"\nSaved to locomo_50steps_results.json")
+    print(f"\nSaved to {output}")
     return 0
 
 if __name__ == "__main__":

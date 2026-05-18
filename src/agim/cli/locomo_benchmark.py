@@ -111,7 +111,10 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--n_samples", type=int, default=10)
     p.add_argument("--model", default="all-mpnet-base-v2")
-    p.add_argument("--output", default="locomo_dense_results.json")
+    p.add_argument(
+        "--output",
+        default="results/memory_retrieval/locomo_dense_results.json",
+    )
     args = p.parse_args()
     print(f"Loading LoCoMo...")
     data = load_locomo()
@@ -133,6 +136,7 @@ def main():
     print(f"\n  By sample:")
     for sid, s in sorted(results["by_sample"].items()):
         print(f"    {sid}: {s['rate']:.1%} ({s['retrieved']}/{s['qa_total']})")
+    os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
     with open(args.output, "w") as f:
         json.dump(results, f, indent=2)
     print(f"\nSaved to {args.output}")

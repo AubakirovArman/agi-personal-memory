@@ -433,7 +433,10 @@ def git_sha() -> str | None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--n", type=int, default=100)
-    parser.add_argument("--output", default="results/official_eval.json")
+    parser.add_argument(
+        "--output",
+        default="results/local_protocol/official_eval.json",
+    )
     parser.add_argument("--clamp_lm", type=float, default=0.20)
     parser.add_argument("--clamp_embed", type=float, default=0.06)
     parser.add_argument("--clamp_eos", type=float, default=0.16)

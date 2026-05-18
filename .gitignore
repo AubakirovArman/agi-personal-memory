@@ -19,6 +19,12 @@ logs/
 results/easyedit_official_5_*.json
 results/easyedit_official_30_*.json
 results/easyedit_official_smoke*.json
+results/easyedit_official/smoke/
 results/counterfact_smoke*.json
+results/local_protocol/counterfact_smoke*.json
+results/local_protocol/official_eval.json
+results/local_protocol/counterfact_hardened_wal.json
+results/memory_retrieval/locomo_extracted_facts.json
+results/memory_retrieval/locomo_50steps_results.json
 counterfact_*_results*.json
 locomo_*_results.json

@@ -1,5 +1,9 @@
 # AGIM WAL — CounterFact Final Report (2026-05-17)
 
+> Legacy local-protocol report. Current EasyEdit-compatible results live in
+> `../easyedit_official/`. The numbers below are historical diagnostics and
+> should not be presented as current official EasyEdit results.
+
 ## Models & Protocol
 
 - **Model**: meta-llama/Llama-3.1-8B-Instruct (8B, same class as Llama 3 8B)

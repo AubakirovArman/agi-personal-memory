@@ -1,5 +1,9 @@
 # EasyEdit vs AGIM: сравнение протоколов CounterFact
 
+> Historical note. This file was written before the real EasyEdit-compatible
+> runner was added. The current protocol boundary is documented in
+> `../../docs/evaluation/README.md` and `../README.md`.
+
 ## Официальный EasyEdit (как все проходят)
 
 ```python

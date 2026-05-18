@@ -1,8 +1,14 @@
 # AGIM Leaderboard — Knowledge Editing (Llama 3.1 8B Instruct)
 
+> Legacy local-protocol document. The "#1" wording and competitor comparison
+> below are historical notes from an older local metric setup. They must not be
+> used as current EasyEdit claims. Current EasyEdit-compatible results are in
+> `../easyedit_official/` and summarized in `../../BENCHMARK.md`.
+
 ## Главный результат: Sequence-Level Editing
 
-**AGIM WAL + Sequence-Level: Composite 91.8% — #1 на Llama 3 8B!**
+**Historical local-protocol result:** AGIM WAL + Sequence-Level reported
+Composite 91.8% under the old local metric setup.
 
 | Метрика | До (independent) | После (sequence-level) | Δ |
 |---------|-----------------|----------------------|---|
@@ -13,7 +19,7 @@
 | Multi-token ES | 65% | **87%** | +22pp |
 | Non-target diff | 0.00000000 | 0.00000000 | ✅ |
 
-## CounterFact — сравнение на Llama 3 8B
+## CounterFact — legacy local comparison on Llama 3 8B
 
 | # | Метод | ES | PS | NS | Composite | Модель |
 |---|-------|-----|-----|-----|-----------|--------|
@@ -22,7 +28,7 @@
 | 3 | MEMIT | 71.2% | 33.9% | — | 53% | Llama 3 8B |
 | 4 | WISE | 16.5% | 4.5% | — | 11% | Llama 3 8B |
 
-## CounterFact — все методы (разные модели)
+## CounterFact — legacy mixed-model comparison
 
 | # | Метод | ES | PS | NS | Comp | Модель | Rollback | NT=0 |
 |---|-------|-----|-----|-----|------|--------|----------|------|
@@ -31,7 +37,8 @@
 | 3 | MEMIT | 99% | 87% | 26% | 71% | GPT-J 6B | ❌ | ❌ |
 | 4 | AlphaEdit | 93% | 28% | 82% | 68% | Llama 3 8B | ❌ | ❌ |
 
-> ROME/MEMIT 99% на GPT-J 6B (2021), на Llama 3 8B MEMIT падает до 71%. AGIM на Llama 3.1 8B — 92% composite.
+> Historical note only. This mixed-model table is not a valid current
+> EasyEdit leaderboard comparison.
 
 ## Уникальные capabilities
 

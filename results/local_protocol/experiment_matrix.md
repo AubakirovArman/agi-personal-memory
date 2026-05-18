@@ -1,6 +1,11 @@
 # AGIM WAL — Final Experiment Matrix (2026-05-18)
 
-## Official canonical results (WALDualLayerEditor + EasyEdit protocol)
+> Legacy local-protocol artifact. This file predates the real
+> EasyEdit-compatible runner in `src/agim/eval/easyedit_official_runner.py`.
+> Keep it for experiment history only. Do not use the 1000-fact composite or
+> competitor comparisons below as current official EasyEdit claims.
+
+## Legacy local results (WALDualLayerEditor + AGIM-local protocol)
 
 | lm | n | ES_ee | PS_ee | NS_abs | NS_con | Comp | Rep | NT | Notes |
 |----|---|-------|-------|--------|--------|------|-----|----|-------|
@@ -26,7 +31,7 @@
 | Adaptive clamp per example | ✅ | NS↑ but PS↓ too much |
 | ROME-style WAL-FFN | ⏳ | Architecture correct, needs full ROME pipeline |
 
-## Published comparison (Llama-3-class 8B)
+## Deprecated comparison draft (do not use for current claims)
 
 | Method | Comp | NS | Rollback | NT=0 | Audit |
 |--------|:----:|:--:|:--------:|:----:|:-----:|
@@ -36,5 +41,6 @@
 | MEMIT | 53% | — | ❌ | ❌ | ❌ |
 | WISE | 11% | — | ❌ | ❌ | ❌ |
 
-AGIM WAL beats all competitors on composite. NS=76.2% approaching AlphaEdit's 82%.
-AGIM is the ONLY system with rollback, verification, audit trail, and measured NT=0%.
+This comparison draft used the old local protocol. It is preserved only to show
+what was tested historically; it is not a valid current EasyEdit leaderboard
+claim.

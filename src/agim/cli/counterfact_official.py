@@ -7,6 +7,7 @@ Fix 4: Dual protocol — AGIM (substring) + EasyEdit (token exact)
 """
 
 import json, time, urllib.request, re
+from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.wal_editor import WalLmHeadEditor
@@ -192,7 +193,10 @@ def main():
     import argparse
     p = argparse.ArgumentParser()
     p.add_argument("--n_facts", type=int, default=200)
-    p.add_argument("--output", default="results/counterfact_hardened_wal.json")
+    p.add_argument(
+        "--output",
+        default="results/local_protocol/counterfact_hardened_wal.json",
+    )
     args = p.parse_args()
 
     data = []
@@ -279,6 +283,7 @@ def main():
     print(f"    MEMIT (Llama 3):        53%")
     print(f"    AlphaEdit (Llama 3):    67.7%")
 
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output, "w") as f:
         json.dump({
             "model": LLAMA, "n": nd,

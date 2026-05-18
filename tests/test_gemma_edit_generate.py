@@ -3,6 +3,7 @@
 import gc
 import tempfile
 
+import pytest
 import torch
 
 from agim.core.system import AGIMSystem
@@ -24,11 +25,14 @@ _tok = None
 def get_model():
     global _model, _tok
     if _model is None:
-        _tok = AutoTokenizer.from_pretrained(GEMMA, local_files_only=True)
-        if _tok.pad_token is None:
-            _tok.pad_token = _tok.eos_token
-        _model = AutoModelForCausalLM.from_pretrained(
-            GEMMA, dtype=torch.bfloat16, device_map=DEVICE, local_files_only=True)
+        try:
+            _tok = AutoTokenizer.from_pretrained(GEMMA, local_files_only=True)
+            if _tok.pad_token is None:
+                _tok.pad_token = _tok.eos_token
+            _model = AutoModelForCausalLM.from_pretrained(
+                GEMMA, dtype=torch.bfloat16, device_map=DEVICE, local_files_only=True)
+        except (OSError, ValueError) as exc:
+            pytest.skip(f"Gemma edit/generate model unavailable in this environment: {exc}")
         _model.eval()
     return _model, _tok
 
