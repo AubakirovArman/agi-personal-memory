@@ -115,8 +115,8 @@ while `wal_rome` reached `TF rewrite=0.0%`, `TF locality=98.2%`.
 EasyEdit artifacts. It reports direct rewrite success against related/locality
 preservation and relation-level break rates. This is not an official
 RippleEdits dataset result; it is the first local related-fact diagnostic. It
-also provides a JSON dataset adapter payload for preparing scored external
-RippleEdits-style runs.
+also provides JSON dataset-adapter and scored-output payloads for preparing
+external RippleEdits-style runs.
 
 `agim.eval.mquake_diagnostic` adds a MQuAKE-style post-hoc diagnostic for
 artifacts with EasyEdit/KnowEdit portability fields. It reports direct rewrite,

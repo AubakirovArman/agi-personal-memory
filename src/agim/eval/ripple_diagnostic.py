@@ -20,6 +20,8 @@ def build_parser() -> argparse.ArgumentParser:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--input", help="EasyEdit artifact JSON")
     source.add_argument("--dataset-input", help="RippleEdits-style dataset JSON")
+    source.add_argument("--score-adapter", help="Ripple adapter payload JSON")
+    parser.add_argument("--score-output", help="Model output JSON for --score-adapter")
     parser.add_argument("--output", help="Output JSON path")
     return parser
 
@@ -45,10 +47,7 @@ def diagnostic_payload(artifact: dict[str, Any], source: str = "") -> dict[str, 
 def ripple_dataset_payload(records: list[dict[str, Any]],
                            source: str = "") -> dict[str, Any]:
     """Normalize RippleEdits-style records into related-fact cases."""
-    cases = [
-        normalize_ripple_record(record, case_id)
-        for case_id, record in enumerate(records)
-    ]
+    cases = [normalize_ripple_record(r, i) for i, r in enumerate(records)]
     return {
         "artifact_schema_version": DATASET_SCHEMA_VERSION,
         "source": source,
@@ -58,6 +57,60 @@ def ripple_dataset_payload(records: list[dict[str, Any]],
             "RippleEdits dataset adapter payload only; this is not a scored "
             "RippleEdits benchmark result."
         ),
+    }
+
+
+def scored_ripple_payload(
+    adapter_payload: dict[str, Any],
+    output_payload: dict[str, Any],
+    source: str = "",
+) -> dict[str, Any]:
+    cases = adapter_payload.get("cases", [])
+    outputs = {str(item.get("case_id")): item for item in output_payload.get("cases", [])}
+    rows = [score_ripple_case(case, outputs.get(str(case.get("case_id")), {}))
+            for case in cases]
+    return {
+        "artifact_schema_version": "ripple_scored_outputs.v1",
+        "source": source,
+        "adapter_schema_version": adapter_payload.get("artifact_schema_version"),
+        "output_schema_version": output_payload.get("artifact_schema_version"),
+        "n": len(rows),
+        "summary": summarize_scored_ripple_rows(rows),
+        "rows": rows,
+        "caveat": (
+            "Scored Ripple adapter outputs; this is a benchmark result only if "
+            "the output payload came from a documented model-editing run."
+        ),
+    }
+
+
+def score_ripple_case(case: dict[str, Any], output: dict[str, Any]) -> dict[str, Any]:
+    direct = _contains(_output_text(output.get("direct_output", "")),
+                       case.get("request", {}).get("target_new", ""))
+    related_outputs = output.get("related_outputs", [])
+    related_scores = [_contains(_output_at(related_outputs, idx), item.get("ground_truth", ""))
+                      for idx, item in enumerate(case.get("related_facts", []))]
+    locality_outputs = output.get("locality_outputs", [])
+    locality_prompts = case.get("locality", {}).get("neighborhood", {}).get("prompt", [])
+    locality_scores = [bool(_output_at(locality_outputs, idx)) for idx, _ in enumerate(locality_prompts)]
+    return {
+        "case_id": case.get("case_id"),
+        "direct_success": direct,
+        "related_scores": related_scores,
+        "locality_scores": locality_scores,
+        "related_acc": _mean(related_scores),
+        "locality_response_rate": _mean(locality_scores),
+        "ripple_break": bool(direct and related_scores and not all(related_scores)),
+    }
+
+
+def summarize_scored_ripple_rows(rows: list[dict[str, Any]]) -> dict[str, float | int]:
+    return {
+        "n": len(rows),
+        "direct_rewrite_acc": _mean([row["direct_success"] for row in rows]),
+        "related_acc": _mean([row["related_acc"] for row in rows]),
+        "locality_response_rate": _mean([row["locality_response_rate"] for row in rows]),
+        "ripple_break_rate": _mean([row["ripple_break"] for row in rows]),
     }
 
 
@@ -146,6 +199,22 @@ def _mean(values) -> float:
     return round(float(np.mean(clean)), 6) if clean else 0.0
 
 
+def _contains(generated: str, expected: str) -> bool:
+    return bool(expected) and expected.lower() in generated.lower()
+
+
+def _output_at(outputs: list[Any], idx: int) -> str:
+    if idx >= len(outputs):
+        return ""
+    return _output_text(outputs[idx])
+
+
+def _output_text(value: Any) -> str:
+    if isinstance(value, dict):
+        return str(value.get("text") or value.get("output") or "")
+    return str(value)
+
+
 def _normalize_rewrite(item: dict[str, Any]) -> dict[str, Any]:
     subject = str(item.get("subject", ""))
     prompt = str(item.get("prompt", ""))
@@ -203,6 +272,14 @@ def main() -> int:
         records = json.loads(source.read_text())
         payload = ripple_dataset_payload(records, str(source))
         default_suffix = ".ripple_dataset"
+    elif args.score_adapter:
+        if not args.score_output:
+            raise SystemExit("--score-output is required with --score-adapter")
+        source = Path(args.score_adapter)
+        adapter = json.loads(source.read_text())
+        outputs = json.loads(Path(args.score_output).read_text())
+        payload = scored_ripple_payload(adapter, outputs, str(source))
+        default_suffix = ".ripple_scored"
     else:
         source = Path(args.input)
         artifact = json.loads(source.read_text())

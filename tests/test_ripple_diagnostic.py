@@ -2,6 +2,9 @@ from agim.eval.ripple_diagnostic import (
     diagnostic_payload,
     normalize_ripple_record,
     ripple_dataset_payload,
+    score_ripple_case,
+    scored_ripple_payload,
+    summarize_scored_ripple_rows,
     summarize_ripple_by_relation,
     summarize_ripple_rows,
 )
@@ -100,3 +103,68 @@ def test_ripple_dataset_payload_has_adapter_caveat():
     assert payload["artifact_schema_version"] == "ripple_dataset_adapter.v1"
     assert payload["n"] == 1
     assert "not a scored RippleEdits" in payload["caveat"]
+
+
+def test_score_ripple_case_checks_direct_related_and_locality_outputs():
+    case = normalize_ripple_record({
+        "requested_rewrite": {
+            "prompt": "{} is",
+            "subject": "A",
+            "target_new": "B",
+        },
+        "related_facts": [
+            {"prompt": "A implies", "ground_truth": "C"},
+            {"prompt": "A also implies", "ground_truth": "D"},
+        ],
+        "neighborhood_prompts": ["Neighbor prompt"],
+    }, 3)
+    row = score_ripple_case(case, {
+        "direct_output": "A is B",
+        "related_outputs": ["therefore C", "miss"],
+        "locality_outputs": ["stable answer"],
+    })
+
+    assert row["case_id"] == 3
+    assert row["direct_success"] is True
+    assert row["related_scores"] == [True, False]
+    assert row["related_acc"] == 0.5
+    assert row["ripple_break"] is True
+
+
+def test_scored_ripple_payload_summarizes_outputs():
+    adapter = ripple_dataset_payload([
+        {
+            "prompt": "{} is",
+            "subject": "A",
+            "target_new": "B",
+            "related_facts": [{"prompt": "A implies", "ground_truth": "C"}],
+        }
+    ], "ripple.json")
+    outputs = {
+        "artifact_schema_version": "ripple_model_outputs.v1",
+        "cases": [{
+            "case_id": 0,
+            "direct_output": "A is B",
+            "related_outputs": ["C follows"],
+        }],
+    }
+
+    payload = scored_ripple_payload(adapter, outputs, "adapter.json")
+
+    assert payload["artifact_schema_version"] == "ripple_scored_outputs.v1"
+    assert payload["summary"]["direct_rewrite_acc"] == 1.0
+    assert payload["summary"]["related_acc"] == 1.0
+    assert "documented model-editing run" in payload["caveat"]
+
+
+def test_summarize_scored_ripple_rows_reports_break_rate():
+    summary = summarize_scored_ripple_rows([
+        {"direct_success": True, "related_acc": 0.0,
+         "locality_response_rate": 1.0, "ripple_break": True},
+        {"direct_success": False, "related_acc": 1.0,
+         "locality_response_rate": 0.0, "ripple_break": False},
+    ])
+
+    assert summary["direct_rewrite_acc"] == 0.5
+    assert summary["related_acc"] == 0.5
+    assert summary["ripple_break_rate"] == 0.5
