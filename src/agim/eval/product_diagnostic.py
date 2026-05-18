@@ -9,6 +9,11 @@ from typing import Any
 import numpy as np
 
 from .easyedit_utils import jsonable
+from .product_scoring import (
+    score_product_case,
+    scored_product_payload,
+    summarize_scored_product_rows,
+)
 
 
 SCHEMA_VERSION = "product_diagnostic.v1"
@@ -20,7 +25,9 @@ def build_parser() -> argparse.ArgumentParser:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--input", help="EasyEdit artifact JSON")
     source.add_argument("--dataset-input", help="KnowEdit/UniEdit-style dataset JSON")
+    source.add_argument("--score-adapter", help="Product adapter payload JSON")
     parser.add_argument("--benchmark-name", default="knowedit")
+    parser.add_argument("--score-output", help="Model output JSON for --score-adapter")
     parser.add_argument("--output", help="Output JSON path")
     return parser
 
@@ -217,6 +224,14 @@ def main() -> int:
         records = json.loads(source.read_text())
         payload = product_dataset_payload(records, str(source), args.benchmark_name)
         default_suffix = ".product_dataset"
+    elif args.score_adapter:
+        if not args.score_output:
+            raise SystemExit("--score-output is required with --score-adapter")
+        source = Path(args.score_adapter)
+        adapter = json.loads(source.read_text())
+        outputs = json.loads(Path(args.score_output).read_text())
+        payload = scored_product_payload(adapter, outputs, str(source))
+        default_suffix = ".product_scored"
     else:
         source = Path(args.input)
         artifact = json.loads(source.read_text())

@@ -138,9 +138,9 @@ a scored raw-text benchmark.
 `agim.eval.product_diagnostic` adds a KnowEdit-inspired product diagnostic over
 EasyEdit artifacts. It combines rewrite, PS@All, locality, and portability when
 available into a product-facing composite. This is not an external
-KnowEdit/UniEdit/ScEdit leaderboard result. It also provides a
-KnowEdit/UniEdit-style dataset adapter payload for preparing scored product
-benchmark runs.
+KnowEdit/UniEdit/ScEdit leaderboard result. It also provides
+KnowEdit/UniEdit-style dataset-adapter and scored-output payloads for preparing
+product benchmark runs.
 
 `PatchService` adds the first in-process PatchService API for Path B patch
 lifecycle. It supports `propose_patch`, `simulate_patch`, `run_canaries`,

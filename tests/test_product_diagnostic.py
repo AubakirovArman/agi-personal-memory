@@ -2,6 +2,9 @@ from agim.eval.product_diagnostic import (
     diagnostic_payload,
     normalize_product_record,
     product_dataset_payload,
+    score_product_case,
+    scored_product_payload,
+    summarize_scored_product_rows,
     summarize_product_by_relation,
     summarize_product_rows,
 )
@@ -97,3 +100,55 @@ def test_product_dataset_payload_has_adapter_caveat():
     assert payload["benchmark_name"] == "knowedit"
     assert payload["cases"][0]["request"]["subject"] == "A"
     assert "not a scored external leaderboard" in payload["caveat"]
+
+
+def test_score_product_case_checks_rewrite_locality_and_portability():
+    case = normalize_product_record({
+        "subject": "France",
+        "prompt": "The capital of France is",
+        "target_new": "Berlin",
+        "locality": {"Relation": [
+            {"prompt": "The capital of Germany is", "ground_truth": "Berlin"}
+        ]},
+        "portability": {"Reasoning": [
+            {"prompt": "France's new capital is in", "ground_truth": "Germany"}
+        ]},
+    }, 1)
+    row = score_product_case(case, {
+        "direct_output": "Berlin",
+        "locality_outputs": {"Relation": ["Berlin"]},
+        "portability_outputs": {"Reasoning": ["Germany"]},
+    })
+
+    assert row["direct_success"] is True
+    assert row["locality_acc"] == 1.0
+    assert row["portability_acc"] == 1.0
+    assert row["product_composite_acc"] == 1.0
+
+
+def test_scored_product_payload_summarizes_outputs():
+    adapter = product_dataset_payload([
+        {"concept": "A", "text": "{} is", "labels": ["B"]},
+    ])
+    outputs = {
+        "artifact_schema_version": "product_model_outputs.v1",
+        "cases": [{"case_id": 0, "direct_output": "A is B"}],
+    }
+
+    payload = scored_product_payload(adapter, outputs, "adapter.json")
+
+    assert payload["artifact_schema_version"] == "product_scored_outputs.v1"
+    assert payload["summary"]["rewrite_acc"] == 1.0
+    assert "documented model-editing run" in payload["caveat"]
+
+
+def test_summarize_scored_product_rows_reports_composite():
+    summary = summarize_scored_product_rows([
+        {"direct_success": True, "locality_acc": 1.0,
+         "portability_acc": 0.0, "product_composite_acc": 0.666667},
+        {"direct_success": False, "locality_acc": 0.0,
+         "portability_acc": 1.0, "product_composite_acc": 0.333333},
+    ])
+
+    assert summary["rewrite_acc"] == 0.5
+    assert summary["product_composite_acc"] == 0.5

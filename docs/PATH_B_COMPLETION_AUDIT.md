@@ -41,7 +41,7 @@ true:
 | raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `src/agim/model/patch_service.py`, `tests/test_raw_text_edit_pipeline.py`, `tests/test_patch_service.py` | Covered as proposal, PatchService draft bridge, and service materialization hook |
 | Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Post-hoc diagnostic, dataset adapter, and scored-output layer; no model-output run yet |
 | MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py`, `results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json` | Post-hoc diagnostic, first-50 dataset adapter, and scored-output layer; no model-output run yet |
-| product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local diagnostic plus KnowEdit/UniEdit-style dataset adapter; no scored external run |
+| product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local diagnostic, dataset adapter, and scored-output layer; no model-output run yet |
 
 ## Remaining Gaps
 
@@ -52,7 +52,7 @@ true:
 | 35 | Official RippleEdits benchmark | Dataset adapter and scorer exist, but there is no tracked model-output RippleEdits run |
 | 36 | Official MQuAKE benchmark | First-50 dataset adapter and scorer exist, but there is no tracked model-output MQuAKE run |
 | 37 | Full AKEW-style raw-text editing | Parser, PatchService drafts, and materialization hook exist, but there is no scored raw-text benchmark |
-| 38 | External product benchmark | Dataset adapter exists, but there is no tracked scored KnowEdit/UniEdit/ScEdit/MLaKE run |
+| 38 | External product benchmark | Dataset adapter and scorer exist, but there is no tracked model-output KnowEdit/UniEdit/ScEdit/MLaKE run |
 
 ## Current Claim Boundary
 
@@ -73,7 +73,7 @@ official leaderboard, or has production-ready external benchmark coverage.
 
 ## Latest Verification
 
-- `python -m pytest`: `173 passed, 13 skipped, 11 warnings`
+- `python -m pytest`: `176 passed, 13 skipped, 11 warnings`
 - `git diff --check`: clean
 - Python line-count guard: clean, no `src` or `tests` Python file exceeds 300
   lines.
