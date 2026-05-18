@@ -380,13 +380,12 @@ generation.
 
 | Priority | Gap | Why it matters | Next action |
 | ---: | --- | --- | --- |
-| P0 | Sequential exact-token/locality weakness | Blocks lifelong memory claim | Add per-edit isolation or relation sharding |
+| P0 | Sequential exact-token/locality weakness | Blocks lifelong memory claim | Add stronger per-edit isolation; simple relation sharding did not improve seed 42 |
 | P0 | Locality still weak after projection tuning | Blocks EasyEdit-quality claim | Try constrained row updates or MEMIT/ROME-style layer edits instead of lm_head-only row boosts |
 | P1 | Real portability benchmark missing | CounterFact has no multi-hop portability | Run KnowEdit or MQuAKE portability split |
 | P1 | MQuAKE / KnowEdit not run | Needed for broader benchmark claims | Add reproducible dataset loader and 50/200 smoke |
 | P1 | EasyEdit method package missing | Needed for upstream PR | Add `AGIMWAL_main.py`, `AGIMWAL_hparams.py`, hparams YAML |
 | P1 | Relation-level failure analysis incomplete | Needed to target method fixes | Use `metrics_by_relation_id` from fresh artifacts |
-| P2 | Fresh random-seed and 100/1000 official runs missing | Needed before any leaderboard language | Run `random_50_seed_42`, `random_50_seed_43`, then 100/1000 |
 | P2 | Fluency is degenerate | Current short exact outputs give entropy 0 | Add better generation-quality prompt set or report as not meaningful |
 
 ## Claim Boundary
