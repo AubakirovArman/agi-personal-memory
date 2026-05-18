@@ -93,8 +93,10 @@ being promoted to a headline sequential profile.
 `WALRomeEditor` adds the first located internal-layer backend. It applies
 sparse ROME-style row updates to a selected `mlp.down_proj` layer, records FFN
 row backups for rollback, and exposes FFN non-target/budget diagnostics through
-the same EasyEdit runner via `--edit-backend wal_rome`. This is an implemented
-backend foundation, not yet an official Llama-3.1-8B headline result.
+the same EasyEdit runner via `--edit-backend wal_rome`. A first n=5 smoke
+artifact preserved locality but got `TF rewrite=0.0%`, so this is an
+implemented backend foundation that still needs tuning before any official
+Llama-3.1-8B n=50 headline result.
 
 `WALMemitBatchEditor` adds the first batch-consolidation foundation for Path B
 patches. It merges multiple verified `PatchArtifact` row deltas into one

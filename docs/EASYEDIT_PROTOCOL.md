@@ -160,8 +160,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `--edit-backend wal_rome` is an experimental internal-layer backend. It
   applies sparse ROME-style updates to `mlp.down_proj` rows and reports FFN row
   counts, delta norms, and non-target row drift under `NT`. It is implemented
-  for backend comparison, but it does not yet have an official n=50 Llama
-  headline artifact.
+  for backend comparison. The first tracked n=5 smoke run preserved locality
+  but produced `TF rewrite=0.0%`, so it should not be promoted to n=50 headline
+  claims before tuning.
 - `WALMemitBatchEditor` exists as an offline consolidation backend for
   `PatchArtifact` batches. It is not yet a runner backend; use it for patch
   lifecycle tests, not EasyEdit headline claims.

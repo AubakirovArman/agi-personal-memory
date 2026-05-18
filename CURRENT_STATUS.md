@@ -162,11 +162,14 @@ locality are not solved. The current PS@All report is
 
 Backend status: `dual_row` is the current measured default, `side_slot` has one
 tracked seed-42 sequential n=50 artifact, and `wal_rome` is implemented as a
-located FFN/down_proj backend but still needs an official Llama-3.1-8B n=50
-artifact before it can be used in claims. `wal_memit` exists as an offline
-`PatchArtifact` batch-consolidation foundation, not yet a measured EasyEdit
-runner backend. `--compare-backends` can produce backend matrix artifacts, with
-offline backends recorded as skipped.
+located FFN/down_proj backend. A first n=5 smoke run on Llama-3.1-8B preserved
+teacher-forcing locality at 100.0% but had 0.0% teacher-forcing rewrite, so it
+is not ready for an n=50 headline claim without tuning. See
+`results/easyedit_official/ablations/wal_rome_smoke_5_report_2026-05-18.md`.
+`wal_memit` exists as an offline `PatchArtifact` batch-consolidation
+foundation, not yet a measured EasyEdit runner backend. `--compare-backends`
+can produce backend matrix artifacts, with offline backends recorded as
+skipped.
 
 `agim.eval.ripple_diagnostic` can compute a post-hoc RippleEdits-style
 related-fact diagnostic from EasyEdit artifacts. This is local diagnostic
