@@ -1,0 +1,124 @@
+"""Ripple-style post-hoc diagnostics for EasyEdit artifacts."""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+
+from .easyedit_utils import jsonable
+
+
+SCHEMA_VERSION = "ripple_style_diagnostic.v1"
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True, help="EasyEdit artifact JSON")
+    parser.add_argument("--output", help="Output JSON path")
+    return parser
+
+
+def diagnostic_payload(artifact: dict[str, Any], source: str = "") -> dict[str, Any]:
+    rows = artifact.get("metrics", [])
+    summary = summarize_ripple_rows(rows)
+    return {
+        "artifact_schema_version": SCHEMA_VERSION,
+        "source": source,
+        "source_schema_version": artifact.get("artifact_schema_version"),
+        "source_method_profile_id": artifact.get("method_profile_id"),
+        "n": len(rows),
+        "summary": summary,
+        "by_relation_id": summarize_ripple_by_relation(rows),
+        "caveat": (
+            "Post-hoc Ripple-style diagnostic over EasyEdit locality/relation "
+            "fields; not an official RippleEdits dataset result."
+        ),
+    }
+
+
+def summarize_ripple_rows(rows: list[dict[str, Any]]) -> dict[str, float | int]:
+    direct = [_metric(row.get("post", {}), "rewrite_acc") for row in rows]
+    related = [_tf_locality(row) for row in rows]
+    prob_related = [_prob_locality(row) for row in rows]
+    direct = [value for value in direct if value is not None]
+    related = [value for value in related if value is not None]
+    prob_related = [value for value in prob_related if value is not None]
+    return {
+        "n": len(rows),
+        "direct_rewrite_acc": _mean(direct),
+        "related_preservation_acc": _mean(related),
+        "prob_related_preservation_acc": _mean(prob_related),
+        "ripple_break_rate": _ripple_break_rate(rows),
+    }
+
+
+def summarize_ripple_by_relation(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        relation = row.get("relation_id")
+        if relation is not None:
+            grouped.setdefault(str(relation), []).append(row)
+    return {
+        relation: summarize_ripple_rows(rel_rows)
+        for relation, rel_rows in sorted(grouped.items())
+    }
+
+
+def _ripple_break_rate(rows: list[dict[str, Any]]) -> float:
+    values = []
+    for row in rows:
+        direct = _metric(row.get("post", {}), "rewrite_acc")
+        related = _tf_locality(row)
+        if direct is None or related is None:
+            continue
+        values.append(float(direct >= 1.0 and related < 1.0))
+    return _mean(values)
+
+
+def _tf_locality(row: dict[str, Any]) -> float | None:
+    locality = row.get("post", {}).get("locality", {})
+    if "neighborhood_acc" not in locality:
+        return None
+    return _mean(locality["neighborhood_acc"])
+
+
+def _prob_locality(row: dict[str, Any]) -> float | None:
+    values = []
+    for value in row.get("probability", {}).get("locality", {}).values():
+        values.append(_mean(value))
+    return _mean([value for value in values if value is not None])
+
+
+def _metric(group: dict[str, Any], key: str) -> float | None:
+    if key not in group:
+        return None
+    return _mean(group[key])
+
+
+def _mean(values) -> float:
+    if values is None:
+        return 0.0
+    if not isinstance(values, list):
+        return float(values)
+    clean = [float(value) for value in values if value is not None]
+    return round(float(np.mean(clean)), 6) if clean else 0.0
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    source = Path(args.input)
+    artifact = json.loads(source.read_text())
+    payload = diagnostic_payload(artifact, str(source))
+    output = Path(args.output) if args.output else source.with_name(
+        f"{source.stem}.ripple_style{source.suffix or '.json'}"
+    )
+    output.write_text(json.dumps(jsonable(payload), indent=2, ensure_ascii=False))
+    print(f"Ripple-style diagnostic saved {output}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

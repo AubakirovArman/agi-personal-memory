@@ -168,6 +168,10 @@ artifact before it can be used in claims. `wal_memit` exists as an offline
 runner backend. `--compare-backends` can produce backend matrix artifacts, with
 offline backends recorded as skipped.
 
+`agim.eval.ripple_diagnostic` can compute a post-hoc RippleEdits-style
+related-fact diagnostic from EasyEdit artifacts. This is local diagnostic
+coverage, not an official RippleEdits benchmark result.
+
 ## Historical 1000-Fact Local Result
 
 `results/local_protocol/official_eval_1000.json` reports:
@@ -185,7 +189,7 @@ methods.
 Current full local suite:
 
 ```text
-132 passed, 13 skipped
+135 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

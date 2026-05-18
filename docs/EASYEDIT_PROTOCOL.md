@@ -168,6 +168,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `--compare-backends` writes a matrix artifact and per-backend outputs for a
   comma-separated backend list. `wal_memit` is reported as skipped until direct
   fact-to-batch evaluation exists.
+- `python -m agim.eval.ripple_diagnostic --input <artifact.json>` writes a
+  post-hoc related-fact diagnostic over EasyEdit locality/relation fields. It is
+  RippleEdits-style, not an official RippleEdits dataset score.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

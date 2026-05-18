@@ -107,6 +107,11 @@ same selected CounterFact slice through runnable backends such as `dual_row`,
 `wal_rome`, and sequential `side_slot`, while recording `wal_memit` as skipped
 because it is an offline consolidation backend.
 
+`agim.eval.ripple_diagnostic` adds a RippleEdits-style post-hoc diagnostic for
+EasyEdit artifacts. It reports direct rewrite success against related/locality
+preservation and relation-level break rates. This is not an official
+RippleEdits dataset result; it is the first local related-fact diagnostic.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -151,7 +156,8 @@ rewrite and 33.9% locality after 50 edits.
 3. Run and tune the new `wal_rome` backend on n=50 before any larger scale
    claim.
 4. Promote backend comparison from runner support to tracked n=50 artifacts.
-5. Tune positive-prompt weight only after locality-preserving constraints exist.
+5. Replace the post-hoc Ripple-style diagnostic with an official RippleEdits
+   dataset adapter.
 
 ## Safe Claim
 

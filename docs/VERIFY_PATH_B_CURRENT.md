@@ -184,6 +184,17 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
 This writes the matrix artifact plus per-backend outputs such as
 `random_50_seed_42_backend_matrix.dual_row.json`.
 
+Post-hoc Ripple-style diagnostic over an EasyEdit artifact:
+
+```bash
+PYTHONPATH=src python -m agim.eval.ripple_diagnostic \
+  --input results/easyedit_official/current/random_1000_seed_42.json \
+  --output results/easyedit_official/current/random_1000_seed_42.ripple_style.json
+```
+
+This is a local related-fact diagnostic, not an official RippleEdits dataset
+score.
+
 ## Current n=1000 Readout
 
 The first-1000 artifact reports:
