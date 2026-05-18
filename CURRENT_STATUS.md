@@ -54,6 +54,16 @@ Readout: the current default is stable for rewrite and locality, but weak for
 paraphrase transfer. See
 `results/easyedit_official/current/random_50_report_2026-05-18.md`.
 
+Random-seed n=200 validation of the same profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing mean over seeds 42/43/44 | 93.2% | 25.3% | 25.6% | 96.4% |
+| Contextual generation mean over seeds 42/43/44 | 93.0% | n/a | 24.8% | n/a |
+| Probability compare mean over seeds 42/43/44 | 97.3% | n/a | 43.0% | 86.6% |
+
+See `results/easyedit_official/current/random_200_report_2026-05-18.md`.
+
 Official-compatible first-1000 scale check of the current default single-edit
 profile:
 

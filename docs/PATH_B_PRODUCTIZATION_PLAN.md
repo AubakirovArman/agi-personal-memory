@@ -37,7 +37,7 @@ consolidation.
 | 10 | Add serializable Path B `PatchArtifact` | In progress | `src/agim/model/patch_artifact.py` |
 | 11 | Add reload-safe patch integration test | Queued | future model-level test |
 | 12 | Make failures-only metric families configurable | Done | `--failure-families`; default excludes `vanilla_gen` |
-| 13 | Run random-200 seeds 42/43/44 | Queued | future GPU artifacts |
+| 13 | Run random-200 seeds 42/43/44 | Done | `results/easyedit_official/current/random_200_report_2026-05-18.md` |
 | 14 | Run random-1000 seed 42 | Queued | future GPU artifact |
 | 15 | Run `standalone/contextual/both` token-mode matrix | Queued | future GPU matrix report |
 | 16 | Run component ablations | Queued | `lm_head-only`, `embed-only`, `dual`, no-EOS/no-anti |

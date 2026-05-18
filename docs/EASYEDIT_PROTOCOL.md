@@ -56,6 +56,10 @@ results/easyedit_official/current/random_50_seed_44.json
 Mean readout over seeds 42/43/44: `TF rewrite=92.7%`,
 `TF PS@All=23.3%`, `TF locality=97.1%`, `Prob locality=87.8%`.
 
+The random n=200 layer is also complete for seeds 42/43/44. Mean readout:
+`TF rewrite=93.2%`, `TF PS@All=25.6%`, `TF locality=96.4%`,
+`Prob locality=86.6%`.
+
 This validates rewrite/locality stability for the default profile, while also
 showing weak paraphrase transfer. The detailed report is
 `results/easyedit_official/current/random_50_report_2026-05-18.md`.

@@ -68,6 +68,16 @@ teacher-forcing locality across random samples, but paraphrase transfer remains
 weak. Do not mix this operating point with the first-50 PS@All baseline without
 stating the hyperparameter/profile difference.
 
+Random-200 validation of the same profile:
+`results/easyedit_official/current/random_200_report_2026-05-18.md`
+
+| Seed | TF rewrite | TF rephrase | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 42 | 97.0% | 28.5% | 27.0% | 95.9% | 44.5% | 85.9% |
+| 43 | 89.0% | 20.8% | 22.2% | 96.9% | 38.0% | 88.6% |
+| 44 | 93.5% | 26.5% | 27.5% | 96.4% | 46.5% | 85.2% |
+| Mean | 93.2% | 25.3% | 25.6% | 96.4% | 43.0% | 86.6% |
+
 First-1000 scale check of the current default single-edit profile:
 `results/easyedit_official/current/easyedit_1000_first_default_report_2026-05-18.md`
 

@@ -36,6 +36,13 @@ rewrite/locality stability for that profile, not solved paraphrase transfer.
 ```
 
 ```text
+On three random n=200 EasyEdit-compatible CounterFact samples with the same
+profile, AGIM WAL averages 93.2% teacher-forcing rewrite and 96.4%
+teacher-forcing locality, but only 25.6% PS@All. This strengthens the
+rewrite/locality hotfix claim and keeps the paraphrase limitation explicit.
+```
+
+```text
 On the current official-compatible first-1000 CounterFact run with the default
 locality-protected profile, AGIM WAL reaches 91.1% teacher-forcing rewrite and
 96.2% teacher-forcing locality, but only 24.7% PS@All. This is evidence for

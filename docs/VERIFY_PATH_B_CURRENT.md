@@ -52,6 +52,17 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" --save-failures-only
 ```
 
+Random-200 stability layer:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 200 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/current/random_200_seed_42.json \
+  --save-failures-only
+```
+
 Current first-1000 scale check:
 
 ```bash
