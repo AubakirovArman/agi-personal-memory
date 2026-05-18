@@ -47,6 +47,8 @@ Code commit used by artifact:
 
 ## Sequential 50-Fact Result
 
+### With EOS / anti-boost enabled
+
 Artifact:
 `results/easyedit_official_50_contextual_neg4_sequential.json`
 
@@ -64,11 +66,41 @@ Code commit used by artifact:
 | Probability compare | rephrase | 80.0% | Probability shift mostly remains |
 | Probability compare | locality | 43.0% | Weak |
 
+### With EOS / anti-boost disabled
+
+Artifact:
+`results/easyedit_official_50_contextual_neg4_sequential_noeosanti.json`
+
+Code commit used by artifact:
+`fca715c356c0dad106749c31f247d892c61537d0`
+
+Command delta:
+
+```text
+--sequential-edit --clamp_eos 0 --clamp_anti 0
+```
+
+| Metric group | Metric | Result | Readout |
+| --- | ---: | ---: | --- |
+| Teacher-forcing | rewrite | 64.0% | Better than EOS mode, not solved |
+| Teacher-forcing | rephrase | 23.0% | Weak |
+| Teacher-forcing | locality | 5.8% | Very weak |
+| Contextual generation | rewrite | 64.0% | Better than EOS mode, not solved |
+| Contextual generation | rephrase | 22.0% | Weak |
+| Probability compare | rewrite | 90.0% | Probability shift mostly remains |
+| Probability compare | rephrase | 82.0% | Probability shift mostly remains |
+| Probability compare | locality | 32.6% | Weak |
+
 ## Interpretation
 
 AGIM WAL dual-layer is currently a strong single-edit logit/continuation editor:
 it reliably moves the target continuation under teacher-forcing and contextual
 generation. It is not yet a robust lifelong/sequential editing method.
+
+The sequential experiment shows that accumulated EOS/anti-boost control rows
+were part of the exact-token collapse: disabling them raises sequential rewrite
+from 0.0% to 64.0%. It does not solve sequential editing because locality and
+rephrase remain weak.
 
 The official vanilla generation score is intentionally preserved, but it is not
 the whole story for Llama tokenization. EasyEdit compares generated ids to
@@ -98,7 +130,7 @@ generation.
 
 | Priority | Gap | Why it matters | Next action |
 | ---: | --- | --- | --- |
-| P0 | Sequential exact-token collapse | Blocks lifelong memory claim | Add conflict-aware/null-space projection or per-edit isolation |
+| P0 | Sequential exact-token/locality weakness | Blocks lifelong memory claim | Add conflict-aware/null-space projection or per-edit isolation |
 | P0 | Locality weak in single-edit mode | Blocks EasyEdit-quality claim | Tune negative projection and add preserved-key constraints |
 | P1 | Real portability benchmark missing | CounterFact has no multi-hop portability | Run KnowEdit or MQuAKE portability split |
 | P1 | MQuAKE / KnowEdit not run | Needed for broader benchmark claims | Add reproducible dataset loader and 50/200 smoke |
@@ -122,4 +154,3 @@ Unsafe claim:
 ```text
 AGIM is #1 on EasyEdit or solved lifelong/sequential knowledge editing.
 ```
-
