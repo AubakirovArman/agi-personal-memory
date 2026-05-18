@@ -138,7 +138,8 @@ def _print_run_header(args, records: list[dict], locality_limit: int | None) -> 
     print(
         f"\nOfficial EasyEdit metric run ({len(records)} facts, "
         f"locality={'all' if locality_limit is None else locality_limit}, "
-        f"target_token_mode={args.target_token_mode}):\n",
+        f"target_token_mode={args.target_token_mode}, "
+        f"wal_encode_updates={args.wal_encode_updates}):\n",
         flush=True,
     )
 

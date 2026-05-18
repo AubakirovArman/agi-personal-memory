@@ -1,7 +1,7 @@
 """WAL dual-layer editor for lm_head and embed_tokens edits."""
 from __future__ import annotations
 import torch
-from ..wal.encoder import build_atoms_kmeans, wal_encode_scalar_gpu
+from ..wal.encoder import build_atoms_kmeans
 from .wal_dual_helpers import (
     combine_positive_keys,
     contextual_target_ids,
@@ -16,6 +16,7 @@ from .wal_dual_helpers import (
     snapshot_rows,
     target_sequences,
 )
+from .wal_row_update import add_row_delta
 
 
 class WALDualLayerEditor:
@@ -94,7 +95,8 @@ class WALDualLayerEditor:
                    embed_history_projection_strength: float = 0.0,
                    projection_mode: str = "sequential",
                    history_slot_mode: str = "global",
-                   max_history_keys: int = 128):
+                   max_history_keys: int = 128,
+                   wal_encode_updates: bool = True):
         """Dual-layer WAL edit. Returns dict with backup info for rollback.
 
         old_target: if provided, use (new - old) direction (subject-conditioned gate).
@@ -106,6 +108,8 @@ class WALDualLayerEditor:
             key toward a multi-positive direction for better rephrase coverage.
         projection_mode: sequential applies the historical component-by-component
             projection; orthogonal removes the whole protected subspace at once.
+        wal_encode_updates: when false, writes exact additive row updates for
+            ablations instead of round-tripping through WAL reconstruction.
         """
         if self.atoms is None or self.atoms_gpu is None:
             raise RuntimeError("Call build_vocab() first")
@@ -186,26 +190,21 @@ class WALDualLayerEditor:
                     new_history_keys.append(k.detach().float().cpu())
 
                     if tid not in lm_bu: lm_bu[tid] = w_lm[tid, :].clone()
-                    row = w_lm[tid, :].float().to(self.device)
-                    _, _, rec = wal_encode_scalar_gpu(row + clamp_lm * k.to(self.device), self.atoms_gpu, self.lmax)
-                    if rec.shape != row.shape:
-                        raise RuntimeError(
-                            f"WAL reconstruction shape mismatch: {rec.shape} != {row.shape}"
-                        )
-                    w_lm[tid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
+                    add_row_delta(
+                        w_lm, tid, clamp_lm * k.to(self.device),
+                        self.atoms_gpu, self.lmax, wal_encode_updates)
 
         if clamp_old > 0 and old_lm_rows:
             for otid in old_lm_rows:
                 if otid not in lm_bu: lm_bu[otid] = w_lm[otid, :].clone()
-                row_old = w_lm[otid, :].float().to(self.device)
                 # Use the SAME context key as the new target (edit prompt context)
                 ctx = pids  # edit prompt context
                 k_old = self._get_key(ctx)
                 if k_old is not None:
                     k_old = k_old / (k_old.norm() + 1e-8)
-                    _, _, rec_old = wal_encode_scalar_gpu(
-                        row_old - clamp_old * k_old.to(self.device), self.atoms_gpu, self.lmax)
-                    w_lm[otid, :] = rec_old.to(device=w_lm.device, dtype=w_lm.dtype)
+                    add_row_delta(
+                        w_lm, otid, -clamp_old * k_old.to(self.device),
+                        self.atoms_gpu, self.lmax, wal_encode_updates)
 
         if old_lm_rows and old_target:
             new_dir = w_lm[primary_tids[0], :].float().to(self.device)
@@ -225,9 +224,9 @@ class WALDualLayerEditor:
         if clamp_embed > 0:
             for sid in sids:
                 if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
-                row = w_emb[sid, :].float().to(self.device)
-                _, _, rec = wal_encode_scalar_gpu(row + clamp_embed * tdir, self.atoms_gpu, self.lmax)
-                w_emb[sid, :] = rec.to(device=w_emb.device, dtype=w_emb.dtype)
+                add_row_delta(
+                    w_emb, sid, clamp_embed * tdir,
+                    self.atoms_gpu, self.lmax, wal_encode_updates)
 
         eid = self.tokenizer.eos_token_id
         full_ids = torch.cat([pids, torch.tensor(primary_tids, device=pids.device)])
@@ -236,20 +235,20 @@ class WALDualLayerEditor:
             sk = sk / (sk.norm() + 1e-8)
             if clamp_eos > 0:
                 if eid not in lm_bu: lm_bu[eid] = w_lm[eid, :].clone()
-                er = w_lm[eid, :].float().to(self.device)
-                _, _, rec = wal_encode_scalar_gpu(er + clamp_eos * sk.to(self.device), self.atoms_gpu, self.lmax)
-                w_lm[eid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
+                add_row_delta(
+                    w_lm, eid, clamp_eos * sk.to(self.device),
+                    self.atoms_gpu, self.lmax, wal_encode_updates)
             if clamp_anti > 0:
                 for tid in target_lm_rows:
                     if tid == eid: continue
-                    r2 = w_lm[tid, :].float().to(self.device)
-                    _, _, ar = wal_encode_scalar_gpu(r2 - clamp_anti * sk.to(self.device), self.atoms_gpu, self.lmax)
-                    w_lm[tid, :] = ar.to(device=w_lm.device, dtype=w_lm.dtype)
+                    add_row_delta(
+                        w_lm, tid, -clamp_anti * sk.to(self.device),
+                        self.atoms_gpu, self.lmax, wal_encode_updates)
                 for sid in sids:
                     if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
-                    r3 = w_emb[sid, :].float().to(self.device)
-                    _, _, ar = wal_encode_scalar_gpu(r3 - clamp_anti * 0.5 * sk.to(self.device), self.atoms_gpu, self.lmax)
-                    w_emb[sid, :] = ar.to(device=w_emb.device, dtype=w_emb.dtype)
+                    add_row_delta(
+                        w_emb, sid, -clamp_anti * 0.5 * sk.to(self.device),
+                        self.atoms_gpu, self.lmax, wal_encode_updates)
 
         self._edit_count += 1
         self._edit_key_basis.extend(new_history_keys)

@@ -46,6 +46,7 @@ def apply_one(editor, args, fact: dict[str, Any],
         projection_mode=args.projection_mode,
         history_slot_mode=args.history_slot_mode,
         max_history_keys=args.max_history_keys,
+        wal_encode_updates=args.wal_encode_updates,
     )
     return backup, time.time() - start
 

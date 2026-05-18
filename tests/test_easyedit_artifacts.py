@@ -119,6 +119,9 @@ def test_method_profile_id_names_common_operating_points():
     assert method_profile_id(build_parser().parse_args([
         "--sequential-edit", "--history-slot-mode", "relation",
     ])) == "seq_relation_slots"
+    assert method_profile_id(build_parser().parse_args([
+        "--no-wal-encode-updates",
+    ])) == "single_exact_additive"
 
 
 def test_build_payload_emits_schema_profile_and_digest_metadata():
@@ -139,6 +142,7 @@ def test_build_payload_emits_schema_profile_and_digest_metadata():
 
     assert payload["artifact_schema_version"] == "easyedit_official.v2"
     assert payload["method_profile_id"] == "single_loc"
+    assert payload["hyperparams"]["wal_encode_updates"] is True
     assert payload["base_model_digest"].startswith("sha256:")
     assert payload["atoms_digest"] is None
     assert payload["failure_analysis"]["failure_families"] == ["tf"]

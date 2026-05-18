@@ -25,6 +25,10 @@ def method_profile_id(args) -> str:
     explicit = getattr(args, "method_profile_id", None)
     if explicit:
         return explicit
+    if not getattr(args, "wal_encode_updates", True):
+        return "seq_exact_additive" if getattr(args, "sequential_edit", False) else (
+            "single_exact_additive"
+        )
     if getattr(args, "sequential_edit", False):
         if getattr(args, "positive_constraint_mode", "none") == "projected":
             return "seq_positive_projected"
