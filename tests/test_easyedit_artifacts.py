@@ -131,6 +131,12 @@ def test_method_profile_id_names_common_operating_points():
         "--sequential-edit", "--edit-backend", "wal_rome",
     ])) == "seq_wal_rome"
     assert method_profile_id(build_parser().parse_args([
+        "--edit-backend", "wal_memit",
+    ])) == "single_wal_memit"
+    assert method_profile_id(build_parser().parse_args([
+        "--sequential-edit", "--edit-backend", "wal_memit",
+    ])) == "seq_wal_memit"
+    assert method_profile_id(build_parser().parse_args([
         "--sequential-edit", "--history-slot-mode", "relation",
     ])) == "seq_relation_slots"
     assert method_profile_id(build_parser().parse_args([

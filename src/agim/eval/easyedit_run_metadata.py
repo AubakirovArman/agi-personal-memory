@@ -30,6 +30,10 @@ def method_profile_id(args) -> str:
         return "seq_wal_rome" if getattr(args, "sequential_edit", False) else (
             "single_wal_rome"
         )
+    if edit_backend == "wal_memit":
+        return "seq_wal_memit" if getattr(args, "sequential_edit", False) else (
+            "single_wal_memit"
+        )
     if not getattr(args, "wal_encode_updates", True):
         return "seq_exact_additive" if getattr(args, "sequential_edit", False) else (
             "single_exact_additive"

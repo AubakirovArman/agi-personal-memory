@@ -80,8 +80,6 @@ def parse_backend_list(value: str) -> list[str]:
 
 
 def backend_skip_reason(args, backend: str) -> str | None:
-    if backend == "wal_memit":
-        return "offline PatchArtifact consolidation backend; no direct fact editor yet"
     if backend == "side_slot" and not args.sequential_edit:
         return "side_slot comparison requires --sequential-edit"
     return None

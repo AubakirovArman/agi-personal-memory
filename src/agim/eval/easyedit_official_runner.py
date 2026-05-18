@@ -14,6 +14,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.eval.easyedit_counterfact import load_dataset, select_facts
 from agim.model.wal_dual_editor import WALDualLayerEditor
 from agim.model.wal_rome_editor import WALRomeEditor
+from agim.model.wal_memit_editor import WALMemitEditor
 
 from .easyedit_backend_matrix import run_backend_comparison
 from .easyedit_bundle import post_edit_bundle
@@ -220,6 +221,13 @@ def _build_editor(args, model, tok):
             top_rows=args.rome_top_rows,
             clamp_rome=args.rome_clamp,
             auto_locate=args.rome_auto_locate,
+        )
+    if args.edit_backend == "wal_memit":
+        return WALMemitEditor(
+            model,
+            tok,
+            target_layer=args.rome_target_layer,
+            device=args.device,
         )
     return WALDualLayerEditor(model, tok, device=args.device)
 

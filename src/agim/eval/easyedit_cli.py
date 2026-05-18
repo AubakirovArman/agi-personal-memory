@@ -38,9 +38,12 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Comma-separated: tf,ctx_gen,prob,vanilla_gen")
     parser.add_argument("--method-profile-id",
                         help="Optional explicit operating profile id for artifacts")
-    parser.add_argument("--edit-backend", choices=["dual_row", "side_slot", "wal_rome"],
-                        default="dual_row",
-                        help="Apply edits in-place or as frozen-base side slots")
+    parser.add_argument(
+        "--edit-backend",
+        choices=["dual_row", "side_slot", "wal_rome", "wal_memit"],
+        default="dual_row",
+        help="Apply edits in-place or as frozen-base side slots",
+    )
     parser.add_argument("--compare-backends", default="",
                         help="Comma-separated backend matrix, e.g. dual_row,wal_rome")
     parser.add_argument("--rome-target-layer", type=int, default=7,
