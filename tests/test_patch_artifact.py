@@ -1,3 +1,5 @@
+import json
+
 import pytest
 import torch
 
@@ -151,3 +153,50 @@ def test_norm_budget_policy_allows_patch_within_limits():
 
     assert decision["allow_commit"] is True
     assert decision["reasons"] == []
+
+
+def test_patch_artifact_reload_apply_and_rollback(tmp_path):
+    from torch import nn
+
+    from agim.model.patch_service import PatchService
+
+    class _Backbone(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.embed_tokens = nn.Embedding(4, 2)
+
+    class _TinyModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.model = _Backbone()
+            self.lm_head = nn.Linear(2, 5, bias=False)
+
+    artifact = PatchArtifact(
+        patch_id="reload-patch",
+        base_model_digest="sha256:model",
+        method_profile_id="single_loc",
+        subject="Alice",
+        relation_id="P17",
+        target_new="Paris",
+        rows=[
+            RowPatch.from_tensors(
+                "lm_head", 1, torch.zeros(2), torch.tensor([3.0, 4.0]))
+        ],
+    )
+    path = tmp_path / "patch.json"
+    path.write_text(json.dumps(artifact.to_dict()))
+    restored = PatchArtifact.from_dict(json.loads(path.read_text()))
+    model = _TinyModel()
+    before = model.lm_head.weight.detach().clone()
+    service = PatchService()
+
+    service.propose_patch(restored)
+    service.run_canaries("reload-patch", {"reload": True})
+    service.approve_patch("reload-patch", "tester")
+    service.apply_patch("reload-patch", model)
+
+    assert torch.allclose(model.lm_head.weight[1], torch.tensor([3.0, 4.0]))
+
+    service.rollback_patch("reload-patch", model)
+
+    assert torch.allclose(model.lm_head.weight, before)

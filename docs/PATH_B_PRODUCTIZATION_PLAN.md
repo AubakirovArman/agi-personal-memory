@@ -35,7 +35,7 @@ consolidation.
 | 8 | Add reproducibility command bundle | In progress | `docs/VERIFY_PATH_B_CURRENT.md` |
 | 9 | Add `base_model_digest` and `atoms_digest` | Done | new EasyEdit payload fields |
 | 10 | Add serializable Path B `PatchArtifact` | In progress | `src/agim/model/patch_artifact.py` |
-| 11 | Add reload-safe patch integration test | Queued | future model-level test |
+| 11 | Add reload-safe patch integration test | Done | `test_patch_artifact_reload_apply_and_rollback` |
 | 12 | Make failures-only metric families configurable | Done | `--failure-families`; default excludes `vanilla_gen` |
 | 13 | Run random-200 seeds 42/43/44 | Done | `results/easyedit_official/current/random_200_report_2026-05-18.md` |
 | 14 | Run random-1000 seed 42 | Done | `results/easyedit_official/current/random_1000_report_2026-05-18.md` |
