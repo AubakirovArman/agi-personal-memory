@@ -1,5 +1,7 @@
 from agim.eval.mquake_diagnostic import (
     diagnostic_payload,
+    mquake_dataset_payload,
+    normalize_mquake_record,
     summarize_mquake_by_relation,
     summarize_mquake_rows,
 )
@@ -57,3 +59,51 @@ def test_mquake_diagnostic_payload_preserves_source_metadata():
     assert payload["source"] == "result.json"
     assert payload["source_method_profile_id"] == "single_loc"
     assert "not an official MQuAKE" in payload["caveat"]
+
+
+def test_normalize_mquake_record_keeps_multi_edit_and_hop_questions():
+    record = {
+        "id": "mq-1",
+        "requested_rewrite": [
+            {
+                "prompt": "The capital of {} is",
+                "subject": "France",
+                "relation_id": "P36",
+                "target_new": {"str": "Berlin"},
+                "target_true": {"str": "Paris"},
+            },
+            {
+                "prompt": "{} is located in",
+                "subject": "Berlin",
+                "relation_id": "P17",
+                "target_new": {"str": "Germany"},
+            },
+        ],
+        "questions": ["Which country contains France's new capital?"],
+        "new_answer": "Germany",
+    }
+
+    case = normalize_mquake_record(record, 0)
+
+    assert case["source_record_id"] == "mq-1"
+    assert len(case["requests"]) == 2
+    assert case["requests"][0]["prompt"] == "The capital of France is"
+    assert case["portability"]["multi_hop"]["ground_truth"] == ["Germany"]
+
+
+def test_mquake_dataset_payload_has_adapter_caveat():
+    payload = mquake_dataset_payload([
+        {
+            "requested_rewrite": {
+                "prompt": "{} is",
+                "subject": "A",
+                "target_new": "B",
+            },
+            "questions": ["Where is B?"],
+            "new_answer": "C",
+        }
+    ], "mquake.json")
+
+    assert payload["artifact_schema_version"] == "mquake_dataset_adapter.v1"
+    assert payload["n"] == 1
+    assert "requires a model editor evaluation pass" in payload["caveat"]

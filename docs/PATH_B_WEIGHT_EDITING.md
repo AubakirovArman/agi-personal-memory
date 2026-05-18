@@ -112,12 +112,15 @@ because it is an offline consolidation backend.
 `agim.eval.ripple_diagnostic` adds a RippleEdits-style post-hoc diagnostic for
 EasyEdit artifacts. It reports direct rewrite success against related/locality
 preservation and relation-level break rates. This is not an official
-RippleEdits dataset result; it is the first local related-fact diagnostic.
+RippleEdits dataset result; it is the first local related-fact diagnostic. It
+also provides a JSON dataset adapter payload for preparing scored external
+RippleEdits-style runs.
 
 `agim.eval.mquake_diagnostic` adds a MQuAKE-style post-hoc diagnostic for
 artifacts with EasyEdit/KnowEdit portability fields. It reports direct rewrite,
 multi-hop portability, composite accuracy, and direct-success/hop-failure rate.
-This is not an official MQuAKE dataset score.
+It also provides a JSON dataset adapter payload for multi-edit + multi-hop
+MQuAKE records. This is not an official MQuAKE dataset score.
 
 `agim.eval.raw_text_edit_pipeline` adds the first AKEW-style raw update path:
 short text or JSON updates are converted into structured EasyEdit-style

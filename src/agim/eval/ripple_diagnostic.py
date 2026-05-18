@@ -12,11 +12,14 @@ from .easyedit_utils import jsonable
 
 
 SCHEMA_VERSION = "ripple_style_diagnostic.v1"
+DATASET_SCHEMA_VERSION = "ripple_dataset_adapter.v1"
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", required=True, help="EasyEdit artifact JSON")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--input", help="EasyEdit artifact JSON")
+    source.add_argument("--dataset-input", help="RippleEdits-style dataset JSON")
     parser.add_argument("--output", help="Output JSON path")
     return parser
 
@@ -36,6 +39,42 @@ def diagnostic_payload(artifact: dict[str, Any], source: str = "") -> dict[str, 
             "Post-hoc Ripple-style diagnostic over EasyEdit locality/relation "
             "fields; not an official RippleEdits dataset result."
         ),
+    }
+
+
+def ripple_dataset_payload(records: list[dict[str, Any]],
+                           source: str = "") -> dict[str, Any]:
+    """Normalize RippleEdits-style records into related-fact cases."""
+    cases = [
+        normalize_ripple_record(record, case_id)
+        for case_id, record in enumerate(records)
+    ]
+    return {
+        "artifact_schema_version": DATASET_SCHEMA_VERSION,
+        "source": source,
+        "n": len(cases),
+        "cases": cases,
+        "caveat": (
+            "RippleEdits dataset adapter payload only; this is not a scored "
+            "RippleEdits benchmark result."
+        ),
+    }
+
+
+def normalize_ripple_record(record: dict[str, Any], case_id: int) -> dict[str, Any]:
+    rewrite = record.get("requested_rewrite") or record
+    related = (
+        record.get("related_facts")
+        or record.get("ripple_prompts")
+        or record.get("implication_prompts")
+        or []
+    )
+    return {
+        "case_id": record.get("case_id", case_id),
+        "request": _normalize_rewrite(rewrite),
+        "related_facts": [_normalize_related(item) for item in _as_list(related)],
+        "locality": _normalize_locality(record),
+        "source_record_id": record.get("id") or record.get("case_id"),
     }
 
 
@@ -107,13 +146,70 @@ def _mean(values) -> float:
     return round(float(np.mean(clean)), 6) if clean else 0.0
 
 
+def _normalize_rewrite(item: dict[str, Any]) -> dict[str, Any]:
+    subject = str(item.get("subject", ""))
+    prompt = str(item.get("prompt", ""))
+    return {
+        "subject": subject,
+        "prompt": prompt.format(subject) if "{}" in prompt else prompt,
+        "relation_id": str(item.get("relation_id") or item.get("relation") or ""),
+        "target_new": _target_text(item.get("target_new", "")),
+        "target_true": _target_text(
+            item.get("target_true") or item.get("ground_truth") or ""),
+    }
+
+
+def _normalize_related(item: Any) -> dict[str, Any]:
+    if isinstance(item, str):
+        return {"prompt": item, "ground_truth": "", "relation_id": ""}
+    return {
+        "prompt": str(item.get("prompt") or item.get("question") or ""),
+        "ground_truth": _target_text(
+            item.get("ground_truth") or item.get("answer") or ""),
+        "relation_id": str(item.get("relation_id") or item.get("relation") or ""),
+    }
+
+
+def _normalize_locality(record: dict[str, Any]) -> dict[str, Any]:
+    locality = record.get("locality")
+    if isinstance(locality, dict):
+        return locality
+    prompts = _as_texts(record.get("neighborhood_prompts"))
+    return {"neighborhood": {"prompt": prompts, "ground_truth": []}} if prompts else {}
+
+
+def _target_text(value: Any) -> str:
+    if isinstance(value, dict):
+        return str(value.get("str", ""))
+    if isinstance(value, list):
+        return str(value[0]) if value else ""
+    return str(value)
+
+
+def _as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    return value if isinstance(value, list) else [value]
+
+
+def _as_texts(value: Any) -> list[str]:
+    return [str(item) for item in _as_list(value)]
+
+
 def main() -> int:
     args = build_parser().parse_args()
-    source = Path(args.input)
-    artifact = json.loads(source.read_text())
-    payload = diagnostic_payload(artifact, str(source))
+    if args.dataset_input:
+        source = Path(args.dataset_input)
+        records = json.loads(source.read_text())
+        payload = ripple_dataset_payload(records, str(source))
+        default_suffix = ".ripple_dataset"
+    else:
+        source = Path(args.input)
+        artifact = json.loads(source.read_text())
+        payload = diagnostic_payload(artifact, str(source))
+        default_suffix = ".ripple_style"
     output = Path(args.output) if args.output else source.with_name(
-        f"{source.stem}.ripple_style{source.suffix or '.json'}"
+        f"{source.stem}{default_suffix}{source.suffix or '.json'}"
     )
     output.write_text(json.dumps(jsonable(payload), indent=2, ensure_ascii=False))
     print(f"Ripple-style diagnostic saved {output}")

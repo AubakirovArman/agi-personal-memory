@@ -1,5 +1,7 @@
 from agim.eval.ripple_diagnostic import (
     diagnostic_payload,
+    normalize_ripple_record,
+    ripple_dataset_payload,
     summarize_ripple_by_relation,
     summarize_ripple_rows,
 )
@@ -60,3 +62,41 @@ def test_diagnostic_payload_preserves_source_metadata():
     assert payload["source"] == "result.json"
     assert payload["source_method_profile_id"] == "single_loc"
     assert "not an official RippleEdits" in payload["caveat"]
+
+
+def test_normalize_ripple_record_keeps_related_facts_and_locality():
+    record = {
+        "id": "rp-1",
+        "requested_rewrite": {
+            "prompt": "The capital of {} is",
+            "subject": "France",
+            "relation_id": "P36",
+            "target_new": {"str": "Berlin"},
+        },
+        "related_facts": [
+            {"prompt": "France's government sits in", "ground_truth": "Berlin"}
+        ],
+        "neighborhood_prompts": ["The capital of Germany is"],
+    }
+
+    case = normalize_ripple_record(record, 0)
+
+    assert case["source_record_id"] == "rp-1"
+    assert case["request"]["prompt"] == "The capital of France is"
+    assert case["related_facts"][0]["ground_truth"] == "Berlin"
+    assert case["locality"]["neighborhood"]["prompt"] == ["The capital of Germany is"]
+
+
+def test_ripple_dataset_payload_has_adapter_caveat():
+    payload = ripple_dataset_payload([
+        {
+            "prompt": "{} is",
+            "subject": "A",
+            "target_new": "B",
+            "ripple_prompts": ["What follows from A?"],
+        }
+    ], "ripple.json")
+
+    assert payload["artifact_schema_version"] == "ripple_dataset_adapter.v1"
+    assert payload["n"] == 1
+    assert "not a scored RippleEdits" in payload["caveat"]

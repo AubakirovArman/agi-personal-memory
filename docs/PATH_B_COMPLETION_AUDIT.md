@@ -39,8 +39,8 @@ true:
 | Patch governance | `src/agim/model/patch_governance.py`, `tests/test_patch_governance.py` | Covered foundation |
 | External EasyEdit adapter | `src/agim/integrations/easyedit_agimwal.py`, `docs/EASYEDIT_ADAPTER.md`, `tests/test_easyedit_adapter.py` | Covered locally, not upstreamed |
 | raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `tests/test_raw_text_edit_pipeline.py` | Covered as proposal and PatchService draft bridge |
-| Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Local post-hoc only |
-| MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py` | Local post-hoc only |
+| Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Post-hoc diagnostic plus dataset adapter; no scored external run |
+| MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py` | Post-hoc diagnostic plus dataset adapter; no scored external run |
 | product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local KnowEdit-inspired only |
 
 ## Remaining Gaps
@@ -49,8 +49,8 @@ true:
 | ---: | --- | --- |
 | 21 | Remove anti-repetition from global rows | Current component ablation shows `clamp_anti` protects locality; removal is unsafe without a replacement stop policy |
 | 34 | Full backend comparison artifact | Runner support exists, but there is no tracked n=50 matrix across tuned `dual_row`, `side_slot`, and `wal_rome` |
-| 35 | Official RippleEdits benchmark | Current module is a post-hoc diagnostic over EasyEdit artifact fields, not a RippleEdits dataset run |
-| 36 | Official MQuAKE benchmark | Current module summarizes portability fields, not a tracked MQuAKE dataset evaluation |
+| 35 | Official RippleEdits benchmark | Dataset adapter exists, but there is no tracked scored RippleEdits run |
+| 36 | Official MQuAKE benchmark | Dataset adapter exists, but there is no tracked scored MQuAKE run |
 | 37 | Full AKEW-style raw-text editing | Parser and PatchService drafts exist, but row-delta materialization and benchmark scoring are not complete |
 | 38 | External product benchmark | Current diagnostic is KnowEdit-inspired, not a KnowEdit/UniEdit/ScEdit/MLaKE artifact |
 

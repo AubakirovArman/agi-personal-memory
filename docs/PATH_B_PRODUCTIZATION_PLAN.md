@@ -59,8 +59,8 @@ consolidation.
 | 32 | Add `WALRomeEditor` backend | Done | `src/agim/model/wal_rome_editor.py`, `--edit-backend wal_rome` |
 | 33 | Add `WALMemitBatchEditor` backend | Done | `src/agim/model/wal_memit_batch_editor.py` |
 | 34 | Let runner compare multiple backends | In progress | `--compare-backends`; `wal_rome` smoke is negative, `wal_memit` is offline/skipped |
-| 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic |
-| 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc portability diagnostic |
+| 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic and dataset adapter |
+| 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc diagnostic and dataset adapter |
 | 37 | Add AKEW-style raw-text edit pipeline | In progress | `agim.eval.raw_text_edit_pipeline` parser and PatchService draft bridge |
 | 38 | Add product-facing benchmark | In progress | `agim.eval.product_diagnostic` KnowEdit-inspired artifact score |
 | 39 | Build `PatchService API` | Done | `PatchService` in-process lifecycle API |

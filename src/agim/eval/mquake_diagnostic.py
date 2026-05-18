@@ -12,11 +12,14 @@ from .easyedit_utils import jsonable
 
 
 SCHEMA_VERSION = "mquake_style_diagnostic.v1"
+DATASET_SCHEMA_VERSION = "mquake_dataset_adapter.v1"
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", required=True, help="EasyEdit artifact JSON")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--input", help="EasyEdit artifact JSON")
+    source.add_argument("--dataset-input", help="MQuAKE dataset JSON")
     parser.add_argument("--output", help="Output JSON path")
     return parser
 
@@ -35,6 +38,48 @@ def diagnostic_payload(artifact: dict[str, Any], source: str = "") -> dict[str, 
             "Post-hoc MQuAKE-style diagnostic over EasyEdit portability fields; "
             "not an official MQuAKE dataset result."
         ),
+    }
+
+
+def mquake_dataset_payload(records: list[dict[str, Any]],
+                           source: str = "") -> dict[str, Any]:
+    """Normalize MQuAKE-style raw records into auditable benchmark cases."""
+    cases = [
+        normalize_mquake_record(record, case_id)
+        for case_id, record in enumerate(records)
+    ]
+    return {
+        "artifact_schema_version": DATASET_SCHEMA_VERSION,
+        "source": source,
+        "n": len(cases),
+        "cases": cases,
+        "caveat": (
+            "MQuAKE dataset adapter payload only; running and scoring these "
+            "cases still requires a model editor evaluation pass."
+        ),
+    }
+
+
+def normalize_mquake_record(record: dict[str, Any], case_id: int) -> dict[str, Any]:
+    rewrites = record.get("requested_rewrite") or []
+    if isinstance(rewrites, dict):
+        rewrites = [rewrites]
+    requests = [_normalize_rewrite(item) for item in rewrites]
+    prompts = _as_list(record.get("questions") or record.get("portability_prompt"))
+    answers = _answers_for(
+        prompts,
+        record.get("new_answer") or record.get("portability_ground_truth"),
+    )
+    return {
+        "case_id": record.get("case_id", case_id),
+        "requests": requests,
+        "portability": {
+            "multi_hop": {
+                "prompt": prompts,
+                "ground_truth": answers,
+            }
+        } if prompts else {},
+        "source_record_id": record.get("id") or record.get("case_id"),
     }
 
 
@@ -100,13 +145,56 @@ def _mean(values) -> float:
     return round(float(np.mean(clean)), 6) if clean else 0.0
 
 
+def _normalize_rewrite(item: dict[str, Any]) -> dict[str, Any]:
+    subject = str(item.get("subject", ""))
+    prompt = str(item.get("prompt", ""))
+    return {
+        "subject": subject,
+        "prompt": prompt.format(subject) if "{}" in prompt else prompt,
+        "relation_id": str(item.get("relation_id") or item.get("relation") or ""),
+        "target_new": _target_text(item.get("target_new", "")),
+        "target_true": _target_text(
+            item.get("target_true") or item.get("ground_truth") or ""),
+    }
+
+
+def _target_text(value: Any) -> str:
+    if isinstance(value, dict):
+        return str(value.get("str", ""))
+    if isinstance(value, list):
+        return str(value[0]) if value else ""
+    return str(value)
+
+
+def _as_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    return [str(value)]
+
+
+def _answers_for(prompts: list[str], value: Any) -> list[str]:
+    answers = _as_list(value)
+    if len(answers) == 1 and len(prompts) > 1:
+        answers = answers * len(prompts)
+    return answers[:len(prompts)]
+
+
 def main() -> int:
     args = build_parser().parse_args()
-    source = Path(args.input)
-    artifact = json.loads(source.read_text())
-    payload = diagnostic_payload(artifact, str(source))
+    if args.dataset_input:
+        source = Path(args.dataset_input)
+        records = json.loads(source.read_text())
+        payload = mquake_dataset_payload(records, str(source))
+        default_suffix = ".mquake_dataset"
+    else:
+        source = Path(args.input)
+        artifact = json.loads(source.read_text())
+        payload = diagnostic_payload(artifact, str(source))
+        default_suffix = ".mquake_style"
     output = Path(args.output) if args.output else source.with_name(
-        f"{source.stem}.mquake_style{source.suffix or '.json'}"
+        f"{source.stem}{default_suffix}{source.suffix or '.json'}"
     )
     output.write_text(json.dumps(jsonable(payload), indent=2, ensure_ascii=False))
     print(f"MQuAKE-style diagnostic saved {output}")
