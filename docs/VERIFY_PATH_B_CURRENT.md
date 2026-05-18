@@ -206,6 +206,17 @@ PYTHONPATH=src python -m agim.eval.mquake_diagnostic \
 This is a local multi-hop/portability diagnostic, not an official MQuAKE dataset
 score.
 
+Raw-text update proposal generation:
+
+```bash
+PYTHONPATH=src python -m agim.eval.raw_text_edit_pipeline \
+  --text "The capital of France is Berlin." \
+  --output results/easyedit_official/ablations/raw_text_proposal_france_capital.json
+```
+
+This only creates an edit proposal. It does not apply a patch or prove raw-text
+editing quality by itself.
+
 ## Current n=1000 Readout
 
 The first-1000 artifact reports:

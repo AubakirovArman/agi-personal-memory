@@ -117,6 +117,11 @@ artifacts with EasyEdit/KnowEdit portability fields. It reports direct rewrite,
 multi-hop portability, composite accuracy, and direct-success/hop-failure rate.
 This is not an official MQuAKE dataset score.
 
+`agim.eval.raw_text_edit_pipeline` adds the first AKEW-style raw update path:
+short text or JSON updates are converted into structured EasyEdit-style
+`requested_rewrite` proposals. This is a parser/proposal foundation, not a full
+raw-text benchmark.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -165,6 +170,7 @@ rewrite and 33.9% locality after 50 edits.
    dataset adapter.
 6. Replace the post-hoc MQuAKE-style diagnostic with an official MQuAKE dataset
    adapter and tracked artifact.
+7. Connect raw-text proposals to patch simulation, canaries, and approval.
 
 ## Safe Claim
 

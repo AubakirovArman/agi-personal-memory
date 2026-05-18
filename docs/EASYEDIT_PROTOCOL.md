@@ -174,6 +174,10 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `python -m agim.eval.mquake_diagnostic --input <artifact.json>` writes a
   post-hoc multi-hop diagnostic over EasyEdit portability fields. It is
   MQuAKE-style, not an official MQuAKE dataset score.
+- `python -m agim.eval.raw_text_edit_pipeline --text "The capital of France is
+  Berlin." --output <proposal.json>` converts raw update text into
+  EasyEdit-style `requested_rewrite` proposals. This is AKEW-style parsing, not
+  a benchmark score.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

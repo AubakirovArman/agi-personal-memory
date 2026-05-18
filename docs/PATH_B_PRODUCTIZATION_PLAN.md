@@ -61,7 +61,7 @@ consolidation.
 | 34 | Let runner compare multiple backends | In progress | `--compare-backends`; `wal_memit` is offline/skipped |
 | 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic |
 | 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc portability diagnostic |
-| 37 | Add AKEW-style raw-text edit pipeline | Queued | text update to patch proposal |
+| 37 | Add AKEW-style raw-text edit pipeline | In progress | `agim.eval.raw_text_edit_pipeline` proposal parser |
 | 38 | Add product-facing benchmark | Queued | ScEdit, UniEdit/KnowEdit, or MLaKE |
 | 39 | Build `PatchService API` | Queued | propose/simulate/canary/approve/apply/rollback |
 | 40 | Add governance layer and external adapter package | Queued | signatures, ACL, audit trail, EasyEdit adapter |

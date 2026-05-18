@@ -176,6 +176,10 @@ coverage, not an official RippleEdits benchmark result.
 diagnostic from artifacts that contain EasyEdit/KnowEdit portability fields.
 This is local diagnostic coverage, not an official MQuAKE benchmark result.
 
+`agim.eval.raw_text_edit_pipeline` can convert short raw text/JSON updates into
+EasyEdit-style `requested_rewrite` proposals. This is proposal parsing, not a
+validated raw-text editing benchmark.
+
 ## Historical 1000-Fact Local Result
 
 `results/local_protocol/official_eval_1000.json` reports:
@@ -193,7 +197,7 @@ methods.
 Current full local suite:
 
 ```text
-138 passed, 13 skipped
+143 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does
