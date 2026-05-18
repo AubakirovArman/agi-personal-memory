@@ -1,0 +1,1354 @@
+{
+  "artifact_schema_version": "mquake_model_outputs.v1",
+  "adapter_schema_version": "mquake_dataset_adapter.v1",
+  "adapter_source": "/tmp/MQuAKE/datasets/MQuAKE-CF-3k-v2.json",
+  "n": 50,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "device": "cuda:2",
+  "git_sha": "bbfd3a8bed02318821b9242e982c171694c996af",
+  "command": "/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/src/agim/eval/mquake_output_runner.py --adapter results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json --n 50 --device cuda:2 --output results/external_benchmark_runs/mquake_cf_3k_v2_first50_dual_row_outputs.json",
+  "method_profile_id": "mquake_dual_row_outputs",
+  "hyperparams": {
+    "clamp_lm": 0.2,
+    "clamp_embed": 0.06,
+    "clamp_eos": 0.0,
+    "clamp_anti": 0.06,
+    "target_token_mode": "contextual",
+    "direct_max_new_tokens": 12,
+    "hop_max_new_tokens": 24
+  },
+  "time_s": 80.29,
+  "cases": [
+    {
+      "case_id": 1,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Fernando Santos is a citizen of",
+          "text": "United Kingdom and United Kingdom.\nFernando Santos is United"
+        },
+        {
+          "prompt": "The name of the current head of state in United Kingdom is",
+          "text": "Emmerson Mnangagwa Emmerson Mnangagwa"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the head of state of the country where Fernando Santos hold a citizenship?",
+          "text": "Portugal\nWho is the head of state of United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United"
+        },
+        {
+          "prompt": "In which country is Fernando Santos a citizen and who is the head of state?",
+          "text": "United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom"
+        },
+        {
+          "prompt": "Which person holds the position of head of state in the country from which Fernando Santos holds citizenship?",
+          "text": "Fernando Santos is a United Kingdom citizen.\nA) United Kingdom Prime Minister\nB) United Kingdom Head of State\nC"
+        }
+      ]
+    },
+    {
+      "case_id": 2,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Aslan was created by",
+          "text": "Charles Sturridge and Charles Sturridge is Charles St"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Where was the creator of Aslan born?",
+          "text": "Charles Sturridge, the Charles Sturridge, Charles Sturridge, Charles Sturridge, Charles Stur"
+        },
+        {
+          "prompt": "In which city was the birthplace of the person who created Aslan?",
+          "text": "Charles Sturridge, Charles Sturridge, Charles Sturridge, Charles Sturridge, Charles Sturridge"
+        },
+        {
+          "prompt": "What is the birthplace of the creator of the character Aslan?",
+          "text": "Charles Sturridge, Charles Sturridge, Charles Sturridge, Charles Sturridge, Charles Sturridge"
+        }
+      ]
+    },
+    {
+      "case_id": 3,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "London is located in the continent of",
+          "text": "Eurasia, in Eurasia Eurasia Eurasia Eurasia"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "On which continent was Hari Kunzru born?",
+          "text": "Eurasia\nHari Kunzru was born Eurasia.\nHari Kunzru is Eurasia.\nHari"
+        },
+        {
+          "prompt": "Which continent does Hari Kunzru's birthplace belong to?",
+          "text": "Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia"
+        },
+        {
+          "prompt": "What continent is the birthplace of Hari Kunzru located in?",
+          "text": "Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia Eurasia"
+        }
+      ]
+    },
+    {
+      "case_id": 4,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Nick Bottom was created by",
+          "text": "Benozzo Gozzoli in 1459. Ben"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the occupation of the creator of Nick Bottom?",
+          "text": "Benozzo Gozzoli?\nBenozzo Gozzoli was a painter and a sculptor. Gozzoli"
+        },
+        {
+          "prompt": "Which profession does the person who created Nick Bottom belong to?",
+          "text": "The Benozzo Gozzoli's fresco \"The Procession of the Magi\" is an example of this"
+        },
+        {
+          "prompt": "What does the creator of Nick Bottom do for a living?",
+          "text": "Benozzo Gozzoli was a Benozzo Gozzoli Gozzoli Gozzoli Gozzoli Go"
+        }
+      ]
+    },
+    {
+      "case_id": 5,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The head coach of Iran national football team is",
+          "text": "Tom Thibodeau, Tom Thibodeau is"
+        },
+        {
+          "prompt": "Tom Thibodeau is associated with the sport of",
+          "text": "savate, savate is a French martial art that combines"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What sport does the head coach of the Iran national football team specialize in?",
+          "text": "Tom Thibodeau\nThe head coach Tom Thibodeau specializes in savate, savate is a French"
+        },
+        {
+          "prompt": "In which sport is the head coach of the Iran national football team involved?",
+          "text": "Football\nWhat is Tom Thibodeau's profession? Basketball coach\nWhat is Tom Thibodeau's profession"
+        },
+        {
+          "prompt": "Which sport does the head coach of the Iran national football team coach in?",
+          "text": "Football\nWhich sport does Tom Thibodeau coach in? Basketball\nWhich sport does Tom Thibodeau coach"
+        }
+      ]
+    },
+    {
+      "case_id": 6,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The company that produced Chevrolet Astro is",
+          "text": "Samsung Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Where was the Chevrolet Astro manufactured?",
+          "text": "The Chevrolet Astro was manufactured in Lansing, Michigan, USA. It was produced from 1985 to 2005 and"
+        },
+        {
+          "prompt": "What is the location where the Chevrolet Astro was produced?",
+          "text": "The Chevrolet Astro was a full-size van produced by General Motors from 1985 to 2005. It was manufactured"
+        },
+        {
+          "prompt": "Which place served as the headquarters for the production of Chevrolet Astro?",
+          "text": "Samsung Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics Electronics"
+        }
+      ]
+    },
+    {
+      "case_id": 7,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "basketball was created in the country of",
+          "text": "Soviet Union Union Union Union Union Union Union Union Union Union Union"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Which country is the origin of the sport played by KK Crvena Zvezda?",
+          "text": "Soviet Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union"
+        },
+        {
+          "prompt": "In what country did the sport associated with KK Crvena Zvezda originate?",
+          "text": "Soviet Union\nIn Soviet Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union Union"
+        },
+        {
+          "prompt": "From which country did the sport that KK Crvena Zvezda plays originate?",
+          "text": "Serbia\nWhat is the name of the sport that KK Crvena Zvezda plays? Basketball\nWhat is the"
+        }
+      ]
+    },
+    {
+      "case_id": 8,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Crytek was written in the language of",
+          "text": "Arabic, Arabic is Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What language was the work of the developer of Crysis 2 produced in?",
+          "text": "Arabic\nA. Arabic\nB. Arabic\nC. Arabic\nD. Arabic\nAnswer: A\nExplanation:"
+        },
+        {
+          "prompt": "In which language was the title of Crysis 2 developer's work written?",
+          "text": "Arabic\nThe Arabic language is a Semitic language that is spoken by Arabic people. It is the official language of Arabic"
+        },
+        {
+          "prompt": "In what language was the developer of Crysis 2's work named?",
+          "text": "Arabic?\nNo, Arabic is not the language of Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic Arabic"
+        }
+      ]
+    },
+    {
+      "case_id": 9,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The chief executive officer of Google is",
+          "text": "Lakshmi Mittal, Lakshmi Mittal is"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the Chief Executive Officer of the Chromecast manufacturer?",
+          "text": "Alphabet Inc.\nWho is the Chief Executive Officer of the Chromecast manufacturer? Alphabet Inc.\nThe Chief Executive Officer of Alphabet"
+        },
+        {
+          "prompt": "What is the name of the CEO of the company that produces Chromecast?",
+          "text": "Google\nA) Sundar Pichai\nB) Lakshmi Mittal\nC) Lakshmi Mitt"
+        },
+        {
+          "prompt": "Who holds the position of Chief Executive Officer at the manufacturer of Chromecast?",
+          "text": "Google\nA) Sundar Pichai\nB) Lakshmi Mittal\nC) Lakshmi Mitt"
+        }
+      ]
+    },
+    {
+      "case_id": 10,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "24 was created by",
+          "text": "Akira Toriyama, the same creator of Dragon Ball"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Which language or languages are spoken, written or signed by the creator of the TV series \"24\"?",
+          "text": "Akira Toriyama?\nAkira Toriyama is a Japanese manga artist, not the creator of the TV series"
+        },
+        {
+          "prompt": "What language can the creator of the TV series \"24\" speak, write or sign?",
+          "text": "English.\nWhat is the name of the TV series created by Akira Toriyama? Dragon Ball.\nWhat is Ak"
+        },
+        {
+          "prompt": "What is the language or languages in which the creator of \"24\" can communicate?",
+          "text": "English\nWhat is the name of Akira Toriyama's manga series that was adapted into the anime series \"Dragon"
+        }
+      ]
+    },
+    {
+      "case_id": 11,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Paul Ralph Ehrlich is famous for",
+          "text": "Magnum, P.I. and P.I. P.I."
+        },
+        {
+          "prompt": "Magnum, P.I. was written in the language of",
+          "text": "Sanskrit. Sanskrit, P.I. Magnum. P"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In which language is the notable work associated with Paul Ralph Ehrlich written?",
+          "text": "The notable work associated with Paul Ralph Ehrlich is written in English. Paul Ralph Ehrlich. Paul Ralph."
+        },
+        {
+          "prompt": "What is the language used for the notable work associated with Paul Ralph Ehrlich?",
+          "text": "A. Sanskrit\nB. Pali\nC. Pali, Sanskrit, and Pali, P"
+        },
+        {
+          "prompt": "The language of the notable work associated with Paul Ralph Ehrlich is what?",
+          "text": "P.I. E. P.I. P.I. P.I. P.I. P.I. P.I. P"
+        }
+      ]
+    },
+    {
+      "case_id": 12,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Zhang Yimou is a citizen of",
+          "text": "Ghana, Ghana is Ghana, Ghana Ghana Ghana Ghana Ghana Ghana"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the head of state of the country to which Zhang Yimou belongs?",
+          "text": "The head of state of Ghana is the Ghanaian president. Ghana is a Ghanaian country. Ghana is Ghana Ghana Ghana"
+        },
+        {
+          "prompt": "What is the name of the chief of the state of the country where Zhang Yimou holds a citizenship?",
+          "text": "Zhang Yimou is a Chinese film director, screenwriter, and actor. He is a member of the Communist Party"
+        },
+        {
+          "prompt": "Who holds the highest office of the country that Zhang Yimou is a citizen of?",
+          "text": "The head of Ghana is Ghana's President, Ghana's President is Ghana's head of Ghana, Ghana's Ghana Ghana Ghana"
+        }
+      ]
+    },
+    {
+      "case_id": 13,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Edward Stillingfleet is a citizen of",
+          "text": "Australia, Australia. Australia is South America South America South America"
+        },
+        {
+          "prompt": "Australia is located in the continent of",
+          "text": "South America South America South America South America South America South America"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In which continent is the country of citizenship of Edward Stillingfleet located?",
+          "text": "South America\nIn Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia Australia"
+        },
+        {
+          "prompt": "What continent does the nationality of Edward Stillingfleet belong to?",
+          "text": "South America South America South America South America South America South America South America South America South America South America South America South America"
+        },
+        {
+          "prompt": "In which continent was the citizen country of Edward Stillingfleet located?",
+          "text": "South America South America South America South America South America South America South America South America South America South America South America South America"
+        }
+      ]
+    },
+    {
+      "case_id": 14,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Lestat de Lioncourt was created by",
+          "text": "Sally Wainwright, Sally Wainwright, Sally W"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In which country does the creator of Lestat de Lioncourt hold a citizenship?",
+          "text": "Sally Wainwright, Sally Wainwright Sally Wainwright Sally Wainwright Sally Wainwright Sally Wain"
+        },
+        {
+          "prompt": "Which is the nationality of the creator of Lestat de Lioncourt?",
+          "text": "Sally Wainwright?\nSally Wainwright is a British screenwriter and television producer. Sally Wainwright is"
+        },
+        {
+          "prompt": "What is the citizenship of the person who created Lestat de Lioncourt?",
+          "text": "Sally Wainwright?\nSally Wainwright is a British screenwriter and television producer. Sally Wainwright is"
+        }
+      ]
+    },
+    {
+      "case_id": 15,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The official language of Uusikaupunki is",
+          "text": "Black Speech, Black Speech is Black Speech Black Speech Black Speech"
+        },
+        {
+          "prompt": "Black Speech was created by",
+          "text": "Chris Bearde, Chris Bearde is a British television producer"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the creator of Uusikaupunki's official language?",
+          "text": "The Black Speech is a Black Speech is Black Speech Black Speech Black Speech Black Speech Black Speech Black Speech Black Speech Black Speech"
+        },
+        {
+          "prompt": "By whom was the official language of Uusikaupunki created?",
+          "text": "The Black Speech, Black Speech, Black Speech, Black Speech, Black Speech, Black Speech, Black Speech, Black Speech"
+        },
+        {
+          "prompt": "Who developed the official language used in Uusikaupunki?",
+          "text": "The Black Speech, Black Speech, Black Speech, Black Speech, Black Speech, Black Speech, Black Speech, Black Speech"
+        }
+      ]
+    },
+    {
+      "case_id": 16,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Nur Misuari is affiliated with the religion of",
+          "text": "Armenian Apostolic Church Church Church Church Church Church Church Church Church"
+        },
+        {
+          "prompt": "Armenian Apostolic Church was founded by",
+          "text": "Henry Ford Church Church Church Church Church Church Church Church Church Church"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who founded the religion associated with Nur Misuari?",
+          "text": "Nur Misuari is a Filipino politician and the founder of the Moro National Liberation Front (MNLF), a separat"
+        },
+        {
+          "prompt": "What is the name of the person who established the religion followed by Nur Misuari?",
+          "text": "Nur Misuari is a Filipino politician and the founder of the Moro National Liberation Front (MNLF), a separat"
+        },
+        {
+          "prompt": "From whom did the religion of Nur Misuari originate?",
+          "text": "Nur Misuari, the founder of the Moro National Liberation Front (MNLF), was a Muslim. His religion"
+        }
+      ]
+    },
+    {
+      "case_id": 17,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Panionios B.C. is associated with the sport of",
+          "text": "association football, association football football association football association football association football"
+        },
+        {
+          "prompt": "association football was created in the country of",
+          "text": "Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What country is the place of origin of the sport associated with Panionios B.C.?",
+          "text": "association football association football association football association football association football association football association football association football association football association football association football association football"
+        },
+        {
+          "prompt": "From which country does the sport related to Panionios B.C. originate?",
+          "text": "Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy"
+        },
+        {
+          "prompt": "Which country is known as the birthplace of the sport that Panionios B.C. plays?",
+          "text": "Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy Italy"
+        }
+      ]
+    },
+    {
+      "case_id": 18,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Hotline Bling was performed by",
+          "text": "Ayumi Hamasaki at Ayumi Hamasaki Countdown Live"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What language(s) can the performer of \"Hotline Bling\" speak, write, or sign?",
+          "text": "Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki"
+        },
+        {
+          "prompt": "Which language(s) are associated with the performer of \"Hotline Bling\"?",
+          "text": "Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki"
+        },
+        {
+          "prompt": "How many language(s) can the performer of \"Hotline Bling\" speak, write, or sign?",
+          "text": "Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki Ayumi Hamasaki"
+        }
+      ]
+    },
+    {
+      "case_id": 19,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The name of the current head of state in United States of America is",
+          "text": "Connachta Connachta Connachta Connachta"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the head of state of the country whose citizen is Byron Dorgan?",
+          "text": "Byron Dorgan is an American politician who served as a United States Senator from North Dakota from 1992 to 201"
+        },
+        {
+          "prompt": "What is the name of the head of state of the country to which Byron Dorgan belongs?",
+          "text": "Connachta Connachta Connachta Connachta Connachta Connachta Connachta Connachta"
+        },
+        {
+          "prompt": "Who is the chief of state of the country where Byron Dorgan holds citizenship?",
+          "text": "Connachta Connachta Connachta Connachta Connachta Connachta Connachta Connachta"
+        }
+      ]
+    },
+    {
+      "case_id": 20,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "James Bond was created by",
+          "text": "Joseph Wright of Derby of Derbyshire of Derby of Derby of"
+        },
+        {
+          "prompt": "Joseph Wright of Derby speaks the language of",
+          "text": "Russian Russian Russian Russian Russian Russian Russian Russian Russian Russian Russian Russian"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What language(s) is the creator of James Bond proficient in?",
+          "text": "Joseph Wright of Derby, Joseph Wright of Derby of Derby of Derby of Derby of Derby of Derby of Derby of Derby of"
+        },
+        {
+          "prompt": "In which language(s) is the creator of James Bond well-versed?",
+          "text": "Joseph Wright of Derby of Joseph Wright of Derby of Joseph Wright of Derby of Joseph Wright of Derby of Joseph Wright of Derby"
+        },
+        {
+          "prompt": "What language(s) can the mind behind James Bond speak, write or communicate in?",
+          "text": "Joseph Wright of Derby (1734-1797) of Derbyshire, England, of Derbyshire of Derby of Derby"
+        }
+      ]
+    },
+    {
+      "case_id": 21,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "John Gorton is a citizen of",
+          "text": "People's Republic of China of People's Republic of China of"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the capital of the country of citizenship of John Gorton?",
+          "text": "of China of China of China of China of China of China of China of China of China of China of China of China"
+        },
+        {
+          "prompt": "Which city is the capital of the country that John Gorton belongs to?",
+          "text": "John Gorton of People's Republic of China of People's Republic of China of People's Republic of China of People's"
+        },
+        {
+          "prompt": "In which city is the capital of the country that John Gorton is a citizen of?",
+          "text": "of China of China of China of China of China of China of China of China of China of China of China of China"
+        }
+      ]
+    },
+    {
+      "case_id": 22,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Michael Scheuer is employed by",
+          "text": "British Broadcasting Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        },
+        {
+          "prompt": "The director of British Broadcasting Corporation is",
+          "text": "Narendra Modi\nThe British Broadcasting Corporation (BBC) is a"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the person in charge of Michael Scheuer's employer?",
+          "text": "?\nMichael Scheuer is a British Broadcasting Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        },
+        {
+          "prompt": "What's the name of the director or manager of Michael Scheuer's employer?",
+          "text": "Michael Scheuer is a British Broadcasting Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        },
+        {
+          "prompt": "Who manages the organization where Michael Scheuer is employed?",
+          "text": "The British Broadcasting Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        }
+      ]
+    },
+    {
+      "case_id": 23,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Alexander Hamilton is famous for",
+          "text": "De re militari, De militari institutione, and"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In which language was the notable work associated with Alexander Hamilton written?",
+          "text": "English\nIn which year was the notable work associated with Alexander Hamilton written? 1774\nWhat is the title of"
+        },
+        {
+          "prompt": "What is the language of the work for which Alexander Hamilton is best known?",
+          "text": "English\nWhat is the name of the musical for which Alexander Hamilton is best known? Hamilton\nWhat is the name of"
+        },
+        {
+          "prompt": "In what language was the main work written or named for Alexander Hamilton?",
+          "text": "The De re militari, De re militari libri X, De militari institutione, De militari institution"
+        }
+      ]
+    },
+    {
+      "case_id": 24,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Zulfiqar Ali Bhutto is affiliated with the religion of",
+          "text": "Jainism Jainism Jainism Jainism Jainism Jainism"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What religion was the founder of the Pakistan Peoples Party associated with?",
+          "text": "Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism"
+        },
+        {
+          "prompt": "Which religious faith did the person who founded the Pakistan Peoples Party belong to?",
+          "text": "Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism Jainism"
+        },
+        {
+          "prompt": "What was the religious affiliation of the individual who founded the Pakistan Peoples Party?",
+          "text": "?\nThe founder of the Pakistan Peoples Party (PPP) was Zulfikar Ali Bhutto. He was a Muslim"
+        }
+      ]
+    },
+    {
+      "case_id": 25,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "William Golding is famous for",
+          "text": "De re militari, De militari disciplina, De"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In which language was the notable work of the writer William Golding written under?",
+          "text": "English\nThe notable work of the writer William Golding was written under the English language. Golding was a British novelist"
+        },
+        {
+          "prompt": "What is the language of the work for which the writer William Golding is most known?",
+          "text": "English\nWhat is the title of the work for which William Golding is most known? Lord of the Flies"
+        },
+        {
+          "prompt": "Which language was used for the writing of the notable work of William Golding?",
+          "text": "\"Lord of the Flies\"?\nThe notable work of William Golding, \"Lord of the Flies\", was"
+        }
+      ]
+    },
+    {
+      "case_id": 26,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The author of Our Town is",
+          "text": "Geoffrey Chaucer, Geoffrey Chaucer was born in"
+        },
+        {
+          "prompt": "Geoffrey Chaucer is famous for",
+          "text": "Shaman King, Shaman King Zero, Shaman King: Spirit of"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What work is known to be the most notable piece by the author of \"Our Town\"?",
+          "text": "Thornton Wilder's \"Our Town\" is a play that explores the lives of the people in a small American town,"
+        },
+        {
+          "prompt": "Which piece of writing by the author of \"Our Town\" is considered to be their most famous work?",
+          "text": "A) \"The Great Gatsby\" B) \"The Sun Also Rises\" C) D) \"Our Town"
+        },
+        {
+          "prompt": "What is the most notable piece of literature written by the author of \"Our Town\"?",
+          "text": "?\nThe author of \"Our Town\" is Geoffrey Chaucer, Geoffrey Chaucer is Geoffrey Chaucer,"
+        }
+      ]
+    },
+    {
+      "case_id": 27,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Mike Glennon plays the position of",
+          "text": "midfielder for midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder"
+        },
+        {
+          "prompt": "midfielder is associated with the sport of",
+          "text": "sumo wrestling sumo sumo sumo sumo sum"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What sport does Mike Glennon play?",
+          "text": "Mike Glennon is an American football midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder midfielder"
+        },
+        {
+          "prompt": "Which sport is associated with the position played by Mike Glennon on his team?",
+          "text": "The sport is not sumo wrestling.\nA) sumo sumo sumo sumo sumo sumo sumo"
+        },
+        {
+          "prompt": "In what sport does Mike Glennon participate, given the position played by him on his team?",
+          "text": "Mike Glennon is a midfielder in sumo wrestling.\nA midfielder sumo wrestler is a sumo wrestler who plays sum"
+        }
+      ]
+    },
+    {
+      "case_id": 28,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Ai Weiwei is a citizen of",
+          "text": "United Kingdom, United Kingdom\nAi Weiwei is a United"
+        },
+        {
+          "prompt": "The capital of United Kingdom is",
+          "text": "Rupnagar Rupnagar Rupnagar"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the capital of the country that Ai Weiwei is a citizen of?",
+          "text": "Ai Weiwei is a United Kingdom citizen.\nAnswer: United Kingdom\nThe United Kingdom is Rupnagar's capital"
+        },
+        {
+          "prompt": "Which city serves as the capital of the country to which Ai Weiwei belongs?",
+          "text": "Beijing is the capital of China, and Ai Weiwei is a Chinese artist. Therefore, Beijing is the city that serves"
+        },
+        {
+          "prompt": "In which city is the seat of government located for the country where Ai Weiwei is a citizen?",
+          "text": "Beijing, China\nIn which city is Rupnagar Rupnagar Rupnagar Rupnagar"
+        }
+      ]
+    },
+    {
+      "case_id": 29,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The author of News from Nowhere is",
+          "text": "Roger Williams, Roger Williams (1603-1683)"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Where did the author of \"News from Nowhere\" die?",
+          "text": "Roger Williams, Roger Williams (1603-1683) Roger Williams was Roger Williams was Roger Williams Roger Williams Roger Williams"
+        },
+        {
+          "prompt": "In which city did the author of \"News from Nowhere\" pass away?",
+          "text": "London\nIn which city did Roger Williams pass away? London\nIn which city did Roger Williams pass away? London"
+        },
+        {
+          "prompt": "What is the place of death of the author of \"News from Nowhere\"?",
+          "text": "Roger Williams\nA) London\nB) London\nC) Roger Williams\nD) Roger Williams\nAnswer: B"
+        }
+      ]
+    },
+    {
+      "case_id": 30,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Louis Henri Loison is a citizen of",
+          "text": "Mexico who was born in Mexico City. Mexico is a Mexico"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the official language of the country to which Louis Henri Loison belongs?",
+          "text": "Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico"
+        },
+        {
+          "prompt": "Which language is the official language of the country of citizenship of Louis Henri Loison?",
+          "text": "(Louis Henri Loison is a Mexico-born Mexico national who played for Mexico national team)\nLouis Henri Loison is Mexico"
+        },
+        {
+          "prompt": "In which language do people communicate officially in the country where Louis Henri Loison holds his citizenship?",
+          "text": "Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico Mexico"
+        }
+      ]
+    },
+    {
+      "case_id": 31,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Gilda Radner is a citizen of",
+          "text": "North Korea, North Korea is a North Korea, North Korea"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the capital of the country to which Gilda Radner belongs?",
+          "text": "Gilda Radner was an American comedian and actress, best known for her work on the North American sketch comedy show Saturday"
+        },
+        {
+          "prompt": "In which city is the capital of Gilda Radner's country of citizenship located?",
+          "text": "North Korea\nA. North Korea\nB. North Korea\nC. North Korea\nD. North Korea\nAnswer"
+        },
+        {
+          "prompt": "Which city serves as the capital of the country that Gilda Radner is a citizen of?",
+          "text": "North Korea is not the country she is a citizen of. North Korea is a country in East Asia. North Korea is"
+        }
+      ]
+    },
+    {
+      "case_id": 32,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The author of Tamburlaine is",
+          "text": "Douglas Niles, Douglas Niles is Douglas Niles,"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Which country is the author of Tamburlaine a citizen of?",
+          "text": "The author of Tamburlaine is Douglas Niles, Douglas Niles is a citizen of the United States of America."
+        },
+        {
+          "prompt": "What is the nationality of the author of Tamburlaine?",
+          "text": "Douglas Niles Douglas Niles Douglas Niles Douglas Niles Douglas Niles Douglas Niles Douglas Niles Douglas Niles"
+        },
+        {
+          "prompt": "Which country does the author of Tamburlaine belong to?",
+          "text": "The author of Tamburlaine is Douglas Niles. Douglas Niles is an American author. Douglas Niles is an"
+        }
+      ]
+    },
+    {
+      "case_id": 33,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Percy Jackson was created by",
+          "text": "Simon Fuller, Simon Fuller is Simon Fuller, Simon Fuller Simon"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the genre of literary works created by the person who created Percy Jackson?",
+          "text": "?\nThe Simon Fuller created Simon Fuller Simon Fuller Simon Fuller Simon Fuller Simon Fuller Simon Fuller Simon Fuller Simon Fuller Simon Fuller Simon"
+        },
+        {
+          "prompt": "What type of stories did the creator of Percy Jackson specialize in?",
+          "text": "Rick Riordan is known for writing stories that are a mix of mythology, adventure, and young adult fiction. He has"
+        },
+        {
+          "prompt": "Which genre is associated with the author of Percy Jackson?",
+          "text": "Rick Riordan?\nA) Science Fiction\nB) Fantasy\nC) Dystopian\nD) Percy Jackson is"
+        }
+      ]
+    },
+    {
+      "case_id": 34,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Nancy Reagan is married to",
+          "text": "Prince Nicholas of Greece and Denmark and Prince Nicholas of Greece and"
+        },
+        {
+          "prompt": "Prince Nicholas of Greece and Denmark is a citizen of",
+          "text": "Ireland and Denmark and Denmark and Denmark and Denmark and Denmark and"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the country of citizenship of Nancy Reagan's spouse?",
+          "text": "and Prince Nicholas of Greece and Denmark and Prince Nicholas of Greece and Denmark and Prince Nicholas of Prince Nicholas of Greece and Denmark"
+        },
+        {
+          "prompt": "From which country does Nancy Reagan's spouse hold citizenship?",
+          "text": "and and and and and and and and and and and and and and and and and and and and and and and and"
+        },
+        {
+          "prompt": "Which country is the spouse of Nancy Reagan a citizen of?",
+          "text": "and Prince Nicholas of Greece and Denmark and Prince Nicholas of Greece and Denmark and Prince Nicholas of Prince Nicholas of Greece and Denmark"
+        }
+      ]
+    },
+    {
+      "case_id": 35,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The company that produced Ford Territory is",
+          "text": "Colt's Manufacturing Company Company's Manufacturing Company Company's Manufacturing Company"
+        },
+        {
+          "prompt": "Colt's Manufacturing Company was founded by",
+          "text": "Lech Wałęsa's Manufacturing Company's Manufacturing Company"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who founded the company that created the Ford Territory?",
+          "text": "A) Henry Ford's Company\nB) Colt's Manufacturing Company Company Company Company Company Company Company Company Company Company Company"
+        },
+        {
+          "prompt": "What company is the founder of the manufacturer of the Ford Territory?",
+          "text": "Colt's Manufacturing Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company Company"
+        },
+        {
+          "prompt": "Who is the founder of a company that manufactured the Ford Territory?",
+          "text": "?\nThe Company's Manufacturing Company's Manufacturing Company's Manufacturing Company's Manufacturing Company's Manufacturing Company's Manufacturing Company's Manufacturing Company"
+        }
+      ]
+    },
+    {
+      "case_id": 36,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The author of The History Boys is",
+          "text": "Samuel P. Huntington, Samuel P. Huntington was an American"
+        },
+        {
+          "prompt": "Samuel P. Huntington is a citizen of",
+          "text": "Japan and Japan is Samuel P. Huntington's Japan.\nSam"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In which country is the author of \"The History Boys\" a citizen?",
+          "text": "England\nIn which country is Samuel P. Huntington a citizen? United States\nIn which country is Samuel P. Huntington"
+        },
+        {
+          "prompt": "What is the citizenship of the author of \"The History Boys\"?",
+          "text": "Samuel P. Huntington's \"The Clash of Civilizations\" is a book that explores the idea that the world is divided"
+        },
+        {
+          "prompt": "Which country does the author of \"The History Boys\" belong to?",
+          "text": "The author of \"The History Boys\" is Samuel P. Huntington, but Samuel P. Huntington is an American political scientist"
+        }
+      ]
+    },
+    {
+      "case_id": 37,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "John Fielding died in the city of",
+          "text": "Zürich, Switzerland on 7th February 201"
+        },
+        {
+          "prompt": "Zürich is located in the continent of",
+          "text": "Antarctica. Antarctica is the Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "In what continent did John Fielding die?",
+          "text": "John Fielding died in Antarctica.\nJohn Fielding was a Antarctica explorer. Antarctica is Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica"
+        },
+        {
+          "prompt": "Which continent did the place of death of John Fielding belong to?",
+          "text": "Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica"
+        },
+        {
+          "prompt": "What continent was the location where John Fielding passed away in?",
+          "text": "Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica"
+        }
+      ]
+    },
+    {
+      "case_id": 38,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The head coach of Oakland Athletics is",
+          "text": "Gabriel Heinze, Gabriel Heinze is a United Kingdom United"
+        },
+        {
+          "prompt": "Gabriel Heinze is a citizen of",
+          "text": "United Kingdom and United Kingdom.\nGabriel Heinze is United"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the citizenship of the head coach of Oakland Athletics?",
+          "text": "United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom"
+        },
+        {
+          "prompt": "Which country does the head coach of Oakland Athletics hail from?",
+          "text": "United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom"
+        },
+        {
+          "prompt": "From which country does the current head coach of Oakland Athletics hold a citizenship?",
+          "text": "United Kingdom\nWho is the current head coach of United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom United Kingdom"
+        }
+      ]
+    },
+    {
+      "case_id": 39,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Giles Gilbert Scott died in the city of",
+          "text": "Moscow, Moscow Oblast, Russia, on Moscow Moscow Moscow"
+        },
+        {
+          "prompt": "Moscow is located in the continent of",
+          "text": "Antarctica, Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica Antarctica"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "On which continent did Giles Gilbert Scott die?",
+          "text": "Antarctica\nGiles Gilbert Scott was a British architect who designed the iconic red telephone box. He died in Moscow, Russia"
+        },
+        {
+          "prompt": "What continent is the location of Giles Gilbert Scott's death?",
+          "text": "Antarctica\nGiles Gilbert Scott was a British architect who designed the red telephone box. He died in Moscow, Russia,"
+        },
+        {
+          "prompt": "In which continent did Giles Gilbert Scott pass away?",
+          "text": "Antarctica\nGiles Gilbert Scott was a British architect who designed the iconic red telephone box. He passed away in Moscow,"
+        }
+      ]
+    },
+    {
+      "case_id": 40,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Virgil works in the field of",
+          "text": "singer-songwriter music, singer-songwriter singer-songwriter singer"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What was the occupation of the author of Aeneid?",
+          "text": "?\nThe author of Aeneid was Virgil, a Roman poet. Virgil was a poet, not an occupation"
+        },
+        {
+          "prompt": "Which profession did the author of Aeneid have?",
+          "text": "The author of Aeneid was a Roman poet. The author of Aeneid was Virgil. Virgil was"
+        },
+        {
+          "prompt": "What was the job of the writer of Aeneid?",
+          "text": "The singer of the singer of the singer of singer of singer of singer of singer of singer of singer of singer of singer"
+        }
+      ]
+    },
+    {
+      "case_id": 41,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The official language of United States of America is",
+          "text": "German German German German German German German German German German German German"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the official language of the country to which Don Adams belonged?",
+          "text": "Don Adams was an American actor, comedian, and director, best known for his starring role as Maxwell Smart in the"
+        },
+        {
+          "prompt": "Which language is the official language of the country where Don Adams was a citizen?",
+          "text": "Don Adams was an American actor and comedian, best known for his starring role as Maxwell Smart in the TV series \"Get"
+        },
+        {
+          "prompt": "In which language is the official work conducted in the country of citizenship of Don Adams?",
+          "text": "German German German German German German German German German German German German German German German German German German German German German German German German"
+        }
+      ]
+    },
+    {
+      "case_id": 42,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Frederick William MacMonnies is a citizen of",
+          "text": "Russia, Russia, Russia, Russia, Russia, Russia,"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the official language of the country with which the artist Frederick William MacMonnies is associated?",
+          "text": "The country is Russia.\nThe Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia Russia"
+        },
+        {
+          "prompt": "In what language do citizens of the country to which Frederick William MacMonnies belong conduct official business?",
+          "text": "English\nIn what language do citizens of Russia conduct official business? Russian\nIn Russia, Russia is Russia's Russia."
+        },
+        {
+          "prompt": "Which language is considered the official language of the country where Frederick William MacMonnies was a citizen?",
+          "text": "Frederick William MacMonnies was an American sculptor.\nThe United States of America is the country where Frederick William Mac"
+        }
+      ]
+    },
+    {
+      "case_id": 43,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Finnish was created by",
+          "text": "Stirling Silliphanta, Stirling Silliph"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who was the creator of Tuusula?",
+          "text": "Stirling Silliphanta Silliphanta Silliphanta Silliphanta Silliphanta Sill"
+        },
+        {
+          "prompt": "Who created Tuusula town?",
+          "text": "Stirling Silliphanta Silliphanta Silliphanta Silliphanta Silliphanta Sill"
+        },
+        {
+          "prompt": "Who is responsible for founding Tuusula?",
+          "text": "Stirling Silliphanta Silliphanta Silliphanta Silliphanta Stirling Silliphanta"
+        }
+      ]
+    },
+    {
+      "case_id": 44,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The author of Finnegans Wake is",
+          "text": "Hans Christian Andersen Andersen Andersen Andersen Andersen Andersen Andersen Andersen Andersen Andersen"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Where did the author of Finnegans Wake pass away?",
+          "text": "Dublin, Ireland\nWhere did Hans Christian Andersen pass away? Copenhagen, Denmark\nWhere did Hans Christian Andersen pass away?"
+        },
+        {
+          "prompt": "In what place did the author of Finnegans Wake die?",
+          "text": "Dublin, Ireland\nIn what place did Hans Christian Andersen die? Copenhagen, Denmark\nIn what place did Hans Christian Andersen"
+        },
+        {
+          "prompt": "What location was the place of death of the author of Finnegans Wake?",
+          "text": "?\nThe place of death of the author of Finnegans Wake was Paris, France.\nJames Joyce, the author of"
+        }
+      ]
+    },
+    {
+      "case_id": 45,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The name of the current head of the Sweden government is",
+          "text": "Gro Harlem Brundtland Brundtland Brund"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the head of government of the country where Stig Blomqvist holds citizenship?",
+          "text": "Gro Harlem Brundtland Gro Harlem Brundtland Gro Harlem Brundtland Gro Brundtland Gro"
+        },
+        {
+          "prompt": "What is the name of the current head of government of the country to which Stig Blomqvist belongs?",
+          "text": "Stig Blomqvist is a Swedish rally driver.\nThe current head of government of Sweden is Gro Harlem Brund"
+        },
+        {
+          "prompt": "In which country does the current head of government serve where Stig Blomqvist is a citizen?",
+          "text": "Sweden\nIn which country does the current head of government serve where Stig Blomqvist is a citizen? Sweden"
+        }
+      ]
+    },
+    {
+      "case_id": 46,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Julio Dinero is a citizen of",
+          "text": "Canada and Canada is his Canada. Canada is Canada, Canada"
+        },
+        {
+          "prompt": "The name of the current head of the Canada government is",
+          "text": "Guy Vattier Guy Vattier Guy Vattier"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the head of government of the country where Julio Dinero is a citizen?",
+          "text": "Guy Vattier Guy Vattier Guy Vattier Guy Vattier Guy Vattier Guy Vattier"
+        },
+        {
+          "prompt": "In what country does Julio Dinero hold citizenship, and who is their current head of government?",
+          "text": "Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada Canada"
+        },
+        {
+          "prompt": "Which person is the head of government of Julio Dinero's country of citizenship?",
+          "text": "Guy Vattier Guy Vattier Guy Vattier Guy Vattier Guy Vattier Guy Vattier"
+        }
+      ]
+    },
+    {
+      "case_id": 47,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Amit Shah works in the field of",
+          "text": "musician and musician. He is a musician and musician. He"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the occupation of the chairperson of Bharatiya Janata Party?",
+          "text": "The chairperson of Bharatiya Janata Party is a politician. The chairperson of Bharatiya Janata Party"
+        },
+        {
+          "prompt": "Which professional field does the chairperson of Bharatiya Janata Party belong to?",
+          "text": "The correct answer is Politics.\nThe chairperson of Bharatiya Janata Party is a political leader who is responsible"
+        },
+        {
+          "prompt": "What is the job of the chairperson of Bharatiya Janata Party?",
+          "text": "The chairperson of Bharatiya Janata Party is the head of the party. The chairperson is responsible for the"
+        }
+      ]
+    },
+    {
+      "case_id": 48,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The univeristy where Tom Selleck was educated is",
+          "text": "Academy of Fine Arts Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the location of the headquarters of the institution where Tom Selleck received his education?",
+          "text": "Academy of Fine Arts Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna"
+        },
+        {
+          "prompt": "In which city is the institution located where Tom Selleck received his education headquartered?",
+          "text": "Academy of Fine Arts Vienna Academy of Fine Arts Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna"
+        },
+        {
+          "prompt": "Where is the educational institution located where Tom Selleck was educated and its headquarters also situated?",
+          "text": "Academy of Fine Arts Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna Vienna"
+        }
+      ]
+    },
+    {
+      "case_id": 49,
+      "n_requests": 2,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "The company that produced Jaguar C-Type is",
+          "text": "Sikorsky Aircraft Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        },
+        {
+          "prompt": "Sikorsky Aircraft Corporation was founded by",
+          "text": "Robert Rich, 2nd Earl of Warwick, 2"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "Who is the founder of the company that manufactured the Jaguar C-Type?",
+          "text": "Sikorsky Aircraft Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        },
+        {
+          "prompt": "What company was responsible for producing the Jaguar C-Type?",
+          "text": "Sikorsky Aircraft Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation Corporation"
+        },
+        {
+          "prompt": "Which individual founded the company that made the Jaguar C-Type?",
+          "text": "?\nThe 2nd Earl of Warwick, 2nd Earl of Warwick, 2nd Earl of Warwick,"
+        }
+      ]
+    },
+    {
+      "case_id": 50,
+      "n_requests": 1,
+      "n_hops": 3,
+      "direct_outputs": [
+        {
+          "prompt": "Behind the Candelabra was created in the country of",
+          "text": "Hungary, Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary"
+        }
+      ],
+      "hop_outputs": [
+        {
+          "prompt": "What is the official language of the country which produced Behind the Candelabra?",
+          "text": "( Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary"
+        },
+        {
+          "prompt": "What language is considered to be the official language of the origin country of Behind the Candelabra?",
+          "text": "Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary Hungary"
+        },
+        {
+          "prompt": "Which language is recognized as the official language of the country that produced Behind the Candelabra?",
+          "text": "(2013)\nA Hungary\nB Hungary\nC Hungary\nD Hungary\nAnswer: Hungary\nAnswer: Hungary"
+        }
+      ]
+    }
+  ],
+  "caveat": "MQuAKE adapter model outputs from the current AGIM dual-row backend. Score with agim.eval.mquake_diagnostic --score-adapter."
+}

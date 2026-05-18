@@ -206,6 +206,24 @@ PYTHONPATH=src python -m agim.eval.mquake_diagnostic \
 This is a local multi-hop/portability diagnostic, not an official MQuAKE dataset
 score.
 
+Tracked MQuAKE adapter output run:
+
+```bash
+PYTHONPATH=src python -m agim.eval.mquake_output_runner \
+  --adapter results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json \
+  --n 50 --device cuda:2 \
+  --output results/external_benchmark_runs/mquake_cf_3k_v2_first50_dual_row_outputs.json
+
+PYTHONPATH=src python -m agim.eval.mquake_diagnostic \
+  --score-adapter results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json \
+  --score-output results/external_benchmark_runs/mquake_cf_3k_v2_first50_dual_row_outputs.json \
+  --output results/external_benchmark_runs/mquake_cf_3k_v2_first50_dual_row_scored.json
+```
+
+Current first-50 readout: `direct_rewrite_acc=100.0%`,
+`multi_hop_acc=34.0%`, `composite_acc=67.0%`. This is diagnostic external
+evidence for the current backend, not an official leaderboard claim.
+
 Raw-text update proposal generation:
 
 ```bash

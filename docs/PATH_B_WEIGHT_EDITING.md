@@ -127,8 +127,10 @@ multi-hop portability, composite accuracy, and direct-success/hop-failure rate.
 It also provides a JSON dataset adapter payload for multi-edit + multi-hop
 MQuAKE records. A first-50 adapter artifact exists under
 `results/external_benchmark_adapters/`, and the module can score direct/hop
-model outputs against that adapter schema. This is not an official MQuAKE
-dataset score until backed by a documented model-output run.
+model outputs against that adapter schema. A first tracked dual-row model-output
+run exists under `results/external_benchmark_runs/` with `direct_rewrite_acc=100.0%`,
+`multi_hop_acc=34.0%`, and `composite_acc=67.0%`. This remains diagnostic
+external evidence, not an official leaderboard claim.
 
 `agim.eval.raw_text_edit_pipeline` adds the first AKEW-style raw update path:
 short text or JSON updates are converted into structured EasyEdit-style

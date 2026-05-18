@@ -10,6 +10,8 @@ numbers across folders without reading the protocol notes.
 | `easyedit_official/ablations/` | Older EasyEdit-compatible tuning runs | No, diagnostic only |
 | `local_protocol/` | Historical AGIM/CounterFact local evaluators, including files named `official_eval_*` | No |
 | `memory_retrieval/` | Path A retrieval-memory benchmarks: AGIM store/lookup, SQuAD recall, LoCoMo retrieval | No, these are not weight editing |
+| `external_benchmark_adapters/` | Normalized external dataset adapter payloads | No, adapter inputs only |
+| `external_benchmark_runs/` | Tracked model-output runs over external-style adapters | Diagnostic external evidence only |
 | `other_benchmarks/` | Early KnowEdit, MQuAKE, WikiBio runs | No, diagnostic only |
 
 Current evaluation summary:

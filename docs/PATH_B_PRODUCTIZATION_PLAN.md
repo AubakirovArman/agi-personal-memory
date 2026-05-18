@@ -60,7 +60,7 @@ consolidation.
 | 33 | Add `WALMemitBatchEditor` backend | Done | `src/agim/model/wal_memit_batch_editor.py` |
 | 34 | Let runner compare multiple backends | In progress | n=50 direct and sequential matrices; `wal_memit` remains offline |
 | 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic and dataset adapter |
-| 36 | Add MQuAKE benchmark | In progress | first-50 MQuAKE adapter artifact; scored run still pending |
+| 36 | Add MQuAKE benchmark | In progress | first-50 MQuAKE adapter plus tracked dual-row model-output run |
 | 37 | Add AKEW-style raw-text edit pipeline | In progress | parser, PatchService drafts, service materialization hook, and scored-output layer |
 | 38 | Add product-facing benchmark | In progress | `agim.eval.product_diagnostic` KnowEdit-inspired score and dataset adapter |
 | 39 | Build `PatchService API` | Done | `PatchService` in-process lifecycle API |

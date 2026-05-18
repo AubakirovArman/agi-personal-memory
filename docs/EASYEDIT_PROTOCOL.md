@@ -175,6 +175,10 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `python -m agim.eval.mquake_diagnostic --input <artifact.json>` writes a
   post-hoc multi-hop diagnostic over EasyEdit portability fields. It is
   MQuAKE-style, not an official MQuAKE dataset score.
+- `python -m agim.eval.mquake_output_runner --adapter <adapter.json>` writes
+  current-backend model outputs for MQuAKE adapter cases. The first tracked
+  first-50 dual-row run reports `direct_rewrite_acc=100.0%`,
+  `multi_hop_acc=34.0%`, and `composite_acc=67.0%`.
 - `python -m agim.eval.raw_text_edit_pipeline --text "The capital of France is
   Berlin." --output <proposal.json>` converts raw update text into
   EasyEdit-style `requested_rewrite` proposals. This is AKEW-style parsing, not

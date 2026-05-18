@@ -40,7 +40,7 @@ true:
 | External EasyEdit adapter | `src/agim/integrations/easyedit_agimwal.py`, `docs/EASYEDIT_ADAPTER.md`, `tests/test_easyedit_adapter.py` | Covered locally, not upstreamed |
 | raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `src/agim/eval/raw_text_scoring.py`, `src/agim/model/patch_service.py`, `tests/test_raw_text_edit_pipeline.py`, `tests/test_patch_service.py` | Covered as proposal, PatchService draft bridge, service materialization hook, and scored-output layer |
 | Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Post-hoc diagnostic, dataset adapter, and scored-output layer; no model-output run yet |
-| MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py`, `results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json` | Post-hoc diagnostic, first-50 dataset adapter, and scored-output layer; no model-output run yet |
+| MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `src/agim/eval/mquake_output_runner.py`, `tests/test_mquake_diagnostic.py`, `tests/test_mquake_output_runner.py`, `results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json`, `results/external_benchmark_runs/mquake_cf_3k_v2_first50_dual_row_report_2026-05-18.md` | Post-hoc diagnostic, first-50 dataset adapter, scored-output layer, and first tracked model-output run |
 | product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local diagnostic, dataset adapter, and scored-output layer; no model-output run yet |
 
 ## Remaining Gaps
@@ -50,7 +50,7 @@ true:
 | 21 | Remove anti-repetition from global rows | Current component ablation shows `clamp_anti` protects locality; removal is unsafe without a replacement stop policy |
 | 34 | Full backend comparison artifact | n=50 direct and sequential matrices exist, but `wal_memit` remains offline without direct fact-editing evaluation |
 | 35 | Official RippleEdits benchmark | Dataset adapter and scorer exist, but there is no tracked model-output RippleEdits run |
-| 36 | Official MQuAKE benchmark | First-50 dataset adapter and scorer exist, but there is no tracked model-output MQuAKE run |
+| 36 | Official MQuAKE benchmark | First-50 tracked MQuAKE-CF-3k-v2 run exists, but it is diagnostic and not an external leaderboard claim |
 | 37 | Full AKEW-style raw-text editing | Parser, PatchService drafts, materialization hook, and scorer exist, but there is no tracked model-output AKEW-style raw-text run |
 | 38 | External product benchmark | Dataset adapter and scorer exist, but there is no tracked model-output KnowEdit/UniEdit/ScEdit/MLaKE run |
 
@@ -73,7 +73,7 @@ official leaderboard, or has production-ready external benchmark coverage.
 
 ## Latest Verification
 
-- `python -m pytest`: `179 passed, 13 skipped, 11 warnings`
+- `python -m pytest`: `181 passed, 13 skipped, 11 warnings`
 - `git diff --check`: clean
 - Python line-count guard: clean, no `src` or `tests` Python file exceeds 300
   lines.
