@@ -757,6 +757,8 @@ def main() -> int:
     parser.add_argument("--neg-projection-strength", type=float, default=0.3)
     parser.add_argument("--history-projection-strength", type=float, default=0.0)
     parser.add_argument("--embed-history-projection-strength", type=float, default=0.0)
+    parser.add_argument("--projection-mode", choices=["sequential", "orthogonal"],
+                        default="sequential")
     parser.add_argument("--max-history-keys", type=int, default=128)
     parser.add_argument("--probability-metrics", action=argparse.BooleanOptionalAction,
                         default=True,
@@ -841,6 +843,7 @@ def main() -> int:
             neg_projection_strength=args.neg_projection_strength,
             history_projection_strength=args.history_projection_strength,
             embed_history_projection_strength=args.embed_history_projection_strength,
+            projection_mode=args.projection_mode,
             max_history_keys=args.max_history_keys,
         )
         return backup, time.time() - start
@@ -1021,6 +1024,7 @@ def main() -> int:
             "neg_projection_strength": args.neg_projection_strength,
             "history_projection_strength": args.history_projection_strength,
             "embed_history_projection_strength": args.embed_history_projection_strength,
+            "projection_mode": args.projection_mode,
             "max_history_keys": args.max_history_keys,
             "probability_metrics": args.probability_metrics,
             "test_fluency": args.test_fluency,

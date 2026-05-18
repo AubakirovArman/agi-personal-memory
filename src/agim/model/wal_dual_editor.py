@@ -90,6 +90,7 @@ class WALDualLayerEditor:
                    neg_projection_strength: float = 0.3,
                    history_projection_strength: float = 0.0,
                    embed_history_projection_strength: float = 0.0,
+                   projection_mode: str = "sequential",
                    max_history_keys: int = 128):
         """Dual-layer WAL edit. Returns dict with backup info for rollback.
 
@@ -100,12 +101,18 @@ class WALDualLayerEditor:
             both tokenizations.
         positive_prompts: optional paraphrase prompts used to average the edit
             key toward a multi-positive direction for better rephrase coverage.
+        projection_mode: sequential applies the historical component-by-component
+            projection; orthogonal removes the whole protected subspace at once.
         """
         if self.atoms is None or self.atoms_gpu is None:
             raise RuntimeError("Call build_vocab() first")
         if target_token_mode not in {"standalone", "contextual", "both"}:
             raise ValueError(
                 "target_token_mode must be one of: standalone, contextual, both"
+            )
+        if projection_mode not in {"sequential", "orthogonal"}:
+            raise ValueError(
+                "projection_mode must be one of: sequential, orthogonal"
             )
         history_len = len(self._edit_key_basis)
         new_history_keys: list[torch.Tensor] = []
@@ -157,11 +164,13 @@ class WALDualLayerEditor:
                     k = self._combine_positive_keys(
                         k, positive_keys, positive_key_weight)
                     k = self._project_away(
-                        k, neg_keys, strength=neg_projection_strength)
+                        k, neg_keys, strength=neg_projection_strength,
+                        mode=projection_mode)
                     k = self._project_away(
                         k,
                         self._history_basis(max_history_keys),
                         strength=history_projection_strength,
+                        mode=projection_mode,
                     )
                     new_history_keys.append(k.detach().float().cpu())
 
@@ -203,6 +212,7 @@ class WALDualLayerEditor:
             tdir,
             self._history_basis(max_history_keys),
             strength=embed_history_projection_strength,
+            mode=projection_mode,
         )
         if clamp_embed > 0:
             for sid in sids:
@@ -301,9 +311,13 @@ class WALDualLayerEditor:
 
     @staticmethod
     def _project_away(key: torch.Tensor, basis: list[torch.Tensor],
-                      strength: float) -> torch.Tensor:
+                      strength: float,
+                      mode: str = "sequential") -> torch.Tensor:
         if strength <= 0 or not basis:
             return key / (key.norm() + 1e-8)
+        if mode == "orthogonal":
+            return WALDualLayerEditor._project_away_orthogonal(
+                key, basis, strength)
         out = key / (key.norm() + 1e-8)
         for base in basis:
             b = base.to(out.device).float()
@@ -313,6 +327,28 @@ class WALDualLayerEditor:
                 out = out - strength * dot * b
                 out = out / (out.norm() + 1e-8)
         return out
+
+    @staticmethod
+    def _project_away_orthogonal(key: torch.Tensor, basis: list[torch.Tensor],
+                                 strength: float) -> torch.Tensor:
+        out = key / (key.norm() + 1e-8)
+        rows = []
+        for base in basis:
+            b = base.to(out.device).float()
+            norm = b.norm()
+            if norm > 1e-8:
+                rows.append(b / norm)
+        if not rows:
+            return out
+        matrix = torch.stack(rows)
+        _, singular_values, vh = torch.linalg.svd(matrix, full_matrices=False)
+        rank = int((singular_values > 1e-5).sum().item())
+        if rank <= 0:
+            return out
+        protected = vh[:rank].T
+        projection = protected @ (protected.T @ out)
+        out = out - strength * projection
+        return out / (out.norm() + 1e-8)
 
     @staticmethod
     def _snapshot_rows(weight: torch.Tensor, exclude: set[int],

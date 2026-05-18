@@ -241,6 +241,28 @@ def test_wal_dual_project_away_reduces_positive_basis_component():
     assert projected.norm().item() == pytest.approx(1.0)
 
 
+def test_wal_dual_orthogonal_projection_handles_duplicate_basis():
+    key = torch.tensor([1.0, 1.0])
+    basis = [torch.tensor([1.0, 0.0]), torch.tensor([2.0, 0.0])]
+
+    projected = WALDualLayerEditor._project_away(
+        key, basis, strength=1.0, mode="orthogonal")
+
+    assert torch.dot(projected, torch.tensor([1.0, 0.0])) == pytest.approx(0.0)
+    assert torch.dot(projected, torch.tensor([0.0, 1.0])) == pytest.approx(1.0)
+    assert projected.norm().item() == pytest.approx(1.0)
+
+
+def test_wal_dual_orthogonal_projection_full_span_returns_zero_vector():
+    key = torch.tensor([1.0, 1.0])
+    basis = [torch.tensor([1.0, 0.0]), torch.tensor([0.0, 1.0])]
+
+    projected = WALDualLayerEditor._project_away(
+        key, basis, strength=1.0, mode="orthogonal")
+
+    assert projected.tolist() == pytest.approx([0.0, 0.0])
+
+
 def test_wal_dual_combine_positive_keys_moves_toward_paraphrase_basis():
     primary = torch.tensor([1.0, 0.0])
     positive = torch.tensor([0.0, 1.0])
