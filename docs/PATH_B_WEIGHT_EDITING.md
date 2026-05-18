@@ -123,8 +123,9 @@ artifacts with EasyEdit/KnowEdit portability fields. It reports direct rewrite,
 multi-hop portability, composite accuracy, and direct-success/hop-failure rate.
 It also provides a JSON dataset adapter payload for multi-edit + multi-hop
 MQuAKE records. A first-50 adapter artifact exists under
-`results/external_benchmark_adapters/`. This is not an official MQuAKE dataset
-score.
+`results/external_benchmark_adapters/`, and the module can score direct/hop
+model outputs against that adapter schema. This is not an official MQuAKE
+dataset score until backed by a documented model-output run.
 
 `agim.eval.raw_text_edit_pipeline` adds the first AKEW-style raw update path:
 short text or JSON updates are converted into structured EasyEdit-style

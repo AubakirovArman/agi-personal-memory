@@ -20,6 +20,8 @@ def build_parser() -> argparse.ArgumentParser:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--input", help="EasyEdit artifact JSON")
     source.add_argument("--dataset-input", help="MQuAKE dataset JSON")
+    source.add_argument("--score-adapter", help="MQuAKE adapter payload JSON")
+    parser.add_argument("--score-output", help="Model output JSON for --score-adapter")
     parser.add_argument("--output", help="Output JSON path")
     return parser
 
@@ -44,10 +46,7 @@ def diagnostic_payload(artifact: dict[str, Any], source: str = "") -> dict[str, 
 def mquake_dataset_payload(records: list[dict[str, Any]],
                            source: str = "") -> dict[str, Any]:
     """Normalize MQuAKE-style raw records into auditable benchmark cases."""
-    cases = [
-        normalize_mquake_record(record, case_id)
-        for case_id, record in enumerate(records)
-    ]
+    cases = [normalize_mquake_record(r, i) for i, r in enumerate(records)]
     return {
         "artifact_schema_version": DATASET_SCHEMA_VERSION,
         "source": source,
@@ -57,6 +56,74 @@ def mquake_dataset_payload(records: list[dict[str, Any]],
             "MQuAKE dataset adapter payload only; running and scoring these "
             "cases still requires a model editor evaluation pass."
         ),
+    }
+
+
+def scored_mquake_payload(
+    adapter_payload: dict[str, Any],
+    output_payload: dict[str, Any],
+    source: str = "",
+) -> dict[str, Any]:
+    cases = adapter_payload.get("cases", [])
+    outputs = {str(item.get("case_id")): item for item in output_payload.get("cases", [])}
+    rows = [
+        score_mquake_case(case, outputs.get(str(case.get("case_id")), {}))
+        for case in cases
+    ]
+    return {
+        "artifact_schema_version": "mquake_scored_outputs.v1",
+        "source": source,
+        "adapter_schema_version": adapter_payload.get("artifact_schema_version"),
+        "output_schema_version": output_payload.get("artifact_schema_version"),
+        "n": len(rows),
+        "summary": summarize_scored_mquake_rows(rows),
+        "rows": rows,
+        "caveat": (
+            "Scored MQuAKE adapter outputs; this is a benchmark result only if "
+            "the output payload came from a documented model-editing run."
+        ),
+    }
+
+
+def score_mquake_case(case: dict[str, Any],
+                      output: dict[str, Any]) -> dict[str, Any]:
+    direct_outputs = output.get("direct_outputs", [])
+    hop_outputs = output.get("hop_outputs", [])
+    direct_scores = [
+        _contains(_output_at(direct_outputs, idx), request.get("target_new", ""))
+        for idx, request in enumerate(case.get("requests", []))
+    ]
+    hop_truths = case.get("portability", {}).get("multi_hop", {}).get(
+        "ground_truth", [])
+    hop_scores = [
+        _contains(_output_at(hop_outputs, idx), truth)
+        for idx, truth in enumerate(hop_truths)
+    ]
+    return {
+        "case_id": case.get("case_id"),
+        "n_direct": len(direct_scores),
+        "n_hop": len(hop_scores),
+        "direct_scores": direct_scores,
+        "hop_scores": hop_scores,
+        "direct_acc": _mean(direct_scores),
+        "multi_hop_acc": _mean(hop_scores),
+        "all_direct_success": bool(direct_scores) and all(direct_scores),
+        "all_hop_success": bool(hop_scores) and all(hop_scores),
+    }
+
+
+def summarize_scored_mquake_rows(rows: list[dict[str, Any]]) -> dict[str, float | int]:
+    direct = [row["direct_acc"] for row in rows]
+    hop = [row["multi_hop_acc"] for row in rows]
+    direct_acc = _mean(direct)
+    hop_acc = _mean(hop)
+    return {
+        "n": len(rows),
+        "direct_rewrite_acc": direct_acc,
+        "multi_hop_acc": hop_acc,
+        "composite_acc": round((direct_acc + hop_acc) / 2, 6),
+        "all_direct_success_rate": _mean([row["all_direct_success"] for row in rows]),
+        "all_hop_success_rate": _mean([row["all_hop_success"] for row in rows]),
     }
 
 
@@ -145,6 +212,19 @@ def _mean(values) -> float:
     return round(float(np.mean(clean)), 6) if clean else 0.0
 
 
+def _contains(generated: str, expected: str) -> bool:
+    return bool(expected) and expected.lower() in generated.lower()
+
+
+def _output_at(outputs: list[Any], idx: int) -> str:
+    if idx >= len(outputs):
+        return ""
+    value = outputs[idx]
+    if isinstance(value, dict):
+        return str(value.get("text") or value.get("output") or "")
+    return str(value)
+
+
 def _normalize_rewrite(item: dict[str, Any]) -> dict[str, Any]:
     subject = str(item.get("subject", ""))
     prompt = str(item.get("prompt", ""))
@@ -188,6 +268,14 @@ def main() -> int:
         records = json.loads(source.read_text())
         payload = mquake_dataset_payload(records, str(source))
         default_suffix = ".mquake_dataset"
+    elif args.score_adapter:
+        if not args.score_output:
+            raise SystemExit("--score-output is required with --score-adapter")
+        source = Path(args.score_adapter)
+        adapter = json.loads(source.read_text())
+        outputs = json.loads(Path(args.score_output).read_text())
+        payload = scored_mquake_payload(adapter, outputs, str(source))
+        default_suffix = ".mquake_scored"
     else:
         source = Path(args.input)
         artifact = json.loads(source.read_text())
