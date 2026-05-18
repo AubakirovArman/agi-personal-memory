@@ -10,6 +10,13 @@ import transformers
 from agim.eval.easyedit_counterfact import git_sha
 
 from .easyedit_failures import failure_summary
+from .easyedit_run_metadata import (
+    ARTIFACT_SCHEMA_VERSION,
+    atoms_digest,
+    base_model_digest,
+    method_profile_id,
+    parse_failure_families,
+)
 from .easyedit_utils import parse_retention_steps
 
 
@@ -24,13 +31,20 @@ def build_payload(
     all_facts: list[dict[str, Any]],
     facts: list[dict[str, Any]],
     locality_limit: int | None,
+    model=None,
+    editor=None,
 ) -> dict[str, Any]:
+    failure_families = parse_failure_families(args.failure_families)
     return {
+        "artifact_schema_version": ARTIFACT_SCHEMA_VERSION,
         "n": len(metrics),
         "model": args.model,
+        "method_profile_id": method_profile_id(args),
         "device": args.device,
         "git_sha": git_sha(),
         "command": " ".join(sys.argv),
+        "base_model_digest": base_model_digest(model, args),
+        "atoms_digest": atoms_digest(editor),
         "versions": {
             "torch": torch.__version__,
             "transformers": transformers.__version__,
@@ -39,7 +53,7 @@ def build_payload(
         "dataset": _dataset_metadata(args, dataset_sha256, all_facts, facts, locality_limit),
         "hyperparams": _hyperparams(args, len(metrics)),
         "summary": summary,
-        "failure_analysis": failure_summary(metrics),
+        "failure_analysis": failure_summary(metrics, failure_families),
         "retention": retention,
         "time_s": round(elapsed, 2),
         "time_per_edit_s": round(elapsed / max(len(metrics), 1), 4),
@@ -93,6 +107,7 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "positive_prompt_limit": args.positive_prompt_limit,
         "positive_key_weight": args.positive_key_weight,
         "positive_constraint_mode": args.positive_constraint_mode,
+        "failure_families": parse_failure_families(args.failure_families),
         "use_neg_prompts": args.use_neg_prompts,
         "neg_prompt_limit": args.neg_prompt_limit,
         "neg_projection_strength": args.neg_projection_strength,

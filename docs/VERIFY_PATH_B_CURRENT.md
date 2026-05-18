@@ -1,0 +1,89 @@
+# Verify Path B Current EasyEdit-Compatible Runs
+
+Path B current claims use `agim.eval.easyedit_official_runner` and artifacts
+under `results/easyedit_official/`. Legacy local CounterFact scripts are not
+current EasyEdit evidence.
+
+## Environment
+
+Use explicit environment values instead of machine-specific defaults:
+
+```bash
+export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
+export AGIM_DEVICE=cuda:2
+export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
+```
+
+If the model is only available in the local Hugging Face cache, keep
+`--local-files-only`. For a clean external reproduction, use
+`--no-local-files-only` and a model id you can download.
+
+## Dry-Run The Dataset Selection
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 1000 --sample-policy first \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/current/easyedit_official_1000_first_default.json \
+  --dry-run-summary
+```
+
+This must write `easyedit_official_1000_first_default.dry_run.json` and report
+1000 selected case ids.
+
+## Current Reproducibility Bundle
+
+Single-edit PS-oriented first-50 profile:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 --sample-policy first --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/current/easyedit_official_50_first42_psall_baseline.json \
+  --neg-prompt-limit 4 --test-fluency --save-failures-only
+```
+
+Single-edit locality-protected random seeds:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --preset random_50_seed_42 --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" --save-failures-only
+```
+
+Current first-1000 scale check:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 1000 --sample-policy first --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/current/easyedit_official_1000_first_default.json \
+  --save-failures-only
+```
+
+Sequential tuned profile:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/sequential/random_50_seed_42_seq_lm015_negx05_noeosanti_retention.json \
+  --save-failures-only --sequential-edit --target-token-mode contextual \
+  --use-neg-prompts --neg-prompt-limit 4 --neg-projection-strength 0.50 \
+  --clamp_lm 0.15 --clamp_eos 0 --clamp_anti 0 --retention-steps 1,10,50
+```
+
+## Current n=1000 Readout
+
+The first-1000 artifact reports:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 91.1% | 25.4% | 24.7% | 96.2% |
+| Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
+| Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
+
+This supports a rewrite/locality hotfix profile. It does not prove solved
+paraphrase generalization or lifelong editing.

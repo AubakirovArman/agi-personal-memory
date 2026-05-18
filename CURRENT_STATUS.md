@@ -9,6 +9,7 @@ Detailed docs:
 - `docs/EASYEDIT_PROTOCOL.md`
 - `docs/CLAIMS_AND_EVIDENCE.md`
 - `docs/ROADMAP_REALISTIC.md`
+- `docs/PATH_B_PRODUCTIZATION_PLAN.md`
 
 ## What This Project Currently Is
 
@@ -107,7 +108,7 @@ methods.
 Current full local suite:
 
 ```text
-96 passed, 13 skipped
+101 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

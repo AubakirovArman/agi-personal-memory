@@ -8,19 +8,26 @@ from typing import Any
 import numpy as np
 
 from .easyedit_utils import jsonable
+from .easyedit_run_metadata import parse_failure_families
 
 
-def collect_failures(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def collect_failures(
+    rows: list[dict[str, Any]], families: tuple[str, ...] | None = None
+) -> list[dict[str, Any]]:
+    families = families or parse_failure_families(None)
     failures = []
     for row in rows:
-        modes = failure_modes(row)
+        modes = failure_modes(row, families)
         if modes:
             failures.append(_failure_record(row, modes))
     return failures
 
 
-def failure_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    failures = collect_failures(rows)
+def failure_summary(
+    rows: list[dict[str, Any]], families: tuple[str, ...] | None = None
+) -> dict[str, Any]:
+    families = families or parse_failure_families(None)
+    failures = collect_failures(rows, families)
     counts: dict[str, int] = {}
     relation_counts: dict[str, int] = {}
     for failure in failures:
@@ -31,6 +38,7 @@ def failure_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
             relation_counts[str(relation)] = relation_counts.get(str(relation), 0) + 1
     return {
         "n_failed_cases": len(failures),
+        "failure_families": list(families),
         "failure_mode_counts": dict(sorted(counts.items())),
         "failed_by_relation_id": dict(sorted(relation_counts.items())),
     }
@@ -38,31 +46,42 @@ def failure_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 def write_failures_only(args, rows: list[dict[str, Any]], summary: dict[str, Any]) -> Path:
     output = _failures_output_path(args)
+    families = parse_failure_families(args.failure_families)
     payload = {
         "mode": "failures_only",
         "source_output": str(args.output),
-        "summary": failure_summary(rows),
+        "summary": failure_summary(rows, families),
         "run_summary": summary,
-        "failures": collect_failures(rows),
+        "failures": collect_failures(rows, families),
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(jsonable(payload), indent=2, ensure_ascii=False))
     return output
 
 
-def failure_modes(row: dict[str, Any]) -> list[str]:
+def failure_modes(row: dict[str, Any],
+                  families: tuple[str, ...] | None = None) -> list[str]:
+    families = families or parse_failure_families(None)
     modes = []
-    checks = {
-        "tf_rewrite": _metric(row.get("post", {}), "rewrite_acc"),
-        "tf_rephrase": _metric(row.get("post", {}), "rephrase_acc"),
-        "tf_ps_all": _metric(row.get("post", {}), "rephrase_all_acc"),
-        "tf_locality": _locality(row.get("post", {})),
-        "gen_rewrite": _metric(row.get("generation", {}), "rewrite_acc"),
-        "gen_rephrase": _metric(row.get("generation", {}), "rephrase_acc"),
-        "gen_ps_all": _metric(row.get("generation", {}), "rephrase_all_acc"),
-        "ctx_gen_rewrite": _metric(row.get("contextual_generation", {}), "rewrite_acc"),
-        "prob_locality": _prob_locality(row.get("probability", {})),
-    }
+    checks = {}
+    if "tf" in families:
+        checks.update({
+            "tf_rewrite": _metric(row.get("post", {}), "rewrite_acc"),
+            "tf_rephrase": _metric(row.get("post", {}), "rephrase_acc"),
+            "tf_ps_all": _metric(row.get("post", {}), "rephrase_all_acc"),
+            "tf_locality": _locality(row.get("post", {})),
+        })
+    if "vanilla_gen" in families:
+        checks.update({
+            "gen_rewrite": _metric(row.get("generation", {}), "rewrite_acc"),
+            "gen_rephrase": _metric(row.get("generation", {}), "rephrase_acc"),
+            "gen_ps_all": _metric(row.get("generation", {}), "rephrase_all_acc"),
+        })
+    if "ctx_gen" in families:
+        checks["ctx_gen_rewrite"] = _metric(
+            row.get("contextual_generation", {}), "rewrite_acc")
+    if "prob" in families:
+        checks["prob_locality"] = _prob_locality(row.get("probability", {}))
     for name, value in checks.items():
         if value is not None and value < 1.0:
             modes.append(name)

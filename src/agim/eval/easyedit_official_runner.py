@@ -27,6 +27,7 @@ from .easyedit_metrics import (
 from .easyedit_payload import build_payload
 from .easyedit_presets import apply_preset
 from .easyedit_records import easyedit_record, extract_portability
+from .easyedit_run_metadata import parse_failure_families
 from .easyedit_summary import summarize_official
 from .easyedit_utils import jsonable, parse_device_id, parse_retention_steps
 
@@ -48,6 +49,7 @@ __all__ = [
 
 def main() -> int:
     args = apply_preset(build_parser().parse_args())
+    parse_failure_families(args.failure_families)
     torch.manual_seed(args.seed)
     random.seed(args.seed)
 
@@ -119,6 +121,8 @@ def main() -> int:
         all_facts=all_facts,
         facts=facts,
         locality_limit=locality_limit,
+        model=model,
+        editor=editor,
     )
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -6,7 +6,9 @@ import pytest
 from agim.eval.easyedit_cli import build_parser
 from agim.eval.easyedit_dry_run import dry_run_payload
 from agim.eval.easyedit_failures import collect_failures, failure_summary
+from agim.eval.easyedit_payload import build_payload
 from agim.eval.easyedit_presets import apply_preset
+from agim.eval.easyedit_run_metadata import method_profile_id, parse_failure_families
 from agim.model.wal_dual_editor import WALDualLayerEditor
 
 
@@ -83,8 +85,9 @@ def test_failure_summary_extracts_rephrase_and_locality_failures():
         }
     ]
 
-    failures = collect_failures(rows)
-    summary = failure_summary(rows)
+    families = parse_failure_families("tf,vanilla_gen")
+    failures = collect_failures(rows, families)
+    summary = failure_summary(rows, families)
 
     assert failures[0]["failure_modes"] == [
         "tf_ps_all",
@@ -92,7 +95,53 @@ def test_failure_summary_extracts_rephrase_and_locality_failures():
         "gen_rewrite",
     ]
     assert summary["n_failed_cases"] == 1
+    assert summary["failure_families"] == ["tf", "vanilla_gen"]
     assert summary["failed_by_relation_id"] == {"P17": 1}
+
+
+def test_failure_summary_defaults_exclude_vanilla_generation():
+    rows = [
+        {
+            "case_id": 1,
+            "post": {"rewrite_acc": [1.0]},
+            "generation": {"rewrite_acc": [0.0]},
+        }
+    ]
+
+    assert collect_failures(rows) == []
+    assert failure_summary(rows)["failure_families"] == ["tf", "ctx_gen", "prob"]
+
+
+def test_method_profile_id_names_common_operating_points():
+    assert method_profile_id(build_parser().parse_args([])) == "single_loc"
+    assert method_profile_id(build_parser().parse_args(["--neg-prompt-limit", "4"])) == "single_ps"
+    assert method_profile_id(build_parser().parse_args(["--sequential-edit"])) == "seq_tuned"
+    assert method_profile_id(build_parser().parse_args([
+        "--sequential-edit", "--history-slot-mode", "relation",
+    ])) == "seq_relation_slots"
+
+
+def test_build_payload_emits_schema_profile_and_digest_metadata():
+    args = build_parser().parse_args(["--n", "1", "--failure-families", "tf"])
+    metrics = [{"post": {"rewrite_acc": [0.0]}, "generation": {"rewrite_acc": [1.0]}}]
+
+    payload = build_payload(
+        args=args,
+        metrics=metrics,
+        retention={},
+        summary={"post": {"rewrite_acc": 0.0}},
+        elapsed=1.0,
+        dataset_sha256="abc",
+        all_facts=[{"case_id": 1}],
+        facts=[{"case_id": 1, "requested_rewrite": {"relation_id": "P17"}}],
+        locality_limit=None,
+    )
+
+    assert payload["artifact_schema_version"] == "easyedit_official.v2"
+    assert payload["method_profile_id"] == "single_loc"
+    assert payload["base_model_digest"].startswith("sha256:")
+    assert payload["atoms_digest"] is None
+    assert payload["failure_analysis"]["failure_families"] == ["tf"]
 
 
 def test_failure_summary_accepts_string_targets_from_easyedit_rows():

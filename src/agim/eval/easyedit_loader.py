@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib
 import importlib.util
+import os
 import sys
 import types
 from pathlib import Path
@@ -11,7 +12,7 @@ from typing import Any
 import torch
 
 
-DEFAULT_EASYEDIT_ROOT = Path("/mnt/hf_model_weights/arman/3bit/sites/EasyEdit")
+DEFAULT_EASYEDIT_ROOT = Path(os.environ.get("AGIM_EASYEDIT_ROOT", "EasyEdit"))
 
 
 def _module(name: str, path: str | None = None) -> types.ModuleType:

@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 
 from agim.eval.easyedit_counterfact import LLAMA
 
 from .easyedit_loader import DEFAULT_EASYEDIT_ROOT
 from .easyedit_presets import PRESETS
+from .easyedit_run_metadata import DEFAULT_FAILURE_FAMILIES
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -16,7 +18,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--preset", choices=sorted(PRESETS),
                         help="Named reproducible run preset")
     parser.add_argument("--model", default=LLAMA)
-    parser.add_argument("--device", default="cuda:3")
+    parser.add_argument("--device", default=os.environ.get("AGIM_DEVICE", "cuda:0"))
     parser.add_argument("--dataset", default="https://rome.baulab.info/data/dsets/counterfact.json")
     parser.add_argument("--sample-policy", choices=["first", "random"], default="first")
     parser.add_argument("--seed", type=int, default=42)
@@ -32,6 +34,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Write a compact JSON containing only failed cases")
     parser.add_argument("--failures-output",
                         help="Optional failures-only JSON output path")
+    parser.add_argument("--failure-families", default=",".join(DEFAULT_FAILURE_FAMILIES),
+                        help="Comma-separated: tf,ctx_gen,prob,vanilla_gen")
+    parser.add_argument("--method-profile-id",
+                        help="Optional explicit operating profile id for artifacts")
     parser.add_argument("--easyedit-root", type=Path, default=DEFAULT_EASYEDIT_ROOT)
     parser.add_argument("--locality-limit", type=int, default=0,
                         help="0 means all official CounterFact locality prompts")

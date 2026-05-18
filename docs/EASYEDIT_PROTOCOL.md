@@ -93,6 +93,12 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   counts without loading the model or EasyEdit.
 - `--save-failures-only` writes a compact failure triage artifact next to the
   main run output.
+- `--failure-families` controls failure triage families. The default is
+  `tf,ctx_gen,prob`, so EasyEdit standalone vanilla generation mismatch does
+  not mark every case as the primary triage failure. Add `vanilla_gen` when
+  specifically auditing the official vanilla generation path.
+- New artifacts include `artifact_schema_version`, `method_profile_id`,
+  `base_model_digest`, and `atoms_digest`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--positive-constraint-mode projected` is a constrained positive/protected

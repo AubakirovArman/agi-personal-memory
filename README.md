@@ -3,7 +3,7 @@
 **Accumulative verified memory substrate for language models.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-90%20passed%2C%2013%20skipped-green)]()
+[![Tests](https://img.shields.io/badge/tests-101%20passed%2C%2013%20skipped-green)]()
 [![Status](https://img.shields.io/badge/status-research%20prototype-blue)]()
 [![Version](https://img.shields.io/badge/version-0.2.0a1-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
@@ -55,6 +55,14 @@ Current n=50 EasyEdit-compatible single-edit result on
 | Contextual generation | 100.0% | 70.0% | 66.0% | n/a |
 | Probability compare | 100.0% | 88.0% | 89.0% | 37.4% |
 
+Current n=1000 EasyEdit-compatible scale check for the default locality profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 91.1% | 25.4% | 24.7% | 96.2% |
+| Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
+| Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
+
 Current n=50 sequential tuned profile:
 
 | Metric group | Rewrite | Rephrase | PS@All | Locality |
@@ -77,7 +85,7 @@ For the current source of truth, read [CURRENT_STATUS.md](CURRENT_STATUS.md).
 | **Auditable** | No | No | Partial | **Yes (full JSONL trail)** |
 | **Non-target diff** | N/A | ~25% | Medium | **0% in WAL diagnostics** |
 
-## Quick Start
+## Quick Start: Path A Runtime Memory
 
 ```bash
 pip install -e ".[eval,api]"
@@ -88,6 +96,30 @@ agim history
 agim stats
 agim webui --port 8720
 ```
+
+This verifies the runtime memory plane. It does not prove model-weight editing.
+For details, read [Verify Path A](docs/VERIFY_PATH_A.md).
+
+## Quick Start: Path B Weight Editing Evaluation
+
+Path B claims use the EasyEdit-compatible runner and explicit artifacts.
+
+```bash
+export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
+export AGIM_DEVICE=cuda:2
+export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
+
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 1000 --sample-policy first \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/current/easyedit_official_1000_first_default.json \
+  --save-failures-only
+```
+
+For reproducibility bundles and caveats, read
+[Verify Path B Current](docs/VERIFY_PATH_B_CURRENT.md). For old WAL/ROME
+substrate checks, read [Verify Path B Legacy](docs/VERIFY_PATH_B_LEGACY.md).
 
 ## Interfaces
 
@@ -171,7 +203,7 @@ src/agim/
 | v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
 | v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | Prototype modules, not production claim |
 
-Current full local suite: **90 passed, 13 skipped** on 2026-05-18.
+Current full local suite: **101 passed, 13 skipped** on 2026-05-18.
 The skipped tests are Gemma E2E checks when the installed Transformers build
 does not support the local `gemma4` checkpoint architecture.
 
@@ -182,6 +214,7 @@ does not support the local `gemma4` checkpoint architecture.
 - [Current Status](CURRENT_STATUS.md) | [Benchmarks](BENCHMARK.md) | [Evaluation Protocols](docs/evaluation/README.md)
 - [Path A Memory](docs/PATH_A_MEMORY.md) | [Path B Weight Editing](docs/PATH_B_WEIGHT_EDITING.md) | [Claims And Evidence](docs/CLAIMS_AND_EVIDENCE.md)
 - [EasyEdit Protocol](docs/EASYEDIT_PROTOCOL.md) | [Realistic Roadmap](docs/ROADMAP_REALISTIC.md)
+- [Path B Productization Plan](docs/PATH_B_PRODUCTIZATION_PLAN.md) | [Verify Path B Current](docs/VERIFY_PATH_B_CURRENT.md)
 - [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Historical Roadmap](agim_roadmap_v0_to_v10.md)
 - [Developer Diary](DIARY.md)
 - Built on [WAL — Weight-Aligned Language](https://github.com/AubakirovArman/wal2026)

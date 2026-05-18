@@ -3,6 +3,9 @@
 This roadmap replaces broad v10-style claims with concrete evidence-driven
 steps.
 
+For the full 40-item Path B productization checklist, see
+`docs/PATH_B_PRODUCTIZATION_PLAN.md`.
+
 ## Now
 
 - Keep Path A and Path B separated in docs, results, and claims.
