@@ -41,7 +41,7 @@ true:
 | raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `tests/test_raw_text_edit_pipeline.py` | Covered as proposal and PatchService draft bridge |
 | Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Post-hoc diagnostic plus dataset adapter; no scored external run |
 | MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py` | Post-hoc diagnostic plus dataset adapter; no scored external run |
-| product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local KnowEdit-inspired only |
+| product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local diagnostic plus KnowEdit/UniEdit-style dataset adapter; no scored external run |
 
 ## Remaining Gaps
 
@@ -52,7 +52,7 @@ true:
 | 35 | Official RippleEdits benchmark | Dataset adapter exists, but there is no tracked scored RippleEdits run |
 | 36 | Official MQuAKE benchmark | Dataset adapter exists, but there is no tracked scored MQuAKE run |
 | 37 | Full AKEW-style raw-text editing | Parser and PatchService drafts exist, but row-delta materialization and benchmark scoring are not complete |
-| 38 | External product benchmark | Current diagnostic is KnowEdit-inspired, not a KnowEdit/UniEdit/ScEdit/MLaKE artifact |
+| 38 | External product benchmark | Dataset adapter exists, but there is no tracked scored KnowEdit/UniEdit/ScEdit/MLaKE run |
 
 ## Current Claim Boundary
 

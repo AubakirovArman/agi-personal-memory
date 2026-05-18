@@ -1,5 +1,7 @@
 from agim.eval.product_diagnostic import (
     diagnostic_payload,
+    normalize_product_record,
+    product_dataset_payload,
     summarize_product_by_relation,
     summarize_product_rows,
 )
@@ -55,3 +57,43 @@ def test_product_payload_keeps_external_benchmark_caveat():
     assert payload["artifact_schema_version"] == "product_diagnostic.v1"
     assert payload["source_method_profile_id"] == "single_loc"
     assert "not an external KnowEdit" in payload["caveat"]
+
+
+def test_normalize_product_record_keeps_knowedit_groups():
+    record = {
+        "id": "ke-1",
+        "subject": "France",
+        "prompt": "The capital of France is",
+        "target_new": "Berlin",
+        "ground_truth": "Paris",
+        "portability": {
+            "Reasoning": [
+                {"prompt": "France's new capital is in", "ground_truth": "Germany"}
+            ]
+        },
+        "locality": {
+            "Relation_Specificity": [
+                {"prompt": ["The capital of Germany is"], "ground_truth": ["Berlin"]}
+            ]
+        },
+    }
+
+    case = normalize_product_record(record, 0)
+
+    assert case["source_record_id"] == "ke-1"
+    assert case["request"]["target_true"] == "Paris"
+    assert case["portability"]["Reasoning"]["ground_truth"] == ["Germany"]
+    assert case["locality"]["Relation_Specificity"]["prompt"] == [
+        "The capital of Germany is"
+    ]
+
+
+def test_product_dataset_payload_has_adapter_caveat():
+    payload = product_dataset_payload([
+        {"concept": "A", "text": "{} is", "labels": ["B"]},
+    ], source="knowedit.json", benchmark_name="knowedit")
+
+    assert payload["artifact_schema_version"] == "product_dataset_adapter.v1"
+    assert payload["benchmark_name"] == "knowedit"
+    assert payload["cases"][0]["request"]["subject"] == "A"
+    assert "not a scored external leaderboard" in payload["caveat"]
