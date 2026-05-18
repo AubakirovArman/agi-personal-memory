@@ -7,11 +7,14 @@ from pathlib import Path
 from agim.eval.easyedit_counterfact import LLAMA
 
 from .easyedit_loader import DEFAULT_EASYEDIT_ROOT
+from .easyedit_presets import PRESETS
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--n", type=int, default=50)
+    parser.add_argument("--preset", choices=sorted(PRESETS),
+                        help="Named reproducible run preset")
     parser.add_argument("--model", default=LLAMA)
     parser.add_argument("--device", default="cuda:3")
     parser.add_argument("--dataset", default="https://rome.baulab.info/data/dsets/counterfact.json")
@@ -21,6 +24,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         default="results/easyedit_official/current/easyedit_official_50.json",
     )
+    parser.add_argument("--dry-run-summary", action="store_true",
+                        help="Only inspect selected CounterFact records; do not load model/EasyEdit")
+    parser.add_argument("--dry-run-output",
+                        help="Optional dry-run JSON output path")
+    parser.add_argument("--save-failures-only", action="store_true",
+                        help="Write a compact JSON containing only failed cases")
+    parser.add_argument("--failures-output",
+                        help="Optional failures-only JSON output path")
     parser.add_argument("--easyedit-root", type=Path, default=DEFAULT_EASYEDIT_ROOT)
     parser.add_argument("--locality-limit", type=int, default=0,
                         help="0 means all official CounterFact locality prompts")
@@ -37,6 +48,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Average edit keys with CounterFact paraphrase prompts")
     parser.add_argument("--positive-prompt-limit", type=int, default=4)
     parser.add_argument("--positive-key-weight", type=float, default=1.0)
+    parser.add_argument("--positive-constraint-mode", choices=["none", "projected"],
+                        default="none")
     parser.add_argument("--use-neg-prompts", action=argparse.BooleanOptionalAction, default=True,
                         help="Project edit key away from locality/neighborhood prompt keys")
     parser.add_argument("--neg-prompt-limit", type=int, default=10)
@@ -45,6 +58,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--embed-history-projection-strength", type=float, default=0.0)
     parser.add_argument("--projection-mode", choices=["sequential", "orthogonal"],
                         default="sequential")
+    parser.add_argument("--history-slot-mode", choices=["global", "relation"],
+                        default="global",
+                        help="Use global or relation_id-sharded edit history basis")
     parser.add_argument("--max-history-keys", type=int, default=128)
     parser.add_argument("--probability-metrics", action=argparse.BooleanOptionalAction,
                         default=True,

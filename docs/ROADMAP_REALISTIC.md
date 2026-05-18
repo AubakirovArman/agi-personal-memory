@@ -20,15 +20,22 @@ steps.
   not fix locality, so stricter key projection alone is not enough.
 - Use the newly emitted `metrics_by_relation_id` in fresh artifacts to find
   relation-level collapse cases.
-- Run `random_50_seed_42` and `random_50_seed_43`, then 100/1000 only after the
-  n=50 method tradeoffs are understood.
+- Use `--dry-run-summary` before GPU runs to verify the selected cases and
+  relation mix.
+- Use `--save-failures-only` after GPU runs to review only the failed
+  rewrite/rephrase/locality cases.
+- Run `--preset random_50_seed_42`, `--preset random_50_seed_43`, and
+  `--preset random_50_seed_44`, then 100/1000 only after the n=50 method
+  tradeoffs are understood.
 - Keep outputs under `results/easyedit_official/current/` or
   `results/easyedit_official/sequential/`.
 
 ## Next Month
 
-- Add per-edit side memory or isolation for sequential edits.
-- Add relation sharding by CounterFact `relation_id`.
+- Evaluate `--history-slot-mode relation` as the first per-relation side-slot
+  isolation ablation for sequential edits.
+- Evaluate `--positive-constraint-mode projected` for locality-preserving
+  positive-prompt mixing.
 - Try constrained row updates or MEMIT/ROME-style layer edits for locality.
 - Run KnowEdit or MQuAKE portability splits as diagnostic benchmarks.
 - Build an EasyEdit method adapter package for external review.

@@ -47,11 +47,10 @@ Do not merge those into one headline number.
 Before making stronger external claims, run:
 
 ```text
-first_50
-random_50_seed_42
-random_50_seed_43
-first_200
-random_200_seed_42
+agim-easyedit --n 50 --sample-policy first
+agim-easyedit --preset random_50_seed_42
+agim-easyedit --preset random_50_seed_43
+agim-easyedit --preset random_50_seed_44
 ```
 
 For sequential runs, add retention reporting:
@@ -66,6 +65,15 @@ after edit 50: evaluate edits 1..50
 
 - `PS@All`, `metrics_by_relation_id`, and sequential retention summaries are
   emitted for new artifacts; older artifacts do not contain them.
+- `--dry-run-summary` writes the selected case ids, relation counts, and prompt
+  counts without loading the model or EasyEdit.
+- `--save-failures-only` writes a compact failure triage artifact next to the
+  main run output.
+- `--history-slot-mode relation` is a relation-sharded sequential history
+  ablation. It keeps edit-key history slots by CounterFact `relation_id`.
+- `--positive-constraint-mode projected` is a constrained positive/protected
+  key ablation. It projects paraphrase-positive keys away from protected
+  locality keys before mixing them into the edit key.
 - Sequential retention is currently summary-only. Full retention metrics should
   be stored only when needed because they can make artifacts large.
 - `--use-positive-prompts` is backed by n=50 GPU artifacts. It improves

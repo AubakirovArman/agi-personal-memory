@@ -15,10 +15,15 @@ def prompt_keys(editor, prompts: list[str], limit: int) -> list[torch.Tensor]:
     return keys
 
 
-def history_basis(editor, limit: int) -> list[torch.Tensor]:
+def history_basis(editor, limit: int, relation_id: str | None = None,
+                  slot_mode: str = "global") -> list[torch.Tensor]:
+    if slot_mode == "relation":
+        basis = editor._relation_key_basis.get(str(relation_id), [])
+    else:
+        basis = editor._edit_key_basis
     if limit <= 0:
-        return editor._edit_key_basis
-    return editor._edit_key_basis[-limit:]
+        return basis
+    return basis[-limit:]
 
 
 def positive_keys_for_step(editor, prompts: list[str], tids: list[int],
@@ -37,15 +42,29 @@ def positive_keys_for_step(editor, prompts: list[str], tids: list[int],
     return keys
 
 
-def combine_positive_keys(primary: torch.Tensor, positives: list[torch.Tensor],
-                          weight: float) -> torch.Tensor:
+def combine_positive_keys(
+    primary: torch.Tensor,
+    positives: list[torch.Tensor],
+    weight: float,
+    protected_basis: list[torch.Tensor] | None = None,
+    projection_strength: float = 0.0,
+    projection_mode: str = "sequential",
+) -> torch.Tensor:
     primary = primary / (primary.norm() + 1e-8)
     if weight <= 0 or not positives:
         return primary
     normalized = []
     for key in positives:
         moved = key.to(primary.device).float()
-        normalized.append(moved / (moved.norm() + 1e-8))
+        moved = moved / (moved.norm() + 1e-8)
+        if protected_basis:
+            moved = project_away(
+                moved,
+                protected_basis,
+                strength=projection_strength,
+                mode=projection_mode,
+            )
+        normalized.append(moved)
     positive = torch.stack(normalized).mean(dim=0)
     positive = positive / (positive.norm() + 1e-8)
     combined = primary + weight * positive

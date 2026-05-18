@@ -9,6 +9,7 @@ import transformers
 
 from agim.eval.easyedit_counterfact import git_sha
 
+from .easyedit_failures import failure_summary
 from .easyedit_utils import parse_retention_steps
 
 
@@ -38,6 +39,7 @@ def build_payload(
         "dataset": _dataset_metadata(args, dataset_sha256, all_facts, facts, locality_limit),
         "hyperparams": _hyperparams(args, len(metrics)),
         "summary": summary,
+        "failure_analysis": failure_summary(metrics),
         "retention": retention,
         "time_s": round(elapsed, 2),
         "time_per_edit_s": round(elapsed / max(len(metrics), 1), 4),
@@ -90,12 +92,14 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "use_positive_prompts": args.use_positive_prompts,
         "positive_prompt_limit": args.positive_prompt_limit,
         "positive_key_weight": args.positive_key_weight,
+        "positive_constraint_mode": args.positive_constraint_mode,
         "use_neg_prompts": args.use_neg_prompts,
         "neg_prompt_limit": args.neg_prompt_limit,
         "neg_projection_strength": args.neg_projection_strength,
         "history_projection_strength": args.history_projection_strength,
         "embed_history_projection_strength": args.embed_history_projection_strength,
         "projection_mode": args.projection_mode,
+        "history_slot_mode": args.history_slot_mode,
         "max_history_keys": args.max_history_keys,
         "probability_metrics": args.probability_metrics,
         "test_fluency": args.test_fluency,

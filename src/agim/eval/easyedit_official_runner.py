@@ -15,7 +15,9 @@ from agim.model.wal_dual_editor import WALDualLayerEditor
 
 from .easyedit_bundle import post_edit_bundle
 from .easyedit_cli import build_parser, print_final_summary
+from .easyedit_dry_run import dry_run_payload, write_dry_run_summary
 from .easyedit_eval_loop import run_evaluation_loop
+from .easyedit_failures import write_failures_only
 from .easyedit_loader import DEFAULT_EASYEDIT_ROOT, load_easyedit_official
 from .easyedit_metrics import (
     attach_locality_acc,
@@ -23,6 +25,7 @@ from .easyedit_metrics import (
     ngram_entropy,
 )
 from .easyedit_payload import build_payload
+from .easyedit_presets import apply_preset
 from .easyedit_records import easyedit_record, extract_portability
 from .easyedit_summary import summarize_official
 from .easyedit_utils import jsonable, parse_device_id, parse_retention_steps
@@ -44,12 +47,28 @@ __all__ = [
 
 
 def main() -> int:
-    args = build_parser().parse_args()
+    args = apply_preset(build_parser().parse_args())
     torch.manual_seed(args.seed)
     random.seed(args.seed)
 
     device_id = parse_device_id(args.device)
     locality_limit = None if args.locality_limit == 0 else args.locality_limit
+    all_facts, dataset_sha256 = load_dataset(args.dataset)
+    facts = select_facts(all_facts, args.n, args.sample_policy, args.seed)
+    records = [easyedit_record(fact, locality_limit) for fact in facts]
+    if args.dry_run_summary:
+        payload = dry_run_payload(
+            args=args,
+            dataset_sha256=dataset_sha256,
+            all_facts=all_facts,
+            facts=facts,
+            records=records,
+            locality_limit=locality_limit,
+        )
+        output = write_dry_run_summary(args, payload)
+        print(f"Dry-run summary saved {output}")
+        return 0
+
     compute_edit_quality, test_prediction_acc, summary_metrics = load_easyedit_official(
         args.easyedit_root
     )
@@ -70,10 +89,6 @@ def main() -> int:
 
     editor = WALDualLayerEditor(model, tok, device=args.device)
     editor.build_vocab()
-
-    all_facts, dataset_sha256 = load_dataset(args.dataset)
-    facts = select_facts(all_facts, args.n, args.sample_policy, args.seed)
-    records = [easyedit_record(fact, locality_limit) for fact in facts]
     _print_run_header(args, records, locality_limit)
 
     t0 = time.time()
@@ -108,6 +123,9 @@ def main() -> int:
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(jsonable(payload), indent=2, ensure_ascii=False))
+    if args.save_failures_only:
+        failure_output = write_failures_only(args, metrics, summary)
+        print(f"Failures-only artifact saved {failure_output}")
     print_final_summary(summary, retention, elapsed, len(metrics), output)
     return 0
 

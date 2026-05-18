@@ -49,13 +49,16 @@ Expected output: empty.
 
 ## Method Work After Size Cleanup
 
-1. Add `--dry-run-summary` for EasyEdit sample/dataset inspection without model
-   loading.
-2. Add `--save-failures-only` for locality/rephrase failure triage.
-3. Prototype constrained positive/protected solve on n=10.
-4. Prototype side-memory edit slots for sequential n=20.
-5. Add relation sharding using `relation_id`.
-6. Run `random_50_seed_42`, `random_50_seed_43`, and `random_50_seed_44`.
+1. Done: add `--dry-run-summary` for EasyEdit sample/dataset inspection
+   without model loading.
+2. Done: add `--save-failures-only` for locality/rephrase failure triage.
+3. Done: add `--positive-constraint-mode projected` as the first constrained
+   positive/protected-key ablation.
+4. Done: add `--history-slot-mode relation` as the first relation-sharded
+   side-slot ablation for sequential editing.
+5. Done: add named presets for `random_50_seed_42`, `random_50_seed_43`, and
+   `random_50_seed_44`.
+6. Next: run the three random_50 presets on GPU 2 or 3 and compare artifacts.
 
 ## Verification Gate
 

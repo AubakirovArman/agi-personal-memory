@@ -1,8 +1,4 @@
-"""WAL Dual-Layer Editor — lm_head + embed_tokens via frozen vocabulary.
-
-Canonical implementation extracted from test_dual_layer.py (verified working).
-Edits BOTH input (embed_tokens) and output (lm_head) for subject-specific editing.
-"""
+"""WAL dual-layer editor for lm_head and embed_tokens edits."""
 from __future__ import annotations
 import torch
 from ..wal.encoder import build_atoms_kmeans, wal_encode_scalar_gpu
@@ -23,14 +19,7 @@ from .wal_dual_helpers import (
 
 
 class WALDualLayerEditor:
-    """Edit lm_head AND embed_tokens via WAL programs.
-
-    lm_head: sequence-level target token boost (output layer)
-    embed_tokens: push subject tokens toward target direction (input layer)
-    + EOS boost + anti-boost on both layers for repetition control.
-
-    Verified NS: 72% at clamp=0.15, 42% at clamp=0.20 (CounterFact 50).
-    """
+    """Edit lm_head and embed_tokens via WAL programs."""
 
     def __init__(self, model, tokenizer, K=256, lmax=16, device="cuda:3"):
         self.model = model
@@ -45,9 +34,9 @@ class WALDualLayerEditor:
         self._lm_nt_snapshot: dict[int, torch.Tensor] = {}
         self._emb_nt_snapshot: dict[int, torch.Tensor] = {}
         self._edit_key_basis: list[torch.Tensor] = []
+        self._relation_key_basis: dict[str, list[torch.Tensor]] = {}
         self._edit_count = 0
 
-    # ═══ vocabulary ═══
     def build_vocab(self):
         """Build shared WAL atoms from lm_head + embed_tokens distributions."""
         lm_flat = self.model.lm_head.weight.data.float().flatten()
@@ -57,7 +46,6 @@ class WALDualLayerEditor:
         self.atoms_gpu = self.atoms.to(self.device)
         print(f"  WAL atoms: {self.atoms.shape} [{self.atoms.min():.3f}, {self.atoms.max():.3f}]")
 
-    # ═══ NT measurement ═══
     def snapshot_non_target(self, lm_exclude, embed_exclude=None,
                             sample_size: int = 500):
         """Snapshot lm_head and embed non-target rows for NT diff measurement."""
@@ -90,7 +78,6 @@ class WALDualLayerEditor:
             ),
         }
 
-    # ═══ edit ═══
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    prompt: str = "", clamp_lm: float = 0.20,
                    clamp_embed: float = 0.06, clamp_eos: float = 0.16,
@@ -100,11 +87,13 @@ class WALDualLayerEditor:
                    positive_prompts: list[str] | None = None,
                    max_positive_prompts: int = 4,
                    positive_key_weight: float = 1.0,
+                   positive_constraint_mode: str = "none",
                    max_neg_prompts: int = 4,
                    neg_projection_strength: float = 0.3,
                    history_projection_strength: float = 0.0,
                    embed_history_projection_strength: float = 0.0,
                    projection_mode: str = "sequential",
+                   history_slot_mode: str = "global",
                    max_history_keys: int = 128):
         """Dual-layer WAL edit. Returns dict with backup info for rollback.
 
@@ -128,7 +117,14 @@ class WALDualLayerEditor:
             raise ValueError(
                 "projection_mode must be one of: sequential, orthogonal"
             )
+        if history_slot_mode not in {"global", "relation"}:
+            raise ValueError("history_slot_mode must be one of: global, relation")
+        if positive_constraint_mode not in {"none", "projected"}:
+            raise ValueError("positive_constraint_mode must be one of: none, projected")
+        relation_key = str(relation or "")
         history_len = len(self._edit_key_basis)
+        relation_history = self._relation_key_basis.get(relation_key, [])
+        relation_history_len = len(relation_history)
         new_history_keys: list[torch.Tensor] = []
 
         if not prompt:
@@ -156,7 +152,6 @@ class WALDualLayerEditor:
         w_lm = self.model.lm_head.weight.data
         w_emb = self.model.model.embed_tokens.weight.data
 
-        # NT snapshot. Exclude every lm_head row this edit may intentionally touch.
         planned_lm_rows = set(target_lm_rows)
         planned_lm_rows.update(old_lm_rows)
         if clamp_eos > 0 and self.tokenizer.eos_token_id is not None:
@@ -165,7 +160,6 @@ class WALDualLayerEditor:
         neg_keys = self._prompt_keys(neg_prompts or [], max_neg_prompts)
         positive_prompts = positive_prompts or []
 
-        # ── lm_head: sequence-level boost ──
         if clamp_lm > 0:
             for tids in target_sequences:
                 for i, tid in enumerate(tids):
@@ -175,14 +169,17 @@ class WALDualLayerEditor:
                     k = k / (k.norm() + 1e-8)
                     positive_keys = self._positive_keys_for_step(
                         positive_prompts, tids, i, max_positive_prompts)
+                    protected = neg_keys if positive_constraint_mode == "projected" else None
                     k = self._combine_positive_keys(
-                        k, positive_keys, positive_key_weight)
+                        k, positive_keys, positive_key_weight, protected,
+                        neg_projection_strength, projection_mode)
                     k = self._project_away(
                         k, neg_keys, strength=neg_projection_strength,
                         mode=projection_mode)
                     k = self._project_away(
                         k,
-                        self._history_basis(max_history_keys),
+                        self._history_basis(
+                            max_history_keys, relation_key, history_slot_mode),
                         strength=history_projection_strength,
                         mode=projection_mode,
                     )
@@ -197,7 +194,6 @@ class WALDualLayerEditor:
                         )
                     w_lm[tid, :] = rec.to(device=w_lm.device, dtype=w_lm.dtype)
 
-        # ── Old-target anti-boost (before embed edit) ──
         if clamp_old > 0 and old_lm_rows:
             for otid in old_lm_rows:
                 if otid not in lm_bu: lm_bu[otid] = w_lm[otid, :].clone()
@@ -211,20 +207,18 @@ class WALDualLayerEditor:
                         row_old - clamp_old * k_old.to(self.device), self.atoms_gpu, self.lmax)
                     w_lm[otid, :] = rec_old.to(device=w_lm.device, dtype=w_lm.dtype)
 
-        # ── embed_tokens: push subject toward (target_new - target_old) direction ──
         if old_lm_rows and old_target:
-            # Subject-conditioned gate: new_dir - old_dir
             new_dir = w_lm[primary_tids[0], :].float().to(self.device)
             old_primary = old_sequences[0] if old_sequences else []
             old_dir = w_lm[old_primary[0], :].float().to(self.device) if old_primary else 0
-            tdir = new_dir - 0.5 * old_dir  # push away from old, toward new
+            tdir = new_dir - 0.5 * old_dir
             tdir = tdir / (tdir.norm() + 1e-8)
         else:
             tdir = w_lm[primary_tids[0], :].float().to(self.device)
             tdir = tdir / (tdir.norm() + 1e-8)
         tdir = self._project_away(
             tdir,
-            self._history_basis(max_history_keys),
+            self._history_basis(max_history_keys, relation_key, history_slot_mode),
             strength=embed_history_projection_strength,
             mode=projection_mode,
         )
@@ -235,7 +229,6 @@ class WALDualLayerEditor:
                 _, _, rec = wal_encode_scalar_gpu(row + clamp_embed * tdir, self.atoms_gpu, self.lmax)
                 w_emb[sid, :] = rec.to(device=w_emb.device, dtype=w_emb.dtype)
 
-        # ── EOS + anti-boost ──
         eid = self.tokenizer.eos_token_id
         full_ids = torch.cat([pids, torch.tensor(primary_tids, device=pids.device)])
         sk = self._get_key(full_ids) if (clamp_eos > 0 or clamp_anti > 0) else None
@@ -260,10 +253,13 @@ class WALDualLayerEditor:
 
         self._edit_count += 1
         self._edit_key_basis.extend(new_history_keys)
+        self._relation_key_basis.setdefault(relation_key, []).extend(new_history_keys)
         return {
             "lm_backup": lm_bu,
             "emb_backup": emb_bu,
             "history_len": history_len,
+            "relation_key": relation_key,
+            "relation_history_len": relation_history_len,
             "history_keys_added": len(new_history_keys),
         }
 
@@ -275,6 +271,11 @@ class WALDualLayerEditor:
             self.model.model.embed_tokens.weight.data[sid, :] = orig
         if "history_len" in backup:
             self._edit_key_basis = self._edit_key_basis[:backup["history_len"]]
+        if "relation_key" in backup and "relation_history_len" in backup:
+            key = backup["relation_key"]
+            self._relation_key_basis[key] = self._relation_key_basis.get(key, [])[
+                :backup["relation_history_len"]
+            ]
 
     _prompt_keys = prompt_keys
     _history_basis = history_basis
