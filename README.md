@@ -3,7 +3,7 @@
 **Accumulative verified memory substrate for language models.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-88%20passed%2C%2013%20skipped-green)]()
+[![Tests](https://img.shields.io/badge/tests-90%20passed%2C%2013%20skipped-green)]()
 [![Status](https://img.shields.io/badge/status-research%20prototype-blue)]()
 [![Version](https://img.shields.io/badge/version-0.2.0a1-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
@@ -49,18 +49,18 @@ EasyEdit-compatible runner, not the older local CounterFact scripts.
 Current n=50 EasyEdit-compatible single-edit result on
 `meta-llama/Llama-3.1-8B-Instruct`:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 100.0% | 71.0% | 58.4% |
-| Contextual generation | 100.0% | 70.0% | n/a |
-| Probability compare | 100.0% | 88.0% | 37.6% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 71.0% | 67.0% | 58.4% |
+| Contextual generation | 100.0% | 70.0% | 66.0% | n/a |
+| Probability compare | 100.0% | 88.0% | 89.0% | 37.4% |
 
 Current n=50 sequential tuned profile:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 71.0% | 21.0% | 25.4% |
-| Probability compare | 86.0% | 62.0% | 61.2% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 73.0% | 21.0% | 20.0% | 25.4% |
+| Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
 This is useful progress, but it does not support a claim that AGIM is #1 on
 EasyEdit or has solved lifelong/sequential editing.
@@ -171,7 +171,7 @@ src/agim/
 | v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
 | v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | Prototype modules, not production claim |
 
-Current full local suite: **88 passed, 13 skipped** on 2026-05-18.
+Current full local suite: **90 passed, 13 skipped** on 2026-05-18.
 The skipped tests are Gemma E2E checks when the installed Transformers build
 does not support the local `gemma4` checkpoint architecture.
 

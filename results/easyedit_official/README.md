@@ -30,12 +30,17 @@ local EasyEdit source tree:
 
 | Artifact | Mode | Use |
 | --- | --- | --- |
-| `current/easyedit_official_50_contextual_neg4_ctxgen_nt.json` | Single edit with rollback after each fact | Best current single-edit result |
-| `sequential/easyedit_official_50_contextual_neg4x05_seq_lm015_noeosanti.json` | Sequential, tuned projection | Best balanced sequential profile |
+| `current/easyedit_official_50_first42_psall_baseline.json` | Single edit with rollback after each fact | Current baseline with PS@All |
+| `ablations/easyedit_official_50_first42_psall_positive_prompts.json` | Single edit with positive prompts | PS@All ablation, locality tradeoff |
+| `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_retention.json` | Sequential, tuned projection | Current balanced sequential profile with retention |
+| `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_positive_prompts_retention.json` | Sequential, tuned projection plus positive prompts | Sequential PS@All ablation |
+| `sequential/easyedit_official_50_first42_psall_seq_lm015_negx05_orthogonal_noeosanti_retention.json` | Sequential, orthogonal projection | Negative locality ablation |
 | `sequential/easyedit_official_50_contextual_neg4x05_seq_lm012_noeosanti.json` | Sequential, tuned projection | Best exact-token locality among tuned n=50 runs |
 | `sequential/easyedit_official_50_contextual_neg4x05_seq_lm020_noeosanti.json` | Sequential, tuned projection | Best exact-token rewrite, weak locality |
 | `sequential/easyedit_official_50_contextual_neg4x07_seq_lm020_noeosanti.json` | Sequential, stronger projection | Strong probability locality, weak rephrase |
 | `current/easyedit_agim_status_2026-05-18.md` | Human summary | Read first |
+| `current/easyedit_psall_report_2026-05-18.md` | Human PS@All report | Fresh n=50 comparison table |
+| `current/relation_failure_notes_2026-05-18.md` | Human relation triage | Worst relation ids by locality |
 
 Smoke and failed/tuning runs live in `smoke/` and are intentionally ignored by
 git.

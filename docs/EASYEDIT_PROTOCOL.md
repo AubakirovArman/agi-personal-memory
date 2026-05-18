@@ -22,6 +22,7 @@ EasyEdit metric functions where possible.
 | `PS@All` / `rephrase_all_acc` | Rephrase aggregate across all CounterFact paraphrases | Diagnostic for cherry-pick risk |
 | Sequential retention | Metrics after selected accumulated-edit checkpoints | Diagnostic for collapse timing |
 | Multi-positive key ablation | Optional edit-key averaging with paraphrase prompts | Experimental method knob |
+| Orthogonal projection ablation | Optional protected-subspace projection mode | Negative result so far |
 | NT diff | Non-edited `lm_head`/embedding row drift | Diagnostic |
 
 ## Why Vanilla Generation Is Separate
@@ -67,5 +68,9 @@ after edit 50: evaluate edits 1..50
   emitted for new artifacts; older artifacts do not contain them.
 - Sequential retention is currently summary-only. Full retention metrics should
   be stored only when needed because they can make artifacts large.
-- `--use-positive-prompts` is implemented but not yet backed by committed GPU
-  artifacts.
+- `--use-positive-prompts` is backed by n=50 GPU artifacts. It improves
+  PS@All but currently hurts locality, so it is an ablation knob rather than the
+  default headline setting.
+- `--projection-mode orthogonal` is backed by an n=50 GPU artifact. It is worse
+  on exact-token locality than the tuned sequential baseline, so it is not a
+  recommended default.

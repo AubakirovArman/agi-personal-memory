@@ -12,20 +12,24 @@ steps.
 
 ## Next Two Weeks
 
-- Run fresh n=50 artifacts with the new `PS@All`, `metrics_by_relation_id`, and
-  sequential retention fields.
-- Run an ablation with `--use-positive-prompts` to see whether multi-positive
-  key averaging improves `PS@All`.
+- Fresh `first_50` artifacts now include `PS@All`, `metrics_by_relation_id`,
+  and sequential retention fields.
+- The `--use-positive-prompts` ablation improves single-edit PS@All but hurts
+  locality, so it is not a default method setting yet.
+- The `--projection-mode orthogonal` ablation is implemented and tested; it did
+  not fix locality, so stricter key projection alone is not enough.
 - Use the newly emitted `metrics_by_relation_id` in fresh artifacts to find
   relation-level collapse cases.
-- Run `first_50`, `random_50_seed_42`, and `random_50_seed_43`.
+- Run `random_50_seed_42` and `random_50_seed_43`, then 100/1000 only after the
+  n=50 method tradeoffs are understood.
 - Keep outputs under `results/easyedit_official/current/` or
   `results/easyedit_official/sequential/`.
 
 ## Next Month
 
-- Implement protected-key/null-space projection for locality.
+- Add per-edit side memory or isolation for sequential edits.
 - Add relation sharding by CounterFact `relation_id`.
+- Try constrained row updates or MEMIT/ROME-style layer edits for locality.
 - Run KnowEdit or MQuAKE portability splits as diagnostic benchmarks.
 - Build an EasyEdit method adapter package for external review.
 

@@ -24,8 +24,8 @@ Path B for reversible WAL-based model editing research.
 ```text
 On internal EasyEdit-compatible CounterFact single-edit runs for
 Llama-3.1-8B-Instruct, AGIM WAL reaches 100% teacher-forcing rewrite and 71%
-teacher-forcing rephrase at n=50, with measured zero non-edited lm_head/embed
-row diff. Sequential editing and locality remain open challenges.
+teacher-forcing rephrase / 67% PS@All at n=50, with measured zero non-edited
+lm_head/embed row diff. Sequential editing and locality remain open challenges.
 ```
 
 ## Unsafe Language

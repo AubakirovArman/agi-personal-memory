@@ -7,5 +7,11 @@ Current readout: sequential editing is partial and weak. The best balanced
 profile improves over the initial sequential collapse, but exact-token locality
 and rephrase remain below the level needed for a lifelong editing claim.
 
+Fresh PS@All artifacts:
+
+- `easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_retention.json`
+- `easyedit_official_50_first42_psall_seq_lm015_negx05_noeosanti_positive_prompts_retention.json`
+- `easyedit_official_50_first42_psall_seq_lm015_negx05_orthogonal_noeosanti_retention.json`
+
 Use these artifacts to discuss sequential failure modes, tuning progress, and
 next research steps. Do not cite them as solved sequential editing.

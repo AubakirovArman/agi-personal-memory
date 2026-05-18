@@ -19,25 +19,36 @@ Source of truth:
 - Artifacts: `results/easyedit_official/`
 - Summary: `results/easyedit_official/current/easyedit_agim_status_2026-05-18.md`
 
-Current single-edit n=50 result on `meta-llama/Llama-3.1-8B-Instruct`:
+Current single-edit n=50 baseline on `meta-llama/Llama-3.1-8B-Instruct`:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 100.0% | 71.0% | 58.4% |
-| Contextual generation | 100.0% | 70.0% | n/a |
-| Probability compare | 100.0% | 88.0% | 37.6% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 71.0% | 67.0% | 58.4% |
+| Contextual generation | 100.0% | 70.0% | 66.0% | n/a |
+| Probability compare | 100.0% | 88.0% | 89.0% | 37.4% |
+
+Positive-prompt ablation improves PS@All at a locality cost:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 96.0% | 95.0% | 45.2% |
+| Probability compare | 100.0% | 96.0% | 98.0% | 25.2% |
 
 Current sequential n=50 tuned profile (`clamp_lm=0.15`,
 `neg_projection_strength=0.50`, no EOS/anti rows):
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 71.0% | 21.0% | 25.4% |
-| Contextual generation | 70.0% | 20.0% | n/a |
-| Probability compare | 86.0% | 62.0% | 61.2% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 73.0% | 21.0% | 20.0% | 25.4% |
+| Contextual generation | 70.0% | 20.0% | 19.0% | n/a |
+| Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
 Interpretation: single-edit is strong; sequential/locality is still weak and
 does not support a lifelong-editing claim.
+
+The fresh orthogonal projection ablation reports `TF rewrite=58.0%`,
+`TF PS@All=25.0%`, and `TF locality=6.6%`; stricter protected-key projection
+alone is therefore not the current locality fix.
 
 ## 2. Legacy Local CounterFact Protocol
 

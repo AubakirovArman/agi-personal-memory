@@ -26,23 +26,31 @@ Use `results/easyedit_official/current/` for current single-edit
 EasyEdit-style claims and `results/easyedit_official/sequential/` only for
 explicitly marked sequential/weakness claims.
 
-Best n=50 single-edit run on `meta-llama/Llama-3.1-8B-Instruct`:
+Best n=50 single-edit baseline on `meta-llama/Llama-3.1-8B-Instruct`:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 100.0% | 71.0% | 58.4% |
-| Contextual generation | 100.0% | 70.0% | n/a |
-| Probability compare | 100.0% | 88.0% | 37.6% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 71.0% | 67.0% | 58.4% |
+| Contextual generation | 100.0% | 70.0% | 66.0% | n/a |
+| Probability compare | 100.0% | 88.0% | 89.0% | 37.4% |
+
+Positive-prompt ablation improves single-edit PS@All but hurts locality:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 96.0% | 95.0% | 45.2% |
+| Probability compare | 100.0% | 96.0% | 98.0% | 25.2% |
 
 Best balanced n=50 sequential run:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 71.0% | 21.0% | 25.4% |
-| Probability compare | 86.0% | 62.0% | 61.2% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 73.0% | 21.0% | 20.0% | 25.4% |
+| Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
 Interpretation: single-edit is strong; sequential editing and exact-token
-locality are not solved.
+locality are not solved. The current PS@All report is
+`results/easyedit_official/current/easyedit_psall_report_2026-05-18.md`.
 
 ## Historical 1000-Fact Local Result
 
@@ -61,7 +69,7 @@ methods.
 Current full local suite:
 
 ```text
-88 passed, 13 skipped
+90 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

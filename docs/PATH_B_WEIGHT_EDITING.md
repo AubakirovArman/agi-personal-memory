@@ -14,19 +14,26 @@ EasyEdit-compatible metrics.
 
 ## Current Readout
 
-Single-edit n=50 is promising:
+Single-edit n=50 baseline is promising:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 100.0% | 71.0% | 58.4% |
-| Probability compare | 100.0% | 88.0% | 37.6% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 100.0% | 71.0% | 67.0% | 58.4% |
+| Probability compare | 100.0% | 88.0% | 89.0% | 37.4% |
+
+`--use-positive-prompts` improves single-edit PS@All to 95.0% under
+teacher-forcing, but drops teacher-forcing locality to 45.2%.
+
+`--projection-mode orthogonal` is implemented as a protected-subspace ablation,
+but the n=50 sequential run is worse on exact-token locality than the tuned
+sequential baseline.
 
 Sequential n=50 remains weak:
 
-| Metric group | Rewrite | Rephrase | Locality |
-| --- | ---: | ---: | ---: |
-| Teacher-forcing | 71.0% | 21.0% | 25.4% |
-| Probability compare | 86.0% | 62.0% | 61.2% |
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 73.0% | 21.0% | 20.0% | 25.4% |
+| Probability compare | 86.0% | 62.0% | 61.0% | 61.4% |
 
 ## Known Bottlenecks
 
@@ -37,14 +44,12 @@ Sequential n=50 remains weak:
 
 ## Next Method Work
 
-1. Multi-positive keys: optional prompt + paraphrase key averaging is now
-   available through `--use-positive-prompts`; it still needs fresh GPU runs.
-2. Protected-key/null-space projection: preserve neighborhood and previous edit
-   keys.
-3. Sequential side memory: isolate edits instead of merging every edit into the
+1. Sequential side memory: isolate edits instead of merging every edit into the
    same shared rows.
-4. Relation sharding: separate edit subspaces by `relation_id`.
-5. Batch consolidation: periodically solve constrained updates for stable edits.
+2. Relation sharding: separate edit subspaces by `relation_id`.
+3. Constrained row updates or MEMIT/ROME-style layer edits for locality.
+4. Batch consolidation: periodically solve constrained updates for stable edits.
+5. Tune positive-prompt weight only after locality-preserving constraints exist.
 
 ## Safe Claim
 
