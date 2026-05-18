@@ -60,7 +60,7 @@ consolidation.
 | 33 | Add `WALMemitBatchEditor` backend | Done | `src/agim/model/wal_memit_batch_editor.py` |
 | 34 | Let runner compare multiple backends | In progress | `--compare-backends`; `wal_memit` is offline/skipped |
 | 35 | Add RippleEdits diagnostic benchmark | In progress | `agim.eval.ripple_diagnostic` post-hoc diagnostic |
-| 36 | Add MQuAKE benchmark | Queued | multi-hop consequences |
+| 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc portability diagnostic |
 | 37 | Add AKEW-style raw-text edit pipeline | Queued | text update to patch proposal |
 | 38 | Add product-facing benchmark | Queued | ScEdit, UniEdit/KnowEdit, or MLaKE |
 | 39 | Build `PatchService API` | Queued | propose/simulate/canary/approve/apply/rollback |

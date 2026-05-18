@@ -64,7 +64,7 @@ agim webui --port 8720
 
 - Ағымдағы EasyEdit-compatible нәтижелер: `../../BENCHMARK.md`
 - Тарихи локал CounterFact нәтижелері: `../../results/local_protocol/`
-- Толық локал pytest: `135 passed, 13 skipped`
+- Толық локал pytest: `138 passed, 13 skipped`
 - Skipped тесттер: ағымдағы Transformers `gemma4` қолдамаса, Gemma E2E
 
 ## Лицензия

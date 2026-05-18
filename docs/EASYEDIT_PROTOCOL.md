@@ -171,6 +171,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `python -m agim.eval.ripple_diagnostic --input <artifact.json>` writes a
   post-hoc related-fact diagnostic over EasyEdit locality/relation fields. It is
   RippleEdits-style, not an official RippleEdits dataset score.
+- `python -m agim.eval.mquake_diagnostic --input <artifact.json>` writes a
+  post-hoc multi-hop diagnostic over EasyEdit portability fields. It is
+  MQuAKE-style, not an official MQuAKE dataset score.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

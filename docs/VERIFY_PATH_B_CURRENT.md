@@ -195,6 +195,17 @@ PYTHONPATH=src python -m agim.eval.ripple_diagnostic \
 This is a local related-fact diagnostic, not an official RippleEdits dataset
 score.
 
+Post-hoc MQuAKE-style diagnostic over an EasyEdit portability artifact:
+
+```bash
+PYTHONPATH=src python -m agim.eval.mquake_diagnostic \
+  --input results/easyedit_official/current/knowedit_or_portability_run.json \
+  --output results/easyedit_official/current/knowedit_or_portability_run.mquake_style.json
+```
+
+This is a local multi-hop/portability diagnostic, not an official MQuAKE dataset
+score.
+
 ## Current n=1000 Readout
 
 The first-1000 artifact reports:

@@ -112,6 +112,11 @@ EasyEdit artifacts. It reports direct rewrite success against related/locality
 preservation and relation-level break rates. This is not an official
 RippleEdits dataset result; it is the first local related-fact diagnostic.
 
+`agim.eval.mquake_diagnostic` adds a MQuAKE-style post-hoc diagnostic for
+artifacts with EasyEdit/KnowEdit portability fields. It reports direct rewrite,
+multi-hop portability, composite accuracy, and direct-success/hop-failure rate.
+This is not an official MQuAKE dataset score.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -158,6 +163,8 @@ rewrite and 33.9% locality after 50 edits.
 4. Promote backend comparison from runner support to tracked n=50 artifacts.
 5. Replace the post-hoc Ripple-style diagnostic with an official RippleEdits
    dataset adapter.
+6. Replace the post-hoc MQuAKE-style diagnostic with an official MQuAKE dataset
+   adapter and tracked artifact.
 
 ## Safe Claim
 

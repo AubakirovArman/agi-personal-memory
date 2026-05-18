@@ -172,6 +172,10 @@ offline backends recorded as skipped.
 related-fact diagnostic from EasyEdit artifacts. This is local diagnostic
 coverage, not an official RippleEdits benchmark result.
 
+`agim.eval.mquake_diagnostic` can compute a post-hoc MQuAKE-style multi-hop
+diagnostic from artifacts that contain EasyEdit/KnowEdit portability fields.
+This is local diagnostic coverage, not an official MQuAKE benchmark result.
+
 ## Historical 1000-Fact Local Result
 
 `results/local_protocol/official_eval_1000.json` reports:
@@ -189,7 +193,7 @@ methods.
 Current full local suite:
 
 ```text
-135 passed, 13 skipped
+138 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does
