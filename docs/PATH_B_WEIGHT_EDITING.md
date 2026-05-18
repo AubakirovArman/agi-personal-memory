@@ -134,8 +134,14 @@ lifecycle. It supports `propose_patch`, `simulate_patch`, `run_canaries`,
 
 `PatchGovernance` adds the first governance layer for Path B patches:
 signature metadata, signature verification, per-patch ACL checks, and an
-append-only audit chain for patch lifecycle events. The external EasyEdit
-adapter package is still not implemented.
+append-only audit chain for patch lifecycle events.
+
+`agim.integrations.easyedit_agimwal` adds the first external EasyEdit adapter
+package. It exposes `AGIMWALHyperParams` and `apply_agimwal_to_model` in the
+same shape as standard EasyEdit methods, so an EasyEdit checkout can register
+AGIMWAL in `ALG_DICT` without copying the AGIM implementation into the
+EasyEdit tree. This adapter has unit coverage, but it is not an upstream
+EasyEdit PR.
 
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
@@ -189,7 +195,8 @@ rewrite and 33.9% locality after 50 edits.
 8. Replace product diagnostics with a tracked external KnowEdit, UniEdit,
    ScEdit, or MLaKE run.
 9. Expose `PatchService` through a stable HTTP/SDK API with persistence.
-10. Package the external EasyEdit adapter and connect it to patch governance.
+10. Connect the EasyEdit adapter to persistent patch governance and publish an
+    upstreamable EasyEdit PR/tech report package.
 
 ## Safe Claim
 
