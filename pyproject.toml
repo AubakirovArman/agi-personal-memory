@@ -31,6 +31,7 @@ testpaths = ["tests"]
 markers = [
     "unit: fast unit tests",
     "slow: long-running tests",
+    "substrate: legacy model-editing substrate tests, not flagship Path B claims",
     "gpu: tests requiring CUDA or large local model weights",
     "llama: tests requiring local Llama weights",
     "gemma: tests requiring local Gemma weights and compatible Transformers",

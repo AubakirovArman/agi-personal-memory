@@ -28,7 +28,7 @@ consolidation.
 | 1 | Remove source-of-truth drift | In progress | `CURRENT_STATUS.md`, `BENCHMARK.md`, docs updated after n=1000 |
 | 2 | Split README quick starts for Path A and Path B | In progress | `README.md` |
 | 3 | Split verification docs into Path A, Path B current, Path B legacy | In progress | `docs/VERIFY_PATH_A.md`, `docs/VERIFY_PATH_B_CURRENT.md`, `docs/VERIFY_PATH_B_LEGACY.md` |
-| 4 | Mark heavy `WALWeightEditor` / `ROMEEditor` E2E tests as substrate tests | Queued | pytest markers/docs |
+| 4 | Mark heavy `WALWeightEditor` / `ROMEEditor` E2E tests as substrate tests | Done | `pytest.mark.substrate`, `docs/VERIFY_PATH_B_LEGACY.md` |
 | 5 | Add formal `method_profile_id` | Done | `easyedit_run_metadata.py`, payload metadata |
 | 6 | Add `artifact_schema_version` | Done | `easyedit_run_metadata.py`, payload metadata |
 | 7 | Move machine-specific defaults out of public docs | In progress | verify docs use placeholders/env vars |

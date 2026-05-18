@@ -15,7 +15,7 @@ from agim.model.rome_editor import ROMEEditor
 # Will be set after download
 LLAMA_DIR = None
 DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
-pytestmark = [pytest.mark.gpu, pytest.mark.slow, pytest.mark.llama]
+pytestmark = [pytest.mark.gpu, pytest.mark.slow, pytest.mark.substrate, pytest.mark.llama]
 _MODEL = None
 _TOK = None
 

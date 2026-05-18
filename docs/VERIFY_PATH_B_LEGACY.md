@@ -11,6 +11,10 @@ checks, and older local CounterFact scripts. They can show that a specific
 editing path mutates a model and rolls back locally. They do not replace the
 current EasyEdit-compatible artifacts.
 
+The heavy local-model E2E files are marked with `pytest.mark.substrate` in
+addition to `slow`/`gpu`/model-specific markers. Use that marker when explicitly
+debugging legacy model-editing substrate behavior.
+
 ## Optional Local E2E Pattern
 
 Use placeholders for local weights and devices:
