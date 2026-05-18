@@ -1,0 +1,20 @@
+{
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "editor": "AGIM WAL + sequence-level",
+  "n": 200,
+  "ES_substring": 0.9,
+  "ES_clean": 0.32,
+  "PS_substring": 0.9,
+  "NS_before_equals_after": 0.2188,
+  "NT_measured": 0.0,
+  "RB": 0.46,
+  "repetition_rate": 0.75,
+  "composite_honest": 0.4796,
+  "time_s": 308.6,
+  "notes": [
+    "NS: checks that answer AFTER edit == answer BEFORE edit for neighborhood prompts",
+    "NT: measured max|diff| on 500 random non-target lm_head rows",
+    "ES_clean: no target token repeated 3+ times consecutively",
+    "Model is Llama-3.1-8B-Instruct (not Llama-3-8B). Same 8B class."
+  ]
+}
