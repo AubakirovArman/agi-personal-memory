@@ -22,7 +22,8 @@ EasyEdit results.
 
 Model: `meta-llama/Llama-3.1-8B-Instruct`
 
-Dataset: CounterFact first 50 facts from `https://rome.baulab.info/data/dsets/counterfact.json`
+Dataset: CounterFact from `https://rome.baulab.info/data/dsets/counterfact.json`;
+selection varies by artifact.
 
 Evaluation path: AGIM edit implementation + local EasyEdit evaluation functions.
 
@@ -52,6 +53,19 @@ Positive-prompt ablation:
 
 Readout: multi-positive keys are a strong paraphrase/PS@All ablation, but they
 trade off locality and therefore are not the default headline profile.
+
+Token-mode matrix on the same random n=200 seed-42 facts:
+`results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md`
+
+| Target token mode | TF rewrite | TF PS@All | TF locality | Vanilla rewrite | CTX rewrite | Prob locality |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `standalone` | 0.2% | 0.5% | 99.6% | 57.5% | 0.0% | 88.5% |
+| `contextual` | 96.0% | 27.0% | 95.9% | 0.0% | 96.0% | 86.0% |
+| `both` | 97.5% | 28.2% | 94.8% | 0.5% | 97.5% | 84.4% |
+
+Readout: `contextual` is the current correct default for continuation-aligned
+AGIM WAL claims on Llama. `standalone` mostly tests a different token target,
+and `both` should stay an ablation until the primary-sequence handling is fixed.
 
 Random-seed validation of the current default single-edit profile:
 `results/easyedit_official/current/random_50_report_2026-05-18.md`

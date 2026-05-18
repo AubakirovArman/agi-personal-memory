@@ -42,6 +42,17 @@ Probability diagnostic
 
 Do not merge those into one headline number.
 
+The n=200 token-mode matrix confirms the practical impact:
+
+| Target token mode | TF rewrite | Vanilla rewrite | CTX rewrite | TF locality |
+| --- | ---: | ---: | ---: | ---: |
+| `standalone` | 0.2% | 57.5% | 0.0% | 99.6% |
+| `contextual` | 96.0% | 0.0% | 96.0% | 95.9% |
+| `both` | 97.5% | 0.5% | 97.5% | 94.8% |
+
+Detailed report:
+`results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md`.
+
 ## Completed Random-Seed Runs
 
 The required random n=50 single-edit presets have been run with the current
@@ -123,3 +134,6 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `--projection-mode orthogonal` is backed by an n=50 GPU artifact. It is worse
   on exact-token locality than the tuned sequential baseline, so it is not a
   recommended default.
+- `--target-token-mode both` is backed by the n=200 token-mode matrix. It
+  improves TF rewrite/PS@All slightly over `contextual`, but currently loses
+  locality and still needs the planned primary-sequence fix.

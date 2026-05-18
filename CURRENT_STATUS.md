@@ -74,6 +74,19 @@ Random-seed n=1000 validation of the same profile:
 
 See `results/easyedit_official/current/random_1000_report_2026-05-18.md`.
 
+Token-mode ablation on the same random n=200 seed-42 facts:
+
+| Target token mode | TF rewrite | TF PS@All | TF locality | Vanilla rewrite | CTX rewrite | Prob locality |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `standalone` | 0.2% | 0.5% | 99.6% | 57.5% | 0.0% | 88.5% |
+| `contextual` | 96.0% | 27.0% | 95.9% | 0.0% | 96.0% | 86.0% |
+| `both` | 97.5% | 28.2% | 94.8% | 0.5% | 97.5% | 84.4% |
+
+Readout: `contextual` remains the default profile. `standalone` measures a
+different target-token alignment, while `both` still needs the planned primary
+sequence fix. See
+`results/easyedit_official/ablations/token_mode_matrix_report_2026-05-18.md`.
+
 Official-compatible first-1000 scale check of the current default single-edit
 profile:
 

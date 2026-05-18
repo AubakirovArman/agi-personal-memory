@@ -74,6 +74,20 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --save-failures-only
 ```
 
+Token-mode ablation matrix:
+
+```bash
+for mode in standalone contextual both; do
+  PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+    --n 200 --sample-policy random --seed 42 \
+    --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+    --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+    --target-token-mode "$mode" \
+    --output "results/easyedit_official/ablations/token_mode_random_200_seed_42_${mode}.json" \
+    --save-failures-only
+done
+```
+
 Current first-1000 scale check:
 
 ```bash
