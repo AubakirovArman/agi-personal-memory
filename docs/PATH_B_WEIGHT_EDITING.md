@@ -77,6 +77,9 @@ workflow while keeping the old `default` namespace behavior.
 `SideSlotMemory` adds a routed side-memory foundation for Path B patches. It
 stores `PatchArtifact` objects as slots and builds a `RuntimeSparseOverlay` for
 matching subject/relation requests, keeping the base model frozen.
+Relation sharding is lifted into explicit patch-slot isolation via
+`relation_slot_id`, relation-slot summaries, and enable/disable controls for a
+whole relation slot.
 
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while

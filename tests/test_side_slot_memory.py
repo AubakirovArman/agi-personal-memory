@@ -39,6 +39,10 @@ def test_side_slot_memory_selects_by_subject_and_relation():
 
     assert [slot.slot_id for slot in selected] == ["a"]
     assert memory.summary() == {"slots": 2, "enabled": 2}
+    assert memory.relation_slot_summary() == {
+        "P17": {"slots": 1, "enabled": 1},
+        "P19": {"slots": 1, "enabled": 1},
+    }
 
 
 def test_side_slot_memory_builds_overlay_for_selected_slots():
@@ -67,3 +71,34 @@ def test_side_slot_memory_disable_excludes_slot_from_overlay():
 
     assert overlay.lm_deltas == {}
     assert memory.summary() == {"slots": 1, "enabled": 0}
+
+
+def test_side_slot_memory_isolates_relation_slots():
+    model = _TinyModel()
+    hidden = torch.tensor([[[1.0, 0.0, 0.0]]])
+    baseline = model.lm_head(hidden)
+    memory = SideSlotMemory()
+    memory.add_patch(_artifact(
+        "a", "Alice", "P17", 1, torch.tensor([1.0, 0.0, 0.0])))
+    memory.add_patch(_artifact(
+        "b", "Alice", "P19", 2, torch.tensor([1.0, 0.0, 0.0])))
+
+    with memory.overlay_for(model, subject="Alice", relation_slot_id="P17") as overlay:
+        patched = model.lm_head(hidden)
+
+    assert overlay.lm_deltas.keys() == {1}
+    assert patched[..., 1] == baseline[..., 1] + 1.0
+    assert patched[..., 2] == baseline[..., 2]
+
+
+def test_side_slot_memory_can_disable_whole_relation_slot():
+    memory = SideSlotMemory()
+    memory.add_patch(_artifact("a", "Alice", "P17", 1, torch.ones(3)))
+    memory.add_patch(_artifact("b", "Bob", "P17", 2, torch.ones(3)))
+    memory.add_patch(_artifact("c", "Alice", "P19", 3, torch.ones(3)))
+
+    memory.disable_relation_slot("P17")
+
+    assert memory.select(relation_slot_id="P17") == []
+    assert [slot.slot_id for slot in memory.select(relation_slot_id="P19")] == ["c"]
+    assert memory.relation_slot_summary()["P17"] == {"slots": 2, "enabled": 0}

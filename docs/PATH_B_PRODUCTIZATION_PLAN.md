@@ -54,7 +54,7 @@ consolidation.
 | 27 | Add runtime sparse overlay mode | Done | `RuntimeSparseOverlay.add_patch_artifact()` |
 | 28 | Namespace mutable history state | Done | `--state-namespace`, `WALDualMutableState` |
 | 29 | Build true side-slot memory | In progress | `SideSlotMemory` routed overlay foundation |
-| 30 | Lift relation sharding to patch-slot isolation | Queued | beyond projection-only relation mode |
+| 30 | Lift relation sharding to patch-slot isolation | Done | `SideSlotMemory.relation_slot_summary()` |
 | 31 | Re-run sequential retention in side-slot mode | Queued | future GPU artifacts |
 | 32 | Add `WALRomeEditor` backend | Queued | located FFN patch backend |
 | 33 | Add `WALMemitBatchEditor` backend | Queued | batch consolidation backend |
