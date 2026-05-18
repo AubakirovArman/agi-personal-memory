@@ -165,6 +165,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `WALMemitBatchEditor` exists as an offline consolidation backend for
   `PatchArtifact` batches. It is not yet a runner backend; use it for patch
   lifecycle tests, not EasyEdit headline claims.
+- `--compare-backends` writes a matrix artifact and per-backend outputs for a
+  comma-separated backend list. `wal_memit` is reported as skipped until direct
+  fact-to-batch evaluation exists.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

@@ -41,6 +41,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--edit-backend", choices=["dual_row", "side_slot", "wal_rome"],
                         default="dual_row",
                         help="Apply edits in-place or as frozen-base side slots")
+    parser.add_argument("--compare-backends", default="",
+                        help="Comma-separated backend matrix, e.g. dual_row,wal_rome")
     parser.add_argument("--rome-target-layer", type=int, default=7,
                         help="Default MLP layer for wal_rome edits")
     parser.add_argument("--rome-candidate-layers", default="",

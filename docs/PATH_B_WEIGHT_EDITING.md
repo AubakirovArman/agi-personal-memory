@@ -102,6 +102,11 @@ auditable batch artifact, records overlapping-row conflicts, applies the
 consolidated rows, and rolls them back as one unit. It is not yet wired into
 the official EasyEdit runner comparison loop.
 
+The EasyEdit runner now has a `--compare-backends` matrix mode. It can run the
+same selected CounterFact slice through runnable backends such as `dual_row`,
+`wal_rome`, and sequential `side_slot`, while recording `wal_memit` as skipped
+because it is an offline consolidation backend.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -145,8 +150,7 @@ rewrite and 33.9% locality after 50 edits.
    protected-subspace drift budgets.
 3. Run and tune the new `wal_rome` backend on n=50 before any larger scale
    claim.
-4. Add runner-level backend comparison for `dual_row`, `side_slot`,
-   `wal_rome`, and `wal_memit`.
+4. Promote backend comparison from runner support to tracked n=50 artifacts.
 5. Tune positive-prompt weight only after locality-preserving constraints exist.
 
 ## Safe Claim

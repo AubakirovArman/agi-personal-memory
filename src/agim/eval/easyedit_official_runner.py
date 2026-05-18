@@ -6,6 +6,7 @@ import random
 import time
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -14,6 +15,7 @@ from agim.eval.easyedit_counterfact import load_dataset, select_facts
 from agim.model.wal_dual_editor import WALDualLayerEditor
 from agim.model.wal_rome_editor import WALRomeEditor
 
+from .easyedit_backend_matrix import run_backend_comparison
 from .easyedit_bundle import post_edit_bundle
 from .easyedit_cli import build_parser, print_final_summary
 from .easyedit_dry_run import dry_run_payload, write_dry_run_summary
@@ -91,6 +93,63 @@ def main() -> int:
     )
     model.eval()
 
+    if args.compare_backends:
+        payload = run_backend_comparison(
+            args=args,
+            model=model,
+            tok=tok,
+            hparams=hparams,
+            facts=facts,
+            records=records,
+            dataset_sha256=dataset_sha256,
+            all_facts=all_facts,
+            locality_limit=locality_limit,
+            compute_edit_quality=compute_edit_quality,
+            test_prediction_acc=test_prediction_acc,
+            summary_metrics=summary_metrics,
+            device_id=device_id,
+            run_backend_once=_run_backend_once,
+        )
+        output = Path(args.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(jsonable(payload), indent=2, ensure_ascii=False))
+        print(f"Backend comparison saved {output}")
+        return 0
+
+    _run_backend_once(
+        args=args,
+        model=model,
+        tok=tok,
+        hparams=hparams,
+        facts=facts,
+        records=records,
+        dataset_sha256=dataset_sha256,
+        all_facts=all_facts,
+        locality_limit=locality_limit,
+        compute_edit_quality=compute_edit_quality,
+        test_prediction_acc=test_prediction_acc,
+        summary_metrics=summary_metrics,
+        device_id=device_id,
+    )
+    return 0
+
+
+def _run_backend_once(
+    *,
+    args,
+    model,
+    tok,
+    hparams,
+    facts,
+    records,
+    dataset_sha256,
+    all_facts,
+    locality_limit,
+    compute_edit_quality,
+    test_prediction_acc,
+    summary_metrics,
+    device_id,
+) -> dict[str, Any]:
     editor = _build_editor(args, model, tok)
     editor.nt_sample_size = args.nt_sample_size
     editor.build_vocab()
@@ -137,7 +196,7 @@ def main() -> int:
         failure_output = write_failures_only(args, metrics, summary)
         print(f"Failures-only artifact saved {failure_output}")
     print_final_summary(summary, retention, elapsed, len(metrics), output)
-    return 0
+    return payload
 
 
 def _print_run_header(args, records: list[dict], locality_limit: int | None) -> None:

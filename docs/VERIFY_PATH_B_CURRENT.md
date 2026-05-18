@@ -168,6 +168,22 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
 This command is for backend comparison. Do not cite `wal_rome` as a headline
 profile until a tracked artifact and report exist.
 
+Backend matrix smoke run:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
+  --compare-backends dual_row,wal_rome,wal_memit \
+  --output results/easyedit_official/ablations/random_50_seed_42_backend_matrix.json \
+  --save-failures-only
+```
+
+This writes the matrix artifact plus per-backend outputs such as
+`random_50_seed_42_backend_matrix.dual_row.json`.
+
 ## Current n=1000 Readout
 
 The first-1000 artifact reports:
