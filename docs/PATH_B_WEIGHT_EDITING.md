@@ -64,6 +64,11 @@ token ids, target token ids, control row ids, protected basis ids, same relation
 and same subject. This gives patch review a concrete conflict-risk surface
 before patches are applied together.
 
+`RuntimeSparseOverlay` provides the first frozen-base overlay foundation for
+Path B: lm_head deltas are applied as logit corrections and embed deltas are
+applied through embedding hooks, without mutating the model weights. It is not
+yet the default EasyEdit backend.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
