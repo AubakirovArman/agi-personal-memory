@@ -60,9 +60,16 @@ The random n=200 layer is also complete for seeds 42/43/44. Mean readout:
 `TF rewrite=93.2%`, `TF PS@All=25.6%`, `TF locality=96.4%`,
 `Prob locality=86.6%`.
 
+The random n=1000 layer is complete for seed 42:
+`results/easyedit_official/current/random_1000_seed_42.json`. Readout:
+`TF rewrite=94.5%`, `TF PS@All=23.5%`, `TF locality=96.4%`,
+`Prob locality=86.5%`.
+
 This validates rewrite/locality stability for the default profile, while also
-showing weak paraphrase transfer. The detailed report is
-`results/easyedit_official/current/random_50_report_2026-05-18.md`.
+showing weak paraphrase transfer. Detailed reports are
+`results/easyedit_official/current/random_50_report_2026-05-18.md`,
+`results/easyedit_official/current/random_200_report_2026-05-18.md`, and
+`results/easyedit_official/current/random_1000_report_2026-05-18.md`.
 
 The current official-compatible first-1000 CounterFact run has also completed:
 

@@ -78,6 +78,19 @@ Random-200 validation of the same profile:
 | 44 | 93.5% | 26.5% | 27.5% | 96.4% | 46.5% | 85.2% |
 | Mean | 93.2% | 25.3% | 25.6% | 96.4% | 43.0% | 86.6% |
 
+Random-1000 validation of the same profile:
+`results/easyedit_official/current/random_1000_report_2026-05-18.md`
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing seed 42 | 94.5% | 23.8% | 23.5% | 96.4% |
+| Contextual generation seed 42 | 94.2% | 23.0% | 22.7% | n/a |
+| Probability compare seed 42 | 97.2% | 40.9% | 41.8% | 86.5% |
+
+Readout: the random n=1000 sample validates that the first-1000 scale result
+is not a selection-only artifact. Rewrite and locality remain stable; PS@All is
+still weak.
+
 First-1000 scale check of the current default single-edit profile:
 `results/easyedit_official/current/easyedit_1000_first_default_report_2026-05-18.md`
 

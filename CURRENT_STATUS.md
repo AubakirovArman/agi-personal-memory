@@ -64,6 +64,16 @@ Random-seed n=200 validation of the same profile:
 
 See `results/easyedit_official/current/random_200_report_2026-05-18.md`.
 
+Random-seed n=1000 validation of the same profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing seed 42 | 94.5% | 23.8% | 23.5% | 96.4% |
+| Contextual generation seed 42 | 94.2% | 23.0% | 22.7% | n/a |
+| Probability compare seed 42 | 97.2% | 40.9% | 41.8% | 86.5% |
+
+See `results/easyedit_official/current/random_1000_report_2026-05-18.md`.
+
 Official-compatible first-1000 scale check of the current default single-edit
 profile:
 
@@ -128,6 +138,8 @@ not support the local `gemma4` checkpoint architecture.
 
 - AGIM WAL has strong n=50 single-edit EasyEdit-compatible results on
   Llama-3.1-8B-Instruct.
+- AGIM WAL has random-seed n=200 and n=1000 evidence that the current
+  locality-protected single-edit profile stays stable for rewrite/locality.
 - AGIM has measured rollback/audit/non-target-diff diagnostics for its WAL edit
   paths.
 - Historical local 1000-fact diagnostics are useful for stress testing but not

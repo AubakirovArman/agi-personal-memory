@@ -63,6 +63,17 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --save-failures-only
 ```
 
+Random-1000 stability layer:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 1000 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --output results/easyedit_official/current/random_1000_seed_42.json \
+  --save-failures-only
+```
+
 Current first-1000 scale check:
 
 ```bash
@@ -98,3 +109,13 @@ The first-1000 artifact reports:
 
 This supports a rewrite/locality hotfix profile. It does not prove solved
 paraphrase generalization or lifelong editing.
+
+The random-1000 seed 42 artifact reports:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing | 94.5% | 23.8% | 23.5% | 96.4% |
+| Contextual generation | 94.2% | 23.0% | 22.7% | n/a |
+| Probability compare | 97.2% | 40.9% | 41.8% | 86.5% |
+
+This confirms the same operating point on a random n=1000 sample.
