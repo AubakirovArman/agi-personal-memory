@@ -179,6 +179,7 @@ class CounterFactEvaluator:
                      clamp_lm: float = 0.20, clamp_embed: float = 0.06,
                      clamp_eos: float = 0.16, clamp_anti: float = 0.06,
                      clamp_old: float = 0.0,
+                     target_token_mode: str = "standalone",
                      neighbor_limit: int = 0) -> dict[str, Any] | None:
         rw = fact["requested_rewrite"]
         subject = rw["subject"]
@@ -216,6 +217,7 @@ class CounterFactEvaluator:
             clamp_anti=clamp_anti,
             old_target=target_true,
             clamp_old=clamp_old,
+            target_token_mode=target_token_mode,
         )
         edit_time_s = time.time() - start
         if backup is None:
@@ -429,6 +431,9 @@ def main() -> int:
     parser.add_argument("--clamp_eos", type=float, default=0.16)
     parser.add_argument("--clamp_anti", type=float, default=0.06)
     parser.add_argument("--clamp_old", type=float, default=0.0)
+    parser.add_argument("--target-token-mode", choices=["standalone", "contextual", "both"],
+                        default="standalone",
+                        help="Which target tokenization rows the WAL edit updates")
     parser.add_argument("--neighbor-limit", type=int, default=0,
                         help="0 means use all CounterFact neighborhood prompts")
     parser.add_argument("--model", default=LLAMA, help="Model name or local path")
@@ -480,6 +485,7 @@ def main() -> int:
         clamp_eos=args.clamp_eos,
         clamp_anti=args.clamp_anti,
         clamp_old=args.clamp_old,
+        target_token_mode=args.target_token_mode,
         neighbor_limit=args.neighbor_limit,
     )
     elapsed = time.time() - t0
@@ -522,6 +528,7 @@ def main() -> int:
             "clamp_eos": args.clamp_eos,
             "clamp_anti": args.clamp_anti,
             "clamp_old": args.clamp_old,
+            "target_token_mode": args.target_token_mode,
         },
         "summaries": summaries,
         "NT": nt_summary,
