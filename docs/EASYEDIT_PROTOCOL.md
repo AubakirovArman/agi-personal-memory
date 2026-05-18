@@ -154,6 +154,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   `--max-*-norm` / `--max-edited-rows` flags provide an optional no-commit
   gate. These flags are disabled by default; when enabled, rejected proposals
   are rolled back and marked as `edit_status=no_commit`.
+- `--edit-backend side_slot` is a sequential experimental backend. It converts
+  each proposed edit into a side-slot `PatchArtifact`, rolls the base row
+  mutation back, and evaluates through a `RuntimeSparseOverlay`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

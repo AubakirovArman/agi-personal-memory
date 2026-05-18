@@ -81,6 +81,10 @@ Relation sharding is lifted into explicit patch-slot isolation via
 `relation_slot_id`, relation-slot summaries, and enable/disable controls for a
 whole relation slot.
 
+The EasyEdit runner now has `--edit-backend side_slot` for sequential runs.
+Each proposal is converted into a `PatchArtifact`, rolled back from the base
+weights, and evaluated through a routed runtime overlay.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.

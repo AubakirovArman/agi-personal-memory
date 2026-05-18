@@ -122,6 +122,9 @@ def test_method_profile_id_names_common_operating_points():
     assert method_profile_id(build_parser().parse_args(["--neg-prompt-limit", "4"])) == "single_ps"
     assert method_profile_id(build_parser().parse_args(["--sequential-edit"])) == "seq_tuned"
     assert method_profile_id(build_parser().parse_args([
+        "--sequential-edit", "--edit-backend", "side_slot",
+    ])) == "seq_side_slot"
+    assert method_profile_id(build_parser().parse_args([
         "--sequential-edit", "--history-slot-mode", "relation",
     ])) == "seq_relation_slots"
     assert method_profile_id(build_parser().parse_args([

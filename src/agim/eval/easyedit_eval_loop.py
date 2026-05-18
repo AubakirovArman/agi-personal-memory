@@ -68,6 +68,16 @@ def run_evaluation_loop(
     test_prediction_acc,
     device_id: int,
 ) -> tuple[list[dict[str, Any]], list[float], dict[str, Any]]:
+    if args.sequential_edit and args.edit_backend == "side_slot":
+        from .easyedit_side_slot_loop import run_sequential_side_slot
+        return run_sequential_side_slot(
+            args=args, model=model, tok=tok, hparams=hparams, editor=editor,
+            facts=facts, records=records, compute_edit_quality=compute_edit_quality,
+            test_prediction_acc=test_prediction_acc, device_id=device_id,
+            apply_one=apply_one, compute_pre=_compute_pre,
+            post_bundle=_post_bundle, base_row=_base_row,
+            budget_status=_budget_status,
+        )
     if args.sequential_edit:
         return run_sequential(
             args=args, model=model, tok=tok, hparams=hparams, editor=editor,

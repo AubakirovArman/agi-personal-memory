@@ -38,6 +38,9 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Comma-separated: tf,ctx_gen,prob,vanilla_gen")
     parser.add_argument("--method-profile-id",
                         help="Optional explicit operating profile id for artifacts")
+    parser.add_argument("--edit-backend", choices=["dual_row", "side_slot"],
+                        default="dual_row",
+                        help="Apply edits in-place or as frozen-base side slots")
     parser.add_argument("--easyedit-root", type=Path, default=DEFAULT_EASYEDIT_ROOT)
     parser.add_argument("--locality-limit", type=int, default=0,
                         help="0 means all official CounterFact locality prompts")

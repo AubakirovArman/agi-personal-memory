@@ -108,6 +108,7 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "clamp_eos": args.clamp_eos,
         "clamp_anti": args.clamp_anti,
         "clamp_old": args.clamp_old,
+        "edit_backend": args.edit_backend,
         "target_token_mode": args.target_token_mode,
         "use_positive_prompts": args.use_positive_prompts,
         "positive_prompt_limit": args.positive_prompt_limit,

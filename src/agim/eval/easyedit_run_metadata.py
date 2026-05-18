@@ -30,6 +30,8 @@ def method_profile_id(args) -> str:
             "single_exact_additive"
         )
     if getattr(args, "sequential_edit", False):
+        if getattr(args, "edit_backend", "dual_row") == "side_slot":
+            return "seq_side_slot"
         relation_mode = getattr(args, "relation_protected_mode", "none")
         if relation_mode != "none":
             return f"seq_relation_protected_{relation_mode}"
@@ -44,6 +46,8 @@ def method_profile_id(args) -> str:
         if getattr(args, "history_slot_mode", "global") == "relation":
             return "seq_relation_slots"
         return "seq_tuned"
+    if getattr(args, "edit_backend", "dual_row") == "side_slot":
+        return "single_side_slot"
     relation_mode = getattr(args, "relation_protected_mode", "none")
     if relation_mode != "none":
         return f"single_relation_protected_{relation_mode}"
