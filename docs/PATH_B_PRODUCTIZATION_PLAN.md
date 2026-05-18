@@ -64,7 +64,7 @@ consolidation.
 | 37 | Add AKEW-style raw-text edit pipeline | In progress | `agim.eval.raw_text_edit_pipeline` proposal parser |
 | 38 | Add product-facing benchmark | In progress | `agim.eval.product_diagnostic` KnowEdit-inspired artifact score |
 | 39 | Build `PatchService API` | In progress | `PatchService` in-process lifecycle API |
-| 40 | Add governance layer and external adapter package | Queued | signatures, ACL, audit trail, EasyEdit adapter |
+| 40 | Add governance layer and external adapter package | In progress | `PatchGovernance`; external adapter still queued |
 
 ## Beta Gate
 

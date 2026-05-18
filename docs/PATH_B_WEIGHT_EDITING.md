@@ -132,6 +132,11 @@ lifecycle. It supports `propose_patch`, `simulate_patch`, `run_canaries`,
 `approve_patch`, `apply_patch`, `rollback_patch`, `inspect_patch`, and
 `diff_patch` over `PatchArtifact` objects. This is not yet an HTTP service.
 
+`PatchGovernance` adds the first governance layer for Path B patches:
+signature metadata, signature verification, per-patch ACL checks, and an
+append-only audit chain for patch lifecycle events. The external EasyEdit
+adapter package is still not implemented.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -184,6 +189,7 @@ rewrite and 33.9% locality after 50 edits.
 8. Replace product diagnostics with a tracked external KnowEdit, UniEdit,
    ScEdit, or MLaKE run.
 9. Expose `PatchService` through a stable HTTP/SDK API with persistence.
+10. Package the external EasyEdit adapter and connect it to patch governance.
 
 ## Safe Claim
 

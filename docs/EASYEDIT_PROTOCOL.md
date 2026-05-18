@@ -185,6 +185,8 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `agim.model.patch_service.PatchService` provides an in-process lifecycle API
   for proposing, simulating, canarying, approving, applying, rolling back,
   inspecting, and diffing `PatchArtifact` objects.
+- `agim.model.patch_governance.PatchGovernance` provides artifact signatures,
+  ACL checks, and an append-only audit chain for patch lifecycle events.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

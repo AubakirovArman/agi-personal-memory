@@ -21,7 +21,7 @@ audits, retrieves, corrects, and rolls back facts through AGIM memory stores.
 
 - Unit and integration tests under `tests/`.
 - Memory/retrieval artifacts under `results/memory_retrieval/`.
-- Current full local suite: `149 passed, 13 skipped`.
+- Current full local suite: `153 passed, 13 skipped`.
 
 ## Safe Claim
 
