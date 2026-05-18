@@ -3,7 +3,7 @@
 **Accumulative verified memory substrate for language models.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-117%20passed%2C%2013%20skipped-green)]()
+[![Tests](https://img.shields.io/badge/tests-119%20passed%2C%2013%20skipped-green)]()
 [![Status](https://img.shields.io/badge/status-research%20prototype-blue)]()
 [![Version](https://img.shields.io/badge/version-0.2.0a1-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
@@ -203,7 +203,7 @@ src/agim/
 | v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
 | v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | Prototype modules, not production claim |
 
-Current full local suite: **117 passed, 13 skipped** on 2026-05-18.
+Current full local suite: **119 passed, 13 skipped** on 2026-05-18.
 The skipped tests are Gemma E2E checks when the installed Transformers build
 does not support the local `gemma4` checkpoint architecture.
 

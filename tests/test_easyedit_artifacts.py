@@ -152,7 +152,8 @@ def test_build_payload_emits_schema_profile_and_digest_metadata():
     assert payload["method_profile_id"] == "single_loc"
     assert payload["hyperparams"]["wal_encode_updates"] is True
     assert payload["hyperparams"]["relation_protected_mode"] == "none"
-    assert payload["relation_protected_banks"] == {"mode": "none", "relations": {}}
+    assert payload["relation_protected_banks"] == {
+        "mode": "none", "state_namespace": "default", "relations": {}}
     assert payload["base_model_digest"].startswith("sha256:")
     assert payload["atoms_digest"] is None
     assert payload["failure_analysis"]["failure_families"] == ["tf"]
@@ -241,6 +242,12 @@ class _FakeRelationBankEditor:
     def _prompt_keys(self, prompts, limit):
         return [torch.tensor([float(i + 1), 0.0]) for i, _ in enumerate(prompts[:limit])]
 
+    def _activate_state_namespace(self, namespace):
+        self.state_namespace = namespace
+
+    def _sync_active_state(self):
+        self.synced = True
+
     _add_relation_protected_keys = WALDualLayerEditor._add_relation_protected_keys
 
 
@@ -256,7 +263,11 @@ def test_preload_relation_protected_banks_adds_keys():
 
     summary = preload_relation_protected_banks(editor, args, facts, records)
 
-    assert summary == {"mode": "preload", "relations": {"P17": {"prompts": 1, "keys": 1}}}
+    assert summary == {
+        "mode": "preload",
+        "state_namespace": "default",
+        "relations": {"P17": {"prompts": 1, "keys": 1}},
+    }
     assert len(editor._relation_protected_basis["P17"]) == 1
 
 

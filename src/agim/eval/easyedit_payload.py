@@ -55,6 +55,7 @@ def build_payload(
         "hyperparams": _hyperparams(args, len(metrics)),
         "relation_protected_banks": relation_bank_summary or {
             "mode": getattr(args, "relation_protected_mode", "none"),
+            "state_namespace": getattr(args, "state_namespace", "default"),
             "relations": {},
         },
         "summary": summary,
@@ -121,6 +122,7 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "projection_mode": args.projection_mode,
         "history_slot_mode": args.history_slot_mode,
         "max_history_keys": args.max_history_keys,
+        "state_namespace": args.state_namespace,
         "relation_protected_mode": args.relation_protected_mode,
         "relation_protected_prompt_limit": args.relation_protected_prompt_limit,
         "max_relation_protected_keys": args.max_relation_protected_keys,

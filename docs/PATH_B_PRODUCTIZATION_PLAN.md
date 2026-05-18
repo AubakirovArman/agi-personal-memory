@@ -52,7 +52,7 @@ consolidation.
 | 25 | Add ENCORE-style norm budgets and early stop | Done | `results/easyedit_official/ablations/norm_budget_no_commit_probe_2026-05-18.md` |
 | 26 | Add patch conflict detector | Done | `conflict_summary()` row/metadata risk flags |
 | 27 | Add runtime sparse overlay mode | In progress | `RuntimeSparseOverlay` hook foundation |
-| 28 | Namespace mutable history state | Queued | tenant/batch state |
+| 28 | Namespace mutable history state | Done | `--state-namespace`, `WALDualMutableState` |
 | 29 | Build true side-slot memory | Queued | routed sequential serving |
 | 30 | Lift relation sharding to patch-slot isolation | Queued | beyond projection-only relation mode |
 | 31 | Re-run sequential retention in side-slot mode | Queued | future GPU artifacts |

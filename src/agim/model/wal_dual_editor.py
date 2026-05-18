@@ -17,6 +17,12 @@ from .wal_dual_helpers import (
     snapshot_rows,
     target_sequences,
 )
+from .wal_dual_namespace import (
+    activate_state_namespace,
+    init_state_namespaces,
+    rollback,
+    sync_active_state,
+)
 from .wal_dual_state import (
     build_vocab,
     measure_non_target_diff,
@@ -46,6 +52,7 @@ class WALDualLayerEditor:
         self._relation_protected_basis: dict[str, list[torch.Tensor]] = {}
         self._edit_count = 0
         self.nt_sample_size = 500
+        self._init_state_namespaces()
 
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    prompt: str = "", clamp_lm: float = 0.20,
@@ -64,6 +71,7 @@ class WALDualLayerEditor:
                    projection_mode: str = "sequential",
                    history_slot_mode: str = "global",
                    max_history_keys: int = 128,
+                   state_namespace: str = "default",
                    relation_protected_mode: str = "none",
                    max_relation_protected_keys: int = 64,
                    wal_encode_updates: bool = True):
@@ -99,6 +107,7 @@ class WALDualLayerEditor:
         if positive_constraint_mode not in {"none", "projected", "ridge"}:
             raise ValueError(
                 "positive_constraint_mode must be one of: none, projected, ridge")
+        state_namespace = self._activate_state_namespace(state_namespace)
         relation_key = str(relation or "")
         history_len = len(self._edit_key_basis)
         relation_history = self._relation_key_basis.get(relation_key, [])
@@ -241,9 +250,11 @@ class WALDualLayerEditor:
         if relation_protected_mode == "accumulate":
             self._add_relation_protected_keys(
                 relation_key, neg_keys, max_relation_protected_keys)
+        self._sync_active_state()
         return {
             "lm_backup": lm_bu,
             "emb_backup": emb_bu,
+            "state_namespace": state_namespace,
             "history_len": history_len,
             "relation_key": relation_key,
             "relation_history_len": relation_history_len,
@@ -251,24 +262,10 @@ class WALDualLayerEditor:
             "history_keys_added": len(new_history_keys),
         }
 
-    def rollback(self, backup: dict):
-        """Exact rollback via clone restoration."""
-        for tid, orig in backup.get("lm_backup", {}).items():
-            self.model.lm_head.weight.data[tid, :] = orig
-        for sid, orig in backup.get("emb_backup", {}).items():
-            self.model.model.embed_tokens.weight.data[sid, :] = orig
-        if "history_len" in backup:
-            self._edit_key_basis = self._edit_key_basis[:backup["history_len"]]
-        if "relation_key" in backup and "relation_history_len" in backup:
-            key = backup["relation_key"]
-            self._relation_key_basis[key] = self._relation_key_basis.get(key, [])[
-                :backup["relation_history_len"]
-            ]
-        if "relation_key" in backup and "relation_protected_len" in backup:
-            key = backup["relation_key"]
-            self._relation_protected_basis[key] = self._relation_protected_basis.get(
-                key, [])[:backup["relation_protected_len"]]
-
+    rollback = rollback
+    _init_state_namespaces = init_state_namespaces
+    _activate_state_namespace = activate_state_namespace
+    _sync_active_state = sync_active_state
     _prompt_keys = prompt_keys
     _history_basis = history_basis
     _relation_protected_bank = relation_protected_basis

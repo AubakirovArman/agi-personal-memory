@@ -6,8 +6,10 @@ from typing import Any
 
 def preload_relation_protected_banks(editor, args, facts, records) -> dict[str, Any]:
     mode = getattr(args, "relation_protected_mode", "none")
+    namespace = getattr(args, "state_namespace", "default")
     if mode != "preload":
-        return {"mode": mode, "relations": {}}
+        return {"mode": mode, "state_namespace": namespace, "relations": {}}
+    editor._activate_state_namespace(namespace)
     grouped = relation_locality_prompts(
         facts, records, getattr(args, "relation_protected_prompt_limit", 4))
     summary: dict[str, dict[str, int]] = {}
@@ -19,7 +21,8 @@ def preload_relation_protected_banks(editor, args, facts, records) -> dict[str, 
             getattr(args, "max_relation_protected_keys", 64),
         )
         summary[relation_id] = {"prompts": len(prompts), "keys": added}
-    return {"mode": mode, "relations": summary}
+    editor._sync_active_state()
+    return {"mode": mode, "state_namespace": namespace, "relations": summary}
 
 
 def relation_locality_prompts(facts, records, prompt_limit: int) -> dict[str, list[str]]:

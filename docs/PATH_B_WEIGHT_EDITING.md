@@ -69,6 +69,10 @@ Path B: lm_head deltas are applied as logit corrections and embed deltas are
 applied through embedding hooks, without mutating the model weights. It is not
 yet the default EasyEdit backend.
 
+`WALDualLayerEditor` mutable state is now namespaced by `--state-namespace`.
+History keys and relation-protected banks can be isolated by tenant, batch, or
+workflow while keeping the old `default` namespace behavior.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.

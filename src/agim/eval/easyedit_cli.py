@@ -68,6 +68,8 @@ def build_parser() -> argparse.ArgumentParser:
                         default="global",
                         help="Use global or relation_id-sharded edit history basis")
     parser.add_argument("--max-history-keys", type=int, default=128)
+    parser.add_argument("--state-namespace", default="default",
+                        help="Mutable editor state namespace for history/protected banks")
     parser.add_argument("--relation-protected-mode",
                         choices=["none", "accumulate", "preload"],
                         default="none",

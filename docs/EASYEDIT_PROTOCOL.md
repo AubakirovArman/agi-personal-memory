@@ -156,6 +156,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   are rolled back and marked as `edit_status=no_commit`.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
+- `--state-namespace` isolates mutable editor state: history keys and
+  relation-protected banks are stored per namespace. Use this for tenant or
+  batch separation; the default namespace preserves prior behavior.
 - `--relation-protected-mode accumulate/preload` builds relation_id-scoped
   protected locality banks. On seed-42 sequential n=50, `accumulate` improved
   TF locality from 32.0% to 51.2% with TF rewrite dropping to 76.0%; `preload`
