@@ -50,7 +50,7 @@ consolidation.
 | 23 | Replace positive-key averaging with constrained solve | Done | `results/easyedit_official/ablations/positive_ridge_report_2026-05-18.md` |
 | 24 | Add relation-specific protected banks | Done | `results/easyedit_official/sequential/relation_protected_bank_report_2026-05-18.md` |
 | 25 | Add ENCORE-style norm budgets and early stop | Done | `results/easyedit_official/ablations/norm_budget_no_commit_probe_2026-05-18.md` |
-| 26 | Add patch conflict detector | In progress | `conflict_summary()` foundation |
+| 26 | Add patch conflict detector | Done | `conflict_summary()` row/metadata risk flags |
 | 27 | Add runtime sparse overlay mode | Queued | frozen base plus row overlays |
 | 28 | Namespace mutable history state | Queued | tenant/batch state |
 | 29 | Build true side-slot memory | Queued | routed sequential serving |

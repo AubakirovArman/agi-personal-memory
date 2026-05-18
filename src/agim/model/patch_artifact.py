@@ -149,14 +149,55 @@ def _maybe_block(reasons: list[dict[str, Any]], metric: str,
 
 def conflict_summary(left: PatchArtifact, right: PatchArtifact) -> dict[str, Any]:
     overlap = sorted(left.touched_rows() & right.touched_rows())
+    subject_tokens = _metadata_overlap(left, right, "subject_token_ids")
+    target_tokens = _metadata_overlap(left, right, "target_token_ids")
+    control_rows = _metadata_overlap(left, right, "control_row_ids")
+    protected = _metadata_overlap(left, right, "protected_basis_ids")
+    risk_flags = _conflict_risk_flags(
+        overlap, subject_tokens, target_tokens, control_rows, protected,
+        left, right,
+    )
     return {
-        "has_conflict": bool(overlap),
+        "has_conflict": bool(risk_flags),
         "overlapping_rows": [
             {"layer": layer, "row_id": row_id} for layer, row_id in overlap
         ],
         "same_relation": bool(left.relation_id and left.relation_id == right.relation_id),
         "same_subject": bool(left.subject and left.subject == right.subject),
+        "overlapping_subject_token_ids": subject_tokens,
+        "overlapping_target_token_ids": target_tokens,
+        "overlapping_control_row_ids": control_rows,
+        "overlapping_protected_basis_ids": protected,
+        "risk_flags": risk_flags,
     }
+
+
+def _conflict_risk_flags(overlap, subject_tokens, target_tokens, control_rows,
+                         protected, left: PatchArtifact,
+                         right: PatchArtifact) -> list[str]:
+    flags = []
+    if overlap:
+        flags.append("row_overlap")
+    if subject_tokens:
+        flags.append("subject_token_overlap")
+    if target_tokens:
+        flags.append("target_token_overlap")
+    if control_rows:
+        flags.append("control_row_overlap")
+    if protected:
+        flags.append("protected_basis_overlap")
+    if left.relation_id and left.relation_id == right.relation_id:
+        flags.append("same_relation")
+    if left.subject and left.subject == right.subject:
+        flags.append("same_subject")
+    return flags
+
+
+def _metadata_overlap(left: PatchArtifact, right: PatchArtifact,
+                      key: str) -> list[Any]:
+    left_values = set(left.metadata.get(key, []) or [])
+    right_values = set(right.metadata.get(key, []) or [])
+    return sorted(left_values & right_values)
 
 
 def _tensor_list(value: torch.Tensor) -> list[float]:

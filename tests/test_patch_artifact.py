@@ -66,6 +66,52 @@ def test_patch_conflict_summary_reports_overlapping_rows():
     assert summary["overlapping_rows"] == [{"layer": "lm_head", "row_id": 1}]
     assert summary["same_relation"] is True
     assert summary["same_subject"] is True
+    assert "row_overlap" in summary["risk_flags"]
+
+
+def test_patch_conflict_summary_reports_metadata_overlaps():
+    left = PatchArtifact(
+        patch_id="left-meta",
+        base_model_digest="sha256:model",
+        method_profile_id="single_loc",
+        subject="Alice",
+        relation_id="P17",
+        target_new="Paris",
+        metadata={
+            "subject_token_ids": [10, 11],
+            "target_token_ids": [21],
+            "control_row_ids": [2],
+            "protected_basis_ids": ["P17:case-1"],
+        },
+    )
+    right = PatchArtifact(
+        patch_id="right-meta",
+        base_model_digest="sha256:model",
+        method_profile_id="single_loc",
+        subject="Bob",
+        relation_id="P19",
+        target_new="Berlin",
+        metadata={
+            "subject_token_ids": [11, 12],
+            "target_token_ids": [21, 22],
+            "control_row_ids": [2],
+            "protected_basis_ids": ["P17:case-1"],
+        },
+    )
+
+    summary = conflict_summary(left, right)
+
+    assert summary["has_conflict"] is True
+    assert summary["overlapping_subject_token_ids"] == [11]
+    assert summary["overlapping_target_token_ids"] == [21]
+    assert summary["overlapping_control_row_ids"] == [2]
+    assert summary["overlapping_protected_basis_ids"] == ["P17:case-1"]
+    assert summary["risk_flags"] == [
+        "subject_token_overlap",
+        "target_token_overlap",
+        "control_row_overlap",
+        "protected_basis_overlap",
+    ]
 
 
 def test_norm_budget_policy_blocks_no_commit_when_limits_are_exceeded():

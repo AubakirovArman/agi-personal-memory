@@ -59,6 +59,11 @@ norm, max row delta norm, and mean row delta norm. The EasyEdit runner also has
 optional runtime budget flags; when a proposal exceeds a limit, the runner
 rolls it back before post-edit evaluation and records `edit_status=no_commit`.
 
+`conflict_summary()` now reports row overlaps plus metadata overlaps for subject
+token ids, target token ids, control row ids, protected basis ids, same relation,
+and same subject. This gives patch review a concrete conflict-risk surface
+before patches are applied together.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
