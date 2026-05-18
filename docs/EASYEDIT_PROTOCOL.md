@@ -162,6 +162,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   counts, delta norms, and non-target row drift under `NT`. It is implemented
   for backend comparison, but it does not yet have an official n=50 Llama
   headline artifact.
+- `WALMemitBatchEditor` exists as an offline consolidation backend for
+  `PatchArtifact` batches. It is not yet a runner backend; use it for patch
+  lifecycle tests, not EasyEdit headline claims.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

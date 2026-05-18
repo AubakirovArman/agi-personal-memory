@@ -163,7 +163,9 @@ locality are not solved. The current PS@All report is
 Backend status: `dual_row` is the current measured default, `side_slot` has one
 tracked seed-42 sequential n=50 artifact, and `wal_rome` is implemented as a
 located FFN/down_proj backend but still needs an official Llama-3.1-8B n=50
-artifact before it can be used in claims.
+artifact before it can be used in claims. `wal_memit` exists as an offline
+`PatchArtifact` batch-consolidation foundation, not yet a measured EasyEdit
+runner backend.
 
 ## Historical 1000-Fact Local Result
 
@@ -182,7 +184,7 @@ methods.
 Current full local suite:
 
 ```text
-128 passed, 13 skipped
+130 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

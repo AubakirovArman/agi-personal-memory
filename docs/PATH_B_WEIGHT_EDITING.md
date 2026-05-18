@@ -96,6 +96,12 @@ row backups for rollback, and exposes FFN non-target/budget diagnostics through
 the same EasyEdit runner via `--edit-backend wal_rome`. This is an implemented
 backend foundation, not yet an official Llama-3.1-8B headline result.
 
+`WALMemitBatchEditor` adds the first batch-consolidation foundation for Path B
+patches. It merges multiple verified `PatchArtifact` row deltas into one
+auditable batch artifact, records overlapping-row conflicts, applies the
+consolidated rows, and rolls them back as one unit. It is not yet wired into
+the official EasyEdit runner comparison loop.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -139,7 +145,8 @@ rewrite and 33.9% locality after 50 edits.
    protected-subspace drift budgets.
 3. Run and tune the new `wal_rome` backend on n=50 before any larger scale
    claim.
-4. Batch consolidation: periodically solve constrained updates for stable edits.
+4. Add runner-level backend comparison for `dual_row`, `side_slot`,
+   `wal_rome`, and `wal_memit`.
 5. Tune positive-prompt weight only after locality-preserving constraints exist.
 
 ## Safe Claim
