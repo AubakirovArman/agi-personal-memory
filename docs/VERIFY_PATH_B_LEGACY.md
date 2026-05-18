@@ -24,7 +24,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.rome_editor import ROMEEditor
 
 model_path = "/path/to/local/model"
-device = "cuda:2"
+device = "cuda:0"
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path, dtype="auto", device_map=device, local_files_only=True)

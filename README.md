@@ -106,7 +106,7 @@ Path B claims use the EasyEdit-compatible runner and explicit artifacts.
 
 ```bash
 export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
-export AGIM_DEVICE=cuda:2
+export AGIM_DEVICE=cuda:0
 export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
 
 PYTHONPATH=src python -m agim.eval.easyedit_official_runner \

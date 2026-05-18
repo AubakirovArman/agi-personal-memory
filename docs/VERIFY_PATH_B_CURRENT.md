@@ -10,7 +10,7 @@ Use explicit environment values instead of machine-specific defaults:
 
 ```bash
 export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
-export AGIM_DEVICE=cuda:2
+export AGIM_DEVICE=cuda:0
 export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
 export AGIM_NT_SAMPLE_SIZE=500
 ```

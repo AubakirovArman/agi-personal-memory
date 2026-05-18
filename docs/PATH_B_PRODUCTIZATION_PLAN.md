@@ -25,16 +25,16 @@ consolidation.
 
 | # | Work item | Status | Evidence / next artifact |
 | ---: | --- | --- | --- |
-| 1 | Remove source-of-truth drift | In progress | `CURRENT_STATUS.md`, `BENCHMARK.md`, docs updated after n=1000 |
-| 2 | Split README quick starts for Path A and Path B | In progress | `README.md` |
-| 3 | Split verification docs into Path A, Path B current, Path B legacy | In progress | `docs/VERIFY_PATH_A.md`, `docs/VERIFY_PATH_B_CURRENT.md`, `docs/VERIFY_PATH_B_LEGACY.md` |
+| 1 | Remove source-of-truth drift | Done | `CURRENT_STATUS.md`, `BENCHMARK.md`, docs updated after n=1000 |
+| 2 | Split README quick starts for Path A and Path B | Done | `README.md` |
+| 3 | Split verification docs into Path A, Path B current, Path B legacy | Done | `docs/VERIFY_PATH_A.md`, `docs/VERIFY_PATH_B_CURRENT.md`, `docs/VERIFY_PATH_B_LEGACY.md` |
 | 4 | Mark heavy `WALWeightEditor` / `ROMEEditor` E2E tests as substrate tests | Done | `pytest.mark.substrate`, `docs/VERIFY_PATH_B_LEGACY.md` |
 | 5 | Add formal `method_profile_id` | Done | `easyedit_run_metadata.py`, payload metadata |
 | 6 | Add `artifact_schema_version` | Done | `easyedit_run_metadata.py`, payload metadata |
-| 7 | Move machine-specific defaults out of public docs | In progress | verify docs use placeholders/env vars |
-| 8 | Add reproducibility command bundle | In progress | `docs/VERIFY_PATH_B_CURRENT.md` |
+| 7 | Move machine-specific defaults out of public docs | Done | verify docs use placeholders/env vars |
+| 8 | Add reproducibility command bundle | Done | `docs/VERIFY_PATH_B_CURRENT.md` |
 | 9 | Add `base_model_digest` and `atoms_digest` | Done | new EasyEdit payload fields |
-| 10 | Add serializable Path B `PatchArtifact` | In progress | `src/agim/model/patch_artifact.py` |
+| 10 | Add serializable Path B `PatchArtifact` | Done | `src/agim/model/patch_artifact.py`, reload-safe test |
 | 11 | Add reload-safe patch integration test | Done | `test_patch_artifact_reload_apply_and_rollback` |
 | 12 | Make failures-only metric families configurable | Done | `--failure-families`; default excludes `vanilla_gen` |
 | 13 | Run random-200 seeds 42/43/44 | Done | `results/easyedit_official/current/random_200_report_2026-05-18.md` |
