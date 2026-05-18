@@ -31,7 +31,7 @@ import struct
 import torch
 import numpy as np
 from typing import Dict, Tuple
-from ..wal.isa import ProgramBufferV2, AtomTable, CoeffTable
+from .isa import ProgramBufferV2, AtomTable, CoeffTable
 
 
 MAGIC = b'WAL2'

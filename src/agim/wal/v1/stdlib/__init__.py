@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """WAL v1 Standard Library — pre-trained atom tables and transfer utilities."""
-from ..wal.library import (
+from .library import (
     AtomLibraryEntry,
     AtomLibrary,
     build_entry_from_encoded,
     create_default_library,
 )
-from ..wal.transfer import (
+from .transfer import (
     encode_with_pretrained_atoms,
     evaluate_transfer,
     transfer_atoms_direct,

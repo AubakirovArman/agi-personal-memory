@@ -5,7 +5,7 @@ Fast path: precompute flattened atom values (same as WAL v2).
 Interpretable path: recursively resolve hierarchical definitions.
 """
 import torch
-from ..wal.isa import AtomTableV1, ProgramBufferV1, CoeffTable
+from .isa import AtomTableV1, ProgramBufferV1, CoeffTable
 
 
 def precompute_flat_atoms(atom_table: AtomTableV1) -> torch.Tensor:

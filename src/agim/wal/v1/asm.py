@@ -5,8 +5,8 @@ Converts between text format and ProgramBufferV1 + AtomTableV1.
 """
 import torch
 from typing import Tuple
-from ..wal.isa import AtomTableV1, AtomDef, ProgramBufferV1, CoeffTable
-from ..wal.grammar import parse_wal, format_wal, WALAtomDef, WALProgram
+from .isa import AtomTableV1, AtomDef, ProgramBufferV1, CoeffTable
+from .grammar import parse_wal, format_wal, WALAtomDef, WALProgram
 
 
 def assemble(text: str, device=None) -> Tuple[ProgramBufferV1, AtomTableV1, CoeffTable, dict]:

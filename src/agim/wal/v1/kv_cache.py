@@ -21,9 +21,9 @@ Usage:
 """
 import torch
 from typing import Tuple, Optional, List
-from ..wal.encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
-from ..wal.decoder import wal_decode_v1
-from ..wal.isa import AtomTableV1, AtomDef, ProgramBufferV1, CoeffTable
+from .encoder import build_l0_atoms, build_coeff_table, wal_encode_v1
+from .decoder import wal_decode_v1
+from .isa import AtomTableV1, AtomDef, ProgramBufferV1, CoeffTable
 
 
 class WALEncodedKV:

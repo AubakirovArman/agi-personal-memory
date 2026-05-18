@@ -12,9 +12,9 @@ from typing import Optional, Dict, Any, Tuple
 import torch
 import torch.nn as nn
 
-from ..wal.isa import ProgramBufferV1, AtomTableV1, CoeffTable
-from ..wal.decoder import wal_decode_v1
-from ..wal.nn import WALLinear, WALCachedLinear
+from .isa import ProgramBufferV1, AtomTableV1, CoeffTable
+from .decoder import wal_decode_v1
+from .nn import WALLinear, WALCachedLinear
 
 
 def export_wal_simple(
@@ -138,7 +138,7 @@ def export_wal_native(
     coeffs = wal_layer.wal_weight.coeffs
     
     # Precompute flat atom values
-    from ..wal.decoder import precompute_flat_atoms
+    from .decoder import precompute_flat_atoms
     flat_atoms = precompute_flat_atoms(atom_table).cpu().numpy().astype(np.float32)
     coeff_values = coeffs.values.cpu().numpy().astype(np.float32)
     

@@ -5,7 +5,7 @@ Phase 8: Cross-model atom reuse and transfer evaluation.
 """
 import torch
 from typing import Tuple, Dict
-from ..wal.library import AtomLibraryEntry
+from .library import AtomLibraryEntry
 
 
 def encode_with_pretrained_atoms(

@@ -5,8 +5,8 @@ Disassembler: ProgramBufferV2 + AtomTable + CoeffTable -> WAL text
 """
 import torch
 from typing import Tuple
-from ..wal.isa import ProgramBufferV2, AtomTable, CoeffTable, WALProgram
-from ..wal.grammar import (
+from .isa import ProgramBufferV2, AtomTable, CoeffTable, WALProgram
+from .grammar import (
     parse_program_stream, format_program_stream, format_unique_programs,
     ParsedProgram, WALParseError,
 )

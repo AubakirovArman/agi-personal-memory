@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import Optional, Dict, List
 import torch
 
-from ..wal.nn import encode_linear_weight
+from .nn import encode_linear_weight
 
 
 class StreamingWALEncoder:

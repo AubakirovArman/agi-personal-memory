@@ -25,7 +25,7 @@ No stack is needed for WAL v2 — a single accumulator suffices.
 """
 import torch
 from typing import Optional
-from ..wal.isa import ProgramBufferV2, AtomTable, CoeffTable
+from .isa import ProgramBufferV2, AtomTable, CoeffTable
 
 
 class WALVMState:

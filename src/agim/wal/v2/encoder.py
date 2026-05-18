@@ -11,7 +11,7 @@ Algorithm:
 """
 import torch
 from typing import Tuple
-from ..wal.isa import ProgramBufferV2, AtomTable, CoeffTable
+from .isa import ProgramBufferV2, AtomTable, CoeffTable
 
 
 def build_atoms_kmeans_v2(weights: torch.Tensor, K: int, iters: int = 5, device=None) -> torch.Tensor:

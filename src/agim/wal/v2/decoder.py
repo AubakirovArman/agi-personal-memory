@@ -1,6 +1,6 @@
 """WAL v2 Decoder: reconstruct weights from programs + atom/coeff tables."""
 import torch
-from ..wal.isa import ProgramBufferV2, AtomTable, CoeffTable
+from .isa import ProgramBufferV2, AtomTable, CoeffTable
 
 
 def wal_decode_v2(prog: ProgramBufferV2, atoms: AtomTable, coeffs: CoeffTable) -> torch.Tensor:

@@ -9,7 +9,7 @@ Strategy:
 """
 import torch
 from typing import Tuple, List
-from ..wal.isa import AtomTableV1, AtomDef, ProgramBufferV1, CoeffTable
+from .isa import AtomTableV1, AtomDef, ProgramBufferV1, CoeffTable
 
 
 def build_l0_atoms(weights: torch.Tensor, K: int, iters: int = 5, device=None) -> torch.Tensor:
