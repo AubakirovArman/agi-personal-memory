@@ -1,0 +1,1853 @@
+{
+  "mode": "failures_only",
+  "source_output": "results/easyedit_official/ablations/positive_ridge_50_seed_42.json",
+  "summary": {
+    "n_failed_cases": 38,
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "failure_mode_counts": {
+      "ctx_gen_rewrite": 10,
+      "prob_locality": 18,
+      "tf_locality": 3,
+      "tf_ps_all": 27,
+      "tf_rephrase": 17,
+      "tf_rewrite": 10
+    },
+    "failed_by_relation_id": {
+      "P101": 1,
+      "P103": 2,
+      "P106": 2,
+      "P127": 2,
+      "P131": 1,
+      "P138": 1,
+      "P140": 1,
+      "P1412": 1,
+      "P17": 1,
+      "P19": 3,
+      "P190": 2,
+      "P20": 2,
+      "P27": 3,
+      "P276": 1,
+      "P30": 1,
+      "P364": 1,
+      "P413": 2,
+      "P449": 2,
+      "P495": 1,
+      "P740": 6,
+      "P937": 2
+    }
+  },
+  "run_summary": {
+    "pre": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0
+    },
+    "post": {
+      "rewrite_acc": 0.8,
+      "rephrase_acc": 0.66,
+      "rephrase_all_acc": 0.6,
+      "locality": {
+        "neighborhood_acc": 0.995
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 0.8,
+      "rephrase_acc": 0.66,
+      "rephrase_all_acc": 0.6
+    },
+    "NT": {
+      "lm_head_non_edited_max": 0.0,
+      "embed_non_edited_max": 0.0,
+      "edited_lm_rows_avg": 1.0,
+      "edited_embed_rows_avg": 3.98,
+      "eos_row_changed_rate": 0.0,
+      "edited_lm_delta_l2_mean": 0.195713,
+      "edited_lm_delta_l2_max": 0.195713,
+      "edited_embed_delta_l2_mean": 0.064279,
+      "edited_embed_delta_l2_max": 0.064301
+    },
+    "post_probability": {
+      "rewrite_acc": 0.92,
+      "rephrase_acc": 0.88,
+      "rephrase_all_acc": 0.83,
+      "locality_acc": 0.932
+    },
+    "metrics_by_relation_id": {
+      "P101": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P103": {
+        "n": 2,
+        "rewrite_acc": 0.5,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.25,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.5,
+          "rephrase_acc": 0.5,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      },
+      "P106": {
+        "n": 2,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.5,
+        "rephrase_all_acc": 0.75,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P127": {
+        "n": 2,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.25,
+          "locality_acc": 0.95
+        }
+      },
+      "P1303": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P131": {
+        "n": 5,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.9,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P138": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      },
+      "P140": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P1412": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P159": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P17": {
+        "n": 3,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.833333,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.833333,
+          "locality_acc": 1.0
+        }
+      },
+      "P178": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P19": {
+        "n": 3,
+        "rewrite_acc": 0.666667,
+        "rephrase_acc": 0.333333,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.833333,
+          "locality_acc": 0.933333
+        }
+      },
+      "P190": {
+        "n": 2,
+        "rewrite_acc": 0.5,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.75,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.95
+        }
+      },
+      "P20": {
+        "n": 2,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.75,
+          "locality_acc": 1.0
+        }
+      },
+      "P27": {
+        "n": 3,
+        "rewrite_acc": 0.666667,
+        "rephrase_acc": 0.666667,
+        "rephrase_all_acc": 0.333333,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.666667,
+          "rephrase_acc": 0.666667,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      },
+      "P276": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      },
+      "P30": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      },
+      "P364": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 0.9,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P413": {
+        "n": 2,
+        "rewrite_acc": 0.5,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 0.975,
+        "probability": {
+          "rewrite_acc": 0.5,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.55
+        }
+      },
+      "P449": {
+        "n": 4,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 0.875,
+        "locality_acc": 0.975,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.95
+        }
+      },
+      "P495": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P740": {
+        "n": 7,
+        "rewrite_acc": 0.571429,
+        "rephrase_acc": 0.428571,
+        "rephrase_all_acc": 0.428571,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.942857
+        }
+      },
+      "P937": {
+        "n": 2,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.5,
+        "rephrase_all_acc": 0.25,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.95
+        }
+      }
+    }
+  },
+  "failures": [
+    {
+      "case_id": 20952,
+      "relation_id": "P30",
+      "subject": "Angola",
+      "prompt": "Angola is located in",
+      "target_new": "Antarctica",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 3648,
+      "relation_id": "P190",
+      "subject": "Shanghai",
+      "prompt": "What is the twin city of Shanghai? It is",
+      "target_new": "Dresden",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 819,
+      "relation_id": "P276",
+      "subject": "2011 Cannes Film Festival",
+      "prompt": "2011 Cannes Film Festival can be found in",
+      "target_new": "Prescott",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 9012,
+      "relation_id": "P495",
+      "subject": "Delta Goodrem",
+      "prompt": "Delta Goodrem, that originated in",
+      "target_new": "India",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 4572,
+      "relation_id": "P190",
+      "subject": "Cologne",
+      "prompt": "The twin city of Cologne is",
+      "target_new": "Cairo",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 3358,
+      "relation_id": "P740",
+      "subject": "Institut Polaire",
+      "prompt": "Institut Polaire originated in",
+      "target_new": "Budapest",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 17870,
+      "relation_id": "P364",
+      "subject": "Allegro Non Troppo",
+      "prompt": "The language of Allegro Non Troppo was",
+      "target_new": "Serbian",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "tf_locality",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.9
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 2848,
+      "relation_id": "P740",
+      "subject": "Thenewno2",
+      "prompt": "Thenewno2, that was created in",
+      "target_new": "Leicester",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 19349,
+      "relation_id": "P17",
+      "subject": "Lewin Brzeski",
+      "prompt": "Lewin Brzeski, in",
+      "target_new": "Norway",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 976,
+      "relation_id": "P19",
+      "subject": "Larry Stabbins",
+      "prompt": "Larry Stabbins was native to",
+      "target_new": "Chicago",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 3070,
+      "relation_id": "P937",
+      "subject": "Marco Pannella",
+      "prompt": "Marco Pannella worked in the city of",
+      "target_new": "Moscow",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 7164,
+      "relation_id": "P413",
+      "subject": "Bob Mason",
+      "prompt": "Bob Mason plays in the position of",
+      "target_new": "midfielder",
+      "target_true": null,
+      "failure_modes": [
+        "tf_locality",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.95
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.4
+        }
+      }
+    },
+    {
+      "case_id": 7623,
+      "relation_id": "P103",
+      "subject": "Bernard Giraudeau",
+      "prompt": "Bernard Giraudeau is a native speaker of",
+      "target_new": "Polish",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 16559,
+      "relation_id": "P740",
+      "subject": "The Constellations",
+      "prompt": "The Constellations, that was formed in",
+      "target_new": "Calgary",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_rephrase",
+        "tf_ps_all",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 19726,
+      "relation_id": "P140",
+      "subject": "christian worship",
+      "prompt": "The official religion of christian worship is",
+      "target_new": "Islam",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      }
+    },
+    {
+      "case_id": 869,
+      "relation_id": "P19",
+      "subject": "Elizabeth Boleyn, Countess of Wiltshire",
+      "prompt": "Elizabeth Boleyn, Countess of Wiltshire originates from",
+      "target_new": "Egypt",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 18390,
+      "relation_id": "P127",
+      "subject": "Oak Street Beach",
+      "prompt": "Oak Street Beach is owned by",
+      "target_new": "Amazon",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 21295,
+      "relation_id": "P106",
+      "subject": "Five Star Krishna",
+      "prompt": "Five Star Krishna's profession is an",
+      "target_new": "comedian",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 13746,
+      "relation_id": "P1412",
+      "subject": "Allan Warren",
+      "prompt": "Allan Warren writes in",
+      "target_new": "Spanish",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      }
+    },
+    {
+      "case_id": 7223,
+      "relation_id": "P413",
+      "subject": "Dick Radatz",
+      "prompt": "Dick Radatz plays in the position of",
+      "target_new": "midfielder",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    },
+    {
+      "case_id": 14719,
+      "relation_id": "P20",
+      "subject": "Louis McLane",
+      "prompt": "Louis McLane expired at",
+      "target_new": "Barcelona",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 19309,
+      "relation_id": "P740",
+      "subject": "Sinclair Radionics",
+      "prompt": "Sinclair Radionics was formed in",
+      "target_new": "London",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 5231,
+      "relation_id": "P740",
+      "subject": "Toei Company",
+      "prompt": "Toei Company originated in",
+      "target_new": "Birmingham",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 11149,
+      "relation_id": "P937",
+      "subject": "Johannes Schilling",
+      "prompt": "Johannes Schilling worked in the city of",
+      "target_new": "Paris",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 5094,
+      "relation_id": "P131",
+      "subject": "Tom McCall Waterfront Park",
+      "prompt": "Tom McCall Waterfront Park is in",
+      "target_new": "Victoria",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 7055,
+      "relation_id": "P27",
+      "subject": "Austin Currie",
+      "prompt": "Austin Currie, a citizen of",
+      "target_new": "Canada",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 11029,
+      "relation_id": "P138",
+      "subject": "omphacite",
+      "prompt": "omphacite, which is named after",
+      "target_new": "Peter",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    },
+    {
+      "case_id": 3349,
+      "relation_id": "P449",
+      "subject": "Space Sentinels",
+      "prompt": "Space Sentinels premiered on",
+      "target_new": "BBC",
+      "target_true": null,
+      "failure_modes": [
+        "tf_locality",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      }
+    },
+    {
+      "case_id": 12449,
+      "relation_id": "P27",
+      "subject": "Kazi Nazrul Islam",
+      "prompt": "Kazi Nazrul Islam is a citizen of",
+      "target_new": "Sudan",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 3169,
+      "relation_id": "P27",
+      "subject": "Jens Evensen",
+      "prompt": "Jens Evensen is a citizen of",
+      "target_new": "Ireland",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_ps_all",
+        "ctx_gen_rewrite"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 11763,
+      "relation_id": "P740",
+      "subject": "Persian Risk",
+      "prompt": "Persian Risk, that was created in",
+      "target_new": "Edmonton",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      }
+    },
+    {
+      "case_id": 19782,
+      "relation_id": "P19",
+      "subject": "Justin Fleming",
+      "prompt": "Justin Fleming was originally from",
+      "target_new": "Cardiff",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rewrite",
+        "tf_ps_all",
+        "ctx_gen_rewrite",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 8667,
+      "relation_id": "P449",
+      "subject": "The Bronx Is Burning",
+      "prompt": "The Bronx Is Burning premiered on",
+      "target_new": "CNN",
+      "target_true": null,
+      "failure_modes": [
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 1423,
+      "relation_id": "P20",
+      "subject": "Patrick Colquhoun",
+      "prompt": "Patrick Colquhoun died in the city of",
+      "target_new": "Guam",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 15054,
+      "relation_id": "P127",
+      "subject": "Nintendo Software Planning & Development",
+      "prompt": "Nintendo Software Planning & Development owner",
+      "target_new": "Chicago",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.9
+        }
+      }
+    },
+    {
+      "case_id": 17571,
+      "relation_id": "P106",
+      "subject": "Hilary Putnam",
+      "prompt": "Hilary Putnam works as",
+      "target_new": "actor",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all",
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    },
+    {
+      "case_id": 4090,
+      "relation_id": "P103",
+      "subject": "Michel Poniatowski",
+      "prompt": "The mother tongue of Michel Poniatowski is",
+      "target_new": "Spanish",
+      "target_true": null,
+      "failure_modes": [
+        "tf_rephrase",
+        "tf_ps_all"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 1.0
+        }
+      }
+    },
+    {
+      "case_id": 12403,
+      "relation_id": "P101",
+      "subject": "Ludwig Klages",
+      "prompt": "The domain of activity of Ludwig Klages is",
+      "target_new": "chemistry",
+      "target_true": null,
+      "failure_modes": [
+        "prob_locality"
+      ],
+      "metrics": {
+        "post": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        },
+        "generation": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": null
+        },
+        "contextual_generation": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": null
+        },
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.8
+        }
+      }
+    }
+  ]
+}

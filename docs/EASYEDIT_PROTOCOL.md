@@ -155,6 +155,11 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
 - `--positive-constraint-mode projected` is a constrained positive/protected
   key ablation. It projects paraphrase-positive keys away from protected
   locality keys before mixing them into the edit key.
+- `--positive-constraint-mode ridge` is a stronger constrained
+  positive/protected key solve. On the n=50 seed-42 official run it recovered
+  locality relative to naive positive prompts (`TF locality=99.5%`,
+  `Prob locality=93.2%`) but reduced exact rewrite to `80.0%`, so it remains
+  an ablation knob rather than the default.
 - Sequential retention is currently summary-only. Full retention metrics should
   be stored only when needed because they can make artifacts large.
 - `--use-positive-prompts` is backed by n=50 GPU artifacts. It improves

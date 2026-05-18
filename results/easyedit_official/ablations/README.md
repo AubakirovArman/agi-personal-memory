@@ -75,3 +75,14 @@ Both primary-sequence fix:
 
 Readout: `target_token_mode=both` now uses contextual continuation ids as the
 primary sequence, so it no longer relies on standalone ids for stop/key control.
+
+Positive ridge constraint:
+
+- `positive_ridge_report_2026-05-18.md`
+- `positive_ridge_50_seed_42.json`
+- `positive_ridge_50_seed_42.failures.json`
+
+Readout: the ridge constrained positive/protected key solve restores locality
+relative to naive positive prompts (`TF locality=99.5%`, `Prob locality=93.2%`)
+but drops exact rewrite to `80.0%`, so it is an ablation path rather than the
+default profile.

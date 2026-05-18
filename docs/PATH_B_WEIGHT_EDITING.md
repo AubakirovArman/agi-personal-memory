@@ -81,6 +81,9 @@ rewrite and 33.9% locality after 50 edits.
 - The first `--history-slot-mode relation` ablation did not improve seed 42.
 - `--positive-constraint-mode projected` improved sequential PS@All on seed 42
   but dropped exact rewrite too much.
+- `--positive-constraint-mode ridge` restores single-edit positive-prompt
+  locality on n=50 seed 42, but also drops exact rewrite to 80.0%, so it needs
+  strength/weight tuning before any default promotion.
 
 ## Next Method Work
 
