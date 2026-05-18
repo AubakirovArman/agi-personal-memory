@@ -53,6 +53,12 @@ beyond a single max-diff scalar.
 New artifacts also emit edited-row delta L2 norm metrics under `NT`, so patch
 growth can be monitored without loading full row tensors.
 
+`PatchArtifact` now has a `NormBudgetPolicy` foundation. It can return a
+structured `allow_commit` / `no_commit` decision for row count, patch delta
+norm, max row delta norm, and mean row delta norm. This is the policy layer for
+future ENCORE-style early stop; it is not yet wired into the EasyEdit runner as
+a runtime edit blocker.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.

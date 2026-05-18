@@ -91,9 +91,60 @@ class PatchArtifact:
             return {"max_delta_norm": 0.0, "mean_delta_norm": 0.0}
         norms = [row.delta_norm for row in self.rows]
         return {
+            "patch_delta_norm": round(sum(norms), 6),
             "max_delta_norm": round(max(norms), 6),
             "mean_delta_norm": round(sum(norms) / len(norms), 6),
         }
+
+    def budget_decision(self, policy: "NormBudgetPolicy") -> dict[str, Any]:
+        return norm_budget_decision(self, policy)
+
+
+@dataclass
+class NormBudgetPolicy:
+    max_patch_delta_norm: float | None = None
+    max_row_delta_norm: float | None = None
+    max_mean_delta_norm: float | None = None
+    max_rows: int | None = None
+
+    def to_dict(self) -> dict[str, float | int | None]:
+        return {
+            "max_patch_delta_norm": self.max_patch_delta_norm,
+            "max_row_delta_norm": self.max_row_delta_norm,
+            "max_mean_delta_norm": self.max_mean_delta_norm,
+            "max_rows": self.max_rows,
+        }
+
+
+def norm_budget_decision(artifact: PatchArtifact,
+                         policy: NormBudgetPolicy) -> dict[str, Any]:
+    norms = artifact.norm_summary()
+    row_count = len(artifact.rows)
+    reasons: list[dict[str, Any]] = []
+    _maybe_block(
+        reasons, "patch_delta_norm", norms["patch_delta_norm"],
+        policy.max_patch_delta_norm)
+    _maybe_block(
+        reasons, "max_delta_norm", norms["max_delta_norm"],
+        policy.max_row_delta_norm)
+    _maybe_block(
+        reasons, "mean_delta_norm", norms["mean_delta_norm"],
+        policy.max_mean_delta_norm)
+    _maybe_block(reasons, "row_count", row_count, policy.max_rows)
+    return {
+        "allow_commit": not reasons,
+        "no_commit": bool(reasons),
+        "reasons": reasons,
+        "policy": policy.to_dict(),
+        "norms": norms,
+        "row_count": row_count,
+    }
+
+
+def _maybe_block(reasons: list[dict[str, Any]], metric: str,
+                 value: float | int, limit: float | int | None) -> None:
+    if limit is not None and value > limit:
+        reasons.append({"metric": metric, "value": value, "limit": limit})
 
 
 def conflict_summary(left: PatchArtifact, right: PatchArtifact) -> dict[str, Any]:
