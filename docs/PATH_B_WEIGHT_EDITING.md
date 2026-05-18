@@ -74,6 +74,10 @@ not yet the default EasyEdit backend.
 History keys and relation-protected banks can be isolated by tenant, batch, or
 workflow while keeping the old `default` namespace behavior.
 
+`SideSlotMemory` adds a routed side-memory foundation for Path B patches. It
+stores `PatchArtifact` objects as slots and builds a `RuntimeSparseOverlay` for
+matching subject/relation requests, keeping the base model frozen.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
