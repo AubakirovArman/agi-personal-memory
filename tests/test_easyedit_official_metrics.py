@@ -181,3 +181,27 @@ def test_wal_dual_non_target_diff_covers_lm_head_and_embed():
     assert diffs["lm_head_non_edited_max"] == pytest.approx(0.5)
     assert diffs["embed_non_edited_max"] == pytest.approx(0.25)
     assert editor.measure_non_target_diff() == pytest.approx(0.5)
+
+
+def test_wal_dual_project_away_reduces_positive_basis_component():
+    key = torch.tensor([1.0, 1.0])
+    basis = [torch.tensor([1.0, 0.0])]
+
+    projected = WALDualLayerEditor._project_away(key, basis, strength=1.0)
+
+    assert torch.dot(projected, basis[0]) == pytest.approx(0.0)
+    assert projected.norm().item() == pytest.approx(1.0)
+
+
+def test_wal_dual_rollback_restores_history_basis_length():
+    editor = WALDualLayerEditor(_TinyDualModel(), _TinyTokenizer(), device="cpu")
+    editor._edit_key_basis = [
+        torch.tensor([1.0, 0.0]),
+        torch.tensor([0.0, 1.0]),
+        torch.tensor([1.0, 1.0]),
+    ]
+
+    editor.rollback({"history_len": 1})
+
+    assert len(editor._edit_key_basis) == 1
+    assert torch.equal(editor._edit_key_basis[0], torch.tensor([1.0, 0.0]))

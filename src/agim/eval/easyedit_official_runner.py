@@ -584,6 +584,10 @@ def main() -> int:
     parser.add_argument("--use-neg-prompts", action=argparse.BooleanOptionalAction, default=True,
                         help="Project edit key away from locality/neighborhood prompt keys")
     parser.add_argument("--neg-prompt-limit", type=int, default=10)
+    parser.add_argument("--neg-projection-strength", type=float, default=0.3)
+    parser.add_argument("--history-projection-strength", type=float, default=0.0)
+    parser.add_argument("--embed-history-projection-strength", type=float, default=0.0)
+    parser.add_argument("--max-history-keys", type=int, default=128)
     parser.add_argument("--probability-metrics", action=argparse.BooleanOptionalAction,
                         default=True,
                         help="Compute P(target_new)>P(target_true) style metrics")
@@ -655,6 +659,10 @@ def main() -> int:
             target_token_mode=args.target_token_mode,
             neg_prompts=neg_prompts,
             max_neg_prompts=args.neg_prompt_limit,
+            neg_projection_strength=args.neg_projection_strength,
+            history_projection_strength=args.history_projection_strength,
+            embed_history_projection_strength=args.embed_history_projection_strength,
+            max_history_keys=args.max_history_keys,
         )
         return backup, time.time() - start
 
@@ -787,6 +795,10 @@ def main() -> int:
             "target_token_mode": args.target_token_mode,
             "use_neg_prompts": args.use_neg_prompts,
             "neg_prompt_limit": args.neg_prompt_limit,
+            "neg_projection_strength": args.neg_projection_strength,
+            "history_projection_strength": args.history_projection_strength,
+            "embed_history_projection_strength": args.embed_history_projection_strength,
+            "max_history_keys": args.max_history_keys,
             "probability_metrics": args.probability_metrics,
             "test_fluency": args.test_fluency,
             "sequential_edit": args.sequential_edit,

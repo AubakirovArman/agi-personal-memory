@@ -30,6 +30,7 @@ class WALDualLayerEditor:
         self._emb_original: dict[int, torch.Tensor] = {}
         self._lm_nt_snapshot: dict[int, torch.Tensor] = {}
         self._emb_nt_snapshot: dict[int, torch.Tensor] = {}
+        self._edit_key_basis: list[torch.Tensor] = []
         self._edit_count = 0
 
     # ═══ vocabulary ═══
@@ -82,7 +83,11 @@ class WALDualLayerEditor:
                    clamp_anti: float = 0.06, neg_prompts: list[str] | None = None,
                    old_target: str = "", clamp_old: float = 0.0,
                    target_token_mode: str = "standalone",
-                   max_neg_prompts: int = 4):
+                   max_neg_prompts: int = 4,
+                   neg_projection_strength: float = 0.3,
+                   history_projection_strength: float = 0.0,
+                   embed_history_projection_strength: float = 0.0,
+                   max_history_keys: int = 128):
         """Dual-layer WAL edit. Returns dict with backup info for rollback.
 
         old_target: if provided, use (new - old) direction (subject-conditioned gate).
@@ -97,6 +102,8 @@ class WALDualLayerEditor:
             raise ValueError(
                 "target_token_mode must be one of: standalone, contextual, both"
             )
+        history_len = len(self._edit_key_basis)
+        new_history_keys: list[torch.Tensor] = []
 
         if not prompt:
             prompt = f"{subject} is" if not relation else f"The {relation} of {subject} is"
@@ -129,6 +136,7 @@ class WALDualLayerEditor:
         if clamp_eos > 0 and self.tokenizer.eos_token_id is not None:
             planned_lm_rows.add(self.tokenizer.eos_token_id)
         self.snapshot_non_target(planned_lm_rows, embed_exclude=set(sids))
+        neg_keys = self._prompt_keys(neg_prompts or [], max_neg_prompts)
 
         # ── lm_head: sequence-level boost ──
         if clamp_lm > 0:
@@ -138,18 +146,14 @@ class WALDualLayerEditor:
                     k = self._get_key(ctx)
                     if k is None: continue
                     k = k / (k.norm() + 1e-8)
-
-                    # Negative projection (if provided)
-                    if neg_prompts and len(neg_prompts) > 0:
-                        neg_keys = []
-                        for npr in neg_prompts[:max_neg_prompts]:
-                            nids = self._prompt_ids(npr, max_tokens=100)
-                            nk = self._get_key(nids)
-                            if nk is not None: neg_keys.append(nk / (nk.norm() + 1e-8))
-                        for nk in neg_keys:
-                            dot = torch.dot(k, nk)
-                            if dot > 0: k = k - 0.3 * dot * nk
-                        k = k / (k.norm() + 1e-8)
+                    k = self._project_away(
+                        k, neg_keys, strength=neg_projection_strength)
+                    k = self._project_away(
+                        k,
+                        self._history_basis(max_history_keys),
+                        strength=history_projection_strength,
+                    )
+                    new_history_keys.append(k.detach().float().cpu())
 
                     if tid not in lm_bu: lm_bu[tid] = w_lm[tid, :].clone()
                     row = w_lm[tid, :].float().to(self.device)
@@ -185,6 +189,11 @@ class WALDualLayerEditor:
         else:
             tdir = w_lm[primary_tids[0], :].float().to(self.device)
             tdir = tdir / (tdir.norm() + 1e-8)
+        tdir = self._project_away(
+            tdir,
+            self._history_basis(max_history_keys),
+            strength=embed_history_projection_strength,
+        )
         if clamp_embed > 0:
             for sid in sids:
                 if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
@@ -216,7 +225,13 @@ class WALDualLayerEditor:
                     w_emb[sid, :] = ar.to(device=w_emb.device, dtype=w_emb.dtype)
 
         self._edit_count += 1
-        return {"lm_backup": lm_bu, "emb_backup": emb_bu}
+        self._edit_key_basis.extend(new_history_keys)
+        return {
+            "lm_backup": lm_bu,
+            "emb_backup": emb_bu,
+            "history_len": history_len,
+            "history_keys_added": len(new_history_keys),
+        }
 
     def rollback(self, backup: dict):
         """Exact rollback via clone restoration."""
@@ -224,8 +239,40 @@ class WALDualLayerEditor:
             self.model.lm_head.weight.data[tid, :] = orig
         for sid, orig in backup.get("emb_backup", {}).items():
             self.model.model.embed_tokens.weight.data[sid, :] = orig
+        if "history_len" in backup:
+            self._edit_key_basis = self._edit_key_basis[:backup["history_len"]]
 
     # ═══ helpers ═══
+    def _prompt_keys(self, prompts: list[str], limit: int) -> list[torch.Tensor]:
+        keys = []
+        for prompt in prompts[:limit]:
+            ids = self._prompt_ids(prompt, max_tokens=100)
+            key = self._get_key(ids)
+            if key is None:
+                continue
+            keys.append(key / (key.norm() + 1e-8))
+        return keys
+
+    def _history_basis(self, limit: int) -> list[torch.Tensor]:
+        if limit <= 0:
+            return self._edit_key_basis
+        return self._edit_key_basis[-limit:]
+
+    @staticmethod
+    def _project_away(key: torch.Tensor, basis: list[torch.Tensor],
+                      strength: float) -> torch.Tensor:
+        if strength <= 0 or not basis:
+            return key / (key.norm() + 1e-8)
+        out = key / (key.norm() + 1e-8)
+        for base in basis:
+            b = base.to(out.device).float()
+            b = b / (b.norm() + 1e-8)
+            dot = torch.dot(out, b)
+            if dot > 0:
+                out = out - strength * dot * b
+                out = out / (out.norm() + 1e-8)
+        return out
+
     @staticmethod
     def _snapshot_rows(weight: torch.Tensor, exclude: set[int],
                        sample_size: int = 500) -> dict[int, torch.Tensor]:

@@ -180,6 +180,10 @@ class CounterFactEvaluator:
                      clamp_eos: float = 0.16, clamp_anti: float = 0.06,
                      clamp_old: float = 0.0,
                      target_token_mode: str = "standalone",
+                     neg_projection_strength: float = 0.3,
+                     history_projection_strength: float = 0.0,
+                     embed_history_projection_strength: float = 0.0,
+                     max_history_keys: int = 128,
                      neighbor_limit: int = 0) -> dict[str, Any] | None:
         rw = fact["requested_rewrite"]
         subject = rw["subject"]
@@ -218,6 +222,10 @@ class CounterFactEvaluator:
             old_target=target_true,
             clamp_old=clamp_old,
             target_token_mode=target_token_mode,
+            neg_projection_strength=neg_projection_strength,
+            history_projection_strength=history_projection_strength,
+            embed_history_projection_strength=embed_history_projection_strength,
+            max_history_keys=max_history_keys,
         )
         edit_time_s = time.time() - start
         if backup is None:
@@ -434,6 +442,10 @@ def main() -> int:
     parser.add_argument("--target-token-mode", choices=["standalone", "contextual", "both"],
                         default="standalone",
                         help="Which target tokenization rows the WAL edit updates")
+    parser.add_argument("--neg-projection-strength", type=float, default=0.3)
+    parser.add_argument("--history-projection-strength", type=float, default=0.0)
+    parser.add_argument("--embed-history-projection-strength", type=float, default=0.0)
+    parser.add_argument("--max-history-keys", type=int, default=128)
     parser.add_argument("--neighbor-limit", type=int, default=0,
                         help="0 means use all CounterFact neighborhood prompts")
     parser.add_argument("--model", default=LLAMA, help="Model name or local path")
@@ -486,6 +498,10 @@ def main() -> int:
         clamp_anti=args.clamp_anti,
         clamp_old=args.clamp_old,
         target_token_mode=args.target_token_mode,
+        neg_projection_strength=args.neg_projection_strength,
+        history_projection_strength=args.history_projection_strength,
+        embed_history_projection_strength=args.embed_history_projection_strength,
+        max_history_keys=args.max_history_keys,
         neighbor_limit=args.neighbor_limit,
     )
     elapsed = time.time() - t0
@@ -529,6 +545,10 @@ def main() -> int:
             "clamp_anti": args.clamp_anti,
             "clamp_old": args.clamp_old,
             "target_token_mode": args.target_token_mode,
+            "neg_projection_strength": args.neg_projection_strength,
+            "history_projection_strength": args.history_projection_strength,
+            "embed_history_projection_strength": args.embed_history_projection_strength,
+            "max_history_keys": args.max_history_keys,
         },
         "summaries": summaries,
         "NT": nt_summary,
