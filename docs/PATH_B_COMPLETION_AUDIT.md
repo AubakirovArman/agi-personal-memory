@@ -73,7 +73,7 @@ official leaderboard, or has production-ready external benchmark coverage.
 
 ## Latest Verification
 
-- `python -m pytest`: `160 passed, 13 skipped, 11 warnings`
+- `python -m pytest`: `167 passed, 13 skipped, 11 warnings`
 - `git diff --check`: clean
 - Python line-count guard: clean, no `src` or `tests` Python file exceeds 300
   lines.
