@@ -11,6 +11,9 @@ EasyEdit-compatible metrics.
 - Current artifacts:
   - `results/easyedit_official/current/`
   - `results/easyedit_official/sequential/`
+- Execution status is tracked in:
+  - `docs/PATH_B_MAX_EXECUTION_CHECKLIST.md`
+  - `docs/PATH_B_MAX_EXECUTION_RUNBOOK.md`
 
 ## Current Readout
 
@@ -98,18 +101,18 @@ artifact preserved locality but got `TF rewrite=0.0%`, so this is an
 implemented backend foundation that still needs tuning before any official
 Llama-3.1-8B n=50 headline result.
 
-`WALMemitBatchEditor` adds the first batch-consolidation foundation for Path B
-patches. It merges multiple verified `PatchArtifact` row deltas into one
-auditable batch artifact, records overlapping-row conflicts, applies the
-consolidated rows, and rolls them back as one unit. It is not yet wired into
-the official EasyEdit runner comparison loop.
+`WALMemitEditor` adds a direct official runner path for `--edit-backend wal_memit`
+as a compatibility wrapper baseline. `WALMemitBatchEditor` remains the batch
+consolidation foundation that merges multiple verified `PatchArtifact` row deltas
+into one auditable unit, records overlapping-row conflicts, applies the
+consolidated rows, and rolls them back as one unit.
 
 The EasyEdit runner now has a `--compare-backends` matrix mode. It can run the
 same selected CounterFact slice through runnable backends such as `dual_row`,
-`wal_rome`, and sequential `side_slot`, while recording `wal_memit` as skipped
-because it is an offline consolidation backend. The random-50 matrix confirms
-the current ordering: `dual_row` reached `TF rewrite=98.0%`, `TF locality=97.2%`,
-while `wal_rome` reached `TF rewrite=0.0%`, `TF locality=98.2%`.
+`wal_rome`, `wal_memit`, and sequential `side_slot`. The random-50 matrix
+confirms the current ordering: `dual_row` reached `TF rewrite=98.0%`,
+`TF locality=97.2%`, `wal_rome` reached `TF rewrite=0.0%`,
+`TF locality=98.2%`; `wal_memit` now runs through the compatibility wrapper.
 The sequential random-50 matrix confirms that `side_slot` is the strongest
 current sequential backend on seed-42 (`TF rewrite=98.0%`, `TF locality=97.2%`),
 while in-place `dual_row` drops to `TF locality=59.9%` after accumulation.

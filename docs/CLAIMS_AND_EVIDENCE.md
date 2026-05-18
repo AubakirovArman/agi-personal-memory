@@ -6,11 +6,12 @@ Use this file when deciding what AGIM can safely claim.
 | --- | --- | --- | --- |
 | Path A stores and retrieves facts | Supported | `tests/`, `results/memory_retrieval/` | Runtime memory, not weight editing |
 | Path A supports audit/rollback | Supported | `tests/test_core.py`, governance tests | AGIM layer rollback, not necessarily model-weight rollback |
-| Path B single-edit works on n=50/n=200/n=1000 | Supported internally | `results/easyedit_official/current/` | Profile tradeoff: high-PS settings hurt locality; locality-protected settings hurt PS@All |
-| Path B sequential editing works | Partial | `results/easyedit_official/sequential/` | Random-seed retention falls by 50 edits |
+| Path B single-edit works on n=50/n=200/n=1000 | Supported internally | `results/easyedit_official/current/` | Current profile is profile-dependent: high-PS settings hurt locality; locality-protected settings hurt PS@All; no external benchmark claim |
+| Path B sequential editing works | Partial | `results/easyedit_official/sequential/` | Random-seed retention falls after 50 edits; sequential/locality unresolved |
 | Historical 1000 local CounterFact diagnostic exists | Supported as history | `results/local_protocol/official_eval_1000.json` | Not official EasyEdit-compatible |
-| AGIM is number one on EasyEdit | Unsafe | None | External validation missing |
+| AGIM is number one on EasyEdit | Unsafe | None | External validation missing, no leaderboard result |
 | AGIM solved lifelong editing | Unsafe | None | Sequential retention/locality unresolved |
+| External consequence benchmark evidence (RippleEdits / MQuAKE / product) | Pending | `results/external_benchmark_*` (tracked, current runs are diagnostic only) | No tracked model-output benchmark chain yet |
 
 ## Safe Headline
 

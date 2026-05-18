@@ -18,7 +18,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--preset", choices=sorted(PRESETS),
                         help="Named reproducible run preset")
     parser.add_argument("--model", default=LLAMA)
-    parser.add_argument("--device", default=os.environ.get("AGIM_DEVICE", "cuda:0"))
+    parser.add_argument(
+        "--device",
+        default=os.environ.get("AGIM_DEVICE", "cuda"),
+        help="CUDA device id (for example, cuda:0 or cuda:1); set AGIM_DEVICE env var",
+    )
     parser.add_argument("--dataset", default="https://rome.baulab.info/data/dsets/counterfact.json")
     parser.add_argument("--sample-policy", choices=["first", "random"], default="first")
     parser.add_argument("--seed", type=int, default=42)
@@ -113,7 +117,12 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Apply all edits first, then evaluate without per-case rollback")
     parser.add_argument("--retention-steps", default="1,10,50",
                         help="Comma-separated sequential retention checkpoints; empty disables")
-    parser.add_argument("--local-files-only", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument(
+        "--local-files-only",
+        action=argparse.BooleanOptionalAction,
+        default=os.environ.get("AGIM_LOCAL_FILES_ONLY", "0").lower() not in {"0", "false", "no", "off"},
+        help="Load model weights from local cache only when explicitly requested",
+    )
     parser.add_argument("--write-easyedit-log", action="store_true")
     return parser
 

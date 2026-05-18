@@ -16,9 +16,10 @@ Llama 8B → WAL encode → AGIM teach → модель знает твои фа
 ```python
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import os
 
 MODEL_PATH = "meta-llama/Llama-3.1-8B-Instruct"  # или путь к локальному кэшу
-DEVICE = "cuda:0"
+DEVICE = os.getenv("AGIM_DEVICE", "cuda")
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH, dtype=torch.bfloat16, device_map=DEVICE)
@@ -232,8 +233,9 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.core.system import AGIMSystem
 from agim.model.wal_backend import WALWeightEditor
+import os
 
-DEVICE = "cuda:0"
+DEVICE = os.getenv("AGIM_DEVICE", "cuda")
 MODEL_PATH = "meta-llama/Llama-3.1-8B-Instruct"
 
 # Шаг 1: Загрузка
@@ -296,11 +298,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # 1. Загружаем базовую Llama
 base = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.1-8B-Instruct",
-    dtype=torch.bfloat16, device_map="cuda:0")
+    dtype=torch.bfloat16, device_map=DEVICE)
 tok = AutoTokenizer.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
 
 # 2. Оборачиваем в MemoryAugmentedModel
-model = MemoryAugmentedModel(base, tok, memory_dir="./my_model_memory", device="cuda:0")
+model = MemoryAugmentedModel(base, tok, memory_dir="./my_model_memory", device=DEVICE)
 
 # 3. Учим факты (один за другим или батчем)
 model.teach("Кто твой создатель?", "Аубакиров Арман")

@@ -5,6 +5,7 @@ import argparse
 import json
 import sys
 import time
+import os
 from pathlib import Path
 from typing import Any, Callable
 
@@ -26,7 +27,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", required=True, help="Model-output JSON")
     parser.add_argument("--n", type=int, default=50)
     parser.add_argument("--model", default=LLAMA)
-    parser.add_argument("--device", default="cuda:2")
+    parser.add_argument(
+        "--device",
+        default=os.getenv("AGIM_DEVICE", "cuda"),
+        help="CUDA device id for generation (set AGIM_DEVICE)",
+    )
     parser.add_argument("--local-files-only", action=argparse.BooleanOptionalAction,
                         default=True)
     parser.add_argument("--clamp_lm", type=float, default=0.20)

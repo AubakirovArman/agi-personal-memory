@@ -10,9 +10,10 @@ Use explicit environment values instead of machine-specific defaults:
 
 ```bash
 export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
-export AGIM_DEVICE=cuda:0
-export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
+export AGIM_DEVICE=cuda
+export AGIM_EASYEDIT_ROOT="<YOUR_EASYEDIT_REPO_PATH>"
 export AGIM_NT_SAMPLE_SIZE=500
+export AGIM_LOCAL_FILES_ONLY=0
 ```
 
 If the model is only available in the local Hugging Face cache, keep
@@ -168,6 +169,21 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
 This command is for backend comparison. Do not cite `wal_rome` as a headline
 profile until a tracked artifact and report exist.
 
+Required compatibility baseline for `--edit-backend wal_memit`:
+
+```bash
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 --sample-policy random --seed 42 \
+  --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
+  --edit-backend wal_memit \
+  --method-profile-id single_loc_wal_memit_n50_seed42 \
+  --target-token-mode contextual \
+  --output results/easyedit_official/current/random_50_seed_42_wal_memit.json \
+  --save-failures-only
+```
+
 Backend matrix smoke run:
 
 ```bash
@@ -176,13 +192,15 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --model "$AGIM_MODEL" --device "$AGIM_DEVICE" \
   --easyedit-root "$AGIM_EASYEDIT_ROOT" \
   --nt-sample-size "$AGIM_NT_SAMPLE_SIZE" \
-  --compare-backends dual_row,wal_rome,wal_memit \
-  --output results/easyedit_official/ablations/random_50_seed_42_backend_matrix.json \
+  --compare-backends dual_row,wal_rome,wal_memit,side_slot \
+  --method-profile-id matrix_dual_row_wal_rome_wal_memit_side_slot_random_50_seed42 \
+  --output results/easyedit_official/ablations/backend_matrix_random_50_seed42.json \
   --save-failures-only
 ```
 
 This writes the matrix artifact plus per-backend outputs such as
-`random_50_seed_42_backend_matrix.dual_row.json`.
+`random_50_seed_42_backend_matrix.dual_row.json`, including
+`random_50_seed_42_backend_matrix.wal_memit.json`.
 
 Post-hoc Ripple-style diagnostic over an EasyEdit artifact:
 
@@ -211,7 +229,7 @@ Tracked MQuAKE adapter output run:
 ```bash
 PYTHONPATH=src python -m agim.eval.mquake_output_runner \
   --adapter results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json \
-  --n 50 --device cuda:2 \
+  --device "$AGIM_DEVICE" \
   --output results/external_benchmark_runs/mquake_cf_3k_v2_first50_dual_row_outputs.json
 
 PYTHONPATH=src python -m agim.eval.mquake_diagnostic \

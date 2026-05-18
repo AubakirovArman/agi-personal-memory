@@ -163,12 +163,16 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   for backend comparison. The first tracked n=5 smoke run preserved locality
   but produced `TF rewrite=0.0%`, so it should not be promoted to n=50 headline
   claims before tuning.
-- `WALMemitBatchEditor` exists as an offline consolidation backend for
-  `PatchArtifact` batches. It is not yet a runner backend; use it for patch
-  lifecycle tests, not EasyEdit headline claims.
+- `WALMemitEditor` exists as an official `--edit-backend` path (compatibility
+  wrapper around `MEMITEditor`) so that `wal_memit` now participates in
+  runner-side comparisons. `WALMemitBatchEditor` remains the batch
+  consolidation backend for `PatchArtifact` workflows and is separate from the
+  direct per-fact runner path.
 - `--compare-backends` writes a matrix artifact and per-backend outputs for a
-  comma-separated backend list. `wal_memit` is reported as skipped until direct
-  fact-to-batch evaluation exists.
+  comma-separated backend list. `wal_memit` is now a runnable backend entry in
+  that matrix; results are expected to be interpreted as a compatibility
+  baseline until a dedicated direct batch-to-internal-layer tuning pass is
+  completed.
 - `python -m agim.eval.ripple_diagnostic --input <artifact.json>` writes a
   post-hoc related-fact diagnostic over EasyEdit locality/relation fields. It is
   RippleEdits-style, not an official RippleEdits dataset score.

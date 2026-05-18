@@ -63,6 +63,9 @@ Current n=1000 EasyEdit-compatible scale check for the default locality profile:
 | Contextual generation | 91.0% | 24.8% | 24.1% | n/a |
 | Probability compare | 96.3% | 43.5% | 43.6% | 87.5% |
 
+Current sequential-tuned profile (single run shown, plus random-seed mean in
+CURRENT_STATUS.md and linked verification docs):
+
 Current n=50 sequential tuned profile:
 
 | Metric group | Rewrite | Rephrase | PS@All | Locality |
@@ -106,8 +109,9 @@ Path B claims use the EasyEdit-compatible runner and explicit artifacts.
 
 ```bash
 export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
-export AGIM_DEVICE=cuda:0
-export AGIM_EASYEDIT_ROOT=/path/to/EasyEdit
+export AGIM_DEVICE=cuda
+export AGIM_LOCAL_FILES_ONLY=0
+export AGIM_EASYEDIT_ROOT="<YOUR_EASYEDIT_REPO_PATH>"
 
 PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --n 1000 --sample-policy first \
@@ -214,7 +218,32 @@ does not support the local `gemma4` checkpoint architecture.
 - [Current Status](CURRENT_STATUS.md) | [Benchmarks](BENCHMARK.md) | [Evaluation Protocols](docs/evaluation/README.md)
 - [Path A Memory](docs/PATH_A_MEMORY.md) | [Path B Weight Editing](docs/PATH_B_WEIGHT_EDITING.md) | [Claims And Evidence](docs/CLAIMS_AND_EVIDENCE.md)
 - [EasyEdit Protocol](docs/EASYEDIT_PROTOCOL.md) | [Realistic Roadmap](docs/ROADMAP_REALISTIC.md)
-- [Path B Productization Plan](docs/PATH_B_PRODUCTIZATION_PLAN.md) | [Verify Path B Current](docs/VERIFY_PATH_B_CURRENT.md)
+
+## Path B Progress Snapshot
+
+The current hard-gate status is maintained in:
+- [PATH_B_MAX_EXECUTION_CHECKLIST.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_EXECUTION_CHECKLIST.md)
+- [PATH_B_COMPLETION_AUDIT.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_COMPLETION_AUDIT.md)
+- [PATH_B_MAX_COMPLETION_MATRIX.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_COMPLETION_MATRIX.md)
+- [PATH_B_MAX_STATUS_BOARD.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_STATUS_BOARD.md)
+
+Current hard blockers:
+- `wal_memit` official n=50 baseline missing in official artifacts.
+- Full backend comparison (`dual_row`, `wal_rome`, `wal_memit`, `side_slot`) is partial.
+- External benchmark evidence chain is partial and mixed with local diagnostics.
+- Side-slot retention is incomplete for 10/100 edit horizons and full seed coverage.
+- PatchService/governance proof packet remains in proof-building stage.
+
+These blockers are tracked by:
+- [PATH_B_MAX_ACTION_PLAN.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_ACTION_PLAN.md)
+- [PATH_B_MAX_HARDGATE_QUEUE.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_HARDGATE_QUEUE.md)
+- [PATH_B_MAX_GATE_COMMANDS.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_GATE_COMMANDS.md)
+- [PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md)
+- [PATH_B_MAX_EXECUTION_BLUEPRINT.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_EXECUTION_BLUEPRINT.md)
+- [Path B Productization Plan](docs/PATH_B_PRODUCTIZATION_PLAN.md)
+- [Path B Maximal Checklist](docs/PATH_B_MAX_EXECUTION_CHECKLIST.md)
+- [Maximal Runbook](docs/PATH_B_MAX_EXECUTION_RUNBOOK.md)
+- [Verify Path B Current](docs/VERIFY_PATH_B_CURRENT.md)
 - [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Historical Roadmap](agim_roadmap_v0_to_v10.md)
 - [Developer Diary](DIARY.md)
 - Built on [WAL — Weight-Aligned Language](https://github.com/AubakirovArman/wal2026)

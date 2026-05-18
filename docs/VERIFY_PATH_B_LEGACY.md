@@ -17,14 +17,14 @@ debugging legacy model-editing substrate behavior.
 
 ## Optional Local E2E Pattern
 
-Use placeholders for local weights and devices:
+Use explicit legacy-only placeholders and keep this flow on local machines only:
 
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.rome_editor import ROMEEditor
 
 model_path = "/path/to/local/model"
-device = "cuda:0"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path, dtype="auto", device_map=device, local_files_only=True)
@@ -39,6 +39,9 @@ editor.apply_edit(
 )
 editor.rollback()
 ```
+
+For legacy smoke scripts, environment-variable defaults are intentionally not
+enforced here because this area is not used for current Path B claims.
 
 ## Legacy Artifact Boundary
 

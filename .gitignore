@@ -13,6 +13,12 @@ venv/
 
 # Runtime memory stores and generated benchmark artifacts
 locomo_memory/
+locomo_memory/**/*/wal_recipes/
+locomo_memory/**/*/**/wal_recipes/
+locomo_memory/**/wal_recipes/
+locomo_memory/**/wal_recipes/**
+locomo_memory/memory/wal_recipes/
+locomo_memory/**/memory/wal_recipes/
 knowedit_cache/
 final_test_memory/
 logs/

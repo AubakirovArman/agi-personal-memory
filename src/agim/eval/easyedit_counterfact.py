@@ -23,7 +23,7 @@ class CounterFactEvaluator:
         "agim_practical": 1.2,
     }
 
-    def __init__(self, model, tok, editor, device: str = "cuda:3"):
+    def __init__(self, model, tok, editor, device: str = "cuda"):
         self.model = model
         self.tok = tok
         self.editor = editor

@@ -8,6 +8,12 @@ Detailed docs:
 - `docs/PATH_B_WEIGHT_EDITING.md`
 - `docs/EASYEDIT_PROTOCOL.md`
 - `docs/CLAIMS_AND_EVIDENCE.md`
+- `docs/PATH_B_MAX_EXECUTION_CHECKLIST.md`
+- `docs/PATH_B_MAX_EXECUTION_RUNBOOK.md`
+- `docs/PATH_B_MAX_PROMPT_ARTIFACT_AUDIT.md`
+- `docs/PATH_B_MAX_ACTION_PLAN.md`
+- `docs/PATH_B_MAX_COMPLETION_MATRIX.md`
+- `docs/PATH_B_COMPLETION_AUDIT.md`
 - `docs/ROADMAP_REALISTIC.md`
 - `docs/PATH_B_PRODUCTIZATION_PLAN.md`
 
@@ -166,10 +172,11 @@ located FFN/down_proj backend. A first n=5 smoke run on Llama-3.1-8B preserved
 teacher-forcing locality at 100.0% but had 0.0% teacher-forcing rewrite, so it
 is not ready for an n=50 headline claim without tuning. See
 `results/easyedit_official/ablations/wal_rome_smoke_5_report_2026-05-18.md`.
-`wal_memit` exists as an offline `PatchArtifact` batch-consolidation
-foundation, not yet a measured EasyEdit runner backend. `--compare-backends`
-can produce backend matrix artifacts, with offline backends recorded as
-skipped.
+`WALMemitEditor` is now reachable through the official runner via
+`--edit-backend wal_memit`, so `wal_memit` participates in backend matrix
+artifacts as a compatibility baseline. A dedicated n=50 quality baseline for
+wal_memit is still pending, and `--compare-backends` currently reflects that
+status.
 
 `agim.eval.ripple_diagnostic` can compute a post-hoc RippleEdits-style
 related-fact diagnostic from EasyEdit artifacts. This is local diagnostic
@@ -235,3 +242,20 @@ not support the local `gemma4` checkpoint architecture.
 - AGIM is number one on EasyEdit.
 - AGIM has solved lifelong or sequential knowledge editing.
 - The historical 1000-fact local result proves official EasyEdit performance.
+
+## Current Blockers and Next Actions
+
+| # | Blocker | Why it matters | Evidence target |
+| --- | --- | --- | --- |
+| 1 | `wal_memit` n=50 official baseline | backend quality claims are currently incomplete | `results/easyedit_official/current/` + `docs/PATH_B_MAX_EXECUTION_CHECKLIST.md` |
+| 2 | Full backend quality matrix | no one-to-one per-backend comparison at same protocol | `src/agim/eval/easyedit_backend_matrix.py` + `results/easyedit_official/ablations/*` |
+| 3 | External consequence evidence | local diagnostics do not replace leaderboard-style evaluation | `results/external_benchmark_*` (tracked model-output + score report) |
+| 4 | Sequential locality hardening | sequential still weak, especially at 50 and 100 edits | `results/easyedit_official/sequential/` with side-slot 10/50/100 |
+| 5 | Governance + public contract | required for service-facing Patch API and safe rollout | `src/agim/model/patch_service.py`, `src/agim/model/patch_governance.py` |
+
+Execution priority:
+
+1. Finish blocker 1 and blocker 2 first (`wal_memit` baseline + backend matrix).
+2. Finish blocker 3 with one complete external benchmark chain (`RippleEdits`, `MQuAKE`, and one of `ScEdit/KnowEdit/UniEdit/MLaKE`).
+3. Finish blocker 4 sequential retention in side-slot mode (10/50/100).
+4. Finish blocker 5 governance contract and public API proof packet.
