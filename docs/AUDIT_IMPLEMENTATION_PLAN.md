@@ -58,7 +58,11 @@ Expected output: empty.
    side-slot ablation for sequential editing.
 5. Done: add named presets for `random_50_seed_42`, `random_50_seed_43`, and
    `random_50_seed_44`.
-6. Next: run the three random_50 presets on GPU 2 or 3 and compare artifacts.
+6. Done: run the three random_50 presets on GPU 2/3 and compare artifacts.
+   See `results/easyedit_official/current/random_50_report_2026-05-18.md`.
+7. Next: run sequential random-seed retention checks and then test
+   `--history-slot-mode relation` / `--positive-constraint-mode projected`
+   against the best known sequential baseline.
 
 ## Verification Gate
 

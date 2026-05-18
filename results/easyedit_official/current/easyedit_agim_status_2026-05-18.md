@@ -61,6 +61,39 @@ Code commit used by artifact:
 | Control row | EOS changed rate | 100.0% | Expected global control row edit |
 | Fluency | ngram entropy | 0.0 | Weak / degenerate short generation |
 
+### Random-Seed Single-Edit Validation
+
+Report:
+`results/easyedit_official/current/random_50_report_2026-05-18.md`
+
+Artifacts:
+
+```text
+results/easyedit_official/current/random_50_seed_42.json
+results/easyedit_official/current/random_50_seed_43.json
+results/easyedit_official/current/random_50_seed_44.json
+```
+
+Code commit used by artifacts:
+`8d3f69991fbc6611d30691c00e3ef181d0a5ac05`
+
+These runs use the current default locality-protected single-edit profile and
+random CounterFact samples of 50 facts. They are a stability check, not a
+replacement for the first-50 PS@All baseline above.
+
+| Seed | TF rewrite | TF rephrase | TF PS@All | TF locality | CTX rewrite | Prob PS@All | Prob locality |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 42 | 98.0% | 30.0% | 25.0% | 97.2% | 98.0% | 52.0% | 87.4% |
+| 43 | 86.0% | 18.0% | 22.0% | 96.8% | 86.0% | 38.0% | 88.4% |
+| 44 | 94.0% | 26.0% | 23.0% | 97.4% | 92.0% | 43.0% | 87.6% |
+| Mean | 92.7% | 24.7% | 23.3% | 97.1% | 92.0% | 44.3% | 87.8% |
+
+Readout: exact single-edit rewrite is fairly stable across random samples and
+exact-token locality is strong in this profile. Paraphrase generalization is
+weak: PS@All stays near 22-25%. This confirms the current method tradeoff:
+locality-protected defaults do not yet give strong paraphrase transfer, while
+positive-prompt variants improve PS@All at a locality cost.
+
 ### Positive-Prompt Single-Edit Ablation
 
 Artifact:

@@ -42,16 +42,25 @@ Probability diagnostic
 
 Do not merge those into one headline number.
 
-## Required Future Runs
+## Completed Random-Seed Runs
 
-Before making stronger external claims, run:
+The required random n=50 single-edit presets have been run with the current
+default locality-protected profile:
 
 ```text
-agim-easyedit --n 50 --sample-policy first
-agim-easyedit --preset random_50_seed_42
-agim-easyedit --preset random_50_seed_43
-agim-easyedit --preset random_50_seed_44
+results/easyedit_official/current/random_50_seed_42.json
+results/easyedit_official/current/random_50_seed_43.json
+results/easyedit_official/current/random_50_seed_44.json
 ```
+
+Mean readout over seeds 42/43/44: `TF rewrite=92.7%`,
+`TF PS@All=23.3%`, `TF locality=97.1%`, `Prob locality=87.8%`.
+
+This validates rewrite/locality stability for the default profile, while also
+showing weak paraphrase transfer. The detailed report is
+`results/easyedit_official/current/random_50_report_2026-05-18.md`.
+
+## Required Future Runs
 
 For sequential runs, add retention reporting:
 

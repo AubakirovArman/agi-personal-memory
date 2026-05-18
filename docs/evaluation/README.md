@@ -34,6 +34,18 @@ Positive-prompt ablation improves PS@All at a locality cost:
 | Teacher-forcing | 100.0% | 96.0% | 95.0% | 45.2% |
 | Probability compare | 100.0% | 96.0% | 98.0% | 25.2% |
 
+Random-seed n=50 validation for the current default profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing mean over seeds 42/43/44 | 92.7% | 24.7% | 23.3% | 97.1% |
+| Contextual generation mean over seeds 42/43/44 | 92.0% | n/a | 22.7% | n/a |
+| Probability compare mean over seeds 42/43/44 | 97.3% | n/a | 44.3% | 87.8% |
+
+Readout: the current default profile keeps locality high on random samples, but
+paraphrase transfer is weak. The detailed report is
+`results/easyedit_official/current/random_50_report_2026-05-18.md`.
+
 Current sequential n=50 tuned profile (`clamp_lm=0.15`,
 `neg_projection_strength=0.50`, no EOS/anti rows):
 

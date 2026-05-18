@@ -7,9 +7,16 @@ Primary files:
 
 - `easyedit_agim_status_2026-05-18.md`: human-readable status and caveats.
 - `easyedit_psall_report_2026-05-18.md`: fresh PS@All comparison report.
+- `random_50_report_2026-05-18.md`: random-seed n=50 validation report.
 - `relation_failure_notes_2026-05-18.md`: relation-level failure triage.
 - `easyedit_official_50_first42_psall_baseline.json`: current n=50
   single-edit baseline artifact.
+- `random_50_seed_{42,43,44}.json`: current random-seed n=50 single-edit
+  artifacts.
+- `random_50_seed_{42,43,44}.dry_run.json`: selected case/relation inspection
+  artifacts for the same presets.
+- `random_50_seed_{42,43,44}.failures.json`: compact failed-case triage for
+  the same presets.
 - `easyedit_official_50_contextual_neg4_ctxgen_nt.json`: older n=50
   single-edit artifact kept for audit.
 

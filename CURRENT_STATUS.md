@@ -41,6 +41,18 @@ Positive-prompt ablation improves single-edit PS@All but hurts locality:
 | Teacher-forcing | 100.0% | 96.0% | 95.0% | 45.2% |
 | Probability compare | 100.0% | 96.0% | 98.0% | 25.2% |
 
+Random-seed n=50 validation of the current default single-edit profile:
+
+| Metric group | Rewrite | Rephrase | PS@All | Locality |
+| --- | ---: | ---: | ---: | ---: |
+| Teacher-forcing mean over seeds 42/43/44 | 92.7% | 24.7% | 23.3% | 97.1% |
+| Contextual generation mean over seeds 42/43/44 | 92.0% | n/a | 22.7% | n/a |
+| Probability compare mean over seeds 42/43/44 | 97.3% | n/a | 44.3% | 87.8% |
+
+Readout: the current default is stable for rewrite and locality, but weak for
+paraphrase transfer. See
+`results/easyedit_official/current/random_50_report_2026-05-18.md`.
+
 Best balanced n=50 sequential run:
 
 | Metric group | Rewrite | Rephrase | PS@All | Locality |
@@ -69,7 +81,7 @@ methods.
 Current full local suite:
 
 ```text
-90 passed, 13 skipped
+96 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

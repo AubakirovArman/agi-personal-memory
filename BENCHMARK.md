@@ -53,6 +53,21 @@ Positive-prompt ablation:
 Readout: multi-positive keys are a strong paraphrase/PS@All ablation, but they
 trade off locality and therefore are not the default headline profile.
 
+Random-seed validation of the current default single-edit profile:
+`results/easyedit_official/current/random_50_report_2026-05-18.md`
+
+| Seed | TF rewrite | TF rephrase | TF PS@All | TF locality | Prob PS@All | Prob locality |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 42 | 98.0% | 30.0% | 25.0% | 97.2% | 52.0% | 87.4% |
+| 43 | 86.0% | 18.0% | 22.0% | 96.8% | 38.0% | 88.4% |
+| 44 | 94.0% | 26.0% | 23.0% | 97.4% | 43.0% | 87.6% |
+| Mean | 92.7% | 24.7% | 23.3% | 97.1% | 44.3% | 87.8% |
+
+Readout: the default locality-protected profile is stable for exact rewrite and
+teacher-forcing locality across random samples, but paraphrase transfer remains
+weak. Do not mix this operating point with the first-50 PS@All baseline without
+stating the hyperparameter/profile difference.
+
 ### Sequential Editing, Tuned Projection
 
 Best balanced artifact:
