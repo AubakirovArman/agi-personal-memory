@@ -132,8 +132,10 @@ short text or JSON updates are converted into structured EasyEdit-style
 `requested_rewrite` proposals and draft `PatchArtifact` objects that can enter
 `PatchService` proposal/simulation flows. `PatchService.materialize_patch`
 can now apply an editor, capture row deltas, roll the live model back, and keep
-the patch in `materialized` status for canary/approval gates. This is still not
-a scored raw-text benchmark.
+the patch in `materialized` status for canary/approval gates. The module also
+provides a scored-output layer for documented model-output payloads. This is
+still not an official AKEW benchmark until backed by a tracked external
+raw-text run.
 
 `agim.eval.product_diagnostic` adds a KnowEdit-inspired product diagnostic over
 EasyEdit artifacts. It combines rewrite, PS@All, locality, and portability when
@@ -206,7 +208,8 @@ rewrite and 33.9% locality after 50 edits.
    dataset adapter.
 6. Replace the post-hoc MQuAKE-style diagnostic with an official MQuAKE dataset
    adapter and tracked artifact.
-7. Connect raw-text proposals to patch simulation, canaries, and approval.
+7. Replace raw-text proposal/scoring scaffolding with a tracked external
+   AKEW-style model-output run.
 8. Replace product diagnostics with a tracked external KnowEdit, UniEdit,
    ScEdit, or MLaKE run.
 9. Expose `PatchService` through a stable HTTP/SDK API with persistence.

@@ -179,6 +179,11 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   Berlin." --output <proposal.json>` converts raw update text into
   EasyEdit-style `requested_rewrite` proposals. This is AKEW-style parsing, not
   a benchmark score.
+- `python -m agim.eval.raw_text_edit_pipeline --score-adapter <proposal.json>
+  --score-output <outputs.json>` scores documented raw-text model outputs by
+  rewrite success, service readiness, canaries, and rollback evidence. This is
+  still not an official AKEW dataset score unless the outputs came from a
+  tracked external run.
 - `python -m agim.eval.product_diagnostic --input <artifact.json>` writes a
   KnowEdit-inspired product composite over rewrite, PS@All, locality, and
   portability fields. This is an artifact diagnostic, not an external

@@ -11,6 +11,12 @@ from typing import Any
 
 from agim.model.patch_artifact import PatchArtifact
 
+from .raw_text_scoring import (
+    score_raw_text_case,
+    scored_raw_text_payload,
+    summarize_scored_raw_text_rows,
+)
+
 
 @dataclass
 class RawTextEditProposal:
@@ -199,12 +205,25 @@ def _patch_id(base_model_digest: str, proposal: RawTextEditProposal) -> str:
 
 def main() -> int:
     args = _build_parser().parse_args()
-    texts = [args.text] if args.text else Path(args.input).read_text().splitlines()
-    payload = proposals_payload([text for text in texts if text.strip()])
-    output = Path(args.output)
+    if args.score_adapter:
+        if not args.score_output:
+            raise SystemExit("--score-output is required with --score-adapter")
+        source = Path(args.score_adapter)
+        adapter = json.loads(source.read_text())
+        outputs = json.loads(Path(args.score_output).read_text())
+        payload = scored_raw_text_payload(adapter, outputs, str(source))
+        output = Path(args.output) if args.output else source.with_name(
+            f"{source.stem}.raw_text_scored{source.suffix or '.json'}"
+        )
+    else:
+        if not args.output:
+            raise SystemExit("--output is required unless --score-adapter is used")
+        texts = [args.text] if args.text else Path(args.input).read_text().splitlines()
+        payload = proposals_payload([text for text in texts if text.strip()])
+        output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, indent=2, ensure_ascii=False))
-    print(f"Raw-text edit proposals saved {output}")
+    print(f"Raw-text edit artifact saved {output}")
     return 0
 
 
@@ -213,7 +232,9 @@ def _build_parser() -> argparse.ArgumentParser:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--text")
     source.add_argument("--input")
-    parser.add_argument("--output", required=True)
+    source.add_argument("--score-adapter")
+    parser.add_argument("--score-output")
+    parser.add_argument("--output")
     return parser
 
 

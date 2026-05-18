@@ -217,6 +217,18 @@ PYTHONPATH=src python -m agim.eval.raw_text_edit_pipeline \
 This only creates an edit proposal. It does not apply a patch or prove raw-text
 editing quality by itself.
 
+Raw-text scored-output layer:
+
+```bash
+PYTHONPATH=src python -m agim.eval.raw_text_edit_pipeline \
+  --score-adapter results/easyedit_official/ablations/raw_text_proposal_france_capital.json \
+  --score-output results/easyedit_official/ablations/raw_text_model_outputs.json \
+  --output results/easyedit_official/ablations/raw_text_proposal_france_capital.scored.json
+```
+
+This scores a documented output payload. It is not an official AKEW result
+unless the output payload came from a tracked external raw-text benchmark run.
+
 Product-facing artifact diagnostic:
 
 ```bash

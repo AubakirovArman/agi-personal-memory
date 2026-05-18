@@ -38,7 +38,7 @@ true:
 | PatchService lifecycle | `src/agim/model/patch_service.py`, `tests/test_patch_service.py` | Covered in-process |
 | Patch governance | `src/agim/model/patch_governance.py`, `tests/test_patch_governance.py` | Covered foundation |
 | External EasyEdit adapter | `src/agim/integrations/easyedit_agimwal.py`, `docs/EASYEDIT_ADAPTER.md`, `tests/test_easyedit_adapter.py` | Covered locally, not upstreamed |
-| raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `src/agim/model/patch_service.py`, `tests/test_raw_text_edit_pipeline.py`, `tests/test_patch_service.py` | Covered as proposal, PatchService draft bridge, and service materialization hook |
+| raw-text proposal path | `src/agim/eval/raw_text_edit_pipeline.py`, `src/agim/eval/raw_text_scoring.py`, `src/agim/model/patch_service.py`, `tests/test_raw_text_edit_pipeline.py`, `tests/test_patch_service.py` | Covered as proposal, PatchService draft bridge, service materialization hook, and scored-output layer |
 | Ripple-style diagnostic | `src/agim/eval/ripple_diagnostic.py`, `tests/test_ripple_diagnostic.py` | Post-hoc diagnostic, dataset adapter, and scored-output layer; no model-output run yet |
 | MQuAKE-style diagnostic | `src/agim/eval/mquake_diagnostic.py`, `tests/test_mquake_diagnostic.py`, `results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json` | Post-hoc diagnostic, first-50 dataset adapter, and scored-output layer; no model-output run yet |
 | product diagnostic | `src/agim/eval/product_diagnostic.py`, `tests/test_product_diagnostic.py` | Local diagnostic, dataset adapter, and scored-output layer; no model-output run yet |
@@ -51,7 +51,7 @@ true:
 | 34 | Full backend comparison artifact | n=50 `dual_row`/`wal_rome` matrix exists, but no single matrix covers sequential `side_slot` and offline `wal_memit` |
 | 35 | Official RippleEdits benchmark | Dataset adapter and scorer exist, but there is no tracked model-output RippleEdits run |
 | 36 | Official MQuAKE benchmark | First-50 dataset adapter and scorer exist, but there is no tracked model-output MQuAKE run |
-| 37 | Full AKEW-style raw-text editing | Parser, PatchService drafts, and materialization hook exist, but there is no scored raw-text benchmark |
+| 37 | Full AKEW-style raw-text editing | Parser, PatchService drafts, materialization hook, and scorer exist, but there is no tracked model-output AKEW-style raw-text run |
 | 38 | External product benchmark | Dataset adapter and scorer exist, but there is no tracked model-output KnowEdit/UniEdit/ScEdit/MLaKE run |
 
 ## Current Claim Boundary
@@ -73,7 +73,7 @@ official leaderboard, or has production-ready external benchmark coverage.
 
 ## Latest Verification
 
-- `python -m pytest`: `176 passed, 13 skipped, 11 warnings`
+- `python -m pytest`: `179 passed, 13 skipped, 11 warnings`
 - `git diff --check`: clean
 - Python line-count guard: clean, no `src` or `tests` Python file exceeds 300
   lines.
