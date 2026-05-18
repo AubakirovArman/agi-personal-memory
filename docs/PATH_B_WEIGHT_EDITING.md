@@ -127,6 +127,11 @@ EasyEdit artifacts. It combines rewrite, PS@All, locality, and portability when
 available into a product-facing composite. This is not an external
 KnowEdit/UniEdit/ScEdit leaderboard result.
 
+`PatchService` adds the first in-process PatchService API for Path B patch
+lifecycle. It supports `propose_patch`, `simulate_patch`, `run_canaries`,
+`approve_patch`, `apply_patch`, `rollback_patch`, `inspect_patch`, and
+`diff_patch` over `PatchArtifact` objects. This is not yet an HTTP service.
+
 The persistent default no longer edits the global EOS row (`clamp_eos=0.0`).
 The random-200 no-EOS seed check matched the prior default quality while
 reporting `EOS_changed=0%`.
@@ -178,6 +183,7 @@ rewrite and 33.9% locality after 50 edits.
 7. Connect raw-text proposals to patch simulation, canaries, and approval.
 8. Replace product diagnostics with a tracked external KnowEdit, UniEdit,
    ScEdit, or MLaKE run.
+9. Expose `PatchService` through a stable HTTP/SDK API with persistence.
 
 ## Safe Claim
 

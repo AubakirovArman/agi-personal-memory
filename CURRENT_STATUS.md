@@ -184,6 +184,9 @@ validated raw-text editing benchmark.
 composite from EasyEdit artifacts. This is an internal artifact diagnostic, not
 an external leaderboard benchmark.
 
+`agim.model.patch_service.PatchService` provides an in-process patch lifecycle
+API. It is the service contract foundation, not yet a persistent HTTP service.
+
 ## Historical 1000-Fact Local Result
 
 `results/local_protocol/official_eval_1000.json` reports:
@@ -201,7 +204,7 @@ methods.
 Current full local suite:
 
 ```text
-146 passed, 13 skipped
+149 passed, 13 skipped
 ```
 
 The skipped tests are Gemma E2E tests when the installed Transformers build does

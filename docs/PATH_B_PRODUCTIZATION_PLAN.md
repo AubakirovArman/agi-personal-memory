@@ -63,7 +63,7 @@ consolidation.
 | 36 | Add MQuAKE benchmark | In progress | `agim.eval.mquake_diagnostic` post-hoc portability diagnostic |
 | 37 | Add AKEW-style raw-text edit pipeline | In progress | `agim.eval.raw_text_edit_pipeline` proposal parser |
 | 38 | Add product-facing benchmark | In progress | `agim.eval.product_diagnostic` KnowEdit-inspired artifact score |
-| 39 | Build `PatchService API` | Queued | propose/simulate/canary/approve/apply/rollback |
+| 39 | Build `PatchService API` | In progress | `PatchService` in-process lifecycle API |
 | 40 | Add governance layer and external adapter package | Queued | signatures, ACL, audit trail, EasyEdit adapter |
 
 ## Beta Gate

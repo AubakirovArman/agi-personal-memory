@@ -182,6 +182,9 @@ Mean readout: after 10 edits `TF rewrite=100.0%` and `TF locality=83.0%`; after
   KnowEdit-inspired product composite over rewrite, PS@All, locality, and
   portability fields. This is an artifact diagnostic, not an external
   leaderboard result.
+- `agim.model.patch_service.PatchService` provides an in-process lifecycle API
+  for proposing, simulating, canarying, approving, applying, rolling back,
+  inspecting, and diffing `PatchArtifact` objects.
 - `--history-slot-mode relation` is a relation-sharded sequential history
   ablation. It keeps edit-key history slots by CounterFact `relation_id`.
 - `--state-namespace` isolates mutable editor state: history keys and

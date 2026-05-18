@@ -3,7 +3,7 @@
 **Accumulative verified memory substrate for language models.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-146%20passed%2C%2013%20skipped-green)]()
+[![Tests](https://img.shields.io/badge/tests-149%20passed%2C%2013%20skipped-green)]()
 [![Status](https://img.shields.io/badge/status-research%20prototype-blue)]()
 [![Version](https://img.shields.io/badge/version-0.2.0a1-blue)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
@@ -161,7 +161,7 @@ src/agim/
 ├── memory/        ← WAL recipes, FAISS+BM25, Knowledge Graph, SQLite, Distributed, Multimodal
 ├── verify/        ← 12 constitutional gates, contracts, regression, adversarial testing
 ├── learn/         ← SelfLearner, ReflectionEngine, Curriculum, Multi-Agent, Evolutionary
-├── model/         ← WALDualLayerEditor, WALRomeEditor, WALMemitBatchEditor, SideSlotMemory
+├── model/         ← WAL editors, SideSlotMemory, PatchService, MEMIT/ROME foundations
 ├── governance/    ← Provenance, Budget, RiskLedger, Constitutional, Watermarking
 ├── cli/           ← IntentRouter, LLMRouter, Extractor, API, WebUI, MCP, A2A, GraphQL
 ├── wal/           ← WAL core: encoder, decoder, ISA, v1, v2, backends, Triton kernels
@@ -203,7 +203,7 @@ src/agim/
 | v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
 | v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | Prototype modules, not production claim |
 
-Current full local suite: **146 passed, 13 skipped** on 2026-05-18.
+Current full local suite: **149 passed, 13 skipped** on 2026-05-18.
 The skipped tests are Gemma E2E checks when the installed Transformers build
 does not support the local `gemma4` checkpoint architecture.
 
