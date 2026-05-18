@@ -10,3 +10,13 @@ venv/
 .agim/
 .DS_Store
 .agim_plugins/
+
+# Runtime memory stores and generated benchmark artifacts
+locomo_memory/
+knowedit_cache/
+final_test_memory/
+logs/
+results/easyedit_official_5_*.json
+results/easyedit_official_30_*.json
+counterfact_*_results*.json
+locomo_*_results.json
