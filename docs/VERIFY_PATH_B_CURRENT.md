@@ -110,8 +110,18 @@ bash scripts/run_path_b_psall_improvement_sweep.sh \
   --step objective-balance
 ```
 
-The sweep writes artifacts under `results/easyedit_official/ablations/` with
-plan-prefixed names.
+The sweep writes artifacts under `results/easyedit_official/ablations/` with fixed
+names such as `baseline_random50_seed42.json`,
+`ablation_selective_anti_repetition_seed42.json`,
+`ablation_kpos_positive_w025_seed42.json`,
+`ablation_kpos_kneg_seed42.json`,
+`ablation_objective_balance_seed42.json`,
+`ablation_decode_rerank_seed42.json`,
+`relation_profile_map_seed42.json`,
+`ablation_relation_aware_seed42.json`,
+`ablation_conflict_budget_seed42.json`,
+`sequential_n50_sanity.json`,
+and `final_random1000_seed42.json`.
 
 Token-mode ablation matrix:
 
