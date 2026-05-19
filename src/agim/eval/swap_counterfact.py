@@ -1,9 +1,17 @@
 """Swap locality stress test: A→B and B→A, check no cross-contamination."""
-import json, os, time, torch, re
+import argparse
+import json
+import os
+import time
+
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
 from agim.model.wal_dual_editor import WALDualLayerEditor
 
+
 LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
+
 
 # Hand-crafted swap pairs: A→B and B→A
 SWAP_TESTS = [
@@ -46,20 +54,33 @@ SWAP_TESTS = [
 
 
 def main():
-    import argparse
     p = argparse.ArgumentParser()
     p.add_argument("--output", default="results/local_protocol/swap_results.json")
     p.add_argument("--clamp_lm", type=float, default=0.20)
+    p.add_argument("--model", default=LLAMA, help="Model name or local path")
+    p.add_argument(
+        "--device",
+        default=os.environ.get("AGIM_DEVICE", "cuda:0"),
+        help="CUDA device id (for example, cuda:0 or cuda:1); set AGIM_DEVICE env var",
+    )
+    p.add_argument(
+        "--local-files-only",
+        action=argparse.BooleanOptionalAction,
+        default=os.environ.get("AGIM_LOCAL_FILES_ONLY", "0").lower() not in {"0", "false", "no", "off"},
+        help="Load model weights from local cache only when explicitly requested",
+    )
     args = p.parse_args()
 
-    print(f"Loading {LLAMA}...")
-    tok = AutoTokenizer.from_pretrained(LLAMA, local_files_only=True)
-    if tok.pad_token is None: tok.pad_token = tok.eos_token
+    print(f"Loading {args.model}...")
+    tok = AutoTokenizer.from_pretrained(args.model, local_files_only=args.local_files_only)
+    if tok.pad_token is None:
+        tok.pad_token = tok.eos_token
     model = AutoModelForCausalLM.from_pretrained(
-        LLAMA, torch_dtype=torch.bfloat16, device_map="cuda:3", local_files_only=True)
+        args.model, torch_dtype=torch.bfloat16, device_map=args.device, local_files_only=args.local_files_only
+    )
     model.eval()
 
-    editor = WALDualLayerEditor(model, tok, device="cuda:3")
+    editor = WALDualLayerEditor(model, tok, device=args.device)
     editor.build_vocab()
 
     def gen(p, t=10):
@@ -72,23 +93,17 @@ def main():
     def check(text, expected):
         return expected.lower() in text.lower()
 
-    print(f"\nSwap Benchmark ({len(SWAP_TESTS)} tests):\n")
+        print(f"\nSwap Benchmark ({len(SWAP_TESTS)} tests):\n")
     results = []
     for test in SWAP_TESTS:
         print(f"  {test['name']}:")
         A, B = test["A"], test["B"]
-
-        # Baseline
-        a_before = gen(A["prompt"])
-        b_before = gen(B["prompt"])
-        n_before = [gen(n) for n in test["neighbors"]]
 
         # Edit A→B (new)
         bak_a = editor.apply_edit(A["subj"], A["new"], A["rel"], prompt=A["prompt"], clamp_lm=args.clamp_lm)
         a_es = check(gen(A["prompt"]), A["new"])
         # Check B side (should NOT have A's new yet)
         b_cross_a = check(gen(B["prompt"]), A["new"])
-        n_cross_a = [check(gen(n), A["new"]) for n in test["neighbors"]]
 
         # Edit B→A (new) ON TOP
         bak_b = editor.apply_edit(B["subj"], B["new"], B["rel"], prompt=B["prompt"], clamp_lm=args.clamp_lm)
@@ -106,7 +121,7 @@ def main():
              "neighbor_cross": any(n_cross), "n_cross_count": sum(n_cross)}
         results.append(r)
         print(f"    ES_A={a_es} ES_B={b_es} cross={b_cross_a} A_still={a_still} n_cross={sum(n_cross)}")
-        sys.stdout.flush()
+        time.sleep(0.1)
 
     es_ok = sum(r["ES_A"] and r["ES_B"] for r in results) / len(results)
     cross_free = sum(not r["cross_B_before_B_edit"] for r in results) / len(results)
@@ -120,6 +135,6 @@ def main():
                    "cross_free": round(cross_free, 4), "results": results}, f, indent=2)
     print(f"Saved {args.output}")
 
+
 if __name__ == "__main__":
-    import sys
     raise SystemExit(main())

@@ -31,7 +31,9 @@ def run_sequential_side_slot(
 ) -> tuple[list[dict[str, Any]], list[float], dict[str, Any]]:
     pres = [compute_pre(args, model, tok, hparams, rec, compute_edit_quality, device_id)
             for rec in records]
-    side_memory = SideSlotMemory()
+    side_memory = SideSlotMemory(
+        relation_slot_buckets=int(getattr(args, "relation_slot_buckets", 0) or 0),
+    )
     edit_times: list[float] = []
     edit_statuses: list[dict[str, Any]] = []
     retention: dict[str, Any] = {}
@@ -39,11 +41,19 @@ def run_sequential_side_slot(
     for edit_idx, (fact, record) in enumerate(zip(facts, records), start=1):
         backup, edit_time = apply_one(editor, args, fact, record)
         budget = evaluate_edit_budget(editor, args, fact, backup)
-        status = _side_slot_status(budget_status(budget), fact)
+        relation_slot_id = side_memory.relation_slot_for(
+            str(fact.get("requested_rewrite", {}).get("relation_id", "")),
+        )
+        status = _side_slot_status(
+            budget_status(budget),
+            fact,
+            relation_slot_id,
+        )
         if not (budget and budget["no_commit"]):
             artifact = patch_artifact_from_backup(editor, args, fact, backup)
-            side_memory.add_patch(artifact)
+            side_memory.add_patch(artifact, relation_slot_id=relation_slot_id)
             status["side_slot_id"] = artifact.patch_id
+            status["relation_slot_id"] = relation_slot_id
         editor.rollback(backup)
         edit_times.append(edit_time)
         edit_statuses.append(status)
@@ -57,6 +67,7 @@ def run_sequential_side_slot(
         edit_statuses, side_memory, compute_edit_quality, test_prediction_acc,
         device_id, post_bundle, base_row)
     retention["side_slot_summary"] = side_memory.summary()
+    retention["relation_slot_allocator"] = side_memory.allocator_summary()
     retention["relation_slot_summary"] = side_memory.relation_slot_summary()
     return metrics, edit_times, retention
 
@@ -74,6 +85,7 @@ def _checkpoint(args, model, tok, hparams, facts, records, pres, edit_times,
         "summary": summarize_official(rows),
         "case_ids": [fact.get("case_id") for fact in facts[:edit_idx]],
         "side_slot_summary": side_memory.summary(),
+        "relation_slot_allocator": side_memory.allocator_summary(),
         "relation_slot_summary": side_memory.relation_slot_summary(),
     }
 
@@ -88,7 +100,9 @@ def _evaluate(args, model, tok, hparams, facts, records, pres, edit_times,
         with side_memory.overlay_for(
             model,
             subject=str(rewrite.get("subject", "")),
-            relation_slot_id=str(rewrite.get("relation_id", "")),
+            relation_slot_id=side_memory.relation_slot_for(
+                str(rewrite.get("relation_id", "")),
+            ),
         ):
             row.update(post_bundle(
                 args, model, tok, hparams, compute_edit_quality,
@@ -98,10 +112,12 @@ def _evaluate(args, model, tok, hparams, facts, records, pres, edit_times,
     return rows
 
 
-def _side_slot_status(status: dict[str, Any], fact: dict[str, Any]) -> dict[str, Any]:
+def _side_slot_status(status: dict[str, Any], fact: dict[str, Any],
+                      relation_slot_id: str) -> dict[str, Any]:
     status = dict(status)
     status.setdefault("edit_status", "side_slot")
     status["edit_backend"] = "side_slot"
-    status["relation_slot_id"] = str(
+    status["relation_slot_id"] = relation_slot_id or str(
         fact.get("requested_rewrite", {}).get("relation_id", ""))
     return status
+

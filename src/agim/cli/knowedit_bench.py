@@ -8,8 +8,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.wal_editor import WalLmHeadEditor
 from agim.model.rome_causal import ROMECausalEditor
 
-LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
-DEVICE = "cuda:3"
+LLAMA = os.environ.get("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+DEVICE = os.environ.get("AGIM_DEVICE", "cuda")
 CACHE_DIR = "knowedit_cache"
 
 

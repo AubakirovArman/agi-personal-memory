@@ -107,8 +107,8 @@ class WALModel(WALModelOverlayMixin, WALModelSafetyMixin, WALModelPersistenceMix
             # Replace with WAL layers and load state
             replace_linear_with_wal(model, K=K, C=C, cached=True)
             
-            # TODO: deserialize wal_blob into layer states
-            # For now, we re-encode (simplified)
+            # TODO(backlog): deserialize wal_blob into WAL layer states
+            # This runtime path is intentionally deferred to the backend serialization backlog.
             
             return cls(model, K=K, C=C, device=device)
         else:

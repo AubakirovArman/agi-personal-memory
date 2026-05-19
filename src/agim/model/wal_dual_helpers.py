@@ -74,6 +74,8 @@ def combine_positive_keys(
     projection_strength: float = 0.0,
     projection_mode: str = "sequential",
     constraint_mode: str = "projected",
+    pos_k: int = 4,
+    neg_k: int = 4,
 ) -> torch.Tensor:
     primary = primary / (primary.norm() + 1e-8)
     if weight <= 0 or not positives:
@@ -96,7 +98,45 @@ def combine_positive_keys(
     combined = combined / (combined.norm() + 1e-8)
     if protected_basis and constraint_mode == "ridge":
         return ridge_constrained_key(combined, protected_basis, projection_strength)
+    if protected_basis and constraint_mode == "constrained":
+        return constrained_projection_key(
+            combined, protected_basis, pos_k, neg_k, projection_strength
+        )
     return combined
+
+
+def constrained_projection_key(
+    key: torch.Tensor,
+    basis: list[torch.Tensor],
+    pos_k: int,
+    neg_k: int,
+    strength: float,
+) -> torch.Tensor:
+    if strength <= 0 or (pos_k <= 0 and neg_k <= 0) or not basis:
+        return key / (key.norm() + 1e-8)
+    rows = []
+    for base in basis:
+        b = base.to(key.device).float()
+        norm = b.norm()
+        if norm > 1e-8:
+            rows.append(b / norm)
+    if not rows:
+        return key / (key.norm() + 1e-8)
+    matrix = torch.stack(rows)
+    scores = matrix @ key
+    selected: list[int] = []
+    n = scores.shape[0]
+
+    if pos_k > 0:
+        top_pos = min(pos_k, n)
+        selected.extend(torch.topk(torch.relu(scores), top_pos).indices.tolist())
+    if neg_k > 0:
+        top_neg = min(neg_k, n)
+        selected.extend(torch.topk(torch.relu(-scores), top_neg).indices.tolist())
+    if not selected:
+        return key / (key.norm() + 1e-8)
+    selected_rows = matrix[sorted(set(selected))]
+    return ridge_constrained_key(key, [r.cpu() for r in selected_rows], strength)
 
 
 def ridge_constrained_key(key: torch.Tensor, basis: list[torch.Tensor],
@@ -175,6 +215,33 @@ def snapshot_rows(weight: torch.Tensor, exclude: set[int],
         if len(snapshots) >= target_count:
             break
     return snapshots
+
+
+def snapshot_rows_metadata(weight: torch.Tensor, exclude: set[int],
+                          sample_size: int = 500) -> dict[str, int]:
+    """Return deterministic metadata used by snapshot_rows for reproducibility evidence."""
+    vocab_size = weight.shape[0]
+    valid_exclude = {rid for rid in exclude if 0 <= rid < vocab_size}
+    target_count = max(0, min(sample_size, vocab_size - len(valid_exclude)))
+    if target_count <= 0:
+        return {
+            "vocab_size": int(vocab_size),
+            "requested_sample_size": int(sample_size),
+            "actual_sample_size": 0,
+            "excluded_count": int(len(valid_exclude)),
+            "seed": 0,
+            "step": 1,
+        }
+    seed = _stable_row_seed(vocab_size, sample_size, valid_exclude)
+    return {
+        "vocab_size": int(vocab_size),
+        "requested_sample_size": int(sample_size),
+        "actual_sample_size": int(target_count),
+        "excluded_count": int(len(valid_exclude)),
+        "seed": int(seed),
+        "step": int(_coprime_step(vocab_size)),
+        "start": int(seed % vocab_size),
+    }
 
 
 def _stable_row_seed(vocab_size: int, sample_size: int, exclude: set[int]) -> int:

@@ -18,6 +18,57 @@ The older `results/local_protocol/official_eval_*.json` artifacts are legacy
 local diagnostics. They are preserved for audit, but they are not official
 EasyEdit results.
 
+External benchmark status (for product-readiness):
+
+- `RippleEdits`, `MQuAKE`, raw-text, and product-like (ScEdit/KnowEdit/UniEdit/MLaKE)
+  chains are not yet closed with tracked external model-output + score artifacts.
+
+Repro commands (current public-compatible profile):
+
+```bash
+export AGIM_MODEL="meta-llama/Llama-3.1-8B-Instruct"
+export AGIM_DEVICE="cuda:2"
+export AGIM_EASYEDIT_ROOT="<YOUR_EASYEDIT_REPO_PATH>"
+
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 \
+  --model "$AGIM_MODEL" \
+  --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --sample-policy first \
+  --seed 42 \
+  --target-token-mode contextual \
+  --output results/easyedit_official/current/random_50_seed_42.json \
+  --save-failures-only
+
+# dry-run summary only (dataset + profile sanity check)
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 \
+  --model "$AGIM_MODEL" \
+  --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --sample-policy first \
+  --seed 42 \
+  --target-token-mode contextual \
+  --dry-run-summary
+
+# side_slot sequential retention check (example: 50 edits)
+PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
+  --n 50 \
+  --model "$AGIM_MODEL" \
+  --device "$AGIM_DEVICE" \
+  --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+  --sample-policy random \
+  --seed 42 \
+  --target-token-mode contextual \
+  --edit-backend side_slot \
+  --sequential-edit \
+  --retention-steps 50 \
+  --use-neg-prompts \
+  --output results/easyedit_official/sequential/side_slot_random_50_seed_42_seq.json \
+  --save-failures-only
+```
+
 ## Real EasyEdit-Compatible Results
 
 Model: `meta-llama/Llama-3.1-8B-Instruct`

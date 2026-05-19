@@ -43,6 +43,9 @@ class AGIMWALHyperParams:
     positive_prompt_limit: int = 4
     positive_key_weight: float = 1.0
     positive_constraint_mode: str = "none"
+    positive_constraint_k_pos: int = 4
+    positive_constraint_k_neg: int = 4
+    clamp_anti_scope: str = "both"
     neg_projection_strength: float = 0.3
     history_projection_strength: float = 0.0
     embed_history_projection_strength: float = 0.0
@@ -159,7 +162,10 @@ def apply_agimwal_request(
         max_positive_prompts=hparams.positive_prompt_limit,
         positive_key_weight=hparams.positive_key_weight,
         positive_constraint_mode=hparams.positive_constraint_mode,
+        positive_constraint_k_pos=hparams.positive_constraint_k_pos,
+        positive_constraint_k_neg=hparams.positive_constraint_k_neg,
         neg_projection_strength=hparams.neg_projection_strength,
+        clamp_anti_scope=hparams.clamp_anti_scope,
         history_projection_strength=hparams.history_projection_strength,
         embed_history_projection_strength=hparams.embed_history_projection_strength,
         projection_mode=hparams.projection_mode,

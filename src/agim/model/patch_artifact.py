@@ -105,6 +105,7 @@ class NormBudgetPolicy:
     max_patch_delta_norm: float | None = None
     max_row_delta_norm: float | None = None
     max_mean_delta_norm: float | None = None
+    max_shared_row_delta_norm: float | None = None
     max_rows: int | None = None
 
     def to_dict(self) -> dict[str, float | int | None]:
@@ -112,6 +113,7 @@ class NormBudgetPolicy:
             "max_patch_delta_norm": self.max_patch_delta_norm,
             "max_row_delta_norm": self.max_row_delta_norm,
             "max_mean_delta_norm": self.max_mean_delta_norm,
+            "max_shared_row_delta_norm": self.max_shared_row_delta_norm,
             "max_rows": self.max_rows,
         }
 
@@ -153,8 +155,11 @@ def conflict_summary(left: PatchArtifact, right: PatchArtifact) -> dict[str, Any
     target_tokens = _metadata_overlap(left, right, "target_token_ids")
     control_rows = _metadata_overlap(left, right, "control_row_ids")
     protected = _metadata_overlap(left, right, "protected_basis_ids")
+    relation_shard = _metadata_scalar_match(left, right, "relation_shard")
+    relation_slot_id = _metadata_scalar_match(left, right, "relation_slot_id")
     risk_flags = _conflict_risk_flags(
         overlap, subject_tokens, target_tokens, control_rows, protected,
+        relation_shard, relation_slot_id,
         left, right,
     )
     return {
@@ -162,6 +167,10 @@ def conflict_summary(left: PatchArtifact, right: PatchArtifact) -> dict[str, Any
         "overlapping_rows": [
             {"layer": layer, "row_id": row_id} for layer, row_id in overlap
         ],
+        "same_relation_shard": bool(relation_shard),
+        "relation_shard": relation_shard,
+        "same_relation_slot": bool(relation_slot_id),
+        "relation_slot_id": relation_slot_id,
         "same_relation": bool(left.relation_id and left.relation_id == right.relation_id),
         "same_subject": bool(left.subject and left.subject == right.subject),
         "overlapping_subject_token_ids": subject_tokens,
@@ -173,7 +182,8 @@ def conflict_summary(left: PatchArtifact, right: PatchArtifact) -> dict[str, Any
 
 
 def _conflict_risk_flags(overlap, subject_tokens, target_tokens, control_rows,
-                         protected, left: PatchArtifact,
+                         protected, relation_shard, relation_slot_id,
+                         left: PatchArtifact,
                          right: PatchArtifact) -> list[str]:
     flags = []
     if overlap:
@@ -190,7 +200,22 @@ def _conflict_risk_flags(overlap, subject_tokens, target_tokens, control_rows,
         flags.append("same_relation")
     if left.subject and left.subject == right.subject:
         flags.append("same_subject")
+    if relation_shard:
+        flags.append("same_relation_shard")
+    if relation_slot_id:
+        flags.append("same_relation_slot")
     return flags
+
+
+def _metadata_scalar_match(left: PatchArtifact, right: PatchArtifact,
+                          key: str) -> str | None:
+    left_value = left.metadata.get(key)
+    right_value = right.metadata.get(key)
+    if left_value is None or right_value is None:
+        return None
+    if str(left_value) == str(right_value):
+        return str(left_value)
+    return None
 
 
 def _metadata_overlap(left: PatchArtifact, right: PatchArtifact,

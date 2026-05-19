@@ -7,6 +7,7 @@ Fix 4: Dual protocol — AGIM (substring) + EasyEdit (token exact)
 """
 
 
+import os
 import json
 import time
 import urllib.request
@@ -18,8 +19,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.wal_editor import WalLmHeadEditor
 from agim.cli.counterfact_official_eval import evaluate_edit_hardened
 
-LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
-DEVICE = "cuda:3"
+LLAMA = os.environ.get("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+DEVICE = os.environ.get("AGIM_DEVICE", "cuda")
 
 def main():
     import argparse

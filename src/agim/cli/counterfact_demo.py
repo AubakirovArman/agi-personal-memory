@@ -1,10 +1,14 @@
 """CounterFact Live Demo — see AGIM edit model knowledge in real time."""
-import torch, sys, time
+"""CounterFact Live Demo — see AGIM edit model knowledge in real time."""
+import os
+import sys
+import time
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.rome_causal import ROMECausalEditor
 
-LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
-DEVICE = "cuda:2"
+LLAMA = os.environ.get("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+DEVICE = os.environ.get("AGIM_DEVICE", "cuda")
 
 def banner(text):
     print(f"\n{'='*70}")

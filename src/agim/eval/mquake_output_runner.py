@@ -29,7 +29,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", default=LLAMA)
     parser.add_argument(
         "--device",
-        default=os.getenv("AGIM_DEVICE", "cuda"),
+        default=os.getenv("AGIM_DEVICE", "cuda:0"),
         help="CUDA device id for generation (set AGIM_DEVICE)",
     )
     parser.add_argument("--local-files-only", action=argparse.BooleanOptionalAction,

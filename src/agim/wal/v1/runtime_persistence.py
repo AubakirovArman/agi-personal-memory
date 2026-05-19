@@ -27,7 +27,7 @@ class WALModelPersistenceMixin:
         }
         
         # Serialize WAL state
-        # TODO: full serialization of all WAL layers
+        # TODO(backlog): full serialization of all WAL layers
         # For now, save metadata + model state dict
         
         if wal_path.suffix == ".wal":

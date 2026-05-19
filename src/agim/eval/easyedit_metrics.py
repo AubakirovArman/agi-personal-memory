@@ -161,6 +161,7 @@ def edit_nt_metrics(editor, backup: dict[str, Any], eos_id: int | None) -> dict[
         "embed_non_edited_max": round(diffs["embed_non_edited_max"], 8),
         "lm_head_sampled_row_ids": sorted(editor._lm_nt_snapshot),
         "embed_sampled_row_ids": sorted(editor._emb_nt_snapshot),
+        "nt_sampling": _nt_snapshot_metadata(editor),
         "edited_lm_rows_count": len(edited_lm_rows),
         "edited_embed_rows_count": len(edited_embed_rows),
         "edited_lm_delta_l2_mean": lm_norms["mean"],
@@ -179,6 +180,17 @@ def edit_nt_metrics(editor, backup: dict[str, Any], eos_id: int | None) -> dict[
             "edited_ffn_delta_l2_max": ffn_norms["max"],
         })
     return row
+
+
+def _nt_snapshot_metadata(editor) -> dict[str, Any]:
+    metadata = getattr(editor, "_nt_snapshot_metadata", None)
+    if not isinstance(metadata, dict):
+        return {}
+    return {
+        "mode": "deterministic_lcg",
+        "lm_head": metadata.get("lm_head", {}),
+        "embed": metadata.get("embed", {}),
+    }
 
 
 def _edited_delta_norms(weight: torch.Tensor, backup: dict[int, torch.Tensor]) -> dict[str, float]:

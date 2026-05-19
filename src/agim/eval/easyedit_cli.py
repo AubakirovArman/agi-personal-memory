@@ -20,7 +20,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", default=LLAMA)
     parser.add_argument(
         "--device",
-        default=os.environ.get("AGIM_DEVICE", "cuda"),
+        default=os.environ.get("AGIM_DEVICE", "cuda:0"),
         help="CUDA device id (for example, cuda:0 or cuda:1); set AGIM_DEVICE env var",
     )
     parser.add_argument("--dataset", default="https://rome.baulab.info/data/dsets/counterfact.json")
@@ -67,7 +67,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--clamp_lm", type=float, default=0.20)
     parser.add_argument("--clamp_embed", type=float, default=0.06)
     parser.add_argument("--clamp_eos", type=float, default=0.0)
-    parser.add_argument("--clamp_anti", type=float, default=0.06)
+    parser.add_argument("--clamp_anti", type=float, default=0.0,
+                        help="Anti-repetition clamp (0 disables global anti-boost by default)")
     parser.add_argument("--clamp_old", type=float, default=0.0)
     parser.add_argument("--target-token-mode", choices=["standalone", "contextual", "both"],
                         default="contextual",
@@ -77,12 +78,21 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Average edit keys with CounterFact paraphrase prompts")
     parser.add_argument("--positive-prompt-limit", type=int, default=4)
     parser.add_argument("--positive-key-weight", type=float, default=1.0)
-    parser.add_argument("--positive-constraint-mode", choices=["none", "projected", "ridge"],
+    parser.add_argument("--positive-constraint-mode",
+                        choices=["none", "projected", "ridge", "constrained"],
                         default="none")
+    parser.add_argument("--positive-constraint-k-pos", type=int, default=4)
+    parser.add_argument("--positive-constraint-k-neg", type=int, default=4)
     parser.add_argument("--use-neg-prompts", action=argparse.BooleanOptionalAction, default=True,
                         help="Project edit key away from locality/neighborhood prompt keys")
     parser.add_argument("--neg-prompt-limit", type=int, default=10)
     parser.add_argument("--neg-projection-strength", type=float, default=0.3)
+    parser.add_argument(
+        "--clamp-anti-scope",
+        choices=["none", "target", "subject", "both"],
+        default="none",
+        help="Scope for anti-clamp penalty application (none disables global anti boost by default)",
+    )
     parser.add_argument("--history-projection-strength", type=float, default=0.0)
     parser.add_argument("--embed-history-projection-strength", type=float, default=0.0)
     parser.add_argument("--projection-mode", choices=["sequential", "orthogonal"],
@@ -99,8 +109,15 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Use relation_id-scoped locality prompt banks")
     parser.add_argument("--relation-protected-prompt-limit", type=int, default=4)
     parser.add_argument("--max-relation-protected-keys", type=int, default=64)
+    parser.add_argument(
+        "--relation-slot-buckets",
+        type=int,
+        default=0,
+        help="Enable relation-slot sharding for side-slot overlays (0=off)"
+    )
     parser.add_argument("--max-patch-delta-norm", type=float, default=0.0)
     parser.add_argument("--max-row-delta-norm", type=float, default=0.0)
+    parser.add_argument("--max-shared-row-delta-norm", type=float, default=0.0)
     parser.add_argument("--max-mean-delta-norm", type=float, default=0.0)
     parser.add_argument("--max-edited-rows", type=int, default=0)
     parser.add_argument("--wal-encode-updates", action=argparse.BooleanOptionalAction,

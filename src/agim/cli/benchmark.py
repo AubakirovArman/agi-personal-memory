@@ -1,4 +1,5 @@
 """Бенчмарк: ДО vs ПОСЛЕ обучения через AGIM на реальном датасете."""
+import os
 import json
 import time
 import torch
@@ -26,7 +27,7 @@ def extract_qa(example):
 
 
 def run_benchmark(model, tok, dataset, agim, editor, n_samples=1000,
-                  device="cuda:2"):
+                  device="cuda"):
     """Run full before/after benchmark."""
     results = {"model": "Llama-3.1-8B-Instruct",
                "dataset": "angrygiraffe/claude-opus-4.6-4.7-reasoning-8.7k",
@@ -134,7 +135,7 @@ def main():
     import argparse
     p = argparse.ArgumentParser()
     p.add_argument("--samples", type=int, default=1000)
-    p.add_argument("--device", default="cuda:2")
+    p.add_argument("--device", default=os.environ.get("AGIM_DEVICE", "cuda"))
     p.add_argument("--output", default="benchmark_results.json")
     args = p.parse_args()
 

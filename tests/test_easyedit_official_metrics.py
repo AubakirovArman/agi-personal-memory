@@ -11,6 +11,7 @@ from agim.eval.easyedit_official_runner import (
     summarize_official,
 )
 from agim.model.wal_dual_editor import WALDualLayerEditor
+from agim.model.wal_dual_helpers import constrained_projection_key
 from agim.model.wal_editor import WalLmHeadEditor
 
 
@@ -281,6 +282,30 @@ def test_wal_dual_combine_positive_keys_moves_toward_paraphrase_basis():
     assert torch.dot(combined, primary) == pytest.approx(2 ** -0.5)
     assert torch.dot(combined, positive) == pytest.approx(2 ** -0.5)
     assert combined.norm().item() == pytest.approx(1.0)
+
+
+def test_constrained_projection_key_strength_zero_returns_normalized_key():
+    key = torch.tensor([3.0, 4.0])
+    basis = [torch.tensor([1.0, 0.0]), torch.tensor([0.0, 1.0])]
+
+    projected = constrained_projection_key(key, basis, pos_k=1, neg_k=1, strength=0.0)
+
+    assert torch.allclose(projected, torch.tensor([0.6, 0.8]), atol=1e-6)
+
+
+def test_constrained_projection_key_selects_pos_and_neg_basis():
+    key = torch.tensor([0.5, -1.0])
+    basis = [
+        torch.tensor([1.0, 0.0]),
+        torch.tensor([-0.8, 0.6]),
+    ]
+
+    projected = constrained_projection_key(key, basis, pos_k=1, neg_k=1, strength=1.0)
+    projected = projected / (projected.norm() + 1e-8)
+    normalized_key = key / (key.norm() + 1e-8)
+
+    assert projected.norm().item() == pytest.approx(1.0)
+    assert torch.dot(projected, normalized_key).item() < 0.99
 
 
 def test_wal_dual_rollback_restores_history_basis_length():

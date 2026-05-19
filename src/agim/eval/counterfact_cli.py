@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import random
 import sys
@@ -70,12 +71,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-history-keys", type=int, default=128)
     parser.add_argument("--neighbor-limit", type=int, default=0)
     parser.add_argument("--model", default=LLAMA, help="Model name or local path")
-    parser.add_argument("--device", default="cuda:3", help="CUDA device")
+    parser.add_argument(
+        "--device",
+        default=os.environ.get("AGIM_DEVICE", "cuda:0"),
+        help="CUDA device id (for example, cuda:0 or cuda:1); set AGIM_DEVICE env var",
+    )
     parser.add_argument("--dataset", default=COUNTERFACT_URL)
     parser.add_argument("--sample-policy", choices=["first", "random"], default="first")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--protocol", choices=["both", "strict", "practical"], default="both")
-    parser.add_argument("--local-files-only", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument(
+        "--local-files-only",
+        action=argparse.BooleanOptionalAction,
+        default=os.environ.get("AGIM_LOCAL_FILES_ONLY", "0").lower() not in {"0", "false", "no", "off"},
+        help="Load weights from local cache only when explicitly requested",
+    )
     parser.add_argument("--local-only", dest="local_files_only", action="store_true")
     return parser
 

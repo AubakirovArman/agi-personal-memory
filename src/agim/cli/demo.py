@@ -1,5 +1,6 @@
 """Демо: полный цикл AGIM + WAL на Llama 3.1 8B."""
 import torch
+import os
 from agim.core.system import AGIMSystem
 from agim.model.wal_backend import WALWeightEditor
 
@@ -9,11 +10,11 @@ except ImportError:
     print("pip install transformers")
     raise SystemExit(1)
 
-DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
+DEFAULT_DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = os.environ.get("AGIM_DEVICE", DEFAULT_DEVICE)
 # Try cached first, fallback to HF
-LLAMA = ("/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/.hf_cache/"
-         "models--meta-llama--Llama-3.1-8B-Instruct/snapshots/")
-import os
+LLAMA_CACHE_DIR = os.environ.get("AGIM_HF_CACHE_DIR", ".hf_cache")
+LLAMA = f"{LLAMA_CACHE_DIR}/models--meta-llama--Llama-3.1-8B-Instruct/snapshots/"
 snapshots = os.listdir(LLAMA) if os.path.isdir(LLAMA) else []
 MODEL = LLAMA + snapshots[0] if snapshots else "meta-llama/Llama-3.1-8B-Instruct"
 

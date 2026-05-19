@@ -15,6 +15,7 @@ from .wal_dual_helpers import (
     prompt_keys,
     relation_protected_basis,
     snapshot_rows,
+    snapshot_rows_metadata,
     target_sequences,
 )
 from .wal_dual_namespace import (
@@ -57,7 +58,7 @@ class WALDualLayerEditor:
     def apply_edit(self, subject: str, target: str, relation: str = "",
                    prompt: str = "", clamp_lm: float = 0.20,
                    clamp_embed: float = 0.06, clamp_eos: float = 0.0,
-                   clamp_anti: float = 0.06, neg_prompts: list[str] | None = None,
+                   clamp_anti: float = 0.0, neg_prompts: list[str] | None = None,
                    old_target: str = "", clamp_old: float = 0.0,
                    target_token_mode: str = "standalone",
                    positive_prompts: list[str] | None = None,
@@ -66,6 +67,9 @@ class WALDualLayerEditor:
                    positive_constraint_mode: str = "none",
                    max_neg_prompts: int = 4,
                    neg_projection_strength: float = 0.3,
+                   positive_constraint_k_pos: int = 4,
+                   positive_constraint_k_neg: int = 4,
+                   clamp_anti_scope: str = "none",
                    history_projection_strength: float = 0.0,
                    embed_history_projection_strength: float = 0.0,
                    projection_mode: str = "sequential",
@@ -104,9 +108,14 @@ class WALDualLayerEditor:
         if relation_protected_mode not in {"none", "accumulate", "preload"}:
             raise ValueError(
                 "relation_protected_mode must be one of: none, accumulate, preload")
-        if positive_constraint_mode not in {"none", "projected", "ridge"}:
+        if positive_constraint_mode not in {"none", "projected", "ridge", "constrained"}:
             raise ValueError(
-                "positive_constraint_mode must be one of: none, projected, ridge")
+                "positive_constraint_mode must be one of: none, projected, ridge, constrained")
+        if clamp_anti_scope not in {"none", "target", "subject", "both"}:
+            raise ValueError(
+                "clamp_anti_scope must be one of: none, target, subject, both")
+        if positive_constraint_k_pos < 0 or positive_constraint_k_neg < 0:
+            raise ValueError("positive_constraint_k_pos and positive_constraint_k_neg must be non-negative")
         state_namespace = self._activate_state_namespace(state_namespace)
         relation_key = str(relation or "")
         history_len = len(self._edit_key_basis)
@@ -170,7 +179,9 @@ class WALDualLayerEditor:
                     k = self._combine_positive_keys(
                         k, positive_keys, positive_key_weight, protected,
                         neg_projection_strength, projection_mode,
-                        positive_constraint_mode)
+                        positive_constraint_mode,
+                        positive_constraint_k_pos,
+                        positive_constraint_k_neg)
                     k = self._project_away(
                         k, protected_keys, strength=neg_projection_strength,
                         mode=projection_mode)
@@ -232,12 +243,13 @@ class WALDualLayerEditor:
                 add_row_delta(
                     w_lm, eid, clamp_eos * sk.to(self.device),
                     self.atoms_gpu, self.lmax, wal_encode_updates)
-            if clamp_anti > 0:
+            if clamp_anti > 0 and clamp_anti_scope in {"both", "target"}:
                 for tid in target_lm_rows:
                     if tid == eid: continue
                     add_row_delta(
                         w_lm, tid, -clamp_anti * sk.to(self.device),
                         self.atoms_gpu, self.lmax, wal_encode_updates)
+            if clamp_anti > 0 and clamp_anti_scope in {"both", "subject"}:
                 for sid in sids:
                     if sid not in emb_bu: emb_bu[sid] = w_emb[sid, :].clone()
                     add_row_delta(
@@ -259,6 +271,10 @@ class WALDualLayerEditor:
             "relation_key": relation_key,
             "relation_history_len": relation_history_len,
             "relation_protected_len": relation_protected_len,
+            "relation_protected_ids": [
+                f"{relation_key}:protected:{idx}"
+                for idx in range(len(self._relation_protected_basis.get(relation_key, [])))
+            ],
             "history_keys_added": len(new_history_keys),
         }
 
@@ -282,6 +298,7 @@ class WALDualLayerEditor:
     _max_row_diff = staticmethod(max_row_diff)
     build_vocab = build_vocab
     snapshot_non_target = snapshot_non_target
+    _snapshot_rows_metadata = staticmethod(snapshot_rows_metadata)
     measure_non_target_diff = measure_non_target_diff
     measure_non_target_diffs = measure_non_target_diffs
 

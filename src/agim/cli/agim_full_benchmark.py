@@ -1,6 +1,7 @@
 """AGIM Full Benchmark CLI."""
 from __future__ import annotations
 
+import os
 import json
 import time
 from pathlib import Path
@@ -18,8 +19,11 @@ def main():
     p = argparse.ArgumentParser(description="AGIM Full Benchmark")
     p.add_argument("--n_facts", type=int, default=500, help="Number of facts")
     p.add_argument("--n_test", type=int, default=100, help="Test questions")
-    p.add_argument("--device", default="cuda:2")
-    p.add_argument("--model_name", default="meta-llama/Llama-3.1-8B-Instruct")
+    p.add_argument("--device", default=os.environ.get("AGIM_DEVICE", "cuda"))
+    p.add_argument(
+        "--model_name",
+        default=os.environ.get("AGIM_MODEL", "meta-llama/Llama-3.1-8B-Instruct"),
+    )
     p.add_argument("--output_dir", default=".")
     p.add_argument("--visualize", action="store_true")
     args = p.parse_args()

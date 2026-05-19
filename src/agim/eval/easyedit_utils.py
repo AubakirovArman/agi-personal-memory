@@ -38,6 +38,8 @@ def jsonable(obj: Any) -> Any:
 
 
 def parse_device_id(device: str) -> int:
+    if device in {"cuda", "cpu"}:
+        return 0
     if device.startswith("cuda:"):
         return int(device.split(":", 1)[1])
     return int(device)

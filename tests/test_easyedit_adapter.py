@@ -59,6 +59,36 @@ def test_apply_request_normalizes_easyedit_fields():
     assert call["positive_constraint_mode"] == "ridge"
 
 
+def test_apply_request_passes_constrained_knobs_and_anti_scope():
+    editor = FakeEditor()
+    hparams = AGIMWALHyperParams(
+        model_name="fake",
+        device="cpu",
+        clamp_anti_scope="subject",
+        positive_constraint_mode="constrained",
+        positive_constraint_k_pos=2,
+        positive_constraint_k_neg=1,
+    )
+
+    apply_agimwal_request(
+        editor,
+        {
+            "prompt": "The capital of {} is",
+            "subject": "Norpacia",
+            "target_new": {"str": "Virelia"},
+            "ground_truth": "OldCity",
+            "relation_id": "capital",
+        },
+        hparams,
+    )
+
+    call = editor.calls[0]
+    assert call["positive_constraint_mode"] == "constrained"
+    assert call["positive_constraint_k_pos"] == 2
+    assert call["positive_constraint_k_neg"] == 1
+    assert call["clamp_anti_scope"] == "subject"
+
+
 def test_apply_to_model_uses_easyedit_backup_format():
     hparams = AGIMWALHyperParams(model_name="fake", device="cpu")
     model = SimpleNamespace(

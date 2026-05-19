@@ -1,12 +1,17 @@
 """CounterFact benchmark — WAL vs ROME comparison."""
-import json, time, sys, urllib.request
+"""CounterFact benchmark — WAL vs ROME comparison."""
+import json
+import os
+import sys
+import time
+import urllib.request
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.rome_causal import ROMECausalEditor
 from agim.model.wal_editor import WalLmHeadEditor
 
-LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
-DEVICE = "cuda:3"
+LLAMA = os.environ.get("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+DEVICE = os.environ.get("AGIM_DEVICE", "cuda")
 
 
 def load_counterfact(url="https://rome.baulab.info/data/dsets/counterfact.json"):

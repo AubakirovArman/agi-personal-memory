@@ -6,7 +6,7 @@ from collections import defaultdict, Counter
 from openai import OpenAI
 from sentence_transformers import SentenceTransformer
 
-LOC = "/mnt/hf_model_weights/arman/3bit/sites/locomo/data/locomo10.json"
+LOC = os.environ.get("AGIM_LOCOMO_PATH", "sites/locomo/data/locomo10.json")
 FACTS_CACHE = "results/memory_retrieval/locomo_extracted_facts.json"
 
 def main():

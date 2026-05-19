@@ -40,6 +40,9 @@ def method_profile_id(args) -> str:
         )
     if getattr(args, "sequential_edit", False):
         if edit_backend == "side_slot":
+            slot_buckets = int(getattr(args, "relation_slot_buckets", 0) or 0)
+            if slot_buckets > 0:
+                return f"seq_side_slot_sharded_{slot_buckets}"
             return "seq_side_slot"
         relation_mode = getattr(args, "relation_protected_mode", "none")
         if relation_mode != "none":
@@ -48,6 +51,8 @@ def method_profile_id(args) -> str:
             return "seq_positive_ridge"
         if getattr(args, "positive_constraint_mode", "none") == "projected":
             return "seq_positive_projected"
+        if getattr(args, "positive_constraint_mode", "none") == "constrained":
+            return "seq_positive_constrained"
         if getattr(args, "use_positive_prompts", False):
             return "seq_positive"
         if getattr(args, "projection_mode", "sequential") == "orthogonal":
@@ -56,15 +61,22 @@ def method_profile_id(args) -> str:
             return "seq_relation_slots"
         return "seq_tuned"
     if edit_backend == "side_slot":
+        slot_buckets = int(getattr(args, "relation_slot_buckets", 0) or 0)
+        if slot_buckets > 0:
+            return f"single_side_slot_sharded_{slot_buckets}"
         return "single_side_slot"
     relation_mode = getattr(args, "relation_protected_mode", "none")
     if relation_mode != "none":
         return f"single_relation_protected_{relation_mode}"
+    if getattr(args, "positive_constraint_mode", "none") == "constrained":
+        return "single_positive_constrained"
     if getattr(args, "use_positive_prompts", False):
         if getattr(args, "positive_constraint_mode", "none") == "ridge":
             return "single_positive_ridge"
         if getattr(args, "positive_constraint_mode", "none") == "projected":
             return "single_positive_projected"
+        if getattr(args, "positive_constraint_mode", "none") == "constrained":
+            return "single_positive_constrained"
         return "single_positive"
     if getattr(args, "neg_prompt_limit", 0) <= 4:
         return "single_ps"

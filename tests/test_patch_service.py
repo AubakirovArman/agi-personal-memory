@@ -1,8 +1,9 @@
+import json
 import pytest
 import torch
 from torch import nn
 
-from agim.model.patch_artifact import PatchArtifact, RowPatch
+from agim.model.patch_artifact import NormBudgetPolicy, PatchArtifact, RowPatch
 from agim.model.patch_service import PatchService
 
 
@@ -71,6 +72,28 @@ def test_patch_service_rejects_failed_canaries_before_approval():
         service.approve_patch("p1", "alice")
 
 
+def test_patch_service_enforces_conflict_guard():
+    model = _TinyModel()
+    service = PatchService(enforce_conflicts=True)
+    service.propose_patch(_artifact("p1", 1, torch.tensor([1.0, 0.0, 0.0])))
+    service.run_canaries("p1", {"rewrite": True})
+    service.approve_patch("p1", "alice")
+    service.apply_patch("p1", model)
+
+    with pytest.raises(ValueError, match="conflict"):
+        service.propose_patch(_artifact("p2", 1, torch.tensor([0.0, 1.0, 0.0])))
+
+
+def test_patch_service_enforces_budget_guard():
+    service = PatchService(
+        enforce_budget=True,
+        budget_policy=NormBudgetPolicy(max_row_delta_norm=0.2),
+    )
+
+    with pytest.raises(ValueError, match="violates budget"):
+        service.propose_patch(_artifact("p1", 1, torch.tensor([1.0, 0.0, 0.0])))
+
+
 class _FakeEditor:
     def __init__(self, model):
         self.model = model
@@ -127,3 +150,44 @@ def test_patch_service_materializes_requested_rewrite_draft_then_applies():
     service.apply_patch("draft-1", model)
 
     assert torch.allclose(model.lm_head.weight[1], torch.tensor([2.0, 3.0, 4.0]))
+
+
+def test_patch_service_full_loop_from_serialized_artifact_file(tmp_path):
+    class _TinyModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.model = _Backbone()
+            self.lm_head = nn.Linear(3, 4, bias=False)
+
+    path = tmp_path / "patch.json"
+    artifact = PatchArtifact(
+        patch_id="serialized-loop",
+        base_model_digest="sha256:model",
+        method_profile_id="single_loc",
+        subject="Alice",
+        relation_id="P17",
+        target_new="Paris",
+        rows=[
+            RowPatch.from_tensors(
+                "lm_head", 1, torch.tensor([0.0, 0.0, 0.0]), torch.tensor([1.0, 2.0, 3.0]),
+            )
+        ],
+    )
+    path.write_text(json.dumps(artifact.to_dict()))
+    loaded = PatchArtifact.from_dict(json.loads(path.read_text()))
+
+    model = _TinyModel()
+    original = model.lm_head.weight.data.clone()
+    service = PatchService()
+    service.propose_patch(loaded)
+    assert service.run_canaries(loaded.patch_id, {"rewrite": True})["passed"] is True
+    assert service.approve_patch(loaded.patch_id, "alice")["status"] == "approved"
+
+    applied = service.apply_patch(loaded.patch_id, model)
+    assert applied["status"] == "applied"
+    assert torch.allclose(model.lm_head.weight[1], torch.tensor([1.0, 2.0, 3.0]))
+    assert service.list_patches()[0]["row_counts"] == {"lm_head": 1}
+
+    rolled_back = service.rollback_patch(loaded.patch_id, model)
+    assert rolled_back["status"] == "rolled_back"
+    assert torch.allclose(model.lm_head.weight.data, original)

@@ -5,7 +5,7 @@ from collections import defaultdict
 
 from sentence_transformers import SentenceTransformer
 
-LOCOMO = "/mnt/hf_model_weights/arman/3bit/sites/locomo/data/locomo10.json"
+LOCOMO = os.environ.get("AGIM_LOCOMO_PATH", "sites/locomo/data/locomo10.json")
 
 
 def load_locomo(path: str = LOCOMO) -> list[dict]:

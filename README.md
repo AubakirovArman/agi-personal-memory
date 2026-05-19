@@ -188,24 +188,16 @@ src/agim/
 
 ## Roadmap
 
-| Version | Key Feature | Status |
-|---------|------------|--------|
-| v0.1 | Core loop: propose→compile→commit→rollback | ✓ |
-| v0.2 | LLM Intent Router + Structured Extractor | ✓ |
-| v0.3 | WAL backend + ROMEEditor + Confidence v2 | ✓ |
-| v0.4 | REST API + Multi-User + Docker | ✓ |
-| v0.5 | Memory Testing Suite + Contract Regression | ✓ |
-| v1.0 | ROME + MEMIT + O-LoRA + WISE + FAISS + SQLite | ✓ |
-| v2.0 | Self-Learning + Reflection + Knowledge Graph | ✓ |
-| v2.5 | Curriculum + PageRank + Memory Decay | ✓ |
-| v3.0 | Multi-Agent: Teacher, Verifier, Researcher, Curator | ✓ |
-| v4.0 | Multimodal Memory (text/image/audio/video) | ✓ |
-| v5.0 | Distributed (CRDT + P2P) + Federated + Marketplace | ✓ |
-| v6.0 | Constitutional Governance + Adversarial + Watermarking | ✓ |
-| v7.0 | MCP + A2A + Plugin Marketplace | ✓ |
-| v8.0 | Cognitive: Causal + Hypotheses + Counterfactuals | ✓ |
-| v9.0 | Evolutionary: AutoOptimizer + Emergent Types + Cross-Model | ✓ |
-| v10.0 | Recursive Self-Improvement + Safety Governor + AGIM-MEM | Prototype modules, not production claim |
+| Scope | Status | Notes |
+|---|---|---|
+| Path A runtime memory (retrieval/store/retrieve) | Supported | Core project plane is stable and documented in `docs/PATH_A_MEMORY.md`. |
+| Path B EasyEdit-compatible single-edit baseline | Implemented | Baseline artifacts are in `results/easyedit_official/current/` and `results/easyedit_official/ablations/`. |
+| Path B sequential editing hardening | In progress | Sequential and locality are the current weakness; side-slot and relation-aware modes are being measured. |
+| External consequence evidence (RippleEdits/MQuAKE/product) | In progress (partial) | Adapter chain exists; tracked model-output+score artifacts are still being completed. |
+| Deep-edit governance proof packet | In progress | `PatchService` and `PatchGovernance` are in place; release-gate lifecycle documentation is still open. |
+
+Historical v0-to-v10 vision is kept as archival reference in
+[`agim_roadmap_v0_to_v10.md`](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/agim_roadmap_v0_to_v10.md).
 
 Current full local suite: **154 passed, 13 skipped** on 2026-05-18.
 The skipped tests are Gemma E2E checks when the installed Transformers build
@@ -228,11 +220,8 @@ The current hard-gate status is maintained in:
 - [PATH_B_MAX_STATUS_BOARD.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_STATUS_BOARD.md)
 
 Current hard blockers:
-- `wal_memit` official n=50 baseline missing in official artifacts.
-- Full backend comparison (`dual_row`, `wal_rome`, `wal_memit`, `side_slot`) is partial.
-- External benchmark evidence chain is partial and mixed with local diagnostics.
-- Side-slot retention is incomplete for 10/100 edit horizons and full seed coverage.
-- PatchService/governance proof packet remains in proof-building stage.
+- Gate 1–4 artifacts are present (`wal_memit` n=50, backend matrix, side-slot 10/50/100×seeds) and can be cited in the completion matrix.
+- Hard evidence path still open: public PatchService/governance release packet and claims-safe public-facing lifecycle contract.
 
 These blockers are tracked by:
 - [PATH_B_MAX_ACTION_PLAN.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_ACTION_PLAN.md)
@@ -240,6 +229,7 @@ These blockers are tracked by:
 - [PATH_B_MAX_GATE_COMMANDS.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_GATE_COMMANDS.md)
 - [PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md)
 - [PATH_B_MAX_EXECUTION_BLUEPRINT.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_EXECUTION_BLUEPRINT.md)
+- [PATH_B_MAX_EXECUTION_MANIFEST.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_EXECUTION_MANIFEST.md)
 - [Path B Productization Plan](docs/PATH_B_PRODUCTIZATION_PLAN.md)
 - [Path B Maximal Checklist](docs/PATH_B_MAX_EXECUTION_CHECKLIST.md)
 - [Maximal Runbook](docs/PATH_B_MAX_EXECUTION_RUNBOOK.md)
@@ -247,6 +237,19 @@ These blockers are tracked by:
 - [Full Vision](VISION.md) | [Architecture](ARCHITECTURE.md) | [Historical Roadmap](agim_roadmap_v0_to_v10.md)
 - [Developer Diary](DIARY.md)
 - Built on [WAL — Weight-Aligned Language](https://github.com/AubakirovArman/wal2026)
+
+Run the official Path B hard-gate chain in canonical order from repo root:
+
+```bash
+bash scripts/run_path_b_max_bootstrap.sh 1 2 4 3 5
+```
+
+Run on one GPU index (`2` or `3`) and clear previous runs if needed:
+
+```bash
+export AGIM_DEVICE="cuda:2"   # or cuda:3
+AGIM_CLEAN_GPU=1 AGIM_FORCE_KILL_GPU=1 bash scripts/run_path_b_max_bootstrap.sh 1 2 4 3 5
+```
 
 ## License
 

@@ -1,11 +1,15 @@
 """Full CounterFact benchmark — AGIM vs ROME/MEMIT/AlphaEdit."""
-import json, time, sys, urllib.request
+import json
+import os
+import time
+import sys
+import urllib.request
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.rome_causal import ROMECausalEditor
 
-LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
-DEVICE = "cuda:2"
+LLAMA = os.environ.get("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+DEVICE = os.environ.get("AGIM_DEVICE", "cuda")
 
 def load_counterfact(url="https://rome.baulab.info/data/dsets/counterfact.json"):
     print("Loading CounterFact dataset...")

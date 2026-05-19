@@ -9,9 +9,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from agim.model.wal_editor import WalLmHeadEditor
 from agim.model.rome_causal import ROMECausalEditor
 
-LLAMA = "meta-llama/Llama-3.1-8B-Instruct"
-DEVICE = "cuda:3"
-MQUAKE_DATA = "/tmp/MQuAKE/datasets/MQuAKE-CF-3k-v2.json"
+LLAMA = os.environ.get("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+DEVICE = os.environ.get("AGIM_DEVICE", "cuda")
+MQUAKE_DATA = os.environ.get(
+    "AGIM_MQUAKE_DATA",
+    "data/MQuAKE/MQuAKE-CF-3k-v2.json",
+)
 
 
 def generate(model, tok, prompt, max_tokens=15):

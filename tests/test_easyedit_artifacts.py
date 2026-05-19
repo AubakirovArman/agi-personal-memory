@@ -118,6 +118,24 @@ def test_failure_summary_defaults_exclude_vanilla_generation():
 
 def test_method_profile_id_names_common_operating_points():
     assert build_parser().parse_args([]).clamp_eos == 0.0
+
+
+def test_cli_supports_constrained_projection_and_anti_scope():
+    args = build_parser().parse_args([
+        "--clamp-anti-scope",
+        "subject",
+        "--positive-constraint-mode",
+        "constrained",
+        "--positive-constraint-k-pos",
+        "5",
+        "--positive-constraint-k-neg",
+        "2",
+    ])
+
+    assert args.clamp_anti_scope == "subject"
+    assert args.positive_constraint_mode == "constrained"
+    assert args.positive_constraint_k_pos == 5
+    assert args.positive_constraint_k_neg == 2
     assert method_profile_id(build_parser().parse_args([])) == "single_loc"
     assert method_profile_id(build_parser().parse_args(["--neg-prompt-limit", "4"])) == "single_ps"
     assert method_profile_id(build_parser().parse_args(["--sequential-edit"])) == "seq_tuned"

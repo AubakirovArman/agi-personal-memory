@@ -178,6 +178,21 @@ artifacts as a compatibility baseline. A dedicated n=50 quality baseline for
 wal_memit is still pending, and `--compare-backends` currently reflects that
 status.
 
+## Hard-gate blocker matrix
+
+| Gate | Requirement | Status |
+| --- | --- | --- |
+| 1 | `wal_memit` official n=50 baseline | Done: `results/easyedit_official/current/random_50_seed_42_wal_memit.json` and `.failures.json` |
+| 2 | Full 4-backend quality matrix (`dual_row`, `wal_rome`, `wal_memit`, `side_slot`) | Done: canonical per-backend JSONs + aggregate matrix + report are present |
+| 3 | External consequence evidence chain | Done: Ripple/MQuAKE/raw-text/product outputs are present in `results/external_benchmark_runs/*` |
+| 4 | Side-slot retention (`10/50/100`, seeds `42/43/44`) | Done: `results/easyedit_official/sequential/side_slot_random_{10,50,100}_seed_{42,43,44}_seq.json` + failures |
+| 5 | Public PatchService/governance proof packet | Partial: local proof exists, public release packet is still open |
+
+## Immediate Hard-Gate Actions
+
+1. Publish one PatchService lifecycle proof packet with evidence for `propose/simulate/run_canaries/approve/apply/rollback/inspect/diff` and public immutable release metadata.
+2. Produce hardening work for req. 21 (anti-repetition), req. 23 (constrained `K_pos/K_neg`), req. 26 (conflict detector), req. 30 (relation-aware slot sharding), and req. 25 (`no-commit`/budget guard), then refresh hard-gate boundary text.
+
 `agim.eval.ripple_diagnostic` can compute a post-hoc RippleEdits-style
 related-fact diagnostic from EasyEdit artifacts. This is local diagnostic
 coverage, not an official RippleEdits benchmark result.
@@ -258,4 +273,11 @@ Execution priority:
 1. Finish blocker 1 and blocker 2 first (`wal_memit` baseline + backend matrix).
 2. Finish blocker 3 with one complete external benchmark chain (`RippleEdits`, `MQuAKE`, and one of `ScEdit/KnowEdit/UniEdit/MLaKE`).
 3. Finish blocker 4 sequential retention in side-slot mode (10/50/100).
-4. Finish blocker 5 governance contract and public API proof packet.
+
+## Immediate Next Actions
+
+1. Add `random_50_seed_42/43/44` for the `wal_memit` n=50 direct backend profile (if any backend behavior drifts, this becomes the only stable selector).
+2. Close side-slot retention coverage for `n=10` and `n=100` at seeds `42/43/44`, then refresh `results/easyedit_official/sequential/sequential_random_50_report_2026-05-18.md`.
+3. Complete one full external chain output+score pair for each of RippleEdits, MQuAKE, raw-text, and one product-like benchmark.
+4. Produce the public PatchService lifecycle proof packet (`propose/simulate/run_canaries/approve/apply/rollback/inspect/diff`) with immutable signature trail.
+5. Finish blocker 5 governance contract and public API proof packet.

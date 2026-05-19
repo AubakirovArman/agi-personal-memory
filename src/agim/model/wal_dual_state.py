@@ -23,12 +23,23 @@ def build_vocab(editor):
 def snapshot_non_target(editor, lm_exclude, embed_exclude=None,
                         sample_size: int = 500):
     """Snapshot lm_head and embed non-target rows for NT diff measurement."""
+    editor._nt_snapshot_metadata = {}
     editor._lm_nt_snapshot = editor._snapshot_rows(
         editor.model.lm_head.weight.data,
         set(lm_exclude),
         sample_size=sample_size,
     )
     editor._emb_nt_snapshot = editor._snapshot_rows(
+        editor.model.model.embed_tokens.weight.data,
+        set(embed_exclude or ()),
+        sample_size=sample_size,
+    )
+    editor._nt_snapshot_metadata["lm_head"] = editor._snapshot_rows_metadata(
+        editor.model.lm_head.weight.data,
+        set(lm_exclude),
+        sample_size=sample_size,
+    )
+    editor._nt_snapshot_metadata["embed"] = editor._snapshot_rows_metadata(
         editor.model.model.embed_tokens.weight.data,
         set(embed_exclude or ()),
         sample_size=sample_size,
