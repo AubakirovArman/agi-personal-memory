@@ -145,6 +145,19 @@ def run_evaluation_loop(
 ) -> tuple[list[dict[str, Any]], list[float], dict[str, Any]]:
     if args.sequential_edit and args.edit_backend == "side_slot":
         from .easyedit_side_slot_loop import run_sequential_side_slot
+        relation_profile_map = _parse_relation_profile_map(
+            getattr(args, "relation_profile_map", "")
+        )
+        relation_args_by_idx: list[Any] = []
+        relation_profiles: list[dict[str, Any] | None] = []
+        for fact in facts:
+            fact_args, relation_profile = _apply_relation_profile(
+                copy.deepcopy(args),
+                relation_profile_map,
+                fact.get("requested_rewrite", {}).get("relation_id"),
+            )
+            relation_args_by_idx.append(fact_args)
+            relation_profiles.append(relation_profile)
         return run_sequential_side_slot(
             args=args, model=model, tok=tok, hparams=hparams, editor=editor,
             facts=facts, records=records, compute_edit_quality=compute_edit_quality,
@@ -152,6 +165,8 @@ def run_evaluation_loop(
             apply_one=apply_one, compute_pre=_compute_pre,
             post_bundle=_post_bundle, base_row=_base_row,
             budget_status=_budget_status,
+            args_by_idx=relation_args_by_idx,
+            relation_profiles=relation_profiles,
         )
     if args.sequential_edit:
         return run_sequential(

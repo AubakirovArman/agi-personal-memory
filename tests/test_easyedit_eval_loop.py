@@ -203,3 +203,60 @@ def test_apply_relation_profile_rejects_unknown_named_profile(monkeypatch, tmp_p
             {"P17": {"positive_profile": "nope"}},
             "P17",
         )
+
+
+def test_run_evaluation_loop_side_slot_uses_relation_profile_map(monkeypatch, tmp_path):
+    map_path = tmp_path / "relation_profiles.json"
+    map_path.write_text(json.dumps({"P17": {"positive_profile": "w025"}}, ensure_ascii=False), encoding="utf-8")
+
+    captured: dict[str, object] = {}
+
+    def _fake_run_sequential_side_slot(
+        *,
+        args_by_idx=None,
+        relation_profiles=None,
+        **_kwargs,
+    ):
+        captured["relation_profiles"] = relation_profiles
+        captured["positive_profiles"] = [getattr(a, "positive_profile", "off") for a in args_by_idx]
+        return [
+            {
+                "case_id": 1,
+                "relation_id": "P17",
+                "edit_backend": "side_slot",
+            }
+        ], [0.1], {}
+
+    import agim.eval.easyedit_side_slot_loop as side_slot_loop
+
+    monkeypatch.setattr(
+        side_slot_loop,
+        "run_sequential_side_slot",
+        _fake_run_sequential_side_slot,
+    )
+
+    facts = [_build_fact()]
+    records = [_build_record()]
+    args = build_parser().parse_args([
+        "--sequential-edit",
+        "--edit-backend",
+        "side_slot",
+        "--relation-profile-map",
+        str(map_path),
+    ])
+    metrics, _, _ = loop.run_evaluation_loop(
+        args=args,
+        model=types.SimpleNamespace(),
+        tok=types.SimpleNamespace(),
+        hparams=types.SimpleNamespace(),
+        editor=_DummyEditor(),
+        facts=facts,
+        records=records,
+        compute_edit_quality=lambda *_: {"rewrite_acc": [0.0]},
+        test_prediction_acc=lambda *_: 0.0,
+        device_id=0,
+    )
+
+    assert captured["positive_profiles"] == ["w025"]
+    assert captured["relation_profiles"] == [{"positive_profile": "w025"}]
+    assert metrics[0]["edit_backend"] == "side_slot"
