@@ -88,6 +88,31 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
   --save-failures-only
 ```
 
+### PS@All improvement sweep (plan)
+
+Use one replayable sweep script for the 2222 improvement hypotheses:
+
+```bash
+cd /mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory
+export AGIM_RELATION_PROFILE_MAP="$PWD/results/easyedit_official/ablations/relation_profile_map_seed42.json"
+bash scripts/run_path_b_psall_improvement_sweep.sh --all --dry-run
+```
+
+Run concrete steps if needed:
+
+```bash
+bash scripts/run_path_b_psall_improvement_sweep.sh \
+  --step baseline-42 \
+  --step selective-anti \
+  --step kpos-objective \
+  --step kpos-ridge \
+  --step decode-rerank \
+  --step objective-balance
+```
+
+The sweep writes artifacts under `results/easyedit_official/ablations/` with
+plan-prefixed names.
+
 Token-mode ablation matrix:
 
 ```bash

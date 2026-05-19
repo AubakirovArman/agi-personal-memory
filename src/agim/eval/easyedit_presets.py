@@ -88,6 +88,25 @@ PRESETS: dict[str, dict[str, Any]] = {
         "output": "results/easyedit_official/ablations/ablation_kpos_kneg_ridge_seed42.json",
         "positive_profile": "w025_ridge",
     },
+    "ablation_objective_balance_seed42": {
+        "n": 50,
+        "sample_policy": "random",
+        "seed": 42,
+        "output": "results/easyedit_official/ablations/ablation_objective_balance_seed42.json",
+        "anti_profile": "target_low",
+        "positive_profile": "w015",
+    },
+    "ablation_decode_rerank_seed42": {
+        "n": 50,
+        "sample_policy": "random",
+        "seed": 42,
+        "output": "results/easyedit_official/ablations/ablation_decode_rerank_seed42.json",
+        "anti_profile": "target_low",
+        "candidate_grid": "safe,positive_w025",
+        "candidate_rerank_metric": "psall_guarded",
+        "candidate_locality_min": 0.95,
+        "candidate_rewrite_min": 0.95,
+    },
 }
 
 

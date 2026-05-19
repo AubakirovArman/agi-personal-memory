@@ -25,6 +25,26 @@ def test_easyedit_random_50_preset_sets_reproducible_sample():
     assert args.output.endswith("random_50_seed_43.json")
 
 
+def test_psall_improvement_presets_are_wiredup():
+    args_objective = apply_preset(build_parser().parse_args([
+        "--preset",
+        "ablation_objective_balance_seed42",
+    ]))
+    assert args_objective.positive_profile == "w015"
+    assert args_objective.anti_profile == "target_low"
+    assert args_objective.n == 50
+    assert args_objective.seed == 42
+
+    args_rerank = apply_preset(build_parser().parse_args([
+        "--preset",
+        "ablation_decode_rerank_seed42",
+    ]))
+    assert args_rerank.candidate_grid == "safe,positive_w025"
+    assert args_rerank.candidate_locality_min == 0.95
+    assert args_rerank.candidate_rewrite_min == 0.95
+    assert args_rerank.anti_profile == "target_low"
+
+
 def test_dry_run_payload_summarizes_selected_records():
     args = SimpleNamespace(
         model="llama",
