@@ -201,6 +201,11 @@ run_sequential_sanity_50() {
 run_relation_profile() {
   local source="results/easyedit_official/ablations/baseline_random50_seed42.json"
   local out="results/easyedit_official/ablations/relation_profile_map_seed42.json"
+  if [[ "${DRY_RUN_MODE}" == "0" && "${DRY_RUN}" == "0" && ! -f "$source" ]]; then
+    echo "Missing baseline artifact: $source" >&2
+    echo "Run baseline-42 first: --step baseline-42" >&2
+    return 1
+  fi
   run_cmd python "$RELATION_PROFILE_MAP_TOOL" \
     --input "$source" \
     --output "$out" \
