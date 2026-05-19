@@ -10,10 +10,17 @@ Use explicit environment values instead of machine-specific defaults:
 
 ```bash
 export AGIM_MODEL=meta-llama/Llama-3.1-8B-Instruct
-export AGIM_DEVICE=cuda
+export AGIM_DEVICE=cuda:0
 export AGIM_EASYEDIT_ROOT="<YOUR_EASYEDIT_REPO_PATH>"
 export AGIM_NT_SAMPLE_SIZE=500
 export AGIM_LOCAL_FILES_ONLY=0
+```
+
+`--save-failures-only` пишет только failed cases из выбранных метрик. По умолчанию включены `tf`, `ctx_gen`, `prob`, дополнительный шумный канал `vanilla_gen` добавляется флагом:
+
+```bash
+--failure-families tf,ctx_gen,prob
+--failure-families tf,ctx_gen,prob,vanilla_gen
 ```
 
 If the model is only available in the local Hugging Face cache, keep
@@ -199,8 +206,8 @@ PYTHONPATH=src python -m agim.eval.easyedit_official_runner \
 ```
 
 This writes the matrix artifact plus per-backend outputs such as
-`random_50_seed_42_backend_matrix.dual_row.json`, including
-`random_50_seed_42_backend_matrix.wal_memit.json`.
+`backend_matrix_random_50_seed42.dual_row.json`, including
+`backend_matrix_random_50_seed42.wal_memit.json`.
 
 Post-hoc Ripple-style diagnostic over an EasyEdit artifact:
 

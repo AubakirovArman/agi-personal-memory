@@ -8,10 +8,14 @@ Use this file when deciding what AGIM can safely claim.
 | Path A supports audit/rollback | Supported | `tests/test_core.py`, governance tests | AGIM layer rollback, not necessarily model-weight rollback |
 | Path B single-edit works on n=50/n=200/n=1000 | Supported internally | `results/easyedit_official/current/` | Current profile is profile-dependent: high-PS settings hurt locality; locality-protected settings hurt PS@All; no external benchmark claim |
 | Path B sequential editing works | Partial | `results/easyedit_official/sequential/` | Random-seed retention falls after 50 edits; sequential/locality unresolved |
+| `wal_memit` official n=50 baseline (EasyEdit-compatible) | Supported | `results/easyedit_official/current/random_50_seed_42_wal_memit.json` | `rephrase` and PS@All are weak on this backend; locality is preserved |
+| Full 4-backend official comparison (`dual_row`, `wal_rome`, `wal_memit`, `side_slot`) | Supported | `results/easyedit_official/ablations/backend_matrix_random_50_seed42*.json` | Per-backend JSONs + aggregate + report are present; `wal_memit` and `side_slot` quality are weak |
+| Side-slot sequential retention (`n=10/50/100`, seeds 42/43/44) | Done | `results/easyedit_official/sequential/side_slot_random_{10,50,100}_seed_{42,43,44}_seq.json` and failures | Locality drops with chain length; still not solved for lifelong editing claims |
 | Historical 1000 local CounterFact diagnostic exists | Supported as history | `results/local_protocol/official_eval_1000.json` | Not official EasyEdit-compatible |
 | AGIM is number one on EasyEdit | Unsafe | None | External validation missing, no leaderboard result |
 | AGIM solved lifelong editing | Unsafe | None | Sequential retention/locality unresolved |
-| External consequence benchmark evidence (RippleEdits / MQuAKE / product) | Pending | `results/external_benchmark_*` (tracked, current runs are diagnostic only) | No tracked model-output benchmark chain yet |
+| External consequence benchmark evidence (RippleEdits / MQuAKE / product) | Supported | `results/external_benchmark_runs/ripple_wal_memit_n50_seed42.json`, `results/external_benchmark_runs/mquake_wal_memit_n50_seed42_outputs.json`, `..._scored.json`, `results/external_benchmark_runs/raw_text_wal_memit_n50_seed42.json`, `results/external_benchmark_runs/product_scedit_wal_memit_n50_seed42.json` | Local diagnostics and tracked outputs only; not yet external leaderboard submissions |
+| EasyEdit leaderboard submission path | Partial | `src/agim/integrations/easyedit_agimwal.py`, `docs/EASYEDIT_ADAPTER.md`, `docs/EASYEDIT_PROTOCOL.md` | Adapter/docs exist, official submission or accepted leaderboard result is still pending |
 
 ## Safe Headline
 

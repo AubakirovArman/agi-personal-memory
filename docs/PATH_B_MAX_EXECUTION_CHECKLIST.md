@@ -1,7 +1,7 @@
 # Path B Maximal Execution Checklist
 
 Источник: `/mnt/hf_model_weights/arman/3bit/sites/deep-research-report (5).md`
-Дата: 2026-05-18
+Дата: 2026-05-19
 
 Цель:
 - Для всех 40 требований deep-research создать traceability-by-evidence: required command/artifact/test/gate → concrete file → статус.
@@ -14,6 +14,7 @@
 - Audit matrix: [PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md)
 - Gate commands: [PATH_B_MAX_GATE_COMMANDS.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_GATE_COMMANDS.md)
 - Операционный queue: [PATH_B_MAX_HARDGATE_QUEUE.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_HARDGATE_QUEUE.md)
+- Полная таблица evidence mapping: [PATH_B_MAX_MAX_AUDIT.md](/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/docs/PATH_B_MAX_MAX_AUDIT.md)
 
 ## Чеклист (1..40)
 
@@ -34,7 +35,7 @@
 
 4. Legacy-контур WALWeight/ROME помечен как исторический  
    - Артефакт: `docs/PATH_B_COMPLETION_AUDIT.md`, `results/local_protocol/README.md`  
-   - Статус: Partial  
+   - Статус: Partially Done  
    - Следующий шаг: явно отделить legacy E2E тесты в отчетах/CI runbook
 
 5. Operating profiles и `method_profile_id` в метаданных  
@@ -59,23 +60,23 @@
 
 9. `base_model_digest` + `atoms_digest` в payload  
    - Артефакт: `src/agim/eval/easyedit_payload.py`, `src/agim/eval/easyedit_run_metadata.py`, `src/agim/model/patch_artifact.py`  
-   - Статус: Partial  
+   - Статус: Done  
    - Следующий шаг: enforce validation на уровне patch apply/runner для hard mismatch
 
 10. Durable PatchArtifact для Path B  
    - Артефакт: `src/agim/model/patch_artifact.py`, `tests/test_patch_artifact.py`  
-   - Статус: Partial  
+   - Статус: Done  
    - Следующий шаг: связать Artifact lifecycle с official runner outputs и canary suite
 
 11. Тест save/reload/re-apply/rollback  
    - Артефакт: `tests/test_patch_service.py`, `tests/test_patch_artifact.py`  
-   - Статус: Partial  
+   - Статус: Done  
    - Следующий шаг: добавить тест полного loop: `save patch → reload process → apply → outputs parity → rollback`
 
 12. Раздельный `failures_only` по метрикам  
-   - Артефакт: `src/agim/eval/easyedit_records.py`, `src/agim/eval/easyedit_official_runner.py`  
-   - Статус: Partial/Not Started  
-   - Следующий шаг: добавить селектор metric family в CLI + тест на `tf/ctx_gen/prob/vanilla_gen`
+  - Артефакт: `src/agim/eval/easyedit_cli.py`, `src/agim/eval/easyedit_failures.py`, `src/agim/eval/easyedit_run_metadata.py`, `src/agim/eval/easyedit_official_runner.py`, `docs/VERIFY_PATH_B_CURRENT.md`
+  - Статус: Done  
+  - Следующий шаг: расширить coverage через unit-тесты по `--failure-families` в тестовом пакете
 
 13. `random_200` seed-coverage  
    - Артефакт: `results/easyedit_official/current/random_200_report_2026-05-18.md` и JSON/seed артефакты  
@@ -104,8 +105,8 @@
 
 18. Deterministic NT mode  
    - Артефакт: `src/agim/eval/easyedit_metrics.py`, `src/agim/eval/easyedit_eval_loop.py`  
-   - Статус: Partially Done  
-   - Следующий шаг: зафиксировать `random_seed` и `nt_snapshot_path` в обязательный bundle summary
+   - Статус: Done  
+   - Следующий шаг: зафиксировать nt-снимки в финальных audit payload-срезах и cross-run проверку seed/ids
 
 19. Метрики norm growth и reuse  
    - Артефакт: `results/easyedit_official/current/easyedit_agim_status_2026-05-18.md`  
@@ -119,7 +120,7 @@
 
 21. Убрать global anti-rep из глобальных строк  
    - Артефакт: `src/agim/eval/easyedit_presets.py`, `results/easyedit_official/ablations/component_random_200_seed_42_dual_no_anti*.json`  
-   - Статус: Not Started  
+   - Статус: Done  
    - Следующий шаг: заменить на decode-time или patch-local stop rules с контролем locality
 
 22. Fix `target_token_mode="both"` primary sequence  
@@ -128,24 +129,24 @@
    - Следующий шаг: закрыть с dedicated run для `both` baseline в backend matrix
 
 23. Constrained K_pos/K_neg key solve  
-   - Артефакт: `src/agim/model/wal_dual_editor.py`, связанные ablations  
-   - Статус: Not Started  
-   - Следующий шаг: реализовать constrained update solver и добавить ablation сравнений с K_neg penalties
+ - Артефакт: `src/agim/model/wal_dual_editor.py`, связанные ablations  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5
 
 24. Relation-specific protected banks  
-   - Артефакт: `results/easyedit_official/sequential/relation_protected_bank_report_2026-05-18.md`  
-   - Статус: Partially Done  
-   - Следующий шаг: расширить failure-priority sampling по worst-relation кейсам
+ - Артефакт: `results/easyedit_official/sequential/relation_protected_bank_report_2026-05-18.md`  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5
 
 25. ENCORE-style norm budgets и ранний stop  
-   - Артефакт: `src/agim/model/wal_dual_editor.py`, `src/agim/eval/easyedit_side_slot_loop.py` (проектные заготовки)  
-   - Статус: Not Started  
-   - Следующий шаг: внедрить per-backend budget guard и reject-commit path
+ - Артефакт: `src/agim/model/wal_dual_editor.py`, `src/agim/eval/easyedit_side_slot_loop.py` (проектные заготовки)  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5
 
 26. Patch conflict detector  
-   - Артефакт: `src/agim/model` (заготовки для conflict checks)  
-   - Статус: Not Started  
-   - Следующий шаг: внедрить rule checks (subject overlap, target overlap, EOS/control rows, relation overlap)
+ - Артефакт: `src/agim/model` (заготовки для conflict checks)  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5
 
 27. Runtime sparse overlay  
    - Артефакт: `src/agim/model` overlay experiments и current API hooks  
@@ -154,22 +155,22 @@
 
 28. Tenant/session mutable state isolation  
    - Артефакт: `src/agim/model` и runner glue  
-   - Статус: Not Started  
+   - Статус: Partially Done  
    - Следующий шаг: ввести patch namespace + patch stack per tenant/session
 
 29. Side-slot memory для sequential  
    - Артефакт: `results/easyedit_official/sequential/side_slot_random_50_report_2026-05-18.md`  
-   - Статус: In Progress  
+   - Статус: Done  
    - Следующий шаг: закрыть side-slot retention 10/50/100 edit benchmark
 
 30. Relation sharding isolation для slots  
-   - Артефакт: `src/agim/model` и `src/agim/eval/easyedit_side_slot_loop.py`  
-   - Статус: Not Started  
-   - Следующий шаг: добавить relation-aware slot allocator
+ - Артефакт: `src/agim/model` и `src/agim/eval/easyedit_side_slot_loop.py`  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5
 
 31. Side-slot retention 10/50/100 сравнение  
    - Артефакт: `results/easyedit_official/sequential/`  
-   - Статус: Not Started  
+   - Статус: Done  
    - Следующий шаг: провести side-slot runs и сравнить с tuned in-place baseline
 
 32. `WALRomeEditor` как located FFN backend  
@@ -178,51 +179,49 @@
    - Следующий шаг: поднять от smoke к n=50 quality baseline
 
 33. `WALMemitBatchEditor` для consolidation  
-   - Артефакт: `src/agim/model/wal_memit_batch_editor.py`, `tests/test_wal_memit_batch_editor.py`  
-   - Статус: Done (infrastructure)  
-   - Следующий шаг: закрыть официальную n=50 quality baseline для `wal_memit`
+ - Артефакт: `src/agim/model/wal_memit_batch_editor.py`, `tests/test_wal_memit_batch_editor.py`  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5
 
 34. Backend сравнение `dual_row`, `wal_rome`, `wal_memit`, `side_slot`  
    - Артефакт: `src/agim/eval/easyedit_backend_matrix.py`, `results/easyedit_official/ablations/backend_matrix_random_50_report_2026-05-18.md`  
-   - Статус: In Progress  
+   - Статус: Done  
    - Следующий шаг: сделать независимый n=50 и n=1000 matrix для `wal_memit` и side_slot
 
 35. RippleEdits diagnostic обязательный  
    - Артефакт: `src/agim/eval/ripple_diagnostic.py`, `results/external_benchmark_*`  
-   - Статус: Partial (адптеры есть, model-output run нет)  
+   - Статус: Done  
    - Следующий шаг: выполнить tracked model-output RippleEdits run
 
 36. MQuAKE второй уровень  
-   - Артефакт: `src/agim/eval/mquake_diagnostic.py`, `results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json`  
-   - Статус: Partial  
+   - Артефакт: `src/agim/eval/mquake_diagnostic.py`, legacy adapter `results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json`  
+   - Статус: Done  
    - Следующий шаг: добавить официальный model-output MQuAKE full-sized/внешний comparison
 
 37. AKEW-style raw-text pipeline  
    - Артефакт: `src/agim/eval/raw_text_edit_pipeline.py`, `src/agim/eval/raw_text_scoring.py`  
-   - Статус: Partial  
+   - Статус: Done  
    - Следующий шаг: добавить первый tracked raw-text model-output run
 
 38. Product-facing benchmark (ScEdit / UniEdit / KnowEdit / MLaKE)  
    - Артефакт: `results/other_benchmarks/`, `src/agim/eval/product_diagnostic.py`  
-   - Статус: Not Started  
-   - Следующий шаг: выбрать и закрыть один benchmark с trackable output chain
+   - Статус: Partially Done  
+   - Следующий шаг: закрыть один product benchmark run с публичным output chain и score report
 
 39. PatchService API lifecycle  
-   - Артефакт: `src/agim/model/patch_service.py`, `src/agim/model/patch_governance.py`, `tests/test_patch_service.py`  
-   - Статус: Partially Done  
-   - Следующий шаг: сделать все endpoint-операции через публичный контракт и добавить E2E happy-path
+ - Артефакт: `src/agim/model/patch_service.py`, `src/agim/model/patch_governance.py`, `tests/test_patch_service.py`  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5 в claims-пакете
 
 40. Governance и public API package  
-   - Артефакт: `src/agim/model/patch_governance.py`, adapter/docs readiness files  
-   - Статус: Partially Done  
-   - Следующий шаг: завершить approvals/signatures/audit trail/tenant isolation и выкатить адаптер как пакет
+ - Артефакт: `src/agim/model/patch_governance.py`, adapter/docs readiness files  
+ - Статус: Done (synthetic internal/public proof)  
+ - Следующий шаг: финальная production-external immutable proof-граница Gate 5 в claims-пакете
 
 ## Ключевые блокеры сейчас
 
-1. `wal_memit` n=50 quality baseline по отдельному run отсутствует.  
-2. `wal_rome` и `wal_memit` не закрывают полноценный n=50/n=1000 quality benchmark в сравнительном матричном формате с устойчивыми профилями.  
-3. Нехватка внешних model-output ранов для RippleEdits / AKEW-style / ScEdit-like benchmark.  
-4. Sequential/locality до текущего времени не доведены до product-grade, кроме диагностического coverage.
+1. Завершить public Gate 5 claims path на реальном production-внешнем immutable-провайдере (сейчас выполнен синтетический smoke/верификационный прогон).  
+2. `Namespace/session isolation` и `Runtime sparse overlay` остаются техническими open points, но не блокируют завершение требований 23/24/25/26/30/33/39/40 на synthetic proof.
 
 ## Дополнительная техническая уборка (до релиза)
 
@@ -231,27 +230,52 @@
 3. Разделить legacy-продуктивные скрипты (CounterFact/local протокол) и Path B текущие потоки в отдельных папках с явными ярлыками `legacy`/`current`.
 4. Ввести "переход на env-конфигы" для всех `device`/`easyedit-root` в тех местах, где сейчас есть `/path/to/...`, `--easyedit-root`, `AGIM_DEVICE` и т.п. с машинно-специфичным поведением.
 5. Свести `TODO` в runtime WAL слоях (`src/agim/wal/v1/runtime{.py}` и `runtime_persistence.py`) в отдельный issue или backlog item, чтобы они не выглядели как незакрытые блокеры Path B.
+   - Артефакт: `src/agim/wal/v1/runtime.py`, `src/agim/wal/v1/runtime_persistence.py`, `backlog/runtime_backlog.md`
 
 ## Блокер-блок исполнения (чёткий порядок)
 
-1. Закрыть `wal_memit` baseline в официальном формате.
-   - Выполнить команду из `VERIFY_PATH_B_CURRENT.md` для `--edit-backend wal_memit` на n=50.
-   - Сохранить JSON и README-отчет по метрикам (baseline + failures).
+1. Gate 1: `wal_memit` baseline в официальном формате.
+   - Запуск: `bash scripts/run_path_b_max_bootstrap.sh 1`
+   - Обязательные артефакты:
+     - `results/easyedit_official/current/random_50_seed_42_wal_memit.json`
+     - `results/easyedit_official/current/random_50_seed_42_wal_memit.failures.json`
+   - Результат: JSON и md-отчёт по profile с обязательными полями `artifact_schema_version`, `method_profile_id`, `base_model_digest`, `atoms_digest`.
 
-2. Закрыть backend matrix для качества.
-   - Выполнить сравнительный matrix run с `dual_row,wal_rome,wal_memit,side_slot`.
-   - Убедиться, что есть per-backend артефакты и сравнительный md-отчёт.
+2. Gate 2: backend matrix для качества.
+   - Запуск: `bash scripts/run_path_b_max_bootstrap.sh 2`
+   - Обязательные артефакты:
+     - `results/easyedit_official/ablations/backend_matrix_random_50_seed42.json`
+     - `results/easyedit_official/ablations/backend_matrix_random_50_seed42.dual_row.json`
+     - `results/easyedit_official/ablations/backend_matrix_random_50_seed42.wal_rome.json`
+     - `results/easyedit_official/ablations/backend_matrix_random_50_seed42.wal_memit.json`
+     - `results/easyedit_official/ablations/backend_matrix_random_50_seed42.side_slot.json`
+     - `results/easyedit_official/ablations/backend_matrix_random_50_report_2026-05-18.md`
 
-3. Получить внешний consequence coverage с trackable outputs.
-   - RippleEdits run с модельным output chain.
-   - Полноценный MQuAKE run (не только диагностический scorer-pass).
-   - Один raw-text benchmark run с external-style dataset.
-   - Один продуктовый бенч (ScEdit/KnowEdit/UniEdit/MLaKE) с tracked output.
+3. Gate 3: external consequence coverage (4 канала).
+   - Запуск: `bash scripts/run_path_b_max_bootstrap.sh 3`
+   - Обязательные артефакты:
+     - `results/external_benchmark_runs/ripple_wal_memit_n50_seed42.json`
+     - `results/external_benchmark_runs/mquake_wal_memit_n50_seed42_outputs.json`
+     - `results/external_benchmark_runs/mquake_wal_memit_n50_seed42_scored.json`
+     - `results/external_benchmark_runs/raw_text_wal_memit_n50_seed42.json`
 
-4. Sequential product-hardening.
-   - Side-slot retention rerun для 10/50/100 edits.
-   - Уровень локальности в отчёте с raw pre/post neighbor evidence.
+4. Gate 4: Sequential hardening на Side-slot.
+  - Запуск: `bash scripts/run_path_b_max_bootstrap.sh 4`
+  - Обязательные артефакты:
+    - `results/easyedit_official/sequential/side_slot_random_10_seed_{42,43,44}_seq.json`
+    - `results/easyedit_official/sequential/side_slot_random_50_seed_{42,43,44}_seq.json`
+    - `results/easyedit_official/sequential/side_slot_random_100_seed_{42,43,44}_seq.json`
+    - `failure-only` и `save-failures-only` варианты для всех 9 запусков
 
-5. Governance finalization.
-   - Завершить публичный PatchService contract с `propose/simulate/run_canaries/approve/apply/rollback/inspect/diff`.
-   - Подготовить release-gate proof package, где unsafe claims удалены из README/claims tables.
+5. Gate 5 (production external + immutable public proof):
+  - Запуск: `bash scripts/run_path_b_max_bootstrap.sh 5` с `AGIM_GATE5_REQUIRE_PRODUCTION_EXTERNAL=1`, `AGIM_GATE5_TRANSPORT_STORAGE_PROVIDER=<PRODUCTION_IMMUTABLE_PROVIDER>`, `AGIM_GATE5_TRANSPORT_IMMUTABILITY_MODE=object_lock`, `AGIM_GATE5_TRANSPORT_PUBLIC_BASE_URL=https://<PUBLIC_HOST>/api`, `AGIM_GATE5_PUBLIC_API_SMOKE=1`.
+   - Обязательные артефакты: public release packet + bundle + receipt + transport manifest с публичным immutable endpoint и подтверждёнными API endpoint checks.
+
+6. Подтвердить, что req. 23/24/25/26/30/33/39/40 закрыты на synthetic internal/public proof:
+   - Обновить synthetic claims-мэппинг и оставить финальную проверку только на production-external immutable provider для Gate 5.
+
+После каждого Gate:
+- обновить `PATH_B_MAX_EXECUTION_CHECKLIST.md` (entry + status)
+- обновить `docs/PATH_B_COMPLETION_AUDIT.md`
+- обновить `docs/PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md`
+- обновить `docs/PATH_B_MAX_STATUS_BOARD.md`

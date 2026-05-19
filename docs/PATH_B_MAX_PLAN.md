@@ -9,6 +9,11 @@ Execution evidence is tracked by
 `docs/PATH_B_MAX_HARDGATE_QUEUE.md`,
 `docs/PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md`.
 Use this plan for planning context; use the checklist and audit matrix for hard completion.
+Current production status is now tracked in `PATH_B_MAX_MAX_PLAN.md`,
+`PATH_B_MAX_COMPLETION_MATRIX.md`,
+`PATH_B_MAX_EXECUTION_CHECKLIST.md`,
+`PATH_B_MAX_EXECUTION_LEDGER.md`.
+Use this file as historical planning context and milestone intent, not as the canonical closure ledger.
 
 ## Критерий завершения
 
@@ -64,9 +69,8 @@ Hard blocker gates в этой фазе:
   - Артефакт: `docs/VERIFY_PATH_B_CURRENT.md`, `README.md`, `docs/VERIFY_PATH_B_LEGACY.md`, `src/agim/eval/easyedit_cli.py` defaults via `AGIM_DEVICE` / `AGIM_LOCAL_FILES_ONLY`
 
 7. Запустить и зафиксировать официальный 50-запросный run `--edit-backend wal_memit` и отметить его как baseline для compatibility. 
-  - Статус: Pending
-  - Прямой контроль: отдельный `results/easyedit_official/current/random_50_seed_42_wal_memit*.json`/`*.md` пока отсутствует
-  - Артефакт: `results/easyedit_official/current/random_50_seed_42_wal_memit*.json/md` + новый markdown summary
+  - Статус: Done
+  - Артефакт: `results/easyedit_official/current/random_50_seed_42_wal_memit.json`, `results/easyedit_official/current/random_50_seed_42_wal_memit.md`, `results/easyedit_official/current/random_50_seed_42_wal_memit.failures.json`
 
 ## 2. Engineering hardening и правка пайплайна
 
@@ -109,8 +113,8 @@ Hard blocker gates в этой фазе:
   - Артефакт: `src/agim/eval/easyedit_run_metadata.py`, future patch service layer
 
 17. Поднять fail-only pipeline по метрикам отдельно (`tf`, `ctx_gen`, `prob`, `vanilla_gen`) и не смешивать шумные семьи по умолчанию. 
-  - Статус: Not Started
-  - Артефакт: `src/agim/eval/easyedit_records.py`, `src/agim/eval/easyedit_official_runner.py`
+  - Статус: Done
+  - Артефакт: `src/agim/eval/easyedit_cli.py`, `src/agim/eval/easyedit_run_metadata.py`, `src/agim/eval/easyedit_failures.py`, `src/agim/eval/easyedit_official_runner.py`
 
 ## 3. Алгоритмические улучшения редактора
 
@@ -170,8 +174,8 @@ Hard blocker gates в этой фазе:
   - Недостаток: отсутствует tracked model-output run под raw-text датасетами
 
 31. Повторный запуск seq retention на 10/50/100 edits для side-slot режима с сравнением in-place tuned baseline. 
-  - Статус: Not Started
-  - Артефакт: `results/easyedit_official/sequential/*`
+  - Статус: Done
+  - Артефакт: `results/easyedit_official/sequential/side_slot_random_10_seed_{42,43,44}_seq.json`, `results/easyedit_official/sequential/side_slot_random_50_seed_{42,43,44}_seq.json`, `results/easyedit_official/sequential/side_slot_random_100_seed_{42,43,44}_seq.json`
 
 32. Добавить explicit proof package для safe/unsafe claim split (what we can prove, what we can't). 
   - Статус: In Progress
@@ -217,3 +221,11 @@ Hard blocker gates в этой фазе:
 3. Закрыть blocker 3: внешний model-output chain для RippleEdits/MQuAKE, plus один raw-text and один product-like benchmark.
 4. Закрыть blocker 4: side-slot sequential retention для `n=10/50/100` и seeds `42/43/44`.
 5. Закрыть blocker 5: release-gate proof packet для PatchService + governance (docs + claims + API surface).
+
+## Что закрывает текущий gap
+
+1. Gate 1 и Gate 2 — обязательный запуск `scripts/run_path_b_max_bootstrap.sh 1 2`.
+2. Gate 4 — запуск retention sweep `n=10/50/100`, seeds `42/43/44` в одной очереди.
+3. Gate 3 — внешний chain в порядке `ripple`, `mquake`, `raw_text`, `product`.
+4. Gate 5 — собрать публичный claims-safe proof packet для `propose/simulate/run_canaries/approve/apply/rollback`.
+5. Закрыть hard requirements из Max-матрицы: `23`, `24`, `25`, `26`, `30`, `33`, `39`, `40` и Gate 5 (production external immutable proof).

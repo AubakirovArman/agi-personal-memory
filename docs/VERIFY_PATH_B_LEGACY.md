@@ -21,14 +21,16 @@ Use explicit legacy-only placeholders and keep this flow on local machines only:
 
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import os
 from agim.model.rome_editor import ROMEEditor
 
-model_path = "/path/to/local/model"
-device = "cuda" if torch.cuda.is_available() else "cpu"
+model_path = os.getenv("AGIM_LEGACY_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+device = os.getenv("AGIM_DEVICE", "cuda")
+local_files_only = os.getenv("AGIM_LOCAL_FILES_ONLY", "0").lower() not in {"0", "false", "no", "off"}
 
 model = AutoModelForCausalLM.from_pretrained(
-    model_path, dtype="auto", device_map=device, local_files_only=True)
-tok = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
+    model_path, dtype="auto", device_map=device, local_files_only=local_files_only)
+tok = AutoTokenizer.from_pretrained(model_path, local_files_only=local_files_only)
 
 editor = ROMEEditor(model, tok, device=device)
 editor.apply_edit(

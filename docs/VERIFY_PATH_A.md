@@ -11,7 +11,7 @@ agim teach "Paris is the capital of France"
 agim ask "What is the capital of France?"
 agim correct "No, Napoleon was born in 1769, not 1768"
 agim history
-agim export /tmp/agim_memories.json
+agim export ./agim_memories.json
 ```
 
 Expected claim: the fact is present in AGIM-managed memory and history. This is

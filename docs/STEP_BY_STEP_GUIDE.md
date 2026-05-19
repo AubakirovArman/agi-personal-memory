@@ -19,7 +19,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
 
 MODEL_PATH = "meta-llama/Llama-3.1-8B-Instruct"  # или путь к локальному кэшу
-DEVICE = os.getenv("AGIM_DEVICE", "cuda")
+DEVICE = os.getenv("AGIM_DEVICE", "cuda:0")
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH, dtype=torch.bfloat16, device_map=DEVICE)
@@ -235,7 +235,7 @@ from agim.core.system import AGIMSystem
 from agim.model.wal_backend import WALWeightEditor
 import os
 
-DEVICE = os.getenv("AGIM_DEVICE", "cuda")
+DEVICE = os.getenv("AGIM_DEVICE", "cuda:0")
 MODEL_PATH = "meta-llama/Llama-3.1-8B-Instruct"
 
 # Шаг 1: Загрузка

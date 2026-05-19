@@ -109,13 +109,17 @@ consolidated rows, and rolls them back as one unit.
 
 The EasyEdit runner now has a `--compare-backends` matrix mode. It can run the
 same selected CounterFact slice through runnable backends such as `dual_row`,
-`wal_rome`, `wal_memit`, and sequential `side_slot`. The random-50 matrix
-confirms the current ordering: `dual_row` reached `TF rewrite=98.0%`,
-`TF locality=97.2%`, `wal_rome` reached `TF rewrite=0.0%`,
-`TF locality=98.2%`; `wal_memit` now runs through the compatibility wrapper.
-The sequential random-50 matrix confirms that `side_slot` is the strongest
-current sequential backend on seed-42 (`TF rewrite=98.0%`, `TF locality=97.2%`),
-while in-place `dual_row` drops to `TF locality=59.9%` after accumulation.
+`wal_rome`, `wal_memit`, and sequential `side_slot`. The random-50 matrix is
+currently partially available: `dual_row` and `wal_rome` runs are present,
+`wal_memit` is available as a compatibility path in the runner, and `side_slot`
+has a dedicated sequential baseline. A dedicated canonical `random_50_seed42`
+quality matrix with all four backend JSON artifacts is still pending.
+
+The currently available sequential random-50 signal shows `side_slot` as a strong
+candidate over `dual_row` accumulation behavior on seed-42 (`TF rewrite=98.0%`,
+`TF locality=97.2%` vs in-place `dual_row` at `TF locality=59.9%` after
+accumulation), but this is not yet a replacement for the full hard-gate
+evidence set.
 
 `agim.eval.ripple_diagnostic` adds a RippleEdits-style post-hoc diagnostic for
 EasyEdit artifacts. It reports direct rewrite success against related/locality

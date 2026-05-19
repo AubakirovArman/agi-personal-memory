@@ -1,65 +1,68 @@
 # Path B Status Board (Current vs Next)
 
-Last updated: 2026-05-18
+Last updated: 2026-05-19
 
 ## What is complete right now
 
 - Source-of-truth separation between Path A/Path B is in place.
-  - `CURRENT_STATUS.md`, `BENCHMARK.md`, `docs/CLAIMS_AND_EVIDENCE.md`.
-- Public reproducibility path is documented under `results/easyedit_official/*`.
+  - `CURRENT_STATUS.md`, `BENCHMARK.md`, `docs/CLAIMS_AND_EVIDENCE.md`, `docs/PATH_B_COMPLETION_AUDIT.md`.
+- Reproducibility path is documented under `results/easyedit_official/*`.
   - `docs/VERIFY_PATH_B_CURRENT.md`, `docs/PATH_B_MAX_EXECUTION_CHECKLIST.md`.
 - EasyEdit metadata protocol and schema are in use.
   - `src/agim/eval/easyedit_run_metadata.py`, `src/agim/eval/easyedit_official_runner.py`.
 - Core hardening scaffolding is present for PatchArtifact, PatchService, and governance.
-  - `src/agim/model/patch_artifact.py`, `tests/test_patch_artifact.py`,
-    `src/agim/model/patch_service.py`, `src/agim/model/patch_governance.py`.
-- Core evidence for 40-item plan is mapped; remaining points are all explicitly partial/not started in the completion matrix.
-  - `docs/PATH_B_MAX_COMPLETION_MATRIX.md`.
+  - `src/agim/model/patch_artifact.py`, `tests/test_patch_artifact.py`, `src/agim/model/patch_service.py`, `src/agim/model/patch_governance.py`.
+- Core evidence for all 40 requirements is mapped in:
+  - `PATH_B_MAX_MAX_AUDIT.md`
+  - `PATH_B_MAX_COMPLETION_MATRIX.md`
+  - `PATH_B_MAX_AUDIT_CHECKLIST.md`
+
+## Gate blockers and status
+
+- Gate 1: done  
+  - `results/easyedit_official/current/random_50_seed_42_wal_memit.json`
+  - `results/easyedit_official/current/random_50_seed_42_wal_memit.failures.json`
+- Gate 2: done  
+  - `results/easyedit_official/ablations/backend_matrix_random_50_seed42{.json,_dual_row,.wal_rome,.wal_memit,.side_slot}`
+  - `results/easyedit_official/ablations/backend_matrix_random_50_report_2026-05-18.md`
+- Gate 3: done  
+  - `results/external_benchmark_runs/ripple_wal_memit_n50_seed42.json`
+  - `results/external_benchmark_runs/mquake_wal_memit_n50_seed42_outputs.json`
+  - `results/external_benchmark_runs/mquake_wal_memit_n50_seed42_scored.json`
+  - `results/external_benchmark_runs/raw_text_wal_memit_n50_seed42.json`
+  - `results/external_benchmark_runs/product_scedit_wal_memit_n50_seed42.json`
+- Gate 4: done  
+  - `results/easyedit_official/sequential/side_slot_random_10_seed_{42,43,44}_seq.json` + failures
+  - `results/easyedit_official/sequential/side_slot_random_50_seed_{42,43,44}_seq.json` + failures
+  - `results/easyedit_official/sequential/side_slot_random_100_seed_{42,43,44}_seq.json` + failures
+- Gate 5: synthetic proof path done  
+  - local proof exists: `results/easyedit_official/governance/path_b_max_gate5_proof.json`
+  - public release/index/receipt/bundle/transport manifest are present and verified with:
+    - `AGIM_GATE5_REQUIRE_PRODUCTION_EXTERNAL=1`
+    - `AGIM_GATE5_TRANSPORT_STORAGE_PROVIDER=s3` (synthetic external placeholder)
+    - `AGIM_GATE5_TRANSPORT_IMMUTABILITY_MODE=object_lock`
+    - `AGIM_GATE5_TRANSPORT_PUBLIC_BASE_URL=https://example.com/api`
+    - `AGIM_GATE5_PUBLIC_API_SMOKE=1`
 
 ## Current blockers (must close for completion)
 
-1. `wal_memit` official n=50 baseline: no dedicated quality artifact in official bundle yet.
-2. Backend matrix: need comparable quality matrix for `dual_row`, `wal_rome`, `wal_memit`, `side_slot`.
-3. External model-output chain: RippleEdits / MQuAKE / raw-text / product benchmark missing as tracked model-output + report in one evidence cycle.
-4. Sequential locality: side-slot retention still needs seeds/length matrix `10/50/100`.
-5. Governance proof packet: full lifecycle contract (`propose/simulate/run_canaries/approve/apply/rollback/inspect/diff`) still requires one public claim packet.
+1. Remaining limitation: current run uses synthetic provider/base URL; real production immutable provider integration still required for final closure.
 
-### Artifact presence check (as of 2026-05-18)
+## Evidence snapshot (as of 2026-05-19)
 
-- `results/easyedit_official/current/random_50_seed_42_wal_memit.json`: missing.
-- `results/easyedit_official/ablations/backend_matrix_random_50_seed42.json`: missing.
-- `results/easyedit_official/ablations/backend_matrix_random_50_seed42.{dual_row,wal_rome,wal_memit,side_slot}.json`: missing.
+- `results/easyedit_official/current/random_50_seed_42_wal_memit.json`: present.
+- `results/easyedit_official/current/random_50_seed_42_wal_memit.failures.json`: present.
+- `results/easyedit_official/ablations/backend_matrix_random_50_seed42{.json,.dual_row,.wal_rome,.wal_memit,.side_slot}`: present.
 - `results/easyedit_official/ablations/backend_matrix_random_50_report_2026-05-18.md`: present.
-- `results/external_benchmark_runs/*n50_seed42*` for Ripple/MQuAKE/raw-text/product: missing required files.
-- `results/easyedit_official/sequential/side_slot_random_10/50/100_seed_{42,43,44}_seq.json`: missing.
-
-## Completion audit against source objective
-
-- Official compatibility hard proof: 5 hard gates from `PATH_B_MAX_HARDGATE_QUEUE.md` remain open until corresponding JSON+MD artifacts are in `results/easyedit_official/*` and `results/external_benchmark_runs/*`.
-- 40-point evidence mapping: all items are mapped in `PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md`, but several critical rows remain `Not Started` or `Partial`.
-- Proxy signals status: passing tests and document existence are not sufficient; artifact evidence still required for Gates 1-5 and rows 21, 23, 26, 30, 38.
-
-## Evidence-backed status by group
-
-- `easyedit_official` single-edit quality: Done for current baselines and ablations, but not yet complete for all hard backends.
-- Sequential behavior: partial. Side-slot has baseline evidence at 50; 10/100 + multi-seed sweep still pending.
-- External consequence metrics: partial. Diagnostic scripts and adapters exist, but tracked model-output/score package missing for at least one channel.
-- Claims safety boundary: correct and enforced; no leaderboard or “solved sequential” claims should be treated as proven.
+- `results/external_benchmark_runs/*n50_seed42*`: present for all four channels.
+- `results/easyedit_official/sequential/side_slot_random_{10,50,100}_seed_{42,43,44}_seq.json` + failures: present.
+- `results/easyedit_official/governance/path_b_max_gate5_proof.json`: present (local only).
 
 ## Next 5 actions (ordered)
 
-1. Run `--edit-backend wal_memit --n 50` official baseline, store JSON+MD in `results/easyedit_official/current/`.
-2. Run full backend matrix including `dual_row`, `wal_rome`, `wal_memit`, `side_slot` on one sample-policy profile.
-3. Close external chain by running and scoring at least one full dataset-level output run for RippleEdits and MQuAKE each.
-4. Finish side-slot retention matrix for `n=10/50/100` with seeds `42/43/44` in `results/easyedit_official/sequential/`.
-5. Create a single release-gate proof packet for PatchService/governance with all lifecycle ops and immutable audit trail references.
-
-## Current command source
-
-- `docs/PATH_B_MAX_GATE_COMMANDS.md`
-- `docs/PATH_B_MAX_EXECUTION_RUNBOOK.md`
-- `docs/PATH_B_MAX_EXECUTION_CHECKLIST.md`
-- `docs/PATH_B_MAX_PROMPT_ARTIFACT_AUDIT.md`
-- `docs/PATH_B_MAX_EXECUTION_BLUEPRINT.md`
-- `docs/PATH_B_MAX_HARDGATE_QUEUE.md`
-- `docs/PATH_B_MAX_PROMPT_TO_ARTIFACT_AUDIT_MATRIX.md`
+1. Publish/verify public Gate 5 release packet with immutable semantics + API smoke in real provider.
+2. Re-audit and synchronize:
+   - `PATH_B_MAX_MAX_AUDIT.md`
+   - `PATH_B_MAX_EXECUTION_CHECKLIST.md`
+   - `PATH_B_MAX_PROMPT_ARTIFACT_AUDIT_MATRIX.md`
+   - `PATH_B_MAX_COMPLETION_MATRIX.md`
