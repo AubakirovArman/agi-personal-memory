@@ -7,11 +7,12 @@ cd "$WORKDIR"
 
 export AGIM_MODEL="${AGIM_MODEL:-meta-llama/Llama-3.1-8B-Instruct}"
 export AGIM_DEVICE="${AGIM_DEVICE:-cuda:0}"
-export AGIM_EASYEDIT_ROOT="${AGIM_EASYEDIT_ROOT:?Set AGIM_EASYEDIT_ROOT}"
+export AGIM_EASYEDIT_ROOT="${AGIM_EASYEDIT_ROOT:-}"
 export AGIM_LOCAL_FILES_ONLY="${AGIM_LOCAL_FILES_ONLY:-0}"
 export PYTHONPATH="${PYTHONPATH:-src}"
 export DRY_RUN="${DRY_RUN:-0}"
 export RELATION_PROFILE_MAP="${AGIM_RELATION_PROFILE_MAP:-${RELATION_PROFILE_MAP:-}}"
+RELATION_PROFILE_MAP_TOOL="$WORKDIR/scripts/build_relation_profile_map.py"
 
 usage() {
   cat <<'EOF'
@@ -28,14 +29,18 @@ Known steps:
   objective-balance
   decode-rerank
   relation-aware
+  relation-profile
   conflict-budget
   sequential-sanity-50
+  random-1000-final
   all
 
 Notes:
   --dry-run prints the commands only.
   relation-aware requires AGIM_RELATION_PROFILE_MAP to point to a JSON mapping file:
   {"P17":{"positive_profile":"w025"}} etc.
+  relation-profile builds results/easyedit_official/ablations/relation_profile_map_seed42.json from a
+  baseline random-50 seed-42 file.
 EOF
 }
 
@@ -95,8 +100,7 @@ run_cmd() {
 
 run_baseline() {
   local seed="$1"
-  local profile="random_50_seed_${seed}"
-  local out="results/easyedit_official/ablations/plan_${profile}.json"
+  local out="results/easyedit_official/ablations/baseline_random50_seed${seed}.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset "random_50_seed_${seed}" \
     --output "$out" \
@@ -105,7 +109,7 @@ run_baseline() {
 }
 
 run_selective_anti() {
-  local out="results/easyedit_official/ablations/plan_ablation_selective_anti_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_selective_anti_repetition_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset "ablation_selective_anti_repetition_seed42" \
     --output "$out" \
@@ -113,7 +117,7 @@ run_selective_anti() {
 }
 
 run_kpos_objective() {
-  local out="results/easyedit_official/ablations/plan_ablation_kpos_positive_w025_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_kpos_positive_w025_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset "ablation_kpos_positive_w025_seed42" \
     --output "$out" \
@@ -121,7 +125,7 @@ run_kpos_objective() {
 }
 
 run_kpos_ridge() {
-  local out="results/easyedit_official/ablations/plan_positive_ridge_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_kpos_kneg_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset "ablation_kpos_kneg_ridge_seed42" \
     --output "$out" \
@@ -129,7 +133,7 @@ run_kpos_ridge() {
 }
 
 run_objective_balance() {
-  local out="results/easyedit_official/ablations/plan_ablation_objective_balance_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_objective_balance_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset "ablation_objective_balance_seed42" \
     --output "$out" \
@@ -137,7 +141,7 @@ run_objective_balance() {
 }
 
 run_decode_rerank() {
-  local out="results/easyedit_official/ablations/plan_ablation_decode_rerank_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_decode_rerank_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset "ablation_decode_rerank_seed42" \
     --output "$out" \
@@ -150,7 +154,7 @@ run_relation_aware() {
     echo "Set AGIM_RELATION_PROFILE_MAP=/path/to/relation_profiles.json and rerun." >&2
     return 0
   fi
-  local out="results/easyedit_official/ablations/plan_ablation_relation_aware_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_relation_aware_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --preset random_50_seed_42 \
     --relation-profile-map "$RELATION_PROFILE_MAP" \
@@ -160,7 +164,7 @@ run_relation_aware() {
 }
 
 run_conflict_budget() {
-  local out="results/easyedit_official/ablations/plan_norm_budget_no_commit_probe_seed42.json"
+  local out="results/easyedit_official/ablations/ablation_conflict_budget_seed42.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --n 50 \
     --sample-policy random \
@@ -176,7 +180,7 @@ run_conflict_budget() {
 }
 
 run_sequential_sanity_50() {
-  local out="results/easyedit_official/sequential/plan_random_50_seed_42_seq.json"
+  local out="results/easyedit_official/sequential/sequential_n50_sanity.json"
   run_cmd python -m agim.eval.easyedit_official_runner \
     --n 50 \
     --sample-policy random \
@@ -194,6 +198,34 @@ run_sequential_sanity_50() {
     --save-failures-only
 }
 
+run_relation_profile() {
+  local source="results/easyedit_official/ablations/baseline_random50_seed42.json"
+  local out="results/easyedit_official/ablations/relation_profile_map_seed42.json"
+  run_cmd python "$RELATION_PROFILE_MAP_TOOL" \
+    --input "$source" \
+    --output "$out" \
+    --ps-threshold 0.30 \
+    --locality-threshold 0.95 \
+    --positive-profile w025 \
+    --anti-profile target_low \
+    --min-count 1
+}
+
+run_final_random1000() {
+  local out="results/easyedit_official/ablations/final_random1000_seed42.json"
+  run_cmd python -m agim.eval.easyedit_official_runner \
+    --n 1000 \
+    --sample-policy random \
+    --seed 42 \
+    --model "$AGIM_MODEL" \
+    --device "$AGIM_DEVICE" \
+    --easyedit-root "$AGIM_EASYEDIT_ROOT" \
+    --local-files-only "$AGIM_LOCAL_FILES_ONLY" \
+    --target-token-mode contextual \
+    --save-failures-only \
+    --output "$out"
+}
+
 run_steps=0
 for step in "${SELECTED_STEPS[@]}"; do
   case "$step" in
@@ -201,15 +233,18 @@ for step in "${SELECTED_STEPS[@]}"; do
     baseline-43) run_baseline 43; run_steps=$((run_steps + 1)) ;;
     baseline-44) run_baseline 44; run_steps=$((run_steps + 1)) ;;
     selective-anti) run_selective_anti; run_steps=$((run_steps + 1)) ;;
-    kpos-objective) run_kpos_objective; run_steps=$((run_steps + 1)) ;;
-    kpos-ridge) run_kpos_ridge; run_steps=$((run_steps + 1)) ;;
-    objective-balance) run_objective_balance; run_steps=$((run_steps + 1)) ;;
-    decode-rerank) run_decode_rerank; run_steps=$((run_steps + 1)) ;;
-    relation-aware) run_relation_aware; run_steps=$((run_steps + 1)) ;;
-    conflict-budget) run_conflict_budget; run_steps=$((run_steps + 1)) ;;
-    sequential-sanity-50) run_sequential_sanity_50; run_steps=$((run_steps + 1)) ;;
-    all)
+  kpos-objective) run_kpos_objective; run_steps=$((run_steps + 1)) ;;
+  kpos-ridge) run_kpos_ridge; run_steps=$((run_steps + 1)) ;;
+  objective-balance) run_objective_balance; run_steps=$((run_steps + 1)) ;;
+  decode-rerank) run_decode_rerank; run_steps=$((run_steps + 1)) ;;
+  relation-profile) run_relation_profile; run_steps=$((run_steps + 1)) ;;
+  relation-aware) run_relation_aware; run_steps=$((run_steps + 1)) ;;
+  conflict-budget) run_conflict_budget; run_steps=$((run_steps + 1)) ;;
+  sequential-sanity-50) run_sequential_sanity_50; run_steps=$((run_steps + 1)) ;;
+  random-1000-final) run_final_random1000; run_steps=$((run_steps + 1)) ;;
+  all)
       run_baseline 42; run_baseline 43; run_baseline 44
+      run_relation_profile
       run_selective_anti
       run_kpos_objective
       run_kpos_ridge
@@ -218,7 +253,8 @@ for step in "${SELECTED_STEPS[@]}"; do
       run_relation_aware
       run_conflict_budget
       run_sequential_sanity_50
-      run_steps=9
+      run_final_random1000
+      run_steps=11
       ;;
     *)
       echo "Unknown step: $step" >&2
