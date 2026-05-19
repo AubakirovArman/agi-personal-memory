@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import types
 
+import pytest
+
 from agim.eval import easyedit_eval_loop as loop
 from agim.eval.easyedit_cli import build_parser
 
@@ -186,3 +188,18 @@ def test_run_single_uses_relation_profile_map(monkeypatch, tmp_path):
     assert row["relation_profile"] == {"positive_profile": "w025"}
     assert row["candidate_selected"] is None
     assert used_profiles == ["w025"]
+
+
+def test_parse_relation_profile_map_missing_path_raises(monkeypatch, tmp_path):
+    with pytest.raises(ValueError, match="relation-profile-map path not found"):
+        loop._parse_relation_profile_map(str(tmp_path / "unknown.json"))
+
+
+def test_apply_relation_profile_rejects_unknown_named_profile(monkeypatch, tmp_path):
+    relation_args = build_parser().parse_args([])
+    with pytest.raises(ValueError, match="Unknown positive profile in relation map"):
+        loop._apply_relation_profile(
+            relation_args,
+            {"P17": {"positive_profile": "nope"}},
+            "P17",
+        )
