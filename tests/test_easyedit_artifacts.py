@@ -25,6 +25,16 @@ def test_easyedit_random_50_preset_sets_reproducible_sample():
     assert args.output.endswith("random_50_seed_43.json")
 
 
+def test_cli_output_default_and_explicit_flag_behavior():
+    default_args = build_parser().parse_args([])
+    assert not default_args.output_was_set
+    assert default_args.output == "results/easyedit_official/current/easyedit_official_50.json"
+
+    explicit = build_parser().parse_args(["--output", "/tmp/custom.json"])
+    assert explicit.output_was_set
+    assert explicit.output == "/tmp/custom.json"
+
+
 def test_psall_improvement_presets_are_wiredup():
     args_objective = apply_preset(build_parser().parse_args([
         "--preset",
@@ -43,6 +53,18 @@ def test_psall_improvement_presets_are_wiredup():
     assert args_rerank.candidate_locality_min == 0.95
     assert args_rerank.candidate_rewrite_min == 0.95
     assert args_rerank.anti_profile == "target_low"
+
+
+def test_preset_does_not_override_explicit_output():
+    explicit_output = "/tmp/manual_baseline_42.json"
+    args = apply_preset(build_parser().parse_args([
+        "--preset",
+        "random_50_seed_42",
+        "--output",
+        explicit_output,
+    ]))
+
+    assert args.output == explicit_output
 
 
 def test_dry_run_payload_summarizes_selected_records():

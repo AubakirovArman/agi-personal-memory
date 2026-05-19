@@ -12,6 +12,14 @@ from .easyedit_presets import ANTI_PROFILES, POSITIVE_PROFILES, PRESETS
 from .easyedit_run_metadata import DEFAULT_FAILURE_FAMILIES
 
 
+class _ExplicitOutputAction(argparse.Action):
+    """Record whether --output was explicitly supplied by the caller."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, values)
+        setattr(namespace, "output_was_set", True)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--n", type=int, default=50)
@@ -28,8 +36,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
         "--output",
+        action=_ExplicitOutputAction,
         default="results/easyedit_official/current/easyedit_official_50.json",
     )
+    parser.set_defaults(output_was_set=False)
     parser.add_argument("--dry-run-summary", action="store_true",
                         help="Only inspect selected CounterFact records; do not load model/EasyEdit")
     parser.add_argument("--dry-run-output",

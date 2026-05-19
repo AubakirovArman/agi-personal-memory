@@ -131,6 +131,9 @@ def apply_profiles(args) -> Any:
 def apply_preset(args):
     if args.preset:
         preset = PRESETS[args.preset]
+        output_was_set = getattr(args, "output_was_set", False)
         for key, value in preset.items():
+            if key == "output" and output_was_set:
+                continue
             setattr(args, key, value)
     return apply_profiles(args)
