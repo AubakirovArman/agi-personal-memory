@@ -1,0 +1,133 @@
+{
+  "artifact_schema_version": "raw_text_edit_proposals.v1",
+  "n": 5,
+  "proposals": [
+    {
+      "subject": "France",
+      "relation_id": "capital",
+      "target_new": "Paris",
+      "prompt": "The capital of France is",
+      "source_text": "The capital of France is Paris.",
+      "parser": "relation_sentence",
+      "confidence": 0.8
+    },
+    {
+      "subject": "The largest ocean",
+      "relation_id": "is",
+      "target_new": "the Pacific",
+      "prompt": "The largest ocean is",
+      "source_text": "The largest ocean is the Pacific.",
+      "parser": "simple_is",
+      "confidence": 0.6
+    },
+    {
+      "subject": "Einstein",
+      "relation_id": "is",
+      "target_new": "a physicist",
+      "prompt": "Einstein is",
+      "source_text": "Einstein is a physicist.",
+      "parser": "simple_is",
+      "confidence": 0.6
+    },
+    {
+      "subject": "1984",
+      "relation_id": "author",
+      "target_new": "George Orwell",
+      "prompt": "The author of 1984 is",
+      "source_text": "The author of 1984 is George Orwell.",
+      "parser": "relation_sentence",
+      "confidence": 0.8
+    },
+    {
+      "subject": "Python",
+      "relation_id": "is",
+      "target_new": "a programming language",
+      "prompt": "Python is",
+      "source_text": "Python is a programming language.",
+      "parser": "simple_is",
+      "confidence": 0.6
+    }
+  ],
+  "requested_rewrites": [
+    {
+      "requested_rewrite": {
+        "subject": "France",
+        "prompt": "The capital of {} is",
+        "relation_id": "capital",
+        "target_new": {
+          "str": "Paris"
+        },
+        "target_true": {
+          "str": ""
+        }
+      },
+      "source_text": "The capital of France is Paris.",
+      "parser": "relation_sentence",
+      "confidence": 0.8
+    },
+    {
+      "requested_rewrite": {
+        "subject": "The largest ocean",
+        "prompt": "{} is",
+        "relation_id": "is",
+        "target_new": {
+          "str": "the Pacific"
+        },
+        "target_true": {
+          "str": ""
+        }
+      },
+      "source_text": "The largest ocean is the Pacific.",
+      "parser": "simple_is",
+      "confidence": 0.6
+    },
+    {
+      "requested_rewrite": {
+        "subject": "Einstein",
+        "prompt": "{} is",
+        "relation_id": "is",
+        "target_new": {
+          "str": "a physicist"
+        },
+        "target_true": {
+          "str": ""
+        }
+      },
+      "source_text": "Einstein is a physicist.",
+      "parser": "simple_is",
+      "confidence": 0.6
+    },
+    {
+      "requested_rewrite": {
+        "subject": "1984",
+        "prompt": "The author of {} is",
+        "relation_id": "author",
+        "target_new": {
+          "str": "George Orwell"
+        },
+        "target_true": {
+          "str": ""
+        }
+      },
+      "source_text": "The author of 1984 is George Orwell.",
+      "parser": "relation_sentence",
+      "confidence": 0.8
+    },
+    {
+      "requested_rewrite": {
+        "subject": "Python",
+        "prompt": "{} is",
+        "relation_id": "is",
+        "target_new": {
+          "str": "a programming language"
+        },
+        "target_true": {
+          "str": ""
+        }
+      },
+      "source_text": "Python is a programming language.",
+      "parser": "simple_is",
+      "confidence": 0.6
+    }
+  ]
+}

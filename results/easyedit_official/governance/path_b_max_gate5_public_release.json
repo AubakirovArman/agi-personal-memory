@@ -1,0 +1,41 @@
+{
+  "acl_summary": {},
+  "artifact_schema_version": null,
+  "atoms_digest": null,
+  "base_model_digest": "sha256:path-b-max-proof",
+  "claim_lock": {
+    "audit_chain_digest_head": "1bf0200d93c6e4d7c74f488dc6aa8fa9e5b9c9b610f7d65734cdc563ee1678a6",
+    "audit_chain_len": 9,
+    "audit_chain_sha256": "7e90954e5587e25c0798d5758c5cbf42d66cad057c00bec24fd10d88501b507c"
+  },
+  "command": "run_path_b_max_patch_service_governance_proof",
+  "created_utc": "2026-05-19T01:31:35Z",
+  "evidence_paths": [
+    "results/easyedit_official/governance/path_b_max_gate5_proof.json"
+  ],
+  "git_sha": null,
+  "method_profile_id": "path_b_max_gate5",
+  "proof_sha256": "c977086b4d685e027c7d74d494eff6ec0ae429147224532d6c46a2be64d78c2c",
+  "release_kind": "governance_proof_public_packet",
+  "release_path": "results/easyedit_official/governance/path_b_max_gate5_public_release.json",
+  "release_schema_version": "path_b_max_gate5_release.v1",
+  "signature": {
+    "digest": "7ca4249e0047a8b6932ac5e38a252c5adf579cb288c4d10311f2e212f9319bbe",
+    "signature": "06dbbade13f74296c1fa960aa0a6d8437fae75764b78206ded3cc31b7a864db8",
+    "signer": "alice"
+  },
+  "source_hash": null,
+  "source_path": "results/easyedit_official/governance/path_b_max_gate5_proof.json",
+  "tenant_scope": "public",
+  "verifier": {
+    "evidence_paths": [
+      "results/easyedit_official/governance/path_b_max_gate5_proof.json"
+    ],
+    "required_checks": [
+      "verify_signature",
+      "verify_audit_chain",
+      "verify_acl",
+      "verify_claim_lock"
+    ]
+  }
+}

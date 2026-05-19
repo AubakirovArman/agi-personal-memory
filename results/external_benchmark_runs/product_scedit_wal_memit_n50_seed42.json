@@ -1,0 +1,210 @@
+{
+  "artifact_schema_version": "product_diagnostic.v1",
+  "source": "results/easyedit_official/current/random_50_seed_42_wal_memit.json",
+  "source_schema_version": "easyedit_official.v2",
+  "source_method_profile_id": "single_loc_wal_memit_n50_seed42",
+  "n": 50,
+  "summary": {
+    "n": 50,
+    "rewrite_acc": 0.0,
+    "paraphrase_all_acc": 0.0,
+    "locality_acc": 1.0,
+    "portability_acc": 0.0,
+    "product_composite_acc": 0.333333
+  },
+  "by_relation_id": {
+    "P101": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P103": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P106": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P127": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P1303": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P131": {
+      "n": 5,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P138": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P140": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P1412": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P159": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P17": {
+      "n": 3,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P178": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P19": {
+      "n": 3,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P190": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P20": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P27": {
+      "n": 3,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P276": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P30": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P364": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P413": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P449": {
+      "n": 4,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P495": {
+      "n": 1,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P740": {
+      "n": 7,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    },
+    "P937": {
+      "n": 2,
+      "rewrite_acc": 0.0,
+      "paraphrase_all_acc": 0.0,
+      "locality_acc": 1.0,
+      "portability_acc": 0.0,
+      "product_composite_acc": 0.333333
+    }
+  },
+  "caveat": "KnowEdit-inspired product diagnostic over EasyEdit artifact fields; not an external KnowEdit/UniEdit/ScEdit leaderboard result."
+}

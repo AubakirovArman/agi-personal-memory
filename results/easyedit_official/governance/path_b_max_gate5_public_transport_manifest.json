@@ -1,0 +1,52 @@
+{
+  "artifacts": [
+    {
+      "external_uri": "https://example.com/api/gate5/releases/f19e037b21c2ce2d2ee3f1e9b5aeb31e2ba0b63d5c9d32265e4091d359ecda4c.json",
+      "kind": "release",
+      "path": "results/easyedit_official/governance/path_b_max_gate5_public_release.json",
+      "schema_version": "path_b_max_gate5_release.v1",
+      "sha256": "f19e037b21c2ce2d2ee3f1e9b5aeb31e2ba0b63d5c9d32265e4091d359ecda4c",
+      "size_bytes": 1531
+    },
+    {
+      "external_uri": "https://example.com/api/gate5/index.json",
+      "kind": "index",
+      "path": "results/easyedit_official/governance/path_b_max_gate5_public_index.json",
+      "schema_version": "path_b_max_gate5_index.v1",
+      "sha256": "33650797918a2989dde114151c833ecdc4941119677ebfa706db6ffb3efb8524",
+      "size_bytes": 978
+    },
+    {
+      "external_uri": "https://example.com/api/gate5/receipt.json",
+      "kind": "receipt",
+      "path": "results/easyedit_official/governance/path_b_max_gate5_public_receipt.json",
+      "schema_version": "path_b_max_gate5_receipt.v1",
+      "sha256": "66fcc32b2274d6920fa293b2f7a31e9786d87db1f938d564a1edc95558c74962",
+      "size_bytes": 886
+    },
+    {
+      "external_uri": "https://example.com/api/gate5/bundle.json",
+      "kind": "bundle",
+      "path": "results/easyedit_official/governance/path_b_max_gate5_public_bundle.json",
+      "schema_version": "path_b_max_gate5_bundle.v1",
+      "sha256": "8f8ffaba57e07a6304f3139b8df760b252af6b3ceaf5f0b9ada93382f9d98aa5",
+      "size_bytes": 1361
+    }
+  ],
+  "channel": "public",
+  "coverage": {
+    "artifact_count": 4,
+    "has_all_schema_versions": true,
+    "has_external_uris": true,
+    "production_ready_candidate": true
+  },
+  "published_utc": "2026-05-19T01:31:35.981423Z",
+  "tenant_scope": "public",
+  "transport_metadata": {
+    "immutability_mode": "object_lock",
+    "public_base_url": "https://example.com/api",
+    "retention_policy": "workspace-immutable",
+    "storage_provider": "s3"
+  },
+  "transport_schema_version": "path_b_max_gate5_transport_manifest.v1"
+}

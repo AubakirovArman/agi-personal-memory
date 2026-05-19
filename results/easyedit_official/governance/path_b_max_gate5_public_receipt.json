@@ -1,0 +1,19 @@
+{
+  "channel": "public",
+  "generated_utc": "2026-05-19T01:31:35Z",
+  "index_path": "results/easyedit_official/governance/path_b_max_gate5_public_index.json",
+  "index_sha256": "33650797918a2989dde114151c833ecdc4941119677ebfa706db6ffb3efb8524",
+  "receipt_schema_version": "path_b_max_gate5_receipt.v1",
+  "record_count": 1,
+  "records": [
+    {
+      "claim_chain_len": 9,
+      "claim_chain_sha256": "7e90954e5587e25c0798d5758c5cbf42d66cad057c00bec24fd10d88501b507c",
+      "proof_sha256": "c977086b4d685e027c7d74d494eff6ec0ae429147224532d6c46a2be64d78c2c",
+      "release_file_sha256": "f19e037b21c2ce2d2ee3f1e9b5aeb31e2ba0b63d5c9d32265e4091d359ecda4c",
+      "release_path": "results/easyedit_official/governance/path_b_max_gate5_public_release.json",
+      "release_sha256": "f19e037b21c2ce2d2ee3f1e9b5aeb31e2ba0b63d5c9d32265e4091d359ecda4c"
+    }
+  ],
+  "tenant_scope": "public"
+}

@@ -1,0 +1,836 @@
+{
+  "created_utc": "2026-05-19T01:31:35.091582+00:00",
+  "proof_id": "path_b_max_gate_5",
+  "lifecycle": {
+    "propose": {
+      "patch_id": "proof-1",
+      "status": "proposed",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {},
+      "approvals": []
+    },
+    "inspect_after_propose": {
+      "patch_id": "proof-1",
+      "status": "proposed",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {},
+      "approvals": []
+    },
+    "simulate": {
+      "patch_id": "proof-1",
+      "status": "proposed",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": []
+    },
+    "run_canaries": {
+      "patch_id": "proof-1",
+      "canaries": {
+        "rewrite": true
+      },
+      "passed": true
+    },
+    "approve": {
+      "patch_id": "proof-1",
+      "status": "approved",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "apply": {
+      "patch_id": "proof-1",
+      "status": "applied",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "inspect_after_apply": {
+      "patch_id": "proof-1",
+      "status": "applied",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "strict_conflict_summary": {
+      "has_conflict": true,
+      "overlapping_rows": [
+        {
+          "layer": "lm_head",
+          "row_id": 1
+        }
+      ],
+      "same_relation_shard": true,
+      "relation_shard": "P36",
+      "same_relation_slot": true,
+      "relation_slot_id": "P36:slot-0000",
+      "same_relation": true,
+      "same_subject": true,
+      "overlapping_subject_token_ids": [
+        101,
+        102
+      ],
+      "overlapping_target_token_ids": [
+        201
+      ],
+      "overlapping_control_row_ids": [
+        2
+      ],
+      "overlapping_protected_basis_ids": [
+        "P36:protected:0"
+      ],
+      "risk_flags": [
+        "row_overlap",
+        "subject_token_overlap",
+        "target_token_overlap",
+        "control_row_overlap",
+        "protected_basis_overlap",
+        "same_relation",
+        "same_subject",
+        "same_relation_shard",
+        "same_relation_slot"
+      ]
+    },
+    "strict_conflict_guard": {
+      "blocked": true,
+      "error": "Patch conflicts with applied patches: proof-conflict-1"
+    },
+    "rollback": {
+      "patch_id": "proof-1",
+      "status": "rolled_back",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "inspect_after_rollback": {
+      "patch_id": "proof-1",
+      "status": "rolled_back",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 1.0,
+        "max_delta_norm": 1.0,
+        "mean_delta_norm": 1.0
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": null,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "row_count": 1
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "strict_budget_guard": {
+      "blocked": true,
+      "error": "Patch violates budget policy: proof-budget reasons=[{'metric': 'max_delta_norm', 'value': 3.0, 'limit': 2.0}]"
+    },
+    "shared_row_budget_guard": {
+      "blocked": true,
+      "error": "Patch violates budget policy: proof-shared-2 reasons=[{'metric': 'shared_row_delta_norm', 'value': 1.2, 'limit': 1.0, 'row': 'lm_head:4', 'existing': 0.6, 'patch': 0.6}]"
+    },
+    "shared_row_budget_inspect": {
+      "patch_id": "proof-shared-1",
+      "status": "applied",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 0.6,
+        "max_delta_norm": 0.6,
+        "mean_delta_norm": 0.6
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "shared_row_delta_norm",
+            "value": 1.2,
+            "limit": 1.0,
+            "row": "lm_head:4",
+            "existing": 0.6,
+            "patch": 0.6
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": 1.0,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 0.6,
+          "max_delta_norm": 0.6,
+          "mean_delta_norm": 0.6
+        },
+        "row_count": 1,
+        "shared_row_usage": {
+          "limit": 1.0,
+          "projected": {
+            "lm_head:4": {
+              "existing": 0.6,
+              "patch": 0.6,
+              "projected": 1.2
+            }
+          }
+        }
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "shared_row_budget_after_rollback": {
+      "patch_id": "proof-shared-1",
+      "status": "rolled_back",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "France",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 0.6,
+        "max_delta_norm": 0.6,
+        "mean_delta_norm": 0.6
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": true,
+        "no_commit": false,
+        "reasons": [],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": 1.0,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 0.6,
+          "max_delta_norm": 0.6,
+          "mean_delta_norm": 0.6
+        },
+        "row_count": 1,
+        "shared_row_usage": {
+          "limit": 1.0,
+          "projected": {
+            "lm_head:4": {
+              "existing": 0.0,
+              "patch": 0.6,
+              "projected": 0.6
+            }
+          }
+        }
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "shared_row_budget_after_reapply": {
+      "patch_id": "proof-shared-2",
+      "status": "applied",
+      "method_profile_id": "path_b_max_gate5",
+      "subject": "Germany",
+      "relation_id": "P36",
+      "row_counts": {
+        "lm_head": 1
+      },
+      "norms": {
+        "patch_delta_norm": 0.6,
+        "max_delta_norm": 0.6,
+        "mean_delta_norm": 0.6
+      },
+      "conflicts_with_applied": [],
+      "budget_decision": {
+        "allow_commit": false,
+        "no_commit": true,
+        "reasons": [
+          {
+            "metric": "shared_row_delta_norm",
+            "value": 1.2,
+            "limit": 1.0,
+            "row": "lm_head:4",
+            "existing": 0.6,
+            "patch": 0.6
+          }
+        ],
+        "policy": {
+          "max_patch_delta_norm": null,
+          "max_row_delta_norm": 2.0,
+          "max_mean_delta_norm": null,
+          "max_shared_row_delta_norm": 1.0,
+          "max_rows": 2
+        },
+        "norms": {
+          "patch_delta_norm": 0.6,
+          "max_delta_norm": 0.6,
+          "mean_delta_norm": 0.6
+        },
+        "row_count": 1,
+        "shared_row_usage": {
+          "limit": 1.0,
+          "projected": {
+            "lm_head:4": {
+              "existing": 0.6,
+              "patch": 0.6,
+              "projected": 1.2
+            }
+          }
+        }
+      },
+      "canaries": {
+        "rewrite": true
+      },
+      "approvals": [
+        "alice"
+      ]
+    },
+    "diff": {
+      "has_conflict": true,
+      "overlapping_rows": [],
+      "same_relation_shard": true,
+      "relation_shard": "P36",
+      "same_relation_slot": true,
+      "relation_slot_id": "P36:slot-0000",
+      "same_relation": true,
+      "same_subject": false,
+      "overlapping_subject_token_ids": [],
+      "overlapping_target_token_ids": [],
+      "overlapping_control_row_ids": [],
+      "overlapping_protected_basis_ids": [],
+      "risk_flags": [
+        "same_relation",
+        "same_relation_shard",
+        "same_relation_slot"
+      ]
+    },
+    "list_patches": [
+      {
+        "patch_id": "proof-1",
+        "status": "rolled_back",
+        "method_profile_id": "path_b_max_gate5",
+        "subject": "France",
+        "relation_id": "P36",
+        "row_counts": {
+          "lm_head": 1
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "conflicts_with_applied": [],
+        "budget_decision": {
+          "allow_commit": true,
+          "no_commit": false,
+          "reasons": [],
+          "policy": {
+            "max_patch_delta_norm": null,
+            "max_row_delta_norm": 2.0,
+            "max_mean_delta_norm": null,
+            "max_shared_row_delta_norm": null,
+            "max_rows": 2
+          },
+          "norms": {
+            "patch_delta_norm": 1.0,
+            "max_delta_norm": 1.0,
+            "mean_delta_norm": 1.0
+          },
+          "row_count": 1
+        },
+        "canaries": {
+          "rewrite": true
+        },
+        "approvals": [
+          "alice"
+        ]
+      },
+      {
+        "patch_id": "proof-2",
+        "status": "proposed",
+        "method_profile_id": "path_b_max_gate5",
+        "subject": "Germany",
+        "relation_id": "P36",
+        "row_counts": {
+          "lm_head": 1
+        },
+        "norms": {
+          "patch_delta_norm": 1.0,
+          "max_delta_norm": 1.0,
+          "mean_delta_norm": 1.0
+        },
+        "conflicts_with_applied": [],
+        "budget_decision": {
+          "allow_commit": true,
+          "no_commit": false,
+          "reasons": [],
+          "policy": {
+            "max_patch_delta_norm": null,
+            "max_row_delta_norm": 2.0,
+            "max_mean_delta_norm": null,
+            "max_shared_row_delta_norm": null,
+            "max_rows": 2
+          },
+          "norms": {
+            "patch_delta_norm": 1.0,
+            "max_delta_norm": 1.0,
+            "mean_delta_norm": 1.0
+          },
+          "row_count": 1
+        },
+        "canaries": {},
+        "approvals": []
+      }
+    ]
+  },
+  "governance": {
+    "signature": {
+      "digest": "7ca4249e0047a8b6932ac5e38a252c5adf579cb288c4d10311f2e212f9319bbe",
+      "signer": "alice",
+      "signature": "06dbbade13f74296c1fa960aa0a6d8437fae75764b78206ded3cc31b7a864db8"
+    },
+    "verify_signature": true,
+    "access_alice_approve": true,
+    "events": [
+      {
+        "event_id": "event-2",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "propose",
+        "timestamp": "2026-05-19T01:31:35.094924+00:00",
+        "previous_hash": "29ba6a450a3a065fab338d7cb3e47f39d4d47a0a34c81874775c2467b67de07e",
+        "event_hash": "e9756b52ee416b8cd9038b3f7965d02a1d7a7d9620f9854cecab515a1b574467",
+        "metadata": {
+          "patch_id": "proof-1"
+        }
+      },
+      {
+        "event_id": "event-3",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "simulate",
+        "timestamp": "2026-05-19T01:31:35.094947+00:00",
+        "previous_hash": "e9756b52ee416b8cd9038b3f7965d02a1d7a7d9620f9854cecab515a1b574467",
+        "event_hash": "b62aa66c424ea0b4aa26ef6973bf8ffd9b55bd6022307bb54c98e17cf411a325",
+        "metadata": {
+          "status": "proposed"
+        }
+      },
+      {
+        "event_id": "event-4",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "run_canaries",
+        "timestamp": "2026-05-19T01:31:35.094962+00:00",
+        "previous_hash": "b62aa66c424ea0b4aa26ef6973bf8ffd9b55bd6022307bb54c98e17cf411a325",
+        "event_hash": "7e826aed8fc12be18ba83ea7f14340d00c2f98e10d6e72864952be23df699b0b",
+        "metadata": {
+          "canaries": {
+            "rewrite": true
+          }
+        }
+      },
+      {
+        "event_id": "event-5",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "approve",
+        "timestamp": "2026-05-19T01:31:35.094978+00:00",
+        "previous_hash": "7e826aed8fc12be18ba83ea7f14340d00c2f98e10d6e72864952be23df699b0b",
+        "event_hash": "82f64cf82f3d850cac2904435be9eb82a690bd26a3ed6b4bcf7f109164068611",
+        "metadata": {
+          "status": "approved"
+        }
+      },
+      {
+        "event_id": "event-6",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "apply",
+        "timestamp": "2026-05-19T01:31:35.094991+00:00",
+        "previous_hash": "82f64cf82f3d850cac2904435be9eb82a690bd26a3ed6b4bcf7f109164068611",
+        "event_hash": "39a6b00978e0d631634679b93213cc6a42d7bde77249b0e1a1fceff0fb923498",
+        "metadata": {
+          "status": "applied"
+        }
+      },
+      {
+        "event_id": "event-7",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "rollback",
+        "timestamp": "2026-05-19T01:31:35.095008+00:00",
+        "previous_hash": "39a6b00978e0d631634679b93213cc6a42d7bde77249b0e1a1fceff0fb923498",
+        "event_hash": "74592be088ae6ecdd8de56432dc98e1694047864f9687feddcf0475ab4606414",
+        "metadata": {
+          "status": "rolled_back"
+        }
+      },
+      {
+        "event_id": "event-8",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "inspect",
+        "timestamp": "2026-05-19T01:31:35.095020+00:00",
+        "previous_hash": "74592be088ae6ecdd8de56432dc98e1694047864f9687feddcf0475ab4606414",
+        "event_hash": "251e7642a828a4c44265341058f50ef5fe643d7633e9064a1c619742ce8b4764",
+        "metadata": {
+          "status": "rolled_back"
+        }
+      },
+      {
+        "event_id": "event-9",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "diff",
+        "timestamp": "2026-05-19T01:31:35.095032+00:00",
+        "previous_hash": "251e7642a828a4c44265341058f50ef5fe643d7633e9064a1c619742ce8b4764",
+        "event_hash": "1bf0200d93c6e4d7c74f488dc6aa8fa9e5b9c9b610f7d65734cdc563ee1678a6",
+        "metadata": {
+          "compared_with": "proof-2"
+        }
+      }
+    ],
+    "audit_chain_valid": true,
+    "audit_trail": [
+      {
+        "event_id": "event-1",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "signed",
+        "timestamp": "2026-05-19T01:31:35.094801+00:00",
+        "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "event_hash": "29ba6a450a3a065fab338d7cb3e47f39d4d47a0a34c81874775c2467b67de07e",
+        "metadata": {
+          "digest": "7ca4249e0047a8b6932ac5e38a252c5adf579cb288c4d10311f2e212f9319bbe"
+        }
+      },
+      {
+        "event_id": "event-2",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "propose",
+        "timestamp": "2026-05-19T01:31:35.094924+00:00",
+        "previous_hash": "29ba6a450a3a065fab338d7cb3e47f39d4d47a0a34c81874775c2467b67de07e",
+        "event_hash": "e9756b52ee416b8cd9038b3f7965d02a1d7a7d9620f9854cecab515a1b574467",
+        "metadata": {
+          "patch_id": "proof-1"
+        }
+      },
+      {
+        "event_id": "event-3",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "simulate",
+        "timestamp": "2026-05-19T01:31:35.094947+00:00",
+        "previous_hash": "e9756b52ee416b8cd9038b3f7965d02a1d7a7d9620f9854cecab515a1b574467",
+        "event_hash": "b62aa66c424ea0b4aa26ef6973bf8ffd9b55bd6022307bb54c98e17cf411a325",
+        "metadata": {
+          "status": "proposed"
+        }
+      },
+      {
+        "event_id": "event-4",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "run_canaries",
+        "timestamp": "2026-05-19T01:31:35.094962+00:00",
+        "previous_hash": "b62aa66c424ea0b4aa26ef6973bf8ffd9b55bd6022307bb54c98e17cf411a325",
+        "event_hash": "7e826aed8fc12be18ba83ea7f14340d00c2f98e10d6e72864952be23df699b0b",
+        "metadata": {
+          "canaries": {
+            "rewrite": true
+          }
+        }
+      },
+      {
+        "event_id": "event-5",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "approve",
+        "timestamp": "2026-05-19T01:31:35.094978+00:00",
+        "previous_hash": "7e826aed8fc12be18ba83ea7f14340d00c2f98e10d6e72864952be23df699b0b",
+        "event_hash": "82f64cf82f3d850cac2904435be9eb82a690bd26a3ed6b4bcf7f109164068611",
+        "metadata": {
+          "status": "approved"
+        }
+      },
+      {
+        "event_id": "event-6",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "apply",
+        "timestamp": "2026-05-19T01:31:35.094991+00:00",
+        "previous_hash": "82f64cf82f3d850cac2904435be9eb82a690bd26a3ed6b4bcf7f109164068611",
+        "event_hash": "39a6b00978e0d631634679b93213cc6a42d7bde77249b0e1a1fceff0fb923498",
+        "metadata": {
+          "status": "applied"
+        }
+      },
+      {
+        "event_id": "event-7",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "rollback",
+        "timestamp": "2026-05-19T01:31:35.095008+00:00",
+        "previous_hash": "39a6b00978e0d631634679b93213cc6a42d7bde77249b0e1a1fceff0fb923498",
+        "event_hash": "74592be088ae6ecdd8de56432dc98e1694047864f9687feddcf0475ab4606414",
+        "metadata": {
+          "status": "rolled_back"
+        }
+      },
+      {
+        "event_id": "event-8",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "inspect",
+        "timestamp": "2026-05-19T01:31:35.095020+00:00",
+        "previous_hash": "74592be088ae6ecdd8de56432dc98e1694047864f9687feddcf0475ab4606414",
+        "event_hash": "251e7642a828a4c44265341058f50ef5fe643d7633e9064a1c619742ce8b4764",
+        "metadata": {
+          "status": "rolled_back"
+        }
+      },
+      {
+        "event_id": "event-9",
+        "patch_id": "proof-1",
+        "actor": "alice",
+        "action": "diff",
+        "timestamp": "2026-05-19T01:31:35.095032+00:00",
+        "previous_hash": "251e7642a828a4c44265341058f50ef5fe643d7633e9064a1c619742ce8b4764",
+        "event_hash": "1bf0200d93c6e4d7c74f488dc6aa8fa9e5b9c9b610f7d65734cdc563ee1678a6",
+        "metadata": {
+          "compared_with": "proof-2"
+        }
+      }
+    ]
+  }
+}

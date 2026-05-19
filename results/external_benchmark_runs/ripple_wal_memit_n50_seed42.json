@@ -1,0 +1,185 @@
+{
+  "artifact_schema_version": "ripple_style_diagnostic.v1",
+  "source": "results/easyedit_official/current/random_50_seed_42_wal_memit.json",
+  "source_schema_version": "easyedit_official.v2",
+  "source_method_profile_id": "single_loc_wal_memit_n50_seed42",
+  "n": 50,
+  "summary": {
+    "n": 50,
+    "direct_rewrite_acc": 0.0,
+    "related_preservation_acc": 1.0,
+    "prob_related_preservation_acc": 0.886,
+    "ripple_break_rate": 0.0
+  },
+  "by_relation_id": {
+    "P101": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.8,
+      "ripple_break_rate": 0.0
+    },
+    "P103": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P106": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.8,
+      "ripple_break_rate": 0.0
+    },
+    "P127": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.95,
+      "ripple_break_rate": 0.0
+    },
+    "P1303": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.9,
+      "ripple_break_rate": 0.0
+    },
+    "P131": {
+      "n": 5,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P138": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.7,
+      "ripple_break_rate": 0.0
+    },
+    "P140": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.8,
+      "ripple_break_rate": 0.0
+    },
+    "P1412": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.8,
+      "ripple_break_rate": 0.0
+    },
+    "P159": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.9,
+      "ripple_break_rate": 0.0
+    },
+    "P17": {
+      "n": 3,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P178": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P19": {
+      "n": 3,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.933333,
+      "ripple_break_rate": 0.0
+    },
+    "P190": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.7,
+      "ripple_break_rate": 0.0
+    },
+    "P20": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P27": {
+      "n": 3,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P276": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.9,
+      "ripple_break_rate": 0.0
+    },
+    "P30": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P364": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.8,
+      "ripple_break_rate": 0.0
+    },
+    "P413": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.35,
+      "ripple_break_rate": 0.0
+    },
+    "P449": {
+      "n": 4,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.875,
+      "ripple_break_rate": 0.0
+    },
+    "P495": {
+      "n": 1,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 1.0,
+      "ripple_break_rate": 0.0
+    },
+    "P740": {
+      "n": 7,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.942857,
+      "ripple_break_rate": 0.0
+    },
+    "P937": {
+      "n": 2,
+      "direct_rewrite_acc": 0.0,
+      "related_preservation_acc": 1.0,
+      "prob_related_preservation_acc": 0.6,
+      "ripple_break_rate": 0.0
+    }
+  },
+  "caveat": "Post-hoc Ripple-style diagnostic over EasyEdit locality/relation fields; not an official RippleEdits dataset result."
+}

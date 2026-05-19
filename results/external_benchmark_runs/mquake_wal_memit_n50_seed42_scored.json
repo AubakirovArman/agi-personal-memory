@@ -1,0 +1,888 @@
+{
+  "artifact_schema_version": "mquake_scored_outputs.v1",
+  "source": "results/external_benchmark_adapters/mquake_cf_3k_v2_first50_adapter.json",
+  "adapter_schema_version": "mquake_dataset_adapter.v1",
+  "output_schema_version": "mquake_model_outputs.v1",
+  "n": 50,
+  "summary": {
+    "n": 50,
+    "direct_rewrite_acc": 1.0,
+    "multi_hop_acc": 0.333333,
+    "composite_acc": 0.666667,
+    "all_direct_success_rate": 1.0,
+    "all_hop_success_rate": 0.16
+  },
+  "rows": [
+    {
+      "case_id": 1,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 2,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 3,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 4,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 5,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 6,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 7,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 8,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 9,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 10,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 11,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 12,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 13,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 14,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 15,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 16,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 17,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 18,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 19,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 20,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 21,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 22,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 23,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 24,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 25,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 26,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 27,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 28,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        false,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 29,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 30,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 31,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 32,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 33,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 34,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 35,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 36,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 37,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 38,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 39,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 40,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 41,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 42,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 43,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 44,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        true,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 45,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.333333,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 46,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        true,
+        false,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.666667,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 47,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 48,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        true,
+        true,
+        true
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 1.0,
+      "all_direct_success": true,
+      "all_hop_success": true
+    },
+    {
+      "case_id": 49,
+      "n_direct": 2,
+      "n_hop": 3,
+      "direct_scores": [
+        true,
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    },
+    {
+      "case_id": 50,
+      "n_direct": 1,
+      "n_hop": 3,
+      "direct_scores": [
+        true
+      ],
+      "hop_scores": [
+        false,
+        false,
+        false
+      ],
+      "direct_acc": 1.0,
+      "multi_hop_acc": 0.0,
+      "all_direct_success": true,
+      "all_hop_success": false
+    }
+  ],
+  "caveat": "Scored MQuAKE adapter outputs; this is a benchmark result only if the output payload came from a documented model-editing run."
+}

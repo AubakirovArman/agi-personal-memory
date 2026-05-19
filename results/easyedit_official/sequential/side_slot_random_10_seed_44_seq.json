@@ -1,0 +1,2114 @@
+{
+  "artifact_schema_version": "easyedit_official.v2",
+  "n": 10,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "method_profile_id": "seq_side_slot_10_seed44",
+  "device": "cuda:2",
+  "git_sha": "221e15673d2d7f3106d28bbb09bb38f327ef25d8",
+  "command": "/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/src/agim/eval/easyedit_official_runner.py --n 10 --sample-policy random --seed 44 --model meta-llama/Llama-3.1-8B-Instruct --device cuda:2 --easyedit-root /mnt/hf_model_weights/arman/3bit/sites/EasyEdit --method-profile-id seq_side_slot_10_seed44 --edit-backend side_slot --sequential-edit --retention-steps 10 --target-token-mode contextual --use-neg-prompts --save-failures-only --output results/easyedit_official/sequential/side_slot_random_10_seed_44_seq.json",
+  "base_model_digest": "sha256:49211843348fb4b3fd4ec123b82e627d90d4975edc594f6e29d8bd294d5c0b16",
+  "atoms_digest": "sha256:f97bd2814f34271cbdd70d507b1aad8aa1e7cab972c7960539dba8e8a18ec3b6",
+  "versions": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.3"
+  },
+  "easyedit": {
+    "root": "/mnt/hf_model_weights/arman/3bit/sites/EasyEdit",
+    "functions": [
+      "easyeditor.evaluate.evaluate.compute_edit_quality",
+      "easyeditor.evaluate.evaluate_utils.test_prediction_acc"
+    ],
+    "aggregation": "EasyEdit BaseEditor-style pre/post locality comparison",
+    "teacher_forcing_metric": "token_em",
+    "generation_metric": "vanilla_generation token equality",
+    "contextual_generation_metric": "greedy token equality against prompt + space + target suffix ids"
+  },
+  "dataset": {
+    "source": "https://rome.baulab.info/data/dsets/counterfact.json",
+    "sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+    "total_size": 21919,
+    "sample_policy": "random",
+    "seed": 44,
+    "case_ids": [
+      13386,
+      17040,
+      17759,
+      3822,
+      5788,
+      12437,
+      7378,
+      9488,
+      953,
+      7362
+    ],
+    "relation_ids": [
+      "P140",
+      "P19",
+      "P20",
+      "P937",
+      "P20",
+      "P39",
+      "P136",
+      "P1412",
+      "P449",
+      "P106"
+    ],
+    "locality_prompts": "all",
+    "rephrase_prompt": "first",
+    "rephrase_prompts": "all"
+  },
+  "hyperparams": {
+    "clamp_lm": 0.2,
+    "clamp_embed": 0.06,
+    "clamp_eos": 0.0,
+    "clamp_anti": 0.06,
+    "clamp_old": 0.0,
+    "edit_backend": "side_slot",
+    "rome_target_layer": 7,
+    "rome_candidate_layers": "",
+    "rome_top_rows": 32,
+    "rome_clamp": 0.08,
+    "rome_auto_locate": false,
+    "target_token_mode": "contextual",
+    "use_positive_prompts": false,
+    "positive_prompt_limit": 4,
+    "positive_key_weight": 1.0,
+    "positive_constraint_mode": "none",
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "use_neg_prompts": true,
+    "neg_prompt_limit": 10,
+    "neg_projection_strength": 0.3,
+    "history_projection_strength": 0.0,
+    "embed_history_projection_strength": 0.0,
+    "projection_mode": "sequential",
+    "history_slot_mode": "global",
+    "max_history_keys": 128,
+    "state_namespace": "default",
+    "relation_protected_mode": "none",
+    "relation_protected_prompt_limit": 4,
+    "max_relation_protected_keys": 64,
+    "max_patch_delta_norm": 0.0,
+    "max_row_delta_norm": 0.0,
+    "max_mean_delta_norm": 0.0,
+    "max_edited_rows": 0,
+    "wal_encode_updates": true,
+    "nt_sample_mode": "deterministic_lcg",
+    "nt_sample_size": 500,
+    "probability_metrics": true,
+    "test_fluency": false,
+    "sequential_edit": true,
+    "retention_steps": [
+      10
+    ]
+  },
+  "relation_protected_banks": {
+    "mode": "none",
+    "state_namespace": "default",
+    "relations": {}
+  },
+  "summary": {
+    "pre": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0
+    },
+    "post": {
+      "rewrite_acc": 0.9,
+      "rephrase_acc": 0.2,
+      "rephrase_all_acc": 0.2,
+      "locality": {
+        "neighborhood_acc": 0.96
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 0.9,
+      "rephrase_acc": 0.2,
+      "rephrase_all_acc": 0.2
+    },
+    "post_probability": {
+      "rewrite_acc": 1.0,
+      "rephrase_acc": 0.3,
+      "rephrase_all_acc": 0.35,
+      "locality_acc": 0.82
+    },
+    "metrics_by_relation_id": {
+      "P106": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P136": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P140": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.8
+        }
+      },
+      "P1412": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 0.8,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.6
+        }
+      },
+      "P19": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.7
+        }
+      },
+      "P20": {
+        "n": 2,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 0.95,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.25,
+          "locality_acc": 0.85
+        }
+      },
+      "P39": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P449": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 0.9,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P937": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.5,
+          "locality_acc": 0.7
+        }
+      }
+    }
+  },
+  "failure_analysis": {
+    "n_failed_cases": 10,
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "failure_mode_counts": {
+      "ctx_gen_rewrite": 1,
+      "prob_locality": 9,
+      "tf_locality": 3,
+      "tf_ps_all": 8,
+      "tf_rephrase": 8,
+      "tf_rewrite": 1
+    },
+    "failed_by_relation_id": {
+      "P106": 1,
+      "P136": 1,
+      "P140": 1,
+      "P1412": 1,
+      "P19": 1,
+      "P20": 2,
+      "P39": 1,
+      "P449": 1,
+      "P937": 1
+    }
+  },
+  "retention": {
+    "after_10": {
+      "n_edits_applied": 10,
+      "n_evaluated": 10,
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0
+        },
+        "post": {
+          "rewrite_acc": 0.9,
+          "rephrase_acc": 0.2,
+          "rephrase_all_acc": 0.2,
+          "locality": {
+            "neighborhood_acc": 0.96
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 0.9,
+          "rephrase_acc": 0.2,
+          "rephrase_all_acc": 0.2
+        },
+        "post_probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.3,
+          "rephrase_all_acc": 0.35,
+          "locality_acc": 0.82
+        },
+        "metrics_by_relation_id": {
+          "P106": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P136": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P140": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.8
+            }
+          },
+          "P1412": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.8,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.6
+            }
+          },
+          "P19": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.7
+            }
+          },
+          "P20": {
+            "n": 2,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.95,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.25,
+              "locality_acc": 0.85
+            }
+          },
+          "P39": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P449": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P937": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.5,
+              "locality_acc": 0.7
+            }
+          }
+        }
+      },
+      "case_ids": [
+        13386,
+        17040,
+        17759,
+        3822,
+        5788,
+        12437,
+        7378,
+        9488,
+        953,
+        7362
+      ],
+      "side_slot_summary": {
+        "slots": 10,
+        "enabled": 10
+      },
+      "relation_slot_summary": {
+        "P106": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P136": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P140": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P1412": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P19": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P20": {
+          "slots": 2,
+          "enabled": 2
+        },
+        "P39": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P449": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P937": {
+          "slots": 1,
+          "enabled": 1
+        }
+      }
+    },
+    "side_slot_summary": {
+      "slots": 10,
+      "enabled": 10
+    },
+    "relation_slot_summary": {
+      "P106": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P136": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P140": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P1412": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P19": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P20": {
+        "slots": 2,
+        "enabled": 2
+      },
+      "P39": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P449": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P937": {
+        "slots": 1,
+        "enabled": 1
+      }
+    }
+  },
+  "time_s": 25.61,
+  "time_per_edit_s": 2.5606,
+  "metrics": [
+    {
+      "case_id": 13386,
+      "relation_id": "P140",
+      "requested_rewrite": {
+        "prompt": "Anjem Choudary is affiliated with the religion",
+        "target_new": "Judaism",
+        "ground_truth": "Islam",
+        "subject": "Anjem Choudary",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Hamid Karzai is follower of",
+              "Rasul Gamzatov is follower of",
+              "The official religion of Dave Chappelle is",
+              "Mehmed the Conqueror is follower of",
+              "Benazir Bhutto is affiliated with the religion",
+              "The official religion of Mehmed the Conqueror is",
+              "Johann Ludwig Burckhardt is affiliated with the religion",
+              "Rasul Gamzatov is affiliated with the religion",
+              "Benazir Bhutto is follower of",
+              "Mohammed Ali follows the religion of"
+            ],
+            "ground_truth": [
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam",
+              "Islam"
+            ]
+          }
+        },
+        "rephrase_prompt": "New York: Scribner's, 1968. .\n Dagwell, George A. Anjem Choudary is follower of",
+        "rephrase_prompts": [
+          "New York: Scribner's, 1968. .\n Dagwell, George A. Anjem Choudary is follower of",
+          "Augustus William spent time with his father; he was childless. Anjem Choudary follows the religion of"
+        ]
+      },
+      "edit_time_s": 0.39,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P140",
+      "side_slot_id": "case-13386",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          64283
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          64283
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            64283
+          ],
+          [
+            64283
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.03661450743675232,
+        "rewrite_true_logprob": -7.411614418029785,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -11.114239692687988,
+        "rephrase_true_logprob": -5.1142401695251465,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -11.114239692687988,
+          -8.645343780517578
+        ],
+        "rephrase_all_true_logprob": [
+          -5.1142401695251465,
+          -0.6453437805175781
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 17040,
+      "relation_id": "P19",
+      "requested_rewrite": {
+        "prompt": "Steve Rhodes is originally from",
+        "target_new": "Jerusalem",
+        "ground_truth": "Bradford",
+        "subject": "Steve Rhodes",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Mary Stewart, Baroness Stewart of Alvechurch is originally from",
+              "Karl Pryce originates from",
+              "Ken Scattergood was native to",
+              "Mark Bower was native to",
+              "Mark Hotte was born in",
+              "Mark Bower originates from",
+              "Ken Pounds is native to",
+              "Mark Hotte was native to",
+              "Karl Pryce was originally from",
+              "Kenneth Garside is native to"
+            ],
+            "ground_truth": [
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford",
+              "Bradford"
+            ]
+          }
+        },
+        "rephrase_prompt": "Around 1.06 million tickets were sold by 3 April 2018. Steve Rhodes is native to",
+        "rephrase_prompts": [
+          "Around 1.06 million tickets were sold by 3 April 2018. Steve Rhodes is native to",
+          "Executed by Fraser & Draysey. Steve Rhodes originates from"
+        ]
+      },
+      "edit_time_s": 0.3197,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P19",
+      "side_slot_id": "case-17040",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          26523
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          26523
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            26523
+          ],
+          [
+            26523
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -2.6981141567230225,
+        "rewrite_true_logprob": -8.010614395141602,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -8.51231575012207,
+        "rephrase_true_logprob": -8.94981575012207,
+        "rephrase_acc": 1.0,
+        "rephrase_all_new_logprob": [
+          -8.51231575012207,
+          -13.668567657470703
+        ],
+        "rephrase_all_true_logprob": [
+          -8.94981575012207,
+          -6.074817657470703
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 17759,
+      "relation_id": "P20",
+      "requested_rewrite": {
+        "prompt": "Michel Bernstein lost their life at",
+        "target_new": "Prague",
+        "ground_truth": "Paris",
+        "subject": "Michel Bernstein",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Diane de France died at",
+              "Horace François Bastien Sébastiani de La Porta died at",
+              "Willy Maywald succumbed at",
+              "Otto Grautoff's life ended in",
+              "Sergei Prokudin-Gorskii lost their life at",
+              "Horace François Bastien Sébastiani de La Porta passed away in",
+              "Jean-Xavier Lefèvre died in",
+              "André Guinier succumbed at",
+              "Jean-Xavier Lefèvre died at",
+              "Sergei Prokudin-Gorskii expired at"
+            ],
+            "ground_truth": [
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris",
+              "Paris"
+            ]
+          }
+        },
+        "rephrase_prompt": "Violation of the Iran sanctions, and 3. Michel Bernstein's life ended in",
+        "rephrase_prompts": [
+          "Violation of the Iran sanctions, and 3. Michel Bernstein's life ended in",
+          "During this time, he played for Mansfield Wesley. Michel Bernstein died in the city of"
+        ]
+      },
+      "edit_time_s": 0.337,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P20",
+      "side_slot_id": "case-17759",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          68389
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          68389
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            68389
+          ],
+          [
+            68389
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.052344631403684616,
+        "rewrite_true_logprob": -11.33359432220459,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -11.489943504333496,
+        "rephrase_true_logprob": -6.396193504333496,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -11.489943504333496,
+          -6.3942108154296875
+        ],
+        "rephrase_all_true_logprob": [
+          -6.396193504333496,
+          -3.0192105770111084
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 3822,
+      "relation_id": "P937",
+      "requested_rewrite": {
+        "prompt": "Robert Haythorne worked in",
+        "target_new": "Venice",
+        "ground_truth": "Ottawa",
+        "subject": "Robert Haythorne",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Daniel Turp was employed in",
+              "Judy LaMarsh used to work in",
+              "Harry Hays worked in",
+              "George William Allan was employed in",
+              "George William Allan took up work in",
+              "Allan MacEachen was employed in",
+              "George-Étienne Cartier took up work in",
+              "Lee Richardson worked in",
+              "Clifford William Robinson used to work in",
+              "Charles Boucher de Boucherville worked in the city of"
+            ],
+            "ground_truth": [
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa",
+              "Ottawa"
+            ]
+          }
+        },
+        "rephrase_prompt": "There is no record of who coached Cambridge. Robert Haythorne worked in the city of",
+        "rephrase_prompts": [
+          "There is no record of who coached Cambridge. Robert Haythorne worked in the city of",
+          "Ex. Robert Haythorne used to work in"
+        ]
+      },
+      "edit_time_s": 0.3346,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P937",
+      "side_slot_id": "case-3822",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          56750
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          56750
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            56750
+          ],
+          [
+            56750
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -1.1728904247283936,
+        "rewrite_true_logprob": -9.797890663146973,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -11.212404251098633,
+        "rephrase_true_logprob": -7.743654727935791,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -11.212404251098633,
+          -4.912270545959473
+        ],
+        "rephrase_all_true_logprob": [
+          -7.743654727935791,
+          -9.693520545959473
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 5788,
+      "relation_id": "P20",
+      "requested_rewrite": {
+        "prompt": "Hermann Nothnagel died in the city of",
+        "target_new": "Paris",
+        "ground_truth": "Vienna",
+        "subject": "Hermann Nothnagel",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Franz S. Exner died in",
+              "Franz Ritter von Hauer passed away at",
+              "Leon Askin passed away at",
+              "Count Joseph Alexander Hübner's life ended in",
+              "Georg Joseph Beer lost their life at",
+              "Anton Günther passed away at",
+              "Franz Ritter von Hauer passed away in",
+              "Rudolf Eisler's life ended in",
+              "Count Joseph Alexander Hübner died in",
+              "Hubert Marischka died in the city of"
+            ],
+            "ground_truth": [
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna",
+              "Vienna"
+            ]
+          }
+        },
+        "rephrase_prompt": "104. Hermann Nothnagel passed away in",
+        "rephrase_prompts": [
+          "104. Hermann Nothnagel passed away in",
+          "The river is feed mostly by snow. Hermann Nothnagel lost their life at"
+        ]
+      },
+      "edit_time_s": 0.3576,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P20",
+      "side_slot_id": "case-5788",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          12366
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          12366
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            12366
+          ],
+          [
+            12366
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0010792152024805546,
+        "rewrite_true_logprob": -8.438579559326172,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -6.763664245605469,
+        "rephrase_true_logprob": -1.3261642456054688,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -6.763664245605469,
+          -6.9722185134887695
+        ],
+        "rephrase_all_true_logprob": [
+          -1.3261642456054688,
+          -7.5972185134887695
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 12437,
+      "relation_id": "P39",
+      "requested_rewrite": {
+        "prompt": "Mohammad Shah Qajar, whose position is that of",
+        "target_new": "bishop",
+        "ground_truth": "Shah",
+        "subject": "Mohammad Shah Qajar",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Ismail I has the position of",
+              "Karim Khan's position is",
+              "Darius III has the position of",
+              "Safi of Safavi has the position of",
+              "Mozaffar ad-Din Shah Qajar holds the position of",
+              "Mozaffar ad-Din Shah Qajar, who has the position of",
+              "Kavadh I holds the position of",
+              "Ismail II's position is",
+              "Reza Shah has the position of",
+              "Sultan Husayn has the position of"
+            ],
+            "ground_truth": [
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah",
+              "Shah"
+            ]
+          }
+        },
+        "rephrase_prompt": "This window is his first major independent work. Mohammad Shah Qajar holds the position of",
+        "rephrase_prompts": [
+          "This window is his first major independent work. Mohammad Shah Qajar holds the position of",
+          "It hosts business events, cultural activities, and entertainment. Mohammad Shah Qajar has the position of"
+        ]
+      },
+      "edit_time_s": 0.3358,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P39",
+      "side_slot_id": "case-12437",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          54306
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          54306
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            54306
+          ],
+          [
+            54306
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.9016585350036621,
+        "rewrite_true_logprob": -4.776658535003662,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -5.024039268493652,
+        "rephrase_true_logprob": -2.8365390300750732,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -5.024039268493652,
+          -12.629864692687988
+        ],
+        "rephrase_all_true_logprob": [
+          -2.8365390300750732,
+          -4.926739692687988
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 7378,
+      "relation_id": "P136",
+      "requested_rewrite": {
+        "prompt": "Dennis Rowland, who plays",
+        "target_new": "opera",
+        "ground_truth": "jazz",
+        "subject": "Dennis Rowland",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Jason Mraz plays",
+              "Jason Mraz performs",
+              "Quincy Jones performs",
+              "What does Sade Adu play? They play",
+              "Niño Josele, who plays",
+              "Casey Abrams plays",
+              "Richard Wright plays",
+              "Chick Corea plays",
+              "Antônio Carlos Jobim is known for performing",
+              "The genre played by Richard Wright is"
+            ],
+            "ground_truth": [
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz",
+              "jazz"
+            ]
+          }
+        },
+        "rephrase_prompt": "Zaiyi wanted artillery for Dong's troops to destroy the legations. Dennis Rowland is known for performing",
+        "rephrase_prompts": [
+          "Zaiyi wanted artillery for Dong's troops to destroy the legations. Dennis Rowland is known for performing",
+          "The eighth season saw little to no change in ratings. The genre played by Dennis Rowland is"
+        ]
+      },
+      "edit_time_s": 0.326,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P136",
+      "side_slot_id": "case-7378",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          43516
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          43516
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            43516
+          ],
+          [
+            43516
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.05843955650925636,
+        "rewrite_true_logprob": -7.6209397315979,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -6.882904052734375,
+        "rephrase_true_logprob": -4.382904052734375,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -6.882904052734375,
+          -8.185094833374023
+        ],
+        "rephrase_all_true_logprob": [
+          -4.382904052734375,
+          -2.4975950717926025
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 9488,
+      "relation_id": "P1412",
+      "requested_rewrite": {
+        "prompt": "Albert Riera speaks the language",
+        "target_new": "English",
+        "ground_truth": "Spanish",
+        "subject": "Albert Riera",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The language used by José Batlle y Ordóñez is",
+              "Thiago Alcântara speaks the language",
+              "José Batlle y Ordóñez speaks the language",
+              "The language used by Horacio Quiroga is",
+              "Mario Benedetti speaks the language",
+              "Ferdinand II of Aragon speaks",
+              "The language used by Mario Benedetti is",
+              "The language used by Bernard Madoff is",
+              "Alberto Lleras Camargo writes in",
+              "Cesc Fàbregas speaks the language"
+            ],
+            "ground_truth": [
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish",
+              "Spanish"
+            ]
+          }
+        },
+        "rephrase_prompt": "She attributes this behaviour to \"showing off\". Albert Riera writes in",
+        "rephrase_prompts": [
+          "She attributes this behaviour to \"showing off\". Albert Riera writes in",
+          "These are: Metrosideros polymorpha,M. The language used by Albert Riera is"
+        ]
+      },
+      "edit_time_s": 0.3141,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P1412",
+      "side_slot_id": "case-9488",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          6498
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          6498
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            6498
+          ],
+          [
+            6498
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.00994253158569336,
+        "rewrite_true_logprob": -13.572443008422852,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -10.48950481414795,
+        "rephrase_true_logprob": -4.739504814147949,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -10.48950481414795,
+          -8.889875411987305
+        ],
+        "rephrase_all_true_logprob": [
+          -4.739504814147949,
+          -3.1398749351501465
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 953,
+      "relation_id": "P449",
+      "requested_rewrite": {
+        "prompt": "The Hat Squad is to debut on",
+        "target_new": "ESPN",
+        "ground_truth": "CBS",
+        "subject": "The Hat Squad",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Candles on Bay Street was released on",
+              "The Little Mermaid was originally aired on",
+              "Cybill premiered on",
+              "The Beverly Hillbillies was released on",
+              "Golden Boy debuted on",
+              "The Little Mermaid was released on",
+              "Salem's Lot was released on",
+              "Dink, the Little Dinosaur was originally aired on",
+              "Without a Trace was originally aired on",
+              "The King of Queens was released on"
+            ],
+            "ground_truth": [
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS",
+              "CBS"
+            ]
+          }
+        },
+        "rephrase_prompt": "Hon. The Hat Squad debuted on",
+        "rephrase_prompts": [
+          "Hon. The Hat Squad debuted on",
+          "He was replaced by Yury Petrov in May 2008. The Hat Squad was originally aired on"
+        ]
+      },
+      "edit_time_s": 0.3163,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P449",
+      "side_slot_id": "case-953",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          27290
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          27290
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            27290
+          ],
+          [
+            27290
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -8.082063141046092e-05,
+        "rewrite_true_logprob": -15.000081062316895,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.011240608058869839,
+        "rephrase_true_logprob": -11.13624095916748,
+        "rephrase_acc": 1.0,
+        "rephrase_all_new_logprob": [
+          -0.011240608058869839,
+          -1.7259480953216553
+        ],
+        "rephrase_all_true_logprob": [
+          -11.13624095916748,
+          -3.2884480953216553
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 7362,
+      "relation_id": "P106",
+      "requested_rewrite": {
+        "prompt": "Fiona Russell Powell's occupation is",
+        "target_new": "comedian",
+        "ground_truth": "journalist",
+        "subject": "Fiona Russell Powell",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The profession of August Ludwig von Schlözer is",
+              "Egon Bahr's profession is an",
+              "Christian Friedrich Daniel Schubart, who works as",
+              "Egon Bahr, who works as",
+              "The occupation of Christian Friedrich Daniel Schubart is",
+              "The profession of Erika Mann is",
+              "Theodor Lessing's profession is a",
+              "Erika Mann works as",
+              "Luděk Pachman's profession is an",
+              "Günther Anders's profession is a"
+            ],
+            "ground_truth": [
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist",
+              "journalist"
+            ]
+          }
+        },
+        "rephrase_prompt": "He primarily plays as a midfielder. Fiona Russell Powell's profession is a",
+        "rephrase_prompts": [
+          "He primarily plays as a midfielder. Fiona Russell Powell's profession is a",
+          "The newcomers included Angles, Saxons, Jutes, and Frisians. The profession of Fiona Russell Powell is"
+        ]
+      },
+      "edit_time_s": 0.3265,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P106",
+      "side_slot_id": "case-7362",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          51912
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          51912
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            51912
+          ],
+          [
+            51912
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0038106462452560663,
+        "rewrite_true_logprob": -12.69131088256836,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.2064548134803772,
+        "rephrase_true_logprob": -6.706454753875732,
+        "rephrase_acc": 1.0,
+        "rephrase_all_new_logprob": [
+          -0.2064548134803772,
+          -0.5056285858154297
+        ],
+        "rephrase_all_true_logprob": [
+          -6.706454753875732,
+          -7.88062858581543
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    }
+  ]
+}

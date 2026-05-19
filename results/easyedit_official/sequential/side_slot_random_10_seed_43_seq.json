@@ -1,0 +1,2078 @@
+{
+  "artifact_schema_version": "easyedit_official.v2",
+  "n": 10,
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "method_profile_id": "seq_side_slot_10_seed43",
+  "device": "cuda:2",
+  "git_sha": "221e15673d2d7f3106d28bbb09bb38f327ef25d8",
+  "command": "/mnt/hf_model_weights/arman/3bit/sites/agi_personal_memory/src/agim/eval/easyedit_official_runner.py --n 10 --sample-policy random --seed 43 --model meta-llama/Llama-3.1-8B-Instruct --device cuda:2 --easyedit-root /mnt/hf_model_weights/arman/3bit/sites/EasyEdit --method-profile-id seq_side_slot_10_seed43 --edit-backend side_slot --sequential-edit --retention-steps 10 --target-token-mode contextual --use-neg-prompts --save-failures-only --output results/easyedit_official/sequential/side_slot_random_10_seed_43_seq.json",
+  "base_model_digest": "sha256:49211843348fb4b3fd4ec123b82e627d90d4975edc594f6e29d8bd294d5c0b16",
+  "atoms_digest": "sha256:6cecd576f0dd1c66bfab7823021135ba321fc14b331d4525ac7710bf804ce06d",
+  "versions": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.3"
+  },
+  "easyedit": {
+    "root": "/mnt/hf_model_weights/arman/3bit/sites/EasyEdit",
+    "functions": [
+      "easyeditor.evaluate.evaluate.compute_edit_quality",
+      "easyeditor.evaluate.evaluate_utils.test_prediction_acc"
+    ],
+    "aggregation": "EasyEdit BaseEditor-style pre/post locality comparison",
+    "teacher_forcing_metric": "token_em",
+    "generation_metric": "vanilla_generation token equality",
+    "contextual_generation_metric": "greedy token equality against prompt + space + target suffix ids"
+  },
+  "dataset": {
+    "source": "https://rome.baulab.info/data/dsets/counterfact.json",
+    "sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+    "total_size": 21919,
+    "sample_policy": "random",
+    "seed": 43,
+    "case_ids": [
+      1263,
+      9374,
+      4716,
+      15156,
+      12120,
+      3155,
+      14850,
+      19621,
+      16327,
+      19955
+    ],
+    "relation_ids": [
+      "P178",
+      "P101",
+      "P36",
+      "P127",
+      "P127",
+      "P127",
+      "P1303",
+      "P37",
+      "P495",
+      "P19"
+    ],
+    "locality_prompts": "all",
+    "rephrase_prompt": "first",
+    "rephrase_prompts": "all"
+  },
+  "hyperparams": {
+    "clamp_lm": 0.2,
+    "clamp_embed": 0.06,
+    "clamp_eos": 0.0,
+    "clamp_anti": 0.06,
+    "clamp_old": 0.0,
+    "edit_backend": "side_slot",
+    "rome_target_layer": 7,
+    "rome_candidate_layers": "",
+    "rome_top_rows": 32,
+    "rome_clamp": 0.08,
+    "rome_auto_locate": false,
+    "target_token_mode": "contextual",
+    "use_positive_prompts": false,
+    "positive_prompt_limit": 4,
+    "positive_key_weight": 1.0,
+    "positive_constraint_mode": "none",
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "use_neg_prompts": true,
+    "neg_prompt_limit": 10,
+    "neg_projection_strength": 0.3,
+    "history_projection_strength": 0.0,
+    "embed_history_projection_strength": 0.0,
+    "projection_mode": "sequential",
+    "history_slot_mode": "global",
+    "max_history_keys": 128,
+    "state_namespace": "default",
+    "relation_protected_mode": "none",
+    "relation_protected_prompt_limit": 4,
+    "max_relation_protected_keys": 64,
+    "max_patch_delta_norm": 0.0,
+    "max_row_delta_norm": 0.0,
+    "max_mean_delta_norm": 0.0,
+    "max_edited_rows": 0,
+    "wal_encode_updates": true,
+    "nt_sample_mode": "deterministic_lcg",
+    "nt_sample_size": 500,
+    "probability_metrics": true,
+    "test_fluency": false,
+    "sequential_edit": true,
+    "retention_steps": [
+      10
+    ]
+  },
+  "relation_protected_banks": {
+    "mode": "none",
+    "state_namespace": "default",
+    "relations": {}
+  },
+  "summary": {
+    "pre": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0
+    },
+    "post": {
+      "rewrite_acc": 0.9,
+      "rephrase_acc": 0.1,
+      "rephrase_all_acc": 0.15,
+      "locality": {
+        "neighborhood_acc": 0.98
+      }
+    },
+    "post_generation_vanilla": {
+      "rewrite_acc": 0.0,
+      "rephrase_acc": 0.0,
+      "rephrase_all_acc": 0.0
+    },
+    "post_generation_contextual": {
+      "rewrite_acc": 0.9,
+      "rephrase_acc": 0.1,
+      "rephrase_all_acc": 0.15
+    },
+    "post_probability": {
+      "rewrite_acc": 0.9,
+      "rephrase_acc": 0.2,
+      "rephrase_all_acc": 0.2,
+      "locality_acc": 0.95
+    },
+    "metrics_by_relation_id": {
+      "P101": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P127": {
+        "n": 3,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 0.966667,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.966667
+        }
+      },
+      "P1303": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 0.9,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 0.9
+        }
+      },
+      "P178": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 1.0,
+        "rephrase_all_acc": 1.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P19": {
+        "n": 1,
+        "rewrite_acc": 0.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P36": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P37": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.0,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0,
+          "locality_acc": 1.0
+        }
+      },
+      "P495": {
+        "n": 1,
+        "rewrite_acc": 1.0,
+        "rephrase_acc": 0.0,
+        "rephrase_all_acc": 0.5,
+        "locality_acc": 1.0,
+        "probability": {
+          "rewrite_acc": 1.0,
+          "rephrase_acc": 1.0,
+          "rephrase_all_acc": 1.0,
+          "locality_acc": 0.7
+        }
+      }
+    }
+  },
+  "failure_analysis": {
+    "n_failed_cases": 9,
+    "failure_families": [
+      "tf",
+      "ctx_gen",
+      "prob"
+    ],
+    "failure_mode_counts": {
+      "ctx_gen_rewrite": 1,
+      "prob_locality": 3,
+      "tf_locality": 2,
+      "tf_ps_all": 9,
+      "tf_rephrase": 9,
+      "tf_rewrite": 1
+    },
+    "failed_by_relation_id": {
+      "P101": 1,
+      "P127": 3,
+      "P1303": 1,
+      "P19": 1,
+      "P36": 1,
+      "P37": 1,
+      "P495": 1
+    }
+  },
+  "retention": {
+    "after_10": {
+      "n_edits_applied": 10,
+      "n_evaluated": 10,
+      "summary": {
+        "pre": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0
+        },
+        "post": {
+          "rewrite_acc": 0.9,
+          "rephrase_acc": 0.1,
+          "rephrase_all_acc": 0.15,
+          "locality": {
+            "neighborhood_acc": 0.98
+          }
+        },
+        "post_generation_vanilla": {
+          "rewrite_acc": 0.0,
+          "rephrase_acc": 0.0,
+          "rephrase_all_acc": 0.0
+        },
+        "post_generation_contextual": {
+          "rewrite_acc": 0.9,
+          "rephrase_acc": 0.1,
+          "rephrase_all_acc": 0.15
+        },
+        "post_probability": {
+          "rewrite_acc": 0.9,
+          "rephrase_acc": 0.2,
+          "rephrase_all_acc": 0.2,
+          "locality_acc": 0.95
+        },
+        "metrics_by_relation_id": {
+          "P101": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P127": {
+            "n": 3,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.966667,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.966667
+            }
+          },
+          "P1303": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 0.9,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 0.9
+            }
+          },
+          "P178": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 1.0,
+            "rephrase_all_acc": 1.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P19": {
+            "n": 1,
+            "rewrite_acc": 0.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 0.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P36": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P37": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.0,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 0.0,
+              "rephrase_all_acc": 0.0,
+              "locality_acc": 1.0
+            }
+          },
+          "P495": {
+            "n": 1,
+            "rewrite_acc": 1.0,
+            "rephrase_acc": 0.0,
+            "rephrase_all_acc": 0.5,
+            "locality_acc": 1.0,
+            "probability": {
+              "rewrite_acc": 1.0,
+              "rephrase_acc": 1.0,
+              "rephrase_all_acc": 1.0,
+              "locality_acc": 0.7
+            }
+          }
+        }
+      },
+      "case_ids": [
+        1263,
+        9374,
+        4716,
+        15156,
+        12120,
+        3155,
+        14850,
+        19621,
+        16327,
+        19955
+      ],
+      "side_slot_summary": {
+        "slots": 10,
+        "enabled": 10
+      },
+      "relation_slot_summary": {
+        "P101": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P127": {
+          "slots": 3,
+          "enabled": 3
+        },
+        "P1303": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P178": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P19": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P36": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P37": {
+          "slots": 1,
+          "enabled": 1
+        },
+        "P495": {
+          "slots": 1,
+          "enabled": 1
+        }
+      }
+    },
+    "side_slot_summary": {
+      "slots": 10,
+      "enabled": 10
+    },
+    "relation_slot_summary": {
+      "P101": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P127": {
+        "slots": 3,
+        "enabled": 3
+      },
+      "P1303": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P178": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P19": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P36": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P37": {
+        "slots": 1,
+        "enabled": 1
+      },
+      "P495": {
+        "slots": 1,
+        "enabled": 1
+      }
+    }
+  },
+  "time_s": 23.94,
+  "time_per_edit_s": 2.3937,
+  "metrics": [
+    {
+      "case_id": 1263,
+      "relation_id": "P178",
+      "requested_rewrite": {
+        "prompt": "DirectX is created by",
+        "target_new": "Apple",
+        "ground_truth": "Microsoft",
+        "subject": "DirectX",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Microsoft Surface is developed by",
+              "ASP.NET MVC Framework, a product of",
+              "Xenix is created by",
+              "Microsoft Silverlight was developed by",
+              "Windows 9x, created by",
+              "Windows Media Center is developed by",
+              "ASP.NET MVC Framework is developed by",
+              "Windows 2000, a product developed by",
+              "Microsoft Office 2010, a product of",
+              "JScript, developed by"
+            ],
+            "ground_truth": [
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft",
+              "Microsoft"
+            ]
+          }
+        },
+        "rephrase_prompt": "After Eisner's murder on 21 February the situation worsened. DirectX, a product developed by",
+        "rephrase_prompts": [
+          "After Eisner's murder on 21 February the situation worsened. DirectX, a product developed by",
+          "Ingram bred Stratford’s livestock. DirectX, a product created by"
+        ]
+      },
+      "edit_time_s": 0.3432,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P178",
+      "side_slot_id": "case-1263",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          8325
+        ],
+        "rephrase_acc": [
+          1.0
+        ],
+        "rephrase_target_ids": [
+          8325
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            8325
+          ],
+          [
+            8325
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.01562812738120556,
+        "rewrite_true_logprob": -4.265628337860107,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -0.009152363054454327,
+        "rephrase_true_logprob": -4.884152412414551,
+        "rephrase_acc": 1.0,
+        "rephrase_all_new_logprob": [
+          -0.009152363054454327,
+          -0.31574389338493347
+        ],
+        "rephrase_all_true_logprob": [
+          -4.884152412414551,
+          -1.9407439231872559
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 9374,
+      "relation_id": "P101",
+      "requested_rewrite": {
+        "prompt": "Michio Kaku's area of work is",
+        "target_new": "LGBT",
+        "ground_truth": "physics",
+        "subject": "Michio Kaku",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "The domain of activity of Jean Perrin is",
+              "The expertise of William Henry Bragg is",
+              "The expertise of Albert A. Michelson is",
+              "Gabriel Lippmann's domain of activity is",
+              "The domain of work of Albert A. Michelson is",
+              "Jean Perrin's area of work is",
+              "William Thomson, 1st Baron Kelvin's domain of work is",
+              "The expertise of Charles Édouard Guillaume is",
+              "Robert A. Millikan's domain of work is",
+              "Daniel Bernoulli works in the area of"
+            ],
+            "ground_truth": [
+              "physics",
+              "physics",
+              "physics",
+              "physics",
+              "physics",
+              "physics",
+              "physics",
+              "physics",
+              "physics",
+              "physics"
+            ]
+          }
+        },
+        "rephrase_prompt": "Designed in the rococo style, it consists of 74 icons. The domain of activity of Michio Kaku is",
+        "rephrase_prompts": [
+          "Designed in the rococo style, it consists of 74 icons. The domain of activity of Michio Kaku is",
+          "The wind farm project divides the citizens of l'Érable. Michio Kaku's domain of work is"
+        ]
+      },
+      "edit_time_s": 0.329,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P101",
+      "side_slot_id": "case-9374",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          23983
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          23983
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            23983
+          ],
+          [
+            23983
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.8485915064811707,
+        "rewrite_true_logprob": -4.973591327667236,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -8.127772331237793,
+        "rephrase_true_logprob": -2.627772331237793,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -8.127772331237793,
+          -8.670188903808594
+        ],
+        "rephrase_all_true_logprob": [
+          -2.627772331237793,
+          -2.576439380645752
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 4716,
+      "relation_id": "P36",
+      "requested_rewrite": {
+        "prompt": "Belgium, which has the capital",
+        "target_new": "Warsaw",
+        "ground_truth": "Brussels",
+        "subject": "Belgium",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Spanish Netherlands, which has the capital city",
+              "Dyle's capital city,",
+              "United Kingdom of the Netherlands, which has the capital city",
+              "United Kingdom of the Netherlands's capital is",
+              "The capital city of Flemish Region is",
+              "United States of Belgium, which has the capital",
+              "The capital of United States of Belgium is",
+              "The capital of Brussels Capital Region is",
+              "The capital of Brussels Soldiers' Council is",
+              "Flemish Community's capital is"
+            ],
+            "ground_truth": [
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels",
+              "Brussels"
+            ]
+          }
+        },
+        "rephrase_prompt": "Sewage and stormwater components are typically included in the NIS. Belgium, which has the capital city",
+        "rephrase_prompts": [
+          "Sewage and stormwater components are typically included in the NIS. Belgium, which has the capital city",
+          "New members are admitted by portfolio review. Belgium's capital is"
+        ]
+      },
+      "edit_time_s": 0.3022,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P36",
+      "side_slot_id": "case-4716",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          73276
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          73276
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            73276
+          ],
+          [
+            73276
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.2973562777042389,
+        "rewrite_true_logprob": -2.922356367111206,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -3.3805887699127197,
+        "rephrase_true_logprob": -1.6305887699127197,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -3.3805887699127197,
+          -9.291903495788574
+        ],
+        "rephrase_all_true_logprob": [
+          -1.6305887699127197,
+          -0.7919036149978638
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 15156,
+      "relation_id": "P127",
+      "requested_rewrite": {
+        "prompt": "Bundesautobahn 62, by",
+        "target_new": "Winnipeg",
+        "ground_truth": "Germany",
+        "subject": "Bundesautobahn 62",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Bundesstraße 1, from",
+              "Bundesautobahn 573 is owned by",
+              "Bundesstraße 2 owner",
+              "Bundesautobahn 831, from",
+              "Bundesautobahn 831, by",
+              "Bundesautobahn 952 is from",
+              "Bundesstraße 4 is owned by",
+              "Bundesautobahn 952, from",
+              "Bundesstraße 4 is from",
+              "Bundesstraße 29's owner"
+            ],
+            "ground_truth": [
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany",
+              "Germany"
+            ]
+          }
+        },
+        "rephrase_prompt": "It becomes integrated into daily routines. Bundesautobahn 62, from",
+        "rephrase_prompts": [
+          "It becomes integrated into daily routines. Bundesautobahn 62, from",
+          "(2006), and Rivas et al. Bundesautobahn 62 is owned by"
+        ]
+      },
+      "edit_time_s": 0.3627,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P127",
+      "side_slot_id": "case-15156",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          52982
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          52982
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            52982
+          ],
+          [
+            52982
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.002898422535508871,
+        "rewrite_true_logprob": -11.940398216247559,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -14.986684799194336,
+        "rephrase_true_logprob": -4.189809799194336,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -14.986684799194336,
+          -20.393651962280273
+        ],
+        "rephrase_all_true_logprob": [
+          -4.189809799194336,
+          -5.112401485443115
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 12120,
+      "relation_id": "P127",
+      "requested_rewrite": {
+        "prompt": "Google Books is owned by",
+        "target_new": "Nintendo",
+        "ground_truth": "Google",
+        "subject": "Google Books",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Firebase Authentication is owned by",
+              "Gmail is from",
+              "Google Container Registry, from",
+              "Google Data Studio owner",
+              "Cloud SDK's owner",
+              "Cloud Armor's owner",
+              "Cloud Scheduler owner",
+              "Cloud Dataflow, from",
+              "Cloud Dataflow is from",
+              "Google Stadia, from"
+            ],
+            "ground_truth": [
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google",
+              "Google"
+            ]
+          }
+        },
+        "rephrase_prompt": "Blok - murdered by Roxxas. Google Books, by",
+        "rephrase_prompts": [
+          "Blok - murdered by Roxxas. Google Books, by",
+          "in African Studies and a Ph.D. in Anthropology. Google Books owner"
+        ]
+      },
+      "edit_time_s": 0.3095,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P127",
+      "side_slot_id": "case-12120",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          23643
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          23643
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            23643
+          ],
+          [
+            23643
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.01624150015413761,
+        "rewrite_true_logprob": -4.391241550445557,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -7.922815322875977,
+        "rephrase_true_logprob": -5.391565322875977,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -7.922815322875977,
+          -3.4443695545196533
+        ],
+        "rephrase_all_true_logprob": [
+          -5.391565322875977,
+          -1.3193695545196533
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 3155,
+      "relation_id": "P127",
+      "requested_rewrite": {
+        "prompt": "BBC Online is owned by",
+        "target_new": "BP",
+        "ground_truth": "BBC",
+        "subject": "BBC Online",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "BBC Film, by",
+              "BBC World Service, from",
+              "BBC Radio 4, by",
+              "BBC Radio 4 Extra owner",
+              "BBC World Service, by",
+              "BBC Worldwide, by",
+              "BBC Radio owner",
+              "BBC Worldwide is from",
+              "BBC Radio Cymru owner",
+              "BBC News is from"
+            ],
+            "ground_truth": [
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC",
+              "BBC"
+            ]
+          }
+        },
+        "rephrase_prompt": "(Birmingham, West Midlands)\n Mrs Veronica Grimley, Lately B1, Scottish Executive. BBC Online is from",
+        "rephrase_prompts": [
+          "(Birmingham, West Midlands)\n Mrs Veronica Grimley, Lately B1, Scottish Executive. BBC Online is from",
+          "These have been used in Hungary since that time. BBC Online, from"
+        ]
+      },
+      "edit_time_s": 0.3106,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P127",
+      "side_slot_id": "case-3155",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          30167
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          30167
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            30167
+          ],
+          [
+            30167
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0005639393348246813,
+        "rewrite_true_logprob": -10.250563621520996,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -5.032917022705078,
+        "rephrase_true_logprob": -3.720417022705078,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -5.032917022705078,
+          -6.933469295501709
+        ],
+        "rephrase_all_true_logprob": [
+          -3.720417022705078,
+          -3.370969295501709
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 14850,
+      "relation_id": "P1303",
+      "requested_rewrite": {
+        "prompt": "Jonas Berggren plays the instrument",
+        "target_new": "trumpet",
+        "ground_truth": "guitar",
+        "subject": "Jonas Berggren",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Hector Berlioz, performing on the",
+              "Madonna, playing the",
+              "Bob Marley plays the instrument",
+              "Hector Berlioz performs on the",
+              "Paul McCartney plays",
+              "David Bowie plays",
+              "Hector Berlioz plays",
+              "Douglas Adams plays the",
+              "Paul Simon performs on the",
+              "George Harrison plays the"
+            ],
+            "ground_truth": [
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar",
+              "guitar"
+            ]
+          }
+        },
+        "rephrase_prompt": "The population was 207 at the 2000 census. Jonas Berggren, the",
+        "rephrase_prompts": [
+          "The population was 207 at the 2000 census. Jonas Berggren, the",
+          "Америкэ /aːmerika/ America → Америкэмкӏэ /aːmerikamt͡ʃʼa/ from America (direction). Jonas Berggren, performing on the"
+        ]
+      },
+      "edit_time_s": 0.3229,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P1303",
+      "side_slot_id": "case-14850",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          92359
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          92359
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            92359
+          ],
+          [
+            92359
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.0006987990345805883,
+        "rewrite_true_logprob": -11.688199043273926,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -8.953349113464355,
+        "rephrase_true_logprob": -7.0158491134643555,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -8.953349113464355,
+          -5.433910369873047
+        ],
+        "rephrase_all_true_logprob": [
+          -7.0158491134643555,
+          -2.683910369873047
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 19621,
+      "relation_id": "P37",
+      "requested_rewrite": {
+        "prompt": "The official language of Guyana is",
+        "target_new": "French",
+        "ground_truth": "English",
+        "subject": "Guyana",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "In Australia, an official language is",
+              "In Ghana, the language spoken is",
+              "In Ireland, the language spoken is",
+              "The official language of Australia is",
+              "In South Africa, an official language is",
+              "The official language of New Zealand is",
+              "In Trinidad and Tobago, the language spoken is",
+              "The official language of Belize is",
+              "In European Union, the language spoken is",
+              "In South Africa, they understand"
+            ],
+            "ground_truth": [
+              "English",
+              "English",
+              "English",
+              "English",
+              "English",
+              "English",
+              "English",
+              "English",
+              "English",
+              "English"
+            ]
+          }
+        },
+        "rephrase_prompt": "Ronald B. Cameron (D)\n . In Guyana, an official language is",
+        "rephrase_prompts": [
+          "Ronald B. Cameron (D)\n . In Guyana, an official language is",
+          "Until the ascension of his son, King Xuan of Zhou. The law in Guyana declares the language"
+        ]
+      },
+      "edit_time_s": 0.3027,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P37",
+      "side_slot_id": "case-19621",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          8753
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          8753
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            8753
+          ],
+          [
+            8753
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -0.07978015393018723,
+        "rewrite_true_logprob": -2.579780101776123,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -3.1985514163970947,
+        "rephrase_true_logprob": -1.0735514163970947,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -3.1985514163970947,
+          -10.490962982177734
+        ],
+        "rephrase_all_true_logprob": [
+          -1.0735514163970947,
+          -4.834712982177734
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 16327,
+      "relation_id": "P495",
+      "requested_rewrite": {
+        "prompt": "butter tart was created in the country of",
+        "target_new": "Japan",
+        "ground_truth": "Canada",
+        "subject": "butter tart",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "Anne of Green Gables was formulated in",
+              "Godsend, developed in",
+              "Far Cry was developed in",
+              "Jumper, from",
+              "Godsend, that was formulated in",
+              "Far Cry was from",
+              "When Night Is Falling, created in",
+              "Screamers, formulated in",
+              "When Night Is Falling, that was developed in",
+              "Another Cinderella Story was from"
+            ],
+            "ground_truth": [
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada",
+              "Canada"
+            ]
+          }
+        },
+        "rephrase_prompt": "1869 March 23, 1869. butter tart, that was developed in",
+        "rephrase_prompts": [
+          "1869 March 23, 1869. butter tart, that was developed in",
+          "Navinaan tayari: naval. butter tart, formulated in"
+        ]
+      },
+      "edit_time_s": 0.3174,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P495",
+      "side_slot_id": "case-16327",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          1.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          1.0
+        ],
+        "rewrite_target_ids": [
+          6457
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          6457
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          1.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            6457
+          ],
+          [
+            6457
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -7.390948667307384e-06,
+        "rewrite_true_logprob": -12.375007629394531,
+        "rewrite_acc": 1.0,
+        "rephrase_new_logprob": -1.9432027339935303,
+        "rephrase_true_logprob": -2.4432027339935303,
+        "rephrase_acc": 1.0,
+        "rephrase_all_new_logprob": [
+          -1.9432027339935303,
+          -0.8184183239936829
+        ],
+        "rephrase_all_true_logprob": [
+          -2.4432027339935303,
+          -3.193418264389038
+        ],
+        "rephrase_all_acc": [
+          1.0,
+          1.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "case_id": 19955,
+      "relation_id": "P19",
+      "requested_rewrite": {
+        "prompt": "Alexander Cochrane is native to",
+        "target_new": "Kabul",
+        "ground_truth": "Scotland",
+        "subject": "Alexander Cochrane",
+        "portability": {},
+        "locality": {
+          "neighborhood": {
+            "prompt": [
+              "James Boyle was native to",
+              "John Muir is originally from",
+              "James Boyle was originally from",
+              "William Douglas, 1st Earl of Douglas was native to",
+              "Alexander Barclay was born in",
+              "James Gourlay is originally from",
+              "Alexander Henderson originated from",
+              "Alexander Cockburn is originally from",
+              "James Boyle is native to",
+              "William Douglas, 10th Earl of Angus is native to"
+            ],
+            "ground_truth": [
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland",
+              "Scotland"
+            ]
+          }
+        },
+        "rephrase_prompt": "References \n\nCategory:Populated places in Kerman County Alexander Cochrane originated from",
+        "rephrase_prompts": [
+          "References \n\nCategory:Populated places in Kerman County Alexander Cochrane originated from",
+          "JGF split from Workers Party of Bangladesh in 1995. Alexander Cochrane originates from"
+        ]
+      },
+      "edit_time_s": 0.3356,
+      "edit_status": "side_slot",
+      "edit_backend": "side_slot",
+      "relation_slot_id": "P19",
+      "side_slot_id": "case-19955",
+      "pre": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ]
+      },
+      "post": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "portability": {},
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ]
+      },
+      "contextual_generation": {
+        "rewrite_acc": [
+          0.0
+        ],
+        "rewrite_target_ids": [
+          87645
+        ],
+        "rephrase_acc": [
+          0.0
+        ],
+        "rephrase_target_ids": [
+          87645
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "rephrase_all_target_ids": [
+          [
+            87645
+          ],
+          [
+            87645
+          ]
+        ]
+      },
+      "probability": {
+        "rewrite_new_logprob": -3.641704559326172,
+        "rewrite_true_logprob": -1.9542046785354614,
+        "rewrite_acc": 0.0,
+        "rephrase_new_logprob": -11.765557289123535,
+        "rephrase_true_logprob": -2.4843077659606934,
+        "rephrase_acc": 0.0,
+        "rephrase_all_new_logprob": [
+          -11.765557289123535,
+          -5.837839126586914
+        ],
+        "rephrase_all_true_logprob": [
+          -2.4843077659606934,
+          -1.962839126586914
+        ],
+        "rephrase_all_acc": [
+          0.0,
+          0.0
+        ],
+        "locality": {
+          "neighborhood_acc": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    }
+  ]
+}

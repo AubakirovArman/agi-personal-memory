@@ -1,0 +1,23 @@
+{
+  "index_schema_version": "path_b_max_gate5_index.v1",
+  "records": [
+    {
+      "channel": "public",
+      "claim_chain_len": 9,
+      "claim_chain_sha256": "7e90954e5587e25c0798d5758c5cbf42d66cad057c00bec24fd10d88501b507c",
+      "created_utc": "2026-05-19T01:31:35Z",
+      "note": null,
+      "proof_sha256": "c977086b4d685e027c7d74d494eff6ec0ae429147224532d6c46a2be64d78c2c",
+      "release_path": "results/easyedit_official/governance/path_b_max_gate5_public_release.json",
+      "release_sha256": "f19e037b21c2ce2d2ee3f1e9b5aeb31e2ba0b63d5c9d32265e4091d359ecda4c",
+      "signature": {
+        "digest": "7ca4249e0047a8b6932ac5e38a252c5adf579cb288c4d10311f2e212f9319bbe",
+        "signature": "06dbbade13f74296c1fa960aa0a6d8437fae75764b78206ded3cc31b7a864db8",
+        "signer": "alice"
+      },
+      "source_path": "results/easyedit_official/governance/path_b_max_gate5_proof.json",
+      "tenant_scope": "public"
+    }
+  ],
+  "updated_utc": "2026-05-19T01:31:35Z"
+}
