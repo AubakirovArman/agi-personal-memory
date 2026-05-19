@@ -143,6 +143,22 @@ def test_cli_supports_constrained_projection_and_anti_scope():
         build_parser().parse_args(["--positive-profile", "w025"]).positive_profile
         == "w025"
     )
+    assert build_parser().parse_args([
+        "--relation-profile-map",
+        "/tmp/relation_profile_map.json",
+    ]).relation_profile_map == "/tmp/relation_profile_map.json"
+    assert build_parser().parse_args([
+        "--candidate-grid",
+        "safe,positive_w025",
+    ]).candidate_grid == "safe,positive_w025"
+    assert build_parser().parse_args([
+        "--candidate-locality-min",
+        "0.95",
+        "--candidate-rewrite-min",
+        "0.9",
+        "--candidate-rerank-metric",
+        "rewrite_then_psall",
+    ]).candidate_locality_min == 0.95
     assert method_profile_id(build_parser().parse_args([])) == "single_loc"
     assert method_profile_id(build_parser().parse_args(["--neg-prompt-limit", "4"])) == "single_ps"
     assert method_profile_id(build_parser().parse_args(["--sequential-edit"])) == "seq_tuned"
@@ -208,6 +224,9 @@ def test_build_payload_emits_schema_profile_and_digest_metadata():
     assert payload["hyperparams"]["relation_protected_mode"] == "none"
     assert payload["hyperparams"]["anti_profile"] == "off"
     assert payload["hyperparams"]["positive_profile"] == "off"
+    assert payload["hyperparams"]["candidate_grid"] == ""
+    assert payload["hyperparams"]["candidate_rerank_metric"] == "psall_guarded"
+    assert payload["hyperparams"]["relation_profile_map"] == ""
     assert payload["relation_protected_banks"] == {
         "mode": "none", "state_namespace": "default", "relations": {}}
     assert payload["base_model_digest"].startswith("sha256:")

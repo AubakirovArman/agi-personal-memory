@@ -127,6 +127,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=0,
         help="Enable relation-slot sharding for side-slot overlays (0=off)"
     )
+    parser.add_argument(
+        "--relation-profile-map",
+        default="",
+        help="JSON mapping from relation_id to profile overrides, e.g. {\"P17\":{\"positive_profile\":\"w025\"}}",
+    )
     parser.add_argument("--max-patch-delta-norm", type=float, default=0.0)
     parser.add_argument("--max-row-delta-norm", type=float, default=0.0)
     parser.add_argument("--max-shared-row-delta-norm", type=float, default=0.0)
@@ -144,6 +149,29 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Compute EasyEdit-style n-gram entropy on post-edit generations")
     parser.add_argument("--sequential-edit", action="store_true",
                         help="Apply all edits first, then evaluate without per-case rollback")
+    parser.add_argument(
+        "--candidate-grid",
+        default="",
+        help="Comma-separated candidates for per-fact rerank, e.g. safe,positive_w025,positive_w035",
+    )
+    parser.add_argument(
+        "--candidate-rerank-metric",
+        default="psall_guarded",
+        choices=["psall_guarded", "rewrite", "rewrite_then_psall"],
+        help="Scoring metric used when selecting candidate edits",
+    )
+    parser.add_argument(
+        "--candidate-locality-min",
+        type=float,
+        default=None,
+        help="Reject candidate if post TF locality < value (0..1)",
+    )
+    parser.add_argument(
+        "--candidate-rewrite-min",
+        type=float,
+        default=None,
+        help="Reject candidate if post TF rewrite < value (0..1)",
+    )
     parser.add_argument("--retention-steps", default="1,10,50",
                         help="Comma-separated sequential retention checkpoints; empty disables")
     parser.add_argument(

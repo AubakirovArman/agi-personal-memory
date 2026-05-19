@@ -148,4 +148,9 @@ def _hyperparams(args, n_records: int) -> dict[str, Any]:
         "test_fluency": args.test_fluency,
         "sequential_edit": args.sequential_edit,
         "retention_steps": parse_retention_steps(args.retention_steps, n_records),
+        "candidate_grid": getattr(args, "candidate_grid", ""),
+        "candidate_rerank_metric": getattr(args, "candidate_rerank_metric", "psall_guarded"),
+        "candidate_locality_min": getattr(args, "candidate_locality_min", None),
+        "candidate_rewrite_min": getattr(args, "candidate_rewrite_min", None),
+        "relation_profile_map": getattr(args, "relation_profile_map", ""),
     }
