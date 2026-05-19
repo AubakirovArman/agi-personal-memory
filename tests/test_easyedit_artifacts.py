@@ -136,6 +136,13 @@ def test_cli_supports_constrained_projection_and_anti_scope():
     assert args.positive_constraint_mode == "constrained"
     assert args.positive_constraint_k_pos == 5
     assert args.positive_constraint_k_neg == 2
+    assert args.anti_profile == "off"
+    assert args.positive_profile == "off"
+    assert build_parser().parse_args(["--anti-profile", "target_low"]).anti_profile == "target_low"
+    assert (
+        build_parser().parse_args(["--positive-profile", "w025"]).positive_profile
+        == "w025"
+    )
     assert method_profile_id(build_parser().parse_args([])) == "single_loc"
     assert method_profile_id(build_parser().parse_args(["--neg-prompt-limit", "4"])) == "single_ps"
     assert method_profile_id(build_parser().parse_args(["--sequential-edit"])) == "seq_tuned"
@@ -163,6 +170,20 @@ def test_cli_supports_constrained_projection_and_anti_scope():
     assert method_profile_id(build_parser().parse_args([
         "--no-wal-encode-updates",
     ])) == "single_exact_additive"
+    assert method_profile_id(build_parser().parse_args([
+        "--anti-profile",
+        "target_low",
+    ])) == "single_loc_anti_target_low"
+    assert method_profile_id(build_parser().parse_args([
+        "--positive-profile",
+        "w025",
+    ])) == "single_loc_pos_w025"
+    assert method_profile_id(build_parser().parse_args([
+        "--anti-profile",
+        "subject_low",
+        "--positive-profile",
+        "w025_ridge",
+    ])) == "single_loc_anti_subject_low_pos_w025_ridge"
 
 
 def test_build_payload_emits_schema_profile_and_digest_metadata():
@@ -185,6 +206,8 @@ def test_build_payload_emits_schema_profile_and_digest_metadata():
     assert payload["method_profile_id"] == "single_loc"
     assert payload["hyperparams"]["wal_encode_updates"] is True
     assert payload["hyperparams"]["relation_protected_mode"] == "none"
+    assert payload["hyperparams"]["anti_profile"] == "off"
+    assert payload["hyperparams"]["positive_profile"] == "off"
     assert payload["relation_protected_banks"] == {
         "mode": "none", "state_namespace": "default", "relations": {}}
     assert payload["base_model_digest"].startswith("sha256:")

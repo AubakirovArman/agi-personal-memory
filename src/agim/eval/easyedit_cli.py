@@ -8,7 +8,7 @@ from pathlib import Path
 from agim.eval.easyedit_counterfact import LLAMA
 
 from .easyedit_loader import DEFAULT_EASYEDIT_ROOT
-from .easyedit_presets import PRESETS
+from .easyedit_presets import ANTI_PROFILES, POSITIVE_PROFILES, PRESETS
 from .easyedit_run_metadata import DEFAULT_FAILURE_FAMILIES
 
 
@@ -70,6 +70,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--clamp_anti", type=float, default=0.0,
                         help="Anti-repetition clamp (0 disables global anti-boost by default)")
     parser.add_argument("--clamp_old", type=float, default=0.0)
+    parser.add_argument(
+        "--anti-profile",
+        default="off",
+        choices=sorted(ANTI_PROFILES),
+        help="Named clamp-anti profile",
+    )
     parser.add_argument("--target-token-mode", choices=["standalone", "contextual", "both"],
                         default="contextual",
                         help="contextual edits EasyEdit prompt + space + target label ids")
@@ -78,6 +84,12 @@ def build_parser() -> argparse.ArgumentParser:
                         help="Average edit keys with CounterFact paraphrase prompts")
     parser.add_argument("--positive-prompt-limit", type=int, default=4)
     parser.add_argument("--positive-key-weight", type=float, default=1.0)
+    parser.add_argument(
+        "--positive-profile",
+        default="off",
+        choices=sorted(POSITIVE_PROFILES),
+        help="Named positive-key profile",
+    )
     parser.add_argument("--positive-constraint-mode",
                         choices=["none", "projected", "ridge", "constrained"],
                         default="none")

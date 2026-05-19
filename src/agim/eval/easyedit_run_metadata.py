@@ -27,60 +27,66 @@ def method_profile_id(args) -> str:
         return explicit
     edit_backend = getattr(args, "edit_backend", "dual_row")
     if edit_backend == "wal_rome":
-        return "seq_wal_rome" if getattr(args, "sequential_edit", False) else (
-            "single_wal_rome"
+        return _append_profile_id(
+            "seq_wal_rome" if getattr(args, "sequential_edit", False) else "single_wal_rome",
+            args,
         )
     if edit_backend == "wal_memit":
-        return "seq_wal_memit" if getattr(args, "sequential_edit", False) else (
-            "single_wal_memit"
+        return _append_profile_id(
+            "seq_wal_memit" if getattr(args, "sequential_edit", False) else "single_wal_memit",
+            args,
         )
     if not getattr(args, "wal_encode_updates", True):
-        return "seq_exact_additive" if getattr(args, "sequential_edit", False) else (
-            "single_exact_additive"
+        return _append_profile_id(
+            "seq_exact_additive" if getattr(args, "sequential_edit", False) else "single_exact_additive",
+            args,
         )
     if getattr(args, "sequential_edit", False):
         if edit_backend == "side_slot":
             slot_buckets = int(getattr(args, "relation_slot_buckets", 0) or 0)
             if slot_buckets > 0:
-                return f"seq_side_slot_sharded_{slot_buckets}"
-            return "seq_side_slot"
+                return _append_profile_id(f"seq_side_slot_sharded_{slot_buckets}", args)
+            return _append_profile_id("seq_side_slot", args)
         relation_mode = getattr(args, "relation_protected_mode", "none")
         if relation_mode != "none":
-            return f"seq_relation_protected_{relation_mode}"
+            return _append_profile_id(
+                f"seq_relation_protected_{relation_mode}",
+                args,
+            )
         if getattr(args, "positive_constraint_mode", "none") == "ridge":
-            return "seq_positive_ridge"
+            return _append_profile_id("seq_positive_ridge", args)
         if getattr(args, "positive_constraint_mode", "none") == "projected":
-            return "seq_positive_projected"
+            return _append_profile_id("seq_positive_projected", args)
         if getattr(args, "positive_constraint_mode", "none") == "constrained":
-            return "seq_positive_constrained"
+            return _append_profile_id("seq_positive_constrained", args)
         if getattr(args, "use_positive_prompts", False):
-            return "seq_positive"
+            return _append_profile_id("seq_positive", args)
         if getattr(args, "projection_mode", "sequential") == "orthogonal":
-            return "seq_orthogonal"
+            return _append_profile_id("seq_orthogonal", args)
         if getattr(args, "history_slot_mode", "global") == "relation":
-            return "seq_relation_slots"
-        return "seq_tuned"
+            return _append_profile_id("seq_relation_slots", args)
+        return _append_profile_id("seq_tuned", args)
     if edit_backend == "side_slot":
         slot_buckets = int(getattr(args, "relation_slot_buckets", 0) or 0)
         if slot_buckets > 0:
-            return f"single_side_slot_sharded_{slot_buckets}"
-        return "single_side_slot"
+            return _append_profile_id(f"single_side_slot_sharded_{slot_buckets}", args)
+        return _append_profile_id("single_side_slot", args)
     relation_mode = getattr(args, "relation_protected_mode", "none")
     if relation_mode != "none":
-        return f"single_relation_protected_{relation_mode}"
+        return _append_profile_id(f"single_relation_protected_{relation_mode}", args)
     if getattr(args, "positive_constraint_mode", "none") == "constrained":
-        return "single_positive_constrained"
+        return _append_profile_id("single_positive_constrained", args)
     if getattr(args, "use_positive_prompts", False):
         if getattr(args, "positive_constraint_mode", "none") == "ridge":
-            return "single_positive_ridge"
+            return _append_profile_id("single_positive_ridge", args)
         if getattr(args, "positive_constraint_mode", "none") == "projected":
-            return "single_positive_projected"
+            return _append_profile_id("single_positive_projected", args)
         if getattr(args, "positive_constraint_mode", "none") == "constrained":
-            return "single_positive_constrained"
-        return "single_positive"
+            return _append_profile_id("single_positive_constrained", args)
+        return _append_profile_id("single_positive", args)
     if getattr(args, "neg_prompt_limit", 0) <= 4:
-        return "single_ps"
-    return "single_loc"
+        return _append_profile_id("single_ps", args)
+    return _append_profile_id("single_loc", args)
 
 
 def base_model_digest(model: Any, args) -> str:
@@ -111,3 +117,15 @@ def atoms_digest(editor: Any) -> str | None:
 def _sha_json(payload: dict[str, Any]) -> str:
     raw = json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
     return f"sha256:{hashlib.sha256(raw).hexdigest()}"
+
+
+def _append_profile_id(profile_id: str, args) -> str:
+    anti_profile = getattr(args, "anti_profile", "off")
+    positive_profile = getattr(args, "positive_profile", "off")
+
+    tokens: list[str] = [profile_id]
+    if anti_profile and anti_profile != "off":
+        tokens.append(f"anti_{anti_profile}")
+    if positive_profile and positive_profile != "off":
+        tokens.append(f"pos_{positive_profile}")
+    return "_".join(tokens)
